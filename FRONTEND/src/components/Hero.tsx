@@ -63,19 +63,19 @@ export default function Hero({ translations }: HeroProps) {
             {/* Quick Stats */}
             <div className="grid grid-cols-3 gap-8 pt-8 border-t border-gray-200 dark:border-gray-700">
               <div className="text-center">
-                <div className="text-2xl mb-1 font-semibold bg-gradient-to-r from-violet-600 to-violet-400 dark:from-violet-400 dark:to-violet-300 bg-clip-text text-transparent">3+</div>
+                <div className="text-2xl mb-1 font-semibold bg-linear-to-r from-violet-600 to-violet-400 dark:from-violet-400 dark:to-violet-300 bg-clip-text text-transparent">3+</div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">
                   {translations.hero.yearsExperience}
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-2xl mb-1 font-semibold bg-gradient-to-r from-violet-600 to-violet-400 dark:from-violet-400 dark:to-violet-300 bg-clip-text text-transparent">15+</div>
+                <div className="text-2xl mb-1 font-semibold bg-linear-to-r from-violet-600 to-violet-400 dark:from-violet-400 dark:to-violet-300 bg-clip-text text-transparent">15+</div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">
                   {translations.hero.projectsCompleted}
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-2xl mb-1 font-semibold bg-gradient-to-r from-violet-600 to-violet-400 dark:from-violet-400 dark:to-violet-300 bg-clip-text text-transparent">5+</div>
+                <div className="text-2xl mb-1 font-semibold bg-linear-to-r from-violet-600 to-violet-400 dark:from-violet-400 dark:to-violet-300 bg-clip-text text-transparent">5+</div>
                 <div className="text-sm text-gray-600 dark:text-gray-400">
                   {translations.hero.technologies}
                 </div>
@@ -87,7 +87,7 @@ export default function Hero({ translations }: HeroProps) {
           <div className="flex justify-center lg:justify-end">
             <div className="relative">
               <div 
-                className="w-80 h-80 lg:w-96 lg:h-96 rounded-2xl overflow-hidden bg-gradient-to-br from-violet-500/30 to-violet-400/20 dark:from-violet-600/40 dark:to-violet-500/30 ring-1 ring-gray-300 dark:ring-gray-600 cursor-pointer transition-all duration-500 hover:ring-2 hover:ring-violet-500 dark:hover:ring-violet-400 hover:shadow-2xl hover:shadow-violet-500/20 group"
+                className="w-80 h-80 lg:w-96 lg:h-96 rounded-2xl overflow-hidden bg-linear-to-br from-violet-500/30 to-violet-400/20 dark:from-violet-600/40 dark:to-violet-500/30 ring-1 ring-gray-300 dark:ring-gray-600 cursor-pointer transition-all duration-500 hover:ring-2 hover:ring-violet-500 dark:hover:ring-violet-400 hover:shadow-2xl hover:shadow-violet-500/20 group"
                 onMouseEnter={() => setIsImageHovered(true)}
                 onMouseLeave={() => setIsImageHovered(false)}
               >
@@ -123,7 +123,7 @@ export default function Hero({ translations }: HeroProps) {
                 
                 {/* Hover indicator */}
                 <div 
-                  className={`absolute inset-0 bg-gradient-to-t from-violet-500/20 via-transparent to-transparent transition-opacity duration-300 ${
+                  className={`absolute inset-0 bg-linear-to-t from-violet-500/20 via-transparent to-transparent transition-opacity duration-300 ${
                     isImageHovered ? 'opacity-100' : 'opacity-0'
                   }`}
                 />
@@ -131,7 +131,7 @@ export default function Hero({ translations }: HeroProps) {
               
               {/* Floating elements */}
               <div 
-                className={`absolute -top-4 -right-4 bg-gradient-to-r from-violet-600 to-violet-500 text-white p-3 rounded-xl shadow-lg border border-violet-400/30 transition-all duration-500 transform ${
+                className={`absolute -top-4 -right-4 bg-linear-to-r from-violet-600 to-violet-500 text-white p-3 rounded-xl shadow-lg border border-violet-400/30 transition-all duration-500 transform ${
                   isImageHovered ? 'translate-x-2 -translate-y-2 scale-110' : 'translate-x-0 translate-y-0 scale-100'
                 }`}
               >
@@ -147,7 +147,7 @@ export default function Hero({ translations }: HeroProps) {
               
               {/* Additional floating elements that appear on hover */}
               <div 
-                className={`absolute top-1/2 -left-8 bg-gradient-to-r from-violet-500 to-violet-600 text-white p-2 rounded-lg shadow-lg border border-violet-400/30 transition-all duration-700 transform ${
+                className={`absolute top-1/2 -left-8 bg-linear-to-r from-violet-500 to-violet-600 text-white p-2 rounded-lg shadow-lg border border-violet-400/30 transition-all duration-700 transform ${
                   isImageHovered ? 'opacity-100 scale-100 translate-x-0' : 'opacity-0 scale-0 -translate-x-4'
                 }`}
               >
@@ -155,7 +155,7 @@ export default function Hero({ translations }: HeroProps) {
               </div>
               
               <div 
-                className={`absolute top-8 right-8 bg-gradient-to-r from-violet-600/90 to-violet-500/90 text-white p-2 rounded-lg shadow-lg border border-violet-400/30 transition-all duration-500 delay-200 transform ${
+                className={`absolute top-8 right-8 bg-linear-to-r from-violet-600/90 to-violet-500/90 text-white p-2 rounded-lg shadow-lg border border-violet-400/30 transition-all duration-500 delay-200 transform ${
                   isImageHovered ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-0 -translate-y-4'
                 }`}
               >
@@ -163,7 +163,7 @@ export default function Hero({ translations }: HeroProps) {
               </div>
               
               <div 
-                className={`absolute bottom-8 right-4 bg-gradient-to-r from-violet-500/80 to-violet-600/80 text-white p-2 rounded-lg shadow-lg border border-violet-400/30 transition-all duration-700 delay-300 transform ${
+                className={`absolute bottom-8 right-4 bg-linear-to-r from-violet-500/80 to-violet-600/80 text-white p-2 rounded-lg shadow-lg border border-violet-400/30 transition-all duration-700 delay-300 transform ${
                   isImageHovered ? 'opacity-100 scale-100 rotate-0' : 'opacity-0 scale-0 rotate-12'
                 }`}
               >
@@ -173,7 +173,7 @@ export default function Hero({ translations }: HeroProps) {
               {/* Animated glow effect on hover */}
               <div 
                 className={`absolute inset-0 rounded-2xl transition-all duration-1000 ${
-                  isImageHovered ? 'bg-gradient-to-r from-violet-500/20 to-violet-400/20 blur-xl scale-110' : 'bg-transparent scale-100'
+                  isImageHovered ? 'bg-linear-to-r from-violet-500/20 to-violet-400/20 blur-xl scale-110' : 'bg-transparent scale-100'
                 }`}
                 style={{ zIndex: -1 }}
               />

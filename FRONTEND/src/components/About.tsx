@@ -66,7 +66,7 @@ export default function About({ translations }: AboutProps) {
             <Card className="border-gray-200 dark:border-gray-700">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                  <div className="w-2 h-2 bg-gradient-to-r from-violet-600 to-violet-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-linear-to-r from-violet-600 to-violet-400 rounded-full"></div>
                   {translations.about.technicalSkills}
                 </CardTitle>
               </CardHeader>
@@ -85,7 +85,7 @@ export default function About({ translations }: AboutProps) {
             <Card className="border-gray-200 dark:border-gray-700">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                  <div className="w-2 h-2 bg-gradient-to-r from-violet-600 to-violet-400 rounded-full"></div>
+                  <div className="w-2 h-2 bg-linear-to-r from-violet-600 to-violet-400 rounded-full"></div>
                   {translations.about.softSkillsTitle}
                 </CardTitle>
               </CardHeader>
@@ -115,7 +115,7 @@ export default function About({ translations }: AboutProps) {
                   
                   <div className="flex gap-4">
                     {/* Icon */}
-                    <div className="flex-shrink-0 w-12 h-12 bg-violet-100 dark:bg-violet-900/50 rounded-full flex items-center justify-center ring-1 ring-gray-200 dark:ring-gray-600">
+                    <div className="shrink-0 w-12 h-12 bg-violet-100 dark:bg-violet-900/50 rounded-full flex items-center justify-center ring-1 ring-gray-200 dark:ring-gray-600">
                       {item.type === 'work' ? (
                         <Briefcase className="h-5 w-5 text-violet-600 dark:text-violet-400" />
                       ) : (

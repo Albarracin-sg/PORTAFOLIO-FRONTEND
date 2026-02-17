@@ -113,7 +113,7 @@ export default function AllProjects({ translations }: AllProjectsProps) {
 
   const ProjectCard = ({ project, isListView = false }: { project: any, isListView?: boolean }) => (
     <Card className={`group border-gray-200 dark:border-gray-700 hover:border-violet-500/50 dark:hover:border-violet-400/50 transition-all duration-300 ${isListView ? 'flex-row overflow-hidden' : ''} hover:shadow-2xl hover:shadow-violet-500/20`}>
-      <div className={`${isListView ? 'w-48 flex-shrink-0' : ''} relative overflow-hidden ${isListView ? '' : 'aspect-video'}`}>
+      <div className={`${isListView ? 'w-48 shrink-0' : ''} relative overflow-hidden ${isListView ? '' : 'aspect-video'}`}>
         <img 
           src={project.image} 
           alt={project.title}

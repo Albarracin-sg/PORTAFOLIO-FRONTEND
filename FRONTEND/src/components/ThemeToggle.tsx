@@ -45,8 +45,8 @@ export default function ThemeToggle({ isDark, onToggle }: ThemeToggleProps) {
           absolute inset-0 rounded-full transition-all duration-500 ease-in-out
           ${
             isDark
-              ? 'bg-gradient-to-br from-purple-500/20 to-blue-600/20 scale-100'
-              : 'bg-gradient-to-br from-orange-400/20 to-yellow-500/20 scale-0'
+              ? 'bg-linear-to-br from-purple-500/20 to-blue-600/20 scale-100'
+              : 'bg-linear-to-br from-orange-400/20 to-yellow-500/20 scale-0'
           }
         `}
       />

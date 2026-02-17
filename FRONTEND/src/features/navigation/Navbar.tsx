@@ -57,7 +57,7 @@ export function Navbar({ translations }: NavbarProps) {
     <nav className="bg-white/95 dark:bg-gray-950/95 backdrop-blur border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <div className="flex-shrink-0">
+          <div className="shrink-0">
             <Link to="/" className="text-violet-600 dark:text-violet-400 font-semibold hover:opacity-90">
               Portfolio
             </Link>

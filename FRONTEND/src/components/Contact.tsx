@@ -243,7 +243,7 @@ export default function Contact({ translations }: ContactProps) {
             </Card>
 
             {/* Call to Action */}
-            <Card className="bg-gradient-to-br from-violet-600 to-violet-500 dark:from-violet-500 dark:to-violet-600 text-white border-violet-400/30">
+            <Card className="bg-linear-to-br from-violet-600 to-violet-500 dark:from-violet-500 dark:to-violet-600 text-white border-violet-400/30">
               <CardContent className="pt-6">
                 <h3 className="text-lg mb-2 font-semibold">{translations.contact.cta.title}</h3>
                 <p className="mb-4 opacity-90">{translations.contact.cta.description}</p>
