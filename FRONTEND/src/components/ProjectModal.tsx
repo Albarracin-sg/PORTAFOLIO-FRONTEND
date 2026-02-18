@@ -23,7 +23,12 @@ interface ProjectModalProps {
   translations: any;
 }
 
-export default function ProjectModal({ project, isOpen, onClose, translations }: ProjectModalProps) {
+export default function ProjectModal({
+  project,
+  isOpen,
+  onClose,
+  translations,
+}: ProjectModalProps) {
   if (!project) return null;
 
   const dialogOpen = isOpen !== undefined ? isOpen : !!project;
@@ -50,7 +55,9 @@ export default function ProjectModal({ project, isOpen, onClose, translations }:
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-gray-500 dark:text-gray-400">Project Preview</div>
+                  <div className="text-gray-500 dark:text-gray-400">
+                    Project Preview
+                  </div>
                 </div>
               )}
             </div>
@@ -65,7 +72,9 @@ export default function ProjectModal({ project, isOpen, onClose, translations }:
               </h4>
               <div className="flex flex-wrap gap-2">
                 {project.technologies.map((tech) => (
-                  <Badge key={tech} variant="secondary">{tech}</Badge>
+                  <Badge key={tech} variant="secondary">
+                    {tech}
+                  </Badge>
                 ))}
               </div>
             </div>
@@ -103,14 +112,22 @@ export default function ProjectModal({ project, isOpen, onClose, translations }:
             {/* Actions */}
             <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
               <Button className="gap-2" asChild>
-                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Github className="h-4 w-4" />
                   {translations.projects.modal.viewGithub}
                 </a>
               </Button>
               {project.liveUrl && (
                 <Button variant="outline" className="gap-2" asChild>
-                  <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <ExternalLink className="h-4 w-4" />
                     {translations.projects.modal.viewLive}
                   </a>

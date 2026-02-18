@@ -2,7 +2,7 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Solo para componentes UI (Input, Select, Dialog…) que usan estas variables */
+/* Componentes UI (Input, Select, Dialog, Popover…) */
 @theme {
   --color-background: #fafafa;
   --color-foreground: #0a0a0a;
@@ -19,6 +19,9 @@
   --color-ring: #7c3aed;
   --color-destructive: #dc2626;
   --color-destructive-foreground: #fafafa;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #0a0a0a;
+  --color-input-background: #ffffff;
 }
 .dark {
   --color-background: #0a0a0a;
@@ -36,4 +39,7 @@
   --color-ring: #a78bfa;
   --color-destructive: #ef4444;
   --color-destructive-foreground: #fafafa;
+  --color-popover: #18181b;
+  --color-popover-foreground: #fafafa;
+  --color-input-background: #27272a;
 }

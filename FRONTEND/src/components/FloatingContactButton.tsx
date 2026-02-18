@@ -147,7 +147,7 @@ export default function FloatingContactButton() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes float-up {
           from {
             opacity: 0;

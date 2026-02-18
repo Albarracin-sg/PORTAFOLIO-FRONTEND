@@ -4,8 +4,16 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
-import { Mail, Github, Linkedin, MapPin, Phone, Send, CheckCircle } from "lucide-react";
-import { toast } from "sonner@2.0.3";
+import {
+  Mail,
+  Github,
+  Linkedin,
+  MapPin,
+  Phone,
+  Send,
+  CheckCircle,
+} from "lucide-react";
+import { toast } from "sonner";
 
 interface ContactProps {
   translations: any;
@@ -15,16 +23,18 @@ export default function Contact({ translations }: ContactProps) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    message: ""
+    message: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -37,7 +47,7 @@ export default function Contact({ translations }: ContactProps) {
       setIsSubmitting(false);
       setIsSubmitted(true);
       toast.success(translations.contact.form.successMessage);
-      
+
       // Reset form after 3 seconds
       setTimeout(() => {
         setIsSubmitted(false);
@@ -51,20 +61,20 @@ export default function Contact({ translations }: ContactProps) {
       icon: Mail,
       label: translations.contact.info.email,
       value: "hello@developer.com",
-      link: "mailto:hello@developer.com"
+      link: "mailto:hello@developer.com",
     },
     {
       icon: Phone,
       label: translations.contact.info.phone,
       value: "+34 123 456 789",
-      link: "tel:+34123456789"
+      link: "tel:+34123456789",
     },
     {
       icon: MapPin,
       label: translations.contact.info.location,
       value: "Madrid, España",
-      link: null
-    }
+      link: null,
+    },
   ];
 
   const socialLinks = [
@@ -72,20 +82,20 @@ export default function Contact({ translations }: ContactProps) {
       icon: Github,
       label: "GitHub",
       link: "https://github.com",
-      color: "hover:text-gray-900 dark:hover:text-white"
+      color: "hover:text-gray-900 dark:hover:text-white",
     },
     {
       icon: Linkedin,
       label: "LinkedIn",
       link: "https://linkedin.com",
-      color: "hover:text-blue-600"
+      color: "hover:text-blue-600",
     },
     {
       icon: Mail,
       label: "Email",
       link: "mailto:hello@developer.com",
-      color: "hover:text-red-500"
-    }
+      color: "hover:text-red-500",
+    },
   ];
 
   return (
@@ -93,7 +103,9 @@ export default function Contact({ translations }: ContactProps) {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl mb-4 text-gray-900 dark:text-gray-100">{translations.contact.title}</h1>
+          <h1 className="text-4xl mb-4 text-gray-900 dark:text-gray-100">
+            {translations.contact.title}
+          </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
             {translations.contact.subtitle}
           </p>
@@ -103,13 +115,17 @@ export default function Contact({ translations }: ContactProps) {
           {/* Contact Form */}
           <Card className="border-gray-200 dark:border-gray-700">
             <CardHeader>
-              <CardTitle className="text-gray-900 dark:text-gray-100">{translations.contact.form.title}</CardTitle>
+              <CardTitle className="text-gray-900 dark:text-gray-100">
+                {translations.contact.form.title}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {!isSubmitted ? (
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
-                    <Label htmlFor="name">{translations.contact.form.name}</Label>
+                    <Label htmlFor="name">
+                      {translations.contact.form.name}
+                    </Label>
                     <Input
                       id="name"
                       name="name"
@@ -122,7 +138,9 @@ export default function Contact({ translations }: ContactProps) {
                   </div>
 
                   <div>
-                    <Label htmlFor="email">{translations.contact.form.email}</Label>
+                    <Label htmlFor="email">
+                      {translations.contact.form.email}
+                    </Label>
                     <Input
                       id="email"
                       name="email"
@@ -136,7 +154,9 @@ export default function Contact({ translations }: ContactProps) {
                   </div>
 
                   <div>
-                    <Label htmlFor="message">{translations.contact.form.message}</Label>
+                    <Label htmlFor="message">
+                      {translations.contact.form.message}
+                    </Label>
                     <Textarea
                       id="message"
                       name="message"
@@ -149,9 +169,9 @@ export default function Contact({ translations }: ContactProps) {
                     />
                   </div>
 
-                  <Button 
-                    type="submit" 
-                    className="w-full gap-2" 
+                  <Button
+                    type="submit"
+                    className="w-full gap-2"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (
@@ -170,8 +190,10 @@ export default function Contact({ translations }: ContactProps) {
               ) : (
                 <div className="text-center py-8">
                   <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
-                  <h3 className="text-lg mb-2 text-gray-900 dark:text-gray-100">{translations.contact.form.thankYou}</h3>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <h3 className="font-display text-lg font-semibold mb-2 text-foreground dark:text-gray-100">
+                    {translations.contact.form.thankYou}
+                  </h3>
+                  <p className="text-muted-foreground dark:text-gray-400">
                     {translations.contact.form.responseTime}
                   </p>
                 </div>
@@ -179,24 +201,28 @@ export default function Contact({ translations }: ContactProps) {
             </CardContent>
           </Card>
 
-          {/* Contact Information */}
           <div className="space-y-8">
-            {/* Contact Details */}
-            <Card className="border-gray-200 dark:border-gray-700">
+            <Card className="border-border dark:border-gray-700 bg-card dark:bg-gray-900/50 shadow-sm dark:shadow-none">
               <CardHeader>
-                <CardTitle className="text-gray-900 dark:text-gray-100">{translations.contact.info.title}</CardTitle>
+                <CardTitle className="font-display text-foreground dark:text-gray-100 font-semibold">
+                  {translations.contact.info.title}
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {contactInfo.map((item, index) => {
                   const Icon = item.icon;
                   const content = (
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-violet-100 dark:bg-violet-900/50 rounded-lg flex items-center justify-center ring-1 ring-gray-200 dark:ring-gray-600">
+                      <div className="w-10 h-10 bg-violet-100 dark:bg-violet-900/50 rounded-lg flex items-center justify-center ring-1 ring-border dark:ring-gray-600">
                         <Icon className="h-5 w-5 text-violet-600 dark:text-violet-400" />
                       </div>
                       <div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">{item.label}</div>
-                        <div className="text-gray-900 dark:text-gray-100">{item.value}</div>
+                        <div className="text-sm text-muted-foreground dark:text-gray-400">
+                          {item.label}
+                        </div>
+                        <div className="text-foreground dark:text-gray-100">
+                          {item.value}
+                        </div>
                       </div>
                     </div>
                   );
@@ -219,7 +245,9 @@ export default function Contact({ translations }: ContactProps) {
             {/* Social Links */}
             <Card className="border-gray-200 dark:border-gray-700">
               <CardHeader>
-                <CardTitle className="text-gray-900 dark:text-gray-100">{translations.contact.social.title}</CardTitle>
+                <CardTitle className="text-gray-900 dark:text-gray-100">
+                  {translations.contact.social.title}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-3 gap-4">
@@ -239,17 +267,6 @@ export default function Contact({ translations }: ContactProps) {
                     );
                   })}
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Call to Action */}
-            <Card className="bg-linear-to-br from-violet-600 to-violet-500 dark:from-violet-500 dark:to-violet-600 text-white border-violet-400/30">
-              <CardContent className="pt-6">
-                <h3 className="text-lg mb-2 font-semibold">{translations.contact.cta.title}</h3>
-                <p className="mb-4 opacity-90">{translations.contact.cta.description}</p>
-                <Button variant="secondary" size="sm">
-                  {translations.contact.cta.button}
-                </Button>
               </CardContent>
             </Card>
           </div>

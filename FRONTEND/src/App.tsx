@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { RootLayout } from '@/app/layout/RootLayout';
+import { RootLayout } from './app/layout/RootLayout';
 import { HomePage } from '@/pages/HomePage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 
@@ -19,23 +19,17 @@ export default function App() {
   return (
     <Routes>
       <Route path="*" element={<RootLayout />}>
+        <Route path="projects" element={
+          <Suspense fallback={<PageFallback />}>
+            <AllProjectsPage />
+          </Suspense>
+        } />
+        <Route path="stats" element={
+          <Suspense fallback={<PageFallback />}>
+            <StatsPage />
+          </Suspense>
+        } />
         <Route index element={<HomePage />} />
-        <Route
-          path="stats"
-          element={
-            <Suspense fallback={<PageFallback />}>
-              <StatsPage />
-            </Suspense>
-          }
-        />
-        <Route
-          path="projects"
-          element={
-            <Suspense fallback={<PageFallback />}>
-              <AllProjectsPage />
-            </Suspense>
-          }
-        />
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
