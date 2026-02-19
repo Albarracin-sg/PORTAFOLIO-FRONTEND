@@ -6,11 +6,16 @@ import { Button } from "./ui/button";
 
 interface StatisticsProps {
   translations: any;
+  content?: Record<string, unknown>;
 }
 
-export default function Statistics({ translations }: StatisticsProps) {
-  // Mock data for charts
-  const languageData = [
+export default function Statistics({ translations, content }: StatisticsProps) {
+  const statsContent = content ?? {};
+  const chartData = (statsContent.charts as Record<string, unknown>) ?? {};
+  const cards = (statsContent.cards as Array<Record<string, string>>) ?? [];
+  const quality = (statsContent.quality as Record<string, string>) ?? {};
+
+  const languageData = (chartData.languageData as Array<Record<string, unknown>>) ?? [
     { name: "JavaScript", value: 35, color: "#f7df1e" },
     { name: "TypeScript", value: 25, color: "#3178c6" },
     { name: "Python", value: 15, color: "#3776ab" },
@@ -18,7 +23,7 @@ export default function Statistics({ translations }: StatisticsProps) {
     { name: "Other", value: 15, color: "#6b7280" }
   ];
 
-  const projectsData = [
+  const projectsData = (chartData.projectsData as Array<Record<string, unknown>>) ?? [
     { month: "Jan", projects: 2 },
     { month: "Feb", projects: 3 },
     { month: "Mar", projects: 1 },
@@ -27,7 +32,7 @@ export default function Statistics({ translations }: StatisticsProps) {
     { month: "Jun", projects: 3 }
   ];
 
-  const githubActivity = [
+  const githubActivity = (chartData.githubActivity as Array<Record<string, unknown>>) ?? [
     { day: "Mon", commits: 4 },
     { day: "Tue", commits: 6 },
     { day: "Wed", commits: 8 },
@@ -37,7 +42,7 @@ export default function Statistics({ translations }: StatisticsProps) {
     { day: "Sun", commits: 2 }
   ];
 
-  const stats = [
+  const stats = cards.length > 0 ? cards : [
     {
       title: translations.stats.totalProjects,
       value: "25+",
@@ -83,24 +88,30 @@ export default function Statistics({ translations }: StatisticsProps) {
 
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl mb-4 text-gray-900 dark:text-gray-100">{translations.stats.title}</h1>
+          <h1 className="text-4xl mb-4 text-gray-900 dark:text-gray-100">
+            {String(statsContent.title ?? translations.stats.title)}
+          </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            {translations.stats.subtitle}
+            {String(statsContent.subtitle ?? translations.stats.subtitle)}
           </p>
         </div>
 
         {/* Stats Cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <Card key={index} className="text-center border-gray-200 dark:border-gray-700 hover:border-violet-500/50 dark:hover:border-violet-400/50 transition-colors">
-                <CardHeader className="pb-2">
-                  <div className="w-12 h-12 bg-violet-100 dark:bg-violet-900/50 rounded-lg flex items-center justify-center mx-auto mb-2 ring-1 ring-gray-200 dark:ring-gray-600">
-                    <Icon className="h-6 w-6 text-violet-600 dark:text-violet-400" />
-                  </div>
-                  <CardTitle className="text-sm text-gray-500 dark:text-gray-400">
-                    {stat.title}
+            {stats.map((stat, index) => {
+              const Icon = (stat as { icon?: typeof Code }).icon;
+              return (
+                <Card key={index} className="text-center border-gray-200 dark:border-gray-700 hover:border-violet-500/50 dark:hover:border-violet-400/50 transition-colors">
+                  <CardHeader className="pb-2">
+                    <div className="w-12 h-12 bg-violet-100 dark:bg-violet-900/50 rounded-lg flex items-center justify-center mx-auto mb-2 ring-1 ring-gray-200 dark:ring-gray-600">
+                      {Icon ? (
+                        <Icon className="h-6 w-6 text-violet-600 dark:text-violet-400" />
+                      ) : (
+                        <div className="h-6 w-6 rounded bg-violet-200/40" />
+                      )}
+                    </div>
+                    <CardTitle className="text-sm text-gray-500 dark:text-gray-400">
+                      {stat.title}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -117,7 +128,9 @@ export default function Statistics({ translations }: StatisticsProps) {
           {/* Languages Chart */}
           <Card className="border-gray-200 dark:border-gray-700">
             <CardHeader>
-              <CardTitle className="text-gray-900 dark:text-gray-100">{translations.stats.languagesUsed}</CardTitle>
+              <CardTitle className="text-gray-900 dark:text-gray-100">
+                {String(statsContent.languagesUsed ?? translations.stats.languagesUsed)}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-80">
@@ -157,7 +170,9 @@ export default function Statistics({ translations }: StatisticsProps) {
           {/* Projects Timeline */}
           <Card className="border-gray-200 dark:border-gray-700">
             <CardHeader>
-              <CardTitle className="text-gray-900 dark:text-gray-100">{translations.stats.projectsTimeline}</CardTitle>
+              <CardTitle className="text-gray-900 dark:text-gray-100">
+                {String(statsContent.projectsTimeline ?? translations.stats.projectsTimeline)}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-80">
@@ -177,7 +192,9 @@ export default function Statistics({ translations }: StatisticsProps) {
           {/* GitHub Activity */}
           <Card className="lg:col-span-2 border-gray-200 dark:border-gray-700">
             <CardHeader>
-              <CardTitle className="text-gray-900 dark:text-gray-100">{translations.stats.githubActivity}</CardTitle>
+              <CardTitle className="text-gray-900 dark:text-gray-100">
+                {String(statsContent.githubActivity ?? translations.stats.githubActivity)}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-80">
@@ -207,21 +224,27 @@ export default function Statistics({ translations }: StatisticsProps) {
             <CardContent className="pt-6">
               <div className="grid grid-cols-3 gap-8">
                 <div>
-                  <div className="text-2xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">98%</div>
+                  <div className="text-2xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">
+                    {quality.codeQuality ?? '98%'}
+                  </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
-                    {translations.stats.codeQuality}
+                    {String(statsContent.codeQuality ?? translations.stats.codeQuality)}
                   </div>
                 </div>
                 <div>
-                  <div className="text-2xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">24h</div>
+                  <div className="text-2xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">
+                    {quality.avgResponseTime ?? '24h'}
+                  </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
-                    {translations.stats.avgResponseTime}
+                    {String(statsContent.avgResponseTime ?? translations.stats.avgResponseTime)}
                   </div>
                 </div>
                 <div>
-                  <div className="text-2xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">100%</div>
+                  <div className="text-2xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">
+                    {quality.projectSuccess ?? '100%'}
+                  </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
-                    {translations.stats.projectSuccess}
+                    {String(statsContent.projectSuccess ?? translations.stats.projectSuccess)}
                   </div>
                 </div>
               </div>

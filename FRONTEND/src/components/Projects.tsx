@@ -9,13 +9,16 @@ import { getFeaturedProjects } from "@/features/projects/data";
 
 interface ProjectsProps {
   translations: any;
+  projects?: any[];
+  content?: Record<string, unknown>;
 }
 
-export default function Projects({ translations }: ProjectsProps) {
+export default function Projects({ translations, projects, content }: ProjectsProps) {
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const featuredProjects = getFeaturedProjects(translations);
+  const featuredProjects = projects && projects.length > 0 ? projects : getFeaturedProjects(translations);
+  const projectsContent = content ?? {};
 
   const handleViewMore = (project: any) => {
     setSelectedProject(project);
@@ -28,11 +31,13 @@ export default function Projects({ translations }: ProjectsProps) {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl mb-4 text-gray-900 dark:text-gray-100">
-            {translations.projects.title}
+            {String(projectsContent.title ?? translations.projects.title)}
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            Featured projects showcasing advanced software engineering skills
-            and system design
+            {String(
+              projectsContent.subtitle ??
+                'Featured projects showcasing advanced software engineering skills and system design',
+            )}
           </p>
         </div>
 
@@ -132,12 +137,13 @@ export default function Projects({ translations }: ProjectsProps) {
         <div className="text-center">
           <div className="bg-violet-50 dark:bg-violet-950/30 rounded-lg border border-gray-200 dark:border-gray-700 p-8">
             <h3 className="text-2xl mb-4 text-gray-900 dark:text-gray-100">
-              Explore All Projects
+              {String(projectsContent.ctaTitle ?? 'Explore All Projects')}
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-2xl mx-auto">
-              Dive deeper into my complete portfolio with advanced filtering,
-              detailed technical breakdowns, and live demos of all{" "}
-              {translations.projects?.totalProjects || "15+"} projects.
+              {String(
+                projectsContent.ctaDescription ??
+                  `Dive deeper into my complete portfolio with advanced filtering, detailed technical breakdowns, and live demos of all ${translations.projects?.totalProjects || '15+'} projects.`,
+              )}
             </p>
             <Button
               size="lg"
@@ -145,7 +151,7 @@ export default function Projects({ translations }: ProjectsProps) {
               asChild
             >
               <Link to="/projects">
-                View All Projects
+                {String(projectsContent.cta ?? projectsContent.ctaLabel ?? 'View All Projects')}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>

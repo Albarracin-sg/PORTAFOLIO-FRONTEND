@@ -16,7 +16,21 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved !== null) {
       setIsDark(saved === 'dark');
+      return;
     }
+
+    const media = window.matchMedia('(prefers-color-scheme: dark)');
+    setIsDark(media.matches);
+
+    const handleChange = (event: MediaQueryListEvent) => {
+      const override = localStorage.getItem(STORAGE_KEY);
+      if (override === null) {
+        setIsDark(event.matches);
+      }
+    };
+
+    media.addEventListener('change', handleChange);
+    return () => media.removeEventListener('change', handleChange);
   }, []);
 
   useEffect(() => {

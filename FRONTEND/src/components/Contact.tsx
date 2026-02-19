@@ -14,12 +14,14 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { toast } from "sonner";
+import { sendContactMessage } from "@/shared/api/public";
 
 interface ContactProps {
   translations: any;
+  content?: Record<string, unknown>;
 }
 
-export default function Contact({ translations }: ContactProps) {
+export default function Contact({ translations, content }: ContactProps) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -42,21 +44,24 @@ export default function Contact({ translations }: ContactProps) {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      await sendContactMessage(formData);
       setIsSubmitted(true);
       toast.success(translations.contact.form.successMessage);
-
-      // Reset form after 3 seconds
       setTimeout(() => {
         setIsSubmitted(false);
         setFormData({ name: "", email: "", message: "" });
       }, 3000);
-    }, 1500);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "No se pudo enviar el mensaje",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const contactInfo = [
+  const fallbackContactInfo = [
     {
       icon: Mail,
       label: translations.contact.info.email,
@@ -77,7 +82,7 @@ export default function Contact({ translations }: ContactProps) {
     },
   ];
 
-  const socialLinks = [
+  const fallbackSocialLinks = [
     {
       icon: Github,
       label: "GitHub",
@@ -98,16 +103,22 @@ export default function Contact({ translations }: ContactProps) {
     },
   ];
 
+  const contactContent = content ?? {};
+  const infoItems = (contactContent.info as Array<Record<string, string>>) ?? fallbackContactInfo;
+  const socialItems = (contactContent.social as Array<Record<string, string>>) ?? fallbackSocialLinks;
+  const infoTitle = (contactContent.infoTitle as string) ?? translations.contact.info.title;
+  const socialTitle = (contactContent.socialTitle as string) ?? translations.contact.social.title;
+
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl mb-4 text-gray-900 dark:text-gray-100">
-            {translations.contact.title}
+            {String(contactContent.title ?? translations.contact.title)}
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            {translations.contact.subtitle}
+            {String(contactContent.subtitle ?? translations.contact.subtitle)}
           </p>
         </div>
 
@@ -116,7 +127,7 @@ export default function Contact({ translations }: ContactProps) {
           <Card className="border-gray-200 dark:border-gray-700">
             <CardHeader>
               <CardTitle className="text-gray-900 dark:text-gray-100">
-                {translations.contact.form.title}
+                {String(contactContent.form?.title ?? translations.contact.form.title)}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -124,7 +135,7 @@ export default function Contact({ translations }: ContactProps) {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <Label htmlFor="name">
-                      {translations.contact.form.name}
+                      {String(contactContent.form?.name ?? translations.contact.form.name)}
                     </Label>
                     <Input
                       id="name"
@@ -139,7 +150,7 @@ export default function Contact({ translations }: ContactProps) {
 
                   <div>
                     <Label htmlFor="email">
-                      {translations.contact.form.email}
+                      {String(contactContent.form?.email ?? translations.contact.form.email)}
                     </Label>
                     <Input
                       id="email"
@@ -155,7 +166,7 @@ export default function Contact({ translations }: ContactProps) {
 
                   <div>
                     <Label htmlFor="message">
-                      {translations.contact.form.message}
+                      {String(contactContent.form?.message ?? translations.contact.form.message)}
                     </Label>
                     <Textarea
                       id="message"
@@ -177,12 +188,12 @@ export default function Contact({ translations }: ContactProps) {
                     {isSubmitting ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        {translations.contact.form.sending}
+                        {String(contactContent.form?.sending ?? translations.contact.form.sending)}
                       </>
                     ) : (
                       <>
                         <Send className="h-4 w-4" />
-                        {translations.contact.form.send}
+                        {String(contactContent.form?.send ?? translations.contact.form.send)}
                       </>
                     )}
                   </Button>
@@ -191,10 +202,10 @@ export default function Contact({ translations }: ContactProps) {
                 <div className="text-center py-8">
                   <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
                   <h3 className="font-display text-lg font-semibold mb-2 text-foreground dark:text-gray-100">
-                    {translations.contact.form.thankYou}
+                    {String(contactContent.form?.thankYou ?? translations.contact.form.thankYou)}
                   </h3>
                   <p className="text-muted-foreground dark:text-gray-400">
-                    {translations.contact.form.responseTime}
+                    {String(contactContent.form?.responseTime ?? translations.contact.form.responseTime)}
                   </p>
                 </div>
               )}
@@ -205,12 +216,12 @@ export default function Contact({ translations }: ContactProps) {
             <Card className="border-border dark:border-gray-700 bg-card dark:bg-gray-900/50 shadow-sm dark:shadow-none">
               <CardHeader>
                 <CardTitle className="font-display text-foreground dark:text-gray-100 font-semibold">
-                  {translations.contact.info.title}
+                  {String(infoTitle)}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {contactInfo.map((item, index) => {
-                  const Icon = item.icon;
+                {infoItems.map((item, index) => {
+                  const Icon = (item.icon as typeof Mail) ?? Mail;
                   const content = (
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 bg-violet-100 dark:bg-violet-900/50 rounded-lg flex items-center justify-center ring-1 ring-border dark:ring-gray-600">
@@ -218,10 +229,10 @@ export default function Contact({ translations }: ContactProps) {
                       </div>
                       <div>
                         <div className="text-sm text-muted-foreground dark:text-gray-400">
-                          {item.label}
+                          {String(item.label)}
                         </div>
                         <div className="text-foreground dark:text-gray-100">
-                          {item.value}
+                          {String(item.value)}
                         </div>
                       </div>
                     </div>
@@ -230,7 +241,7 @@ export default function Contact({ translations }: ContactProps) {
                   return item.link ? (
                     <a
                       key={index}
-                      href={item.link}
+                      href={String(item.link)}
                       className="block hover:bg-gray-100 dark:hover:bg-gray-800 p-2 -m-2 rounded-lg transition-colors"
                     >
                       {content}
@@ -246,23 +257,23 @@ export default function Contact({ translations }: ContactProps) {
             <Card className="border-gray-200 dark:border-gray-700">
               <CardHeader>
                 <CardTitle className="text-gray-900 dark:text-gray-100">
-                  {translations.contact.social.title}
+                  {String(socialTitle)}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-3 gap-4">
-                  {socialLinks.map((social, index) => {
-                    const Icon = social.icon;
+                  {socialItems.map((social, index) => {
+                    const Icon = (social.icon as typeof Github) ?? Github;
                     return (
                       <a
                         key={index}
-                        href={social.link}
+                        href={String(social.link)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`flex flex-col items-center gap-2 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 transition-colors ${social.color}`}
+                        className={`flex flex-col items-center gap-2 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 transition-colors ${String(social.color ?? '')}`}
                       >
                         <Icon className="h-6 w-6" />
-                        <span className="text-sm">{social.label}</span>
+                        <span className="text-sm">{String(social.label)}</span>
                       </a>
                     );
                   })}

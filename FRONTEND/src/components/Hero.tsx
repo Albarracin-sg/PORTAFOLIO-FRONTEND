@@ -6,10 +6,14 @@ import { useState } from "react";
 interface HeroProps {
   translations: any;
   scrollY?: number;
+  content?: Record<string, unknown>;
 }
 
-export default function Hero({ translations }: HeroProps) {
+export default function Hero({ translations, content }: HeroProps) {
   const [isImageHovered, setIsImageHovered] = useState(false);
+  const heroContent = content ?? {};
+  const stats = (heroContent.stats as { yearsExperience?: string; projectsCompleted?: string; technologies?: string }) ?? {};
+  const cta = (heroContent.cta as { viewProjects?: string; contactMe?: string }) ?? {};
 
   return (
     <section className="min-h-[calc(100vh-4rem)] flex items-center py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -19,13 +23,13 @@ export default function Hero({ translations }: HeroProps) {
           <div className="space-y-8">
             <div className="space-y-4">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl text-gray-900 dark:text-gray-100">
-                {translations.hero.greeting}
+                {String(heroContent.greeting ?? translations.hero.greeting)}
                 <span className="text-violet-600 dark:text-violet-400 block">
-                  {translations.hero.role}
+                  {String(heroContent.role ?? translations.hero.role)}
                 </span>
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl">
-                {translations.hero.subtitle}
+                {String(heroContent.subtitle ?? translations.hero.subtitle)}
               </p>
             </div>
 
@@ -44,7 +48,7 @@ export default function Hero({ translations }: HeroProps) {
                   }
                 }}
               >
-                {translations.hero.viewProjects}
+                {String(cta.viewProjects ?? translations.hero.viewProjects)}
                 <ArrowRight className="h-5 w-5" />
               </Button>
               <Button
@@ -62,7 +66,7 @@ export default function Hero({ translations }: HeroProps) {
                 }}
               >
                 <Mail className="h-5 w-5" />
-                {translations.hero.contactMe}
+                {String(cta.contactMe ?? translations.hero.contactMe)}
               </Button>
             </div>
 
@@ -70,7 +74,7 @@ export default function Hero({ translations }: HeroProps) {
             <div className="grid grid-cols-3 gap-8 pt-8 border-t border-border dark:border-gray-700">
               <div className="text-center">
                 <div className="font-display text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
-                  3+
+                  {stats.yearsExperience ?? '3+'}
                 </div>
                 <div className="text-sm text-muted-foreground dark:text-gray-400">
                   {translations.hero.yearsExperience}
@@ -78,7 +82,7 @@ export default function Hero({ translations }: HeroProps) {
               </div>
               <div className="text-center">
                 <div className="font-display text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
-                  15+
+                  {stats.projectsCompleted ?? '15+'}
                 </div>
                 <div className="text-sm text-muted-foreground dark:text-gray-400">
                   {translations.hero.projectsCompleted}
@@ -86,7 +90,7 @@ export default function Hero({ translations }: HeroProps) {
               </div>
               <div className="text-center">
                 <div className="font-display text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
-                  5+
+                  {stats.technologies ?? '5+'}
                 </div>
                 <div className="text-sm text-muted-foreground dark:text-gray-400">
                   {translations.hero.technologies}

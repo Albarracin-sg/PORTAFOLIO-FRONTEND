@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
@@ -13,6 +13,8 @@ import {
 } from "./ui/select";
 import ProjectModal from "./ProjectModal";
 import { allProjectsList } from "@/features/projects/data";
+import { fetchPublicProjects } from "@/shared/api/public";
+import { mapPublicProjectToList } from "@/shared/api/mappers";
 import {
   Search,
   Calendar,
@@ -41,7 +43,28 @@ export default function AllProjects({ translations }: AllProjectsProps) {
   const [sortOrder, setSortOrder] = useState("desc");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  const allProjects = allProjectsList;
+  const [allProjects, setAllProjects] = useState(allProjectsList);
+
+  useEffect(() => {
+    let isActive = true;
+
+    const load = async () => {
+      try {
+        const projects = await fetchPublicProjects();
+        if (!isActive) return;
+        setAllProjects(projects.map(mapPublicProjectToList));
+      } catch {
+        if (!isActive) return;
+        setAllProjects(allProjectsList);
+      }
+    };
+
+    load();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   const categories = [
     { value: "all", label: t.allProjects ?? "Todos los proyectos" },

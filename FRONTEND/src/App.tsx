@@ -1,8 +1,16 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { RootLayout } from './app/layout/RootLayout';
+import { AdminLayout } from './app/layout/AdminLayout';
+import { RequireAdmin } from '@/features/admin/RequireAdmin';
 import { HomePage } from '@/pages/HomePage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
+import { AdminLoginPage } from '@/pages/Admin/LoginPage';
+import { AdminDashboardPage } from '@/pages/Admin/DashboardPage';
+import { AdminContentPage } from '@/pages/Admin/ContentPage';
+import { AdminProjectsPage } from '@/pages/Admin/ProjectsPage';
+import { AdminTranslationsPage } from '@/pages/Admin/TranslationsPage';
+import { AdminMessagesPage } from '@/pages/Admin/MessagesPage';
 
 const StatsPage = lazy(() => import('@/pages/StatsPage').then((m) => ({ default: m.StatsPage })));
 const AllProjectsPage = lazy(() => import('@/pages/AllProjectsPage').then((m) => ({ default: m.AllProjectsPage })));
@@ -18,6 +26,21 @@ function PageFallback() {
 export default function App() {
   return (
     <Routes>
+      <Route path="admin/login" element={<AdminLoginPage />} />
+      <Route
+        path="admin"
+        element={
+          <RequireAdmin>
+            <AdminLayout />
+          </RequireAdmin>
+        }
+      >
+        <Route index element={<AdminDashboardPage />} />
+        <Route path="content" element={<AdminContentPage />} />
+        <Route path="projects" element={<AdminProjectsPage />} />
+        <Route path="translations" element={<AdminTranslationsPage />} />
+        <Route path="messages" element={<AdminMessagesPage />} />
+      </Route>
       <Route path="*" element={<RootLayout />}>
         <Route path="projects" element={
           <Suspense fallback={<PageFallback />}>

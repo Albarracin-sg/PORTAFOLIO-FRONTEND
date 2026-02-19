@@ -4,10 +4,11 @@ import { Calendar, MapPin, GraduationCap, Briefcase } from "lucide-react";
 
 interface AboutProps {
   translations: any;
+  content?: Record<string, unknown>;
 }
 
-export default function About({ translations }: AboutProps) {
-  const technicalSkills = [
+export default function About({ translations, content }: AboutProps) {
+  const defaultTechnicalSkills = [
     "React",
     "Node.js",
     "TypeScript",
@@ -22,7 +23,7 @@ export default function About({ translations }: AboutProps) {
     "Tailwind CSS",
   ];
 
-  const softSkills = [
+  const fallbackSoftSkills = [
     translations.about.softSkills.problemSolving,
     translations.about.softSkills.teamwork,
     translations.about.softSkills.communication,
@@ -31,7 +32,7 @@ export default function About({ translations }: AboutProps) {
     translations.about.softSkills.creativity,
   ];
 
-  const timeline = [
+  const fallbackTimeline = [
     {
       type: "work",
       title: translations.about.timeline.work1.title,
@@ -58,16 +59,21 @@ export default function About({ translations }: AboutProps) {
     },
   ];
 
+  const aboutContent = content ?? {};
+  const technicalSkills = (aboutContent.technicalSkills as string[]) ?? defaultTechnicalSkills;
+  const softSkills = (aboutContent.softSkills as string[]) ?? fallbackSoftSkills;
+  const timeline = (aboutContent.timeline as Array<Record<string, string>>) ?? fallbackTimeline;
+
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl mb-4 text-gray-900 dark:text-gray-100">
-            {translations.about.title}
+            {String(aboutContent.title ?? translations.about.title)}
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            {translations.about.bio}
+            {String(aboutContent.bio ?? translations.about.bio)}
           </p>
         </div>
 
@@ -79,7 +85,7 @@ export default function About({ translations }: AboutProps) {
               <CardHeader>
                 <CardTitle className="font-display flex items-center gap-2 font-semibold text-foreground dark:text-gray-100">
                   <div className="w-2 h-2 rounded-full bg-violet-600 dark:bg-violet-400"></div>
-                  {translations.about.technicalSkills}
+                  {String(aboutContent.technicalSkillsTitle ?? translations.about.technicalSkills)}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -98,7 +104,7 @@ export default function About({ translations }: AboutProps) {
               <CardHeader>
                 <CardTitle className="font-display flex items-center gap-2 font-semibold text-foreground dark:text-gray-100">
                   <div className="w-2 h-2 rounded-full bg-violet-600 dark:bg-violet-400"></div>
-                  {translations.about.softSkillsTitle}
+                  {String(aboutContent.softSkillsTitle ?? translations.about.softSkillsTitle)}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -119,7 +125,7 @@ export default function About({ translations }: AboutProps) {
           {/* Timeline Section */}
           <div>
             <h3 className="font-display text-2xl font-semibold mb-8 text-foreground dark:text-gray-100">
-              {translations.about.experienceEducation}
+              {String(aboutContent.experienceEducation ?? translations.about.experienceEducation)}
             </h3>
             <div className="space-y-6">
               {timeline.map((item, index) => (
@@ -142,22 +148,22 @@ export default function About({ translations }: AboutProps) {
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-2">
                         <h4 className="font-medium text-foreground dark:text-gray-100">
-                          {item.title}
-                        </h4>
+                        {String(item.title)}
+                      </h4>
                         <div className="flex items-center gap-1 text-sm text-muted-foreground dark:text-gray-400">
                           <Calendar className="h-3 w-3" />
-                          {item.period}
+                           {String(item.period)}
                         </div>
                       </div>
                       <div className="text-violet-600 dark:text-violet-400 mb-1 font-medium">
-                        {item.company}
+                        {String(item.company)}
                       </div>
                       <div className="flex items-center gap-1 text-sm text-muted-foreground dark:text-gray-400 mb-3">
                         <MapPin className="h-3 w-3" />
-                        {item.location}
+                        {String(item.location)}
                       </div>
                       <p className="text-sm text-muted-foreground dark:text-gray-400">
-                        {item.description}
+                        {String(item.description)}
                       </p>
                     </div>
                   </div>

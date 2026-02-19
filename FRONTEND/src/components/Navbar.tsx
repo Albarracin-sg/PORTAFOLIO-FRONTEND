@@ -2,6 +2,9 @@ import { Button } from "./ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { FileText, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { AdminLoginModal } from "@/features/admin/AdminLoginModal";
+import { useAdminAuth } from "@/features/admin/AdminAuthProvider";
 import ThemeToggle from "./ThemeToggle";
 
 interface NavbarProps {
@@ -16,6 +19,7 @@ interface NavbarProps {
 
 export default function Navbar({ currentPage, onPageChange, language, onLanguageChange, translations, isDark, onThemeToggle }: NavbarProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { token } = useAdminAuth();
 
   const navItems = [
     { key: 'home', label: translations.nav.home },
@@ -96,11 +100,18 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
               </SelectContent>
             </Select>
 
-            {/* Download CV Button */}
-            <Button variant="outline" className="gap-2">
-              <FileText className="h-4 w-4" />
-              {translations.nav.downloadCV}
-            </Button>
+             {/* Admin + CV */}
+             {token ? (
+               <Button variant="outline" className="gap-2" asChild>
+                 <Link to="/admin">Admin</Link>
+               </Button>
+             ) : (
+               <AdminLoginModal />
+             )}
+             <Button variant="outline" className="gap-2">
+               <FileText className="h-4 w-4" />
+               {translations.nav.downloadCV}
+             </Button>
           </div>
 
           {/* Mobile menu button */}
@@ -151,10 +162,17 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
                   </SelectContent>
                 </Select>
                 
-                <Button variant="outline" className="gap-2 w-full">
-                  <FileText className="h-4 w-4" />
-                  {translations.nav.downloadCV}
-                </Button>
+                 {token ? (
+                   <Button variant="outline" className="gap-2 w-full" asChild>
+                     <Link to="/admin">Admin</Link>
+                   </Button>
+                 ) : (
+                   <AdminLoginModal triggerLabel="Admin" triggerClassName="w-full" />
+                 )}
+                 <Button variant="outline" className="gap-2 w-full">
+                   <FileText className="h-4 w-4" />
+                   {translations.nav.downloadCV}
+                 </Button>
               </div>
             </div>
           </div>
