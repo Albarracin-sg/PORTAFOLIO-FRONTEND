@@ -1,6 +1,6 @@
 import { Button } from "./ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { FileText, Menu, X } from "lucide-react";
+import { FileText, Menu } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AdminLoginModal } from "@/features/admin/AdminLoginModal";
@@ -117,66 +117,86 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
           {/* Mobile menu button */}
           <div className="md:hidden">
             <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={() => setIsMobileMenuOpen(true)}
               className="p-2 text-muted-foreground hover:text-primary"
             >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              <Menu className="h-6 w-6" />
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 border-t">
-              {navItems.map((item) => (
-                <button
-                  key={item.key}
-                  onClick={() => {
-                    scrollToSection(item.key);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className={`block px-3 py-2 text-base w-full text-left transition-colors hover:text-primary ${
-                    currentPage === item.key
-                      ? 'text-primary bg-accent'
-                      : 'text-muted-foreground'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-              
-              <div className="pt-4 flex flex-col space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">Theme:</span>
-                  <ThemeToggle isDark={isDark} onToggle={onThemeToggle} />
-                </div>
-                
-                <Select value={language} onValueChange={onLanguageChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="es">Español</SelectItem>
-                    <SelectItem value="en">English</SelectItem>
-                  </SelectContent>
-                </Select>
-                
-                 {token ? (
-                   <Button variant="outline" className="gap-2 w-full" asChild>
-                     <Link to="/admin">Admin</Link>
-                   </Button>
-                 ) : (
-                   <AdminLoginModal triggerLabel="Admin" triggerClassName="w-full" />
-                 )}
-                 <Button variant="outline" className="gap-2 w-full">
-                   <FileText className="h-4 w-4" />
-                   {translations?.nav?.downloadCV ?? ''}
-                 </Button>
-              </div>
-            </div>
+      {/* Mobile Slide-over */}
+      <div
+        className={`fixed inset-0 z-50 md:hidden transition-opacity ${
+          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+      >
+        <div
+          className="absolute inset-0 bg-black/40"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+        <aside
+          className={`absolute right-0 top-0 h-full w-72 bg-background shadow-2xl border-l border-white/10 transition-transform duration-300 ${
+            isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+        >
+          <div className="p-5 border-b border-white/10 flex items-center justify-between">
+            <span className="text-sm text-muted-foreground">Menu</span>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-sm text-muted-foreground"
+            >
+              Cerrar
+            </button>
           </div>
-        )}
+          <div className="p-5 space-y-2">
+            {navItems.map((item) => (
+              <button
+                key={item.key}
+                onClick={() => {
+                  scrollToSection(item.key);
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full rounded-md px-3 py-2 text-left text-sm transition-colors hover:text-primary ${
+                  currentPage === item.key
+                    ? 'text-primary bg-accent'
+                    : 'text-muted-foreground'
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </div>
+          <div className="mt-auto p-5 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-muted-foreground">Theme</span>
+              <ThemeToggle isDark={isDark} onToggle={onThemeToggle} />
+            </div>
+
+            <Select value={language} onValueChange={onLanguageChange}>
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="es">Español</SelectItem>
+                <SelectItem value="en">English</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {token ? (
+              <Button variant="outline" className="gap-2 w-full" asChild>
+                <Link to="/admin">Admin</Link>
+              </Button>
+            ) : (
+              <AdminLoginModal triggerLabel="Admin" triggerClassName="w-full" />
+            )}
+            <Button variant="outline" className="gap-2 w-full">
+              <FileText className="h-4 w-4" />
+              {translations?.nav?.downloadCV ?? ''}
+            </Button>
+          </div>
+        </aside>
       </div>
     </nav>
   );
