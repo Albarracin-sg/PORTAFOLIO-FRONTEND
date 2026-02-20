@@ -1,12 +1,18 @@
-import { useEffect, useState } from 'react';
-import { fetchTranslations, TranslationRecord } from '@/features/admin/api/translations';
+import { useEffect, useMemo, useState } from 'react';
+import { fetchTranslations, TranslationRecord, upsertTranslation } from '@/features/admin/api/translations';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { useAdminAuth } from '@/features/admin/AdminAuthProvider';
 
 export function AdminTranslationsPage() {
+  const { token } = useAdminAuth();
   const [lang, setLang] = useState<'es' | 'en'>('es');
   const [records, setRecords] = useState<TranslationRecord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedNamespace, setSelectedNamespace] = useState<string | null>(null);
+  const [jsonDraft, setJsonDraft] = useState('');
+  const [saveStatus, setSaveStatus] = useState<string | null>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -18,6 +24,38 @@ export function AdminTranslationsPage() {
 
     load();
   }, [lang]);
+
+  const selectedRecord = useMemo(
+    () => records.find((record) => record.namespace === selectedNamespace),
+    [records, selectedNamespace],
+  );
+
+  useEffect(() => {
+    if (!selectedRecord) {
+      setJsonDraft('');
+      return;
+    }
+    setJsonDraft(JSON.stringify(selectedRecord.content ?? {}, null, 2));
+  }, [selectedRecord]);
+
+  const handleSave = async () => {
+    if (!token || !selectedRecord) return;
+    setSaveStatus(null);
+    try {
+      const parsed = JSON.parse(jsonDraft);
+      const updated = await upsertTranslation(token, {
+        lang: selectedRecord.lang,
+        namespace: selectedRecord.namespace,
+        content: parsed,
+      });
+      setRecords((prev) =>
+        prev.map((item) => (item.id === updated.id ? updated : item)),
+      );
+      setSaveStatus('Guardado');
+    } catch (error) {
+      setSaveStatus(error instanceof Error ? error.message : 'JSON invalido');
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -36,26 +74,61 @@ export function AdminTranslationsPage() {
         </div>
       </div>
 
-      <Card className="border-gray-200 dark:border-gray-700">
-        <CardHeader>
-          <CardTitle className="text-gray-900 dark:text-gray-100">Namespaces</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          {loading ? (
-            <p className="text-gray-500">Loading translations...</p>
-          ) : (
-            records.map((record) => (
-              <div key={record.id} className="flex items-center justify-between border-b border-gray-200/60 pb-2">
-                <div>
+      <div className="grid gap-6 lg:grid-cols-3">
+        <Card className="border-gray-200 dark:border-gray-700 lg:col-span-1">
+          <CardHeader>
+            <CardTitle className="text-gray-900 dark:text-gray-100">Namespaces</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {loading ? (
+              <p className="text-gray-500">Loading translations...</p>
+            ) : (
+              records.map((record) => (
+                <button
+                  key={record.id}
+                  type="button"
+                  onClick={() => setSelectedNamespace(record.namespace)}
+                  className={`w-full text-left rounded-lg border border-gray-200/60 dark:border-gray-700/60 px-3 py-2 transition-colors ${
+                    selectedNamespace === record.namespace
+                      ? 'border-violet-400/80 bg-violet-50/70 dark:bg-violet-900/30'
+                      : 'hover:bg-gray-50 dark:hover:bg-gray-800/50'
+                  }`}
+                >
                   <div className="font-medium text-gray-900 dark:text-gray-100">{record.namespace}</div>
-                  <div className="text-sm text-gray-500">{record.lang}</div>
+                  <div className="text-xs text-gray-500">Keys: {Object.keys(record.content ?? {}).length}</div>
+                </button>
+              ))
+            )}
+          </CardContent>
+        </Card>
+        <Card className="border-gray-200 dark:border-gray-700 lg:col-span-2">
+          <CardHeader>
+            <CardTitle className="text-gray-900 dark:text-gray-100">Editor</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {selectedRecord ? (
+              <>
+                <div>
+                  <Label htmlFor="translation-json">JSON</Label>
+                  <textarea
+                    id="translation-json"
+                    value={jsonDraft}
+                    onChange={(event) => setJsonDraft(event.target.value)}
+                    rows={16}
+                    className="mt-1 w-full rounded-md border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100"
+                  />
                 </div>
-                <div className="text-sm text-gray-500">Keys: {Object.keys(record.content ?? {}).length}</div>
-              </div>
-            ))
-          )}
-        </CardContent>
-      </Card>
+                {saveStatus && <p className="text-sm text-gray-500">{saveStatus}</p>}
+                <Button className="w-full" onClick={handleSave} disabled={!token}>
+                  Save translation
+                </Button>
+              </>
+            ) : (
+              <p className="text-sm text-gray-500">Select a namespace to edit.</p>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

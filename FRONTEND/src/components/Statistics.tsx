@@ -3,71 +3,28 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts";
 import { Code, GitBranch, Award, Users, ArrowLeft } from "lucide-react";
 import { Button } from "./ui/button";
+import { EditableText } from "@/features/admin/InlineEdit";
+import { useSectionEditor } from "@/features/admin/hooks/useSectionEditor";
 
 interface StatisticsProps {
   translations: any;
-  content?: Record<string, unknown>;
+  section?: { id: string; type: string; content: Record<string, unknown> };
 }
 
-export default function Statistics({ translations, content }: StatisticsProps) {
-  const statsContent = content ?? {};
+export default function Statistics({ translations, section }: StatisticsProps) {
+  const statsContent = section?.content ?? {};
+  const { draft, updateField } = useSectionEditor(section as any);
   const chartData = (statsContent.charts as Record<string, unknown>) ?? {};
-  const cards = (statsContent.cards as Array<Record<string, string>>) ?? [];
-  const quality = (statsContent.quality as Record<string, string>) ?? {};
+  const cards = (draft.cards as Array<Record<string, string>>) ?? (statsContent.cards as Array<Record<string, string>>) ?? [];
+  const quality = (draft.quality as Record<string, string>) ?? (statsContent.quality as Record<string, string>) ?? {};
 
-  const languageData = (chartData.languageData as Array<Record<string, unknown>>) ?? [
-    { name: "JavaScript", value: 35, color: "#f7df1e" },
-    { name: "TypeScript", value: 25, color: "#3178c6" },
-    { name: "Python", value: 15, color: "#3776ab" },
-    { name: "Java", value: 10, color: "#ed8b00" },
-    { name: "Other", value: 15, color: "#6b7280" }
-  ];
+  const languageData = (chartData.languageData as Array<Record<string, unknown>>) ?? [];
 
-  const projectsData = (chartData.projectsData as Array<Record<string, unknown>>) ?? [
-    { month: "Jan", projects: 2 },
-    { month: "Feb", projects: 3 },
-    { month: "Mar", projects: 1 },
-    { month: "Apr", projects: 4 },
-    { month: "May", projects: 2 },
-    { month: "Jun", projects: 3 }
-  ];
+  const projectsData = (chartData.projectsData as Array<Record<string, unknown>>) ?? [];
 
-  const githubActivity = (chartData.githubActivity as Array<Record<string, unknown>>) ?? [
-    { day: "Mon", commits: 4 },
-    { day: "Tue", commits: 6 },
-    { day: "Wed", commits: 8 },
-    { day: "Thu", commits: 5 },
-    { day: "Fri", commits: 7 },
-    { day: "Sat", commits: 3 },
-    { day: "Sun", commits: 2 }
-  ];
+  const githubActivity = (chartData.githubActivity as Array<Record<string, unknown>>) ?? [];
 
-  const stats = cards.length > 0 ? cards : [
-    {
-      title: translations.stats.totalProjects,
-      value: "25+",
-      icon: Code,
-      description: translations.stats.projectsDescription
-    },
-    {
-      title: translations.stats.githubCommits,
-      value: "1,240",
-      icon: GitBranch,
-      description: translations.stats.commitsDescription
-    },
-    {
-      title: translations.stats.openSource,
-      value: "8",
-      icon: Award,
-      description: translations.stats.openSourceDescription
-    },
-    {
-      title: translations.stats.collaborations,
-      value: "12",
-      icon: Users,
-      description: translations.stats.collaborationsDescription
-    }
-  ];
+  const stats = cards.length > 0 ? cards : [];
 
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8">
@@ -81,7 +38,7 @@ export default function Statistics({ translations, content }: StatisticsProps) {
           >
             <Link to="/">
               <ArrowLeft className="h-4 w-4" />
-              {translations.common?.back || 'Volver'}
+              {translations?.common?.back ?? ''}
             </Link>
           </Button>
         </div>
@@ -89,34 +46,55 @@ export default function Statistics({ translations, content }: StatisticsProps) {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl mb-4 text-gray-900 dark:text-gray-100">
-            {String(statsContent.title ?? translations.stats.title)}
+            <EditableText
+              value={String(draft.title ?? statsContent.title ?? '')}
+              onSave={(value) => updateField('title', value)}
+            />
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            {String(statsContent.subtitle ?? translations.stats.subtitle)}
+            <EditableText
+              value={String(draft.subtitle ?? statsContent.subtitle ?? '')}
+              onSave={(value) => updateField('subtitle', value)}
+              multiline
+            />
           </p>
         </div>
 
         {/* Stats Cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            {stats.map((stat, index) => {
-              const Icon = (stat as { icon?: typeof Code }).icon;
-              return (
-                <Card key={index} className="text-center border-gray-200 dark:border-gray-700 hover:border-violet-500/50 dark:hover:border-violet-400/50 transition-colors">
-                  <CardHeader className="pb-2">
-                    <div className="w-12 h-12 bg-violet-100 dark:bg-violet-900/50 rounded-lg flex items-center justify-center mx-auto mb-2 ring-1 ring-gray-200 dark:ring-gray-600">
-                      {Icon ? (
-                        <Icon className="h-6 w-6 text-violet-600 dark:text-violet-400" />
-                      ) : (
-                        <div className="h-6 w-6 rounded bg-violet-200/40" />
-                      )}
-                    </div>
-                    <CardTitle className="text-sm text-gray-500 dark:text-gray-400">
-                      {stat.title}
+          {stats.map((stat, index) => {
+            const Icon = (stat as { icon?: typeof Code }).icon;
+            return (
+              <Card key={index} className="text-center border-gray-200 dark:border-gray-700 hover:border-violet-500/50 dark:hover:border-violet-400/50 transition-colors">
+                <CardHeader className="pb-2">
+                  <div className="w-12 h-12 bg-violet-100 dark:bg-violet-900/50 rounded-lg flex items-center justify-center mx-auto mb-2 ring-1 ring-gray-200 dark:ring-gray-600">
+                    {Icon ? (
+                      <Icon className="h-6 w-6 text-violet-600 dark:text-violet-400" />
+                    ) : (
+                      <div className="h-6 w-6 rounded bg-violet-200/40" />
+                    )}
+                  </div>
+                  <CardTitle className="text-sm text-gray-500 dark:text-gray-400">
+                    <EditableText
+                      value={String(stat.title)}
+                      onSave={(value) => updateField(`cards.${index}.title`, value)}
+                    />
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">{stat.value}</div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">{stat.description}</p>
+                  <div className="text-3xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">
+                    <EditableText
+                      value={String(stat.value)}
+                      onSave={(value) => updateField(`cards.${index}.value`, value)}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">
+                    <EditableText
+                      value={String(stat.description)}
+                      onSave={(value) => updateField(`cards.${index}.description`, value)}
+                      multiline
+                    />
+                  </p>
                 </CardContent>
               </Card>
             );
@@ -129,7 +107,10 @@ export default function Statistics({ translations, content }: StatisticsProps) {
           <Card className="border-gray-200 dark:border-gray-700">
             <CardHeader>
               <CardTitle className="text-gray-900 dark:text-gray-100">
-                {String(statsContent.languagesUsed ?? translations.stats.languagesUsed)}
+                <EditableText
+                  value={String(draft.languagesUsed ?? statsContent.languagesUsed ?? '')}
+                  onSave={(value) => updateField('languagesUsed', value)}
+                />
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -171,7 +152,10 @@ export default function Statistics({ translations, content }: StatisticsProps) {
           <Card className="border-gray-200 dark:border-gray-700">
             <CardHeader>
               <CardTitle className="text-gray-900 dark:text-gray-100">
-                {String(statsContent.projectsTimeline ?? translations.stats.projectsTimeline)}
+                <EditableText
+                  value={String(draft.projectsTimeline ?? statsContent.projectsTimeline ?? '')}
+                  onSave={(value) => updateField('projectsTimeline', value)}
+                />
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -193,7 +177,10 @@ export default function Statistics({ translations, content }: StatisticsProps) {
           <Card className="lg:col-span-2 border-gray-200 dark:border-gray-700">
             <CardHeader>
               <CardTitle className="text-gray-900 dark:text-gray-100">
-                {String(statsContent.githubActivity ?? translations.stats.githubActivity)}
+                <EditableText
+                  value={String(draft.githubActivity ?? statsContent.githubActivity ?? '')}
+                  onSave={(value) => updateField('githubActivity', value)}
+                />
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -225,26 +212,44 @@ export default function Statistics({ translations, content }: StatisticsProps) {
               <div className="grid grid-cols-3 gap-8">
                 <div>
                   <div className="text-2xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">
-                    {quality.codeQuality ?? '98%'}
+                    <EditableText
+                      value={String(quality.codeQuality ?? '98%')}
+                      onSave={(value) => updateField('quality.codeQuality', value)}
+                    />
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
-                    {String(statsContent.codeQuality ?? translations.stats.codeQuality)}
+                    <EditableText
+                      value={String(draft.codeQuality ?? statsContent.codeQuality ?? '')}
+                      onSave={(value) => updateField('codeQuality', value)}
+                    />
                   </div>
                 </div>
                 <div>
                   <div className="text-2xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">
-                    {quality.avgResponseTime ?? '24h'}
+                    <EditableText
+                      value={String(quality.avgResponseTime ?? '24h')}
+                      onSave={(value) => updateField('quality.avgResponseTime', value)}
+                    />
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
-                    {String(statsContent.avgResponseTime ?? translations.stats.avgResponseTime)}
+                    <EditableText
+                      value={String(draft.avgResponseTime ?? statsContent.avgResponseTime ?? '')}
+                      onSave={(value) => updateField('avgResponseTime', value)}
+                    />
                   </div>
                 </div>
                 <div>
                   <div className="text-2xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">
-                    {quality.projectSuccess ?? '100%'}
+                    <EditableText
+                      value={String(quality.projectSuccess ?? '100%')}
+                      onSave={(value) => updateField('quality.projectSuccess', value)}
+                    />
                   </div>
                   <div className="text-sm text-gray-600 dark:text-gray-400">
-                    {String(statsContent.projectSuccess ?? translations.stats.projectSuccess)}
+                    <EditableText
+                      value={String(draft.projectSuccess ?? statsContent.projectSuccess ?? '')}
+                      onSave={(value) => updateField('projectSuccess', value)}
+                    />
                   </div>
                 </div>
               </div>

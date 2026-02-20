@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
-import { translations } from '@/shared/translations';
 import { fetchPublicTranslations } from '@/shared/api/public';
 
 export type Language = 'es' | 'en';
@@ -16,7 +15,7 @@ const STORAGE_KEY = 'language';
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>('es');
-  const [currentTranslations, setCurrentTranslations] = useState(translations.es);
+  const [currentTranslations, setCurrentTranslations] = useState<Record<string, any>>({});
 
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -33,7 +32,6 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     let isActive = true;
 
     const loadTranslations = async () => {
-      setCurrentTranslations(translations[language]);
       try {
         const records = await fetchPublicTranslations(language);
         if (!isActive) return;
@@ -41,13 +39,10 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
           acc[record.namespace] = record.content;
           return acc;
         }, {});
-        setCurrentTranslations({
-          ...translations[language],
-          ...(merged as typeof translations.es),
-        });
+        setCurrentTranslations(merged as Record<string, any>);
       } catch {
         if (!isActive) return;
-        setCurrentTranslations(translations[language]);
+        setCurrentTranslations({});
       }
     };
 
@@ -63,7 +58,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, translations: currentTranslations }}>
+    <LanguageContext.Provider value={{ language, setLanguage, translations: currentTranslations as any }}>
       {children}
     </LanguageContext.Provider>
   );

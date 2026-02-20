@@ -29,7 +29,7 @@ export function NotFoundPage() {
           <Button variant="outline" asChild className="gap-2">
             <Link to="/projects">
               <FolderOpen className="h-4 w-4" />
-              {translations.nav.projects}
+            {translations?.nav?.projects ?? ''}
             </Link>
           </Button>
         </div>

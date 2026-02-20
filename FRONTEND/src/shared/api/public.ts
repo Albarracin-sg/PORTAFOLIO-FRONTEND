@@ -42,11 +42,11 @@ export type PublicTranslationRecord = {
 };
 
 export async function fetchPublicPage(slug: string) {
-  return apiRequest<PublicPage>(`/public/pages/${slug}`);
+  return apiRequest<PublicPage>(`/public/pages/${slug}`, { cache: 'no-store' });
 }
 
 export async function fetchPublicProjects() {
-  return apiRequest<PublicProject[]>('/public/projects');
+  return apiRequest<PublicProject[]>('/public/projects', { cache: 'no-store' });
 }
 
 export async function sendContactMessage(payload: {
@@ -58,5 +58,5 @@ export async function sendContactMessage(payload: {
 }
 
 export async function fetchPublicTranslations(lang: string) {
-  return apiRequest<PublicTranslationRecord[]>(`/public/translations?lang=${lang}`);
+  return apiRequest<PublicTranslationRecord[]>(`/public/translations?lang=${lang}`, { cache: 'no-store' });
 }

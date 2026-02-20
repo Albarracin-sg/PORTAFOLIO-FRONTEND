@@ -4,6 +4,7 @@ import { useAdminAuth } from '@/features/admin/AdminAuthProvider';
 
 const navItems = [
   { label: 'Dashboard', href: '/admin' },
+  { label: 'Live Editor', href: '/admin/live' },
   { label: 'Content', href: '/admin/content' },
   { label: 'Projects', href: '/admin/projects' },
   { label: 'Translations', href: '/admin/translations' },
@@ -16,7 +17,7 @@ export function AdminLayout() {
 
   const handleLogout = () => {
     logout();
-    navigate('/admin/login');
+    navigate('/');
   };
 
   return (

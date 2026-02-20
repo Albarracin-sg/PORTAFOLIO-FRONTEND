@@ -6,19 +6,22 @@ import { Badge } from "./ui/badge";
 import { ExternalLink, ArrowRight, Star } from "lucide-react";
 import ProjectModal from "./ProjectModal";
 import { getFeaturedProjects } from "@/features/projects/data";
+import { EditableText } from "@/features/admin/InlineEdit";
+import { useSectionEditor } from "@/features/admin/hooks/useSectionEditor";
 
 interface ProjectsProps {
   translations: any;
   projects?: any[];
-  content?: Record<string, unknown>;
+  section?: { id: string; type: string; content: Record<string, unknown> };
 }
 
-export default function Projects({ translations, projects, content }: ProjectsProps) {
+export default function Projects({ translations, projects, section }: ProjectsProps) {
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const featuredProjects = projects && projects.length > 0 ? projects : getFeaturedProjects(translations);
-  const projectsContent = content ?? {};
+  const featuredProjects = projects && projects.length > 0 ? projects : [];
+  const projectsContent = section?.content ?? {};
+  const { draft, updateField } = useSectionEditor(section as any);
 
   const handleViewMore = (project: any) => {
     setSelectedProject(project);
@@ -31,13 +34,21 @@ export default function Projects({ translations, projects, content }: ProjectsPr
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl mb-4 text-gray-900 dark:text-gray-100">
-            {String(projectsContent.title ?? translations.projects.title)}
+            <EditableText
+              value={String(draft.title ?? projectsContent.title ?? '')}
+              onSave={(value) => updateField('title', value)}
+            />
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            {String(
-              projectsContent.subtitle ??
-                'Featured projects showcasing advanced software engineering skills and system design',
-            )}
+            <EditableText
+              value={String(
+                draft.subtitle ??
+                  projectsContent.subtitle ??
+                  '',
+              )}
+              onSave={(value) => updateField('subtitle', value)}
+              multiline
+            />
           </p>
         </div>
 
@@ -137,13 +148,21 @@ export default function Projects({ translations, projects, content }: ProjectsPr
         <div className="text-center">
           <div className="bg-violet-50 dark:bg-violet-950/30 rounded-lg border border-gray-200 dark:border-gray-700 p-8">
             <h3 className="text-2xl mb-4 text-gray-900 dark:text-gray-100">
-              {String(projectsContent.ctaTitle ?? 'Explore All Projects')}
+              <EditableText
+                value={String(draft.ctaTitle ?? projectsContent.ctaTitle ?? '')}
+                onSave={(value) => updateField('ctaTitle', value)}
+              />
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6 max-w-2xl mx-auto">
-              {String(
-                projectsContent.ctaDescription ??
-                  `Dive deeper into my complete portfolio with advanced filtering, detailed technical breakdowns, and live demos of all ${translations.projects?.totalProjects || '15+'} projects.`,
-              )}
+              <EditableText
+                value={String(
+                draft.ctaDescription ??
+                    projectsContent.ctaDescription ??
+                    '',
+                )}
+                onSave={(value) => updateField('ctaDescription', value)}
+                multiline
+              />
             </p>
             <Button
               size="lg"
@@ -151,7 +170,10 @@ export default function Projects({ translations, projects, content }: ProjectsPr
               asChild
             >
               <Link to="/projects">
-                {String(projectsContent.cta ?? projectsContent.ctaLabel ?? 'View All Projects')}
+                <EditableText
+                  value={String(draft.cta ?? projectsContent.cta ?? projectsContent.ctaLabel ?? '')}
+                  onSave={(value) => updateField('cta', value)}
+                />
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>

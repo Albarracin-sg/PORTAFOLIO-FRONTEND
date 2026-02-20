@@ -22,11 +22,11 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
   const { token } = useAdminAuth();
 
   const navItems = [
-    { key: 'home', label: translations.nav.home },
-    { key: 'about', label: translations.nav.about },
-    { key: 'projects', label: translations.nav.projects },
-    { key: 'stats', label: translations.nav.stats },
-    { key: 'contact', label: translations.nav.contact },
+    { key: 'home', label: translations?.nav?.home ?? '' },
+    { key: 'about', label: translations?.nav?.about ?? '' },
+    { key: 'projects', label: translations?.nav?.projects ?? '' },
+    { key: 'stats', label: translations?.nav?.stats ?? '' },
+    { key: 'contact', label: translations?.nav?.contact ?? '' },
   ];
 
   const scrollToSection = (sectionId: string) => {
@@ -108,10 +108,10 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
              ) : (
                <AdminLoginModal />
              )}
-             <Button variant="outline" className="gap-2">
-               <FileText className="h-4 w-4" />
-               {translations.nav.downloadCV}
-             </Button>
+              <Button variant="outline" className="gap-2">
+                <FileText className="h-4 w-4" />
+                {translations?.nav?.downloadCV ?? ''}
+              </Button>
           </div>
 
           {/* Mobile menu button */}
@@ -171,7 +171,7 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
                  )}
                  <Button variant="outline" className="gap-2 w-full">
                    <FileText className="h-4 w-4" />
-                   {translations.nav.downloadCV}
+                   {translations?.nav?.downloadCV ?? ''}
                  </Button>
               </div>
             </div>

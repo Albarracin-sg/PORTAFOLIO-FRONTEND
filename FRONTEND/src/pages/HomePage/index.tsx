@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useLanguage } from '@/features/language';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
@@ -10,15 +11,16 @@ import type { FeaturedProject } from '@/shared/types';
 
 export function HomePage() {
   const { translations } = useLanguage();
+  const location = useLocation();
   const [scrollY, setScrollY] = useState(0);
-  const [sections, setSections] = useState<Record<string, Record<string, unknown>>>({});
+  const [sections, setSections] = useState<Record<string, { id: string; type: string; content: Record<string, unknown> }>>({});
   const [featuredProjects, setFeaturedProjects] = useState<FeaturedProject[]>([]);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location.key]);
 
   useEffect(() => {
     let isActive = true;
@@ -30,20 +32,25 @@ export function HomePage() {
           fetchPublicProjects(),
         ]);
         if (!isActive) return;
-        const sectionMap = page.sections.reduce<Record<string, Record<string, unknown>>>(
+        const sectionMap = page.sections.reduce<Record<string, { id: string; type: string; content: Record<string, unknown> }>>(
           (acc, section) => {
-            acc[section.type] = section.content;
+            acc[section.type] = { id: section.id, type: section.type, content: section.content };
             return acc;
           },
+          {},
         );
         setSections(sectionMap);
+        if (import.meta.env.DEV) {
+          console.debug('[HomePage] sections', sectionMap);
+        }
 
         const featured = projects.filter((project) => project.featured);
         setFeaturedProjects(featured.map(mapPublicProjectToFeatured));
+        if (import.meta.env.DEV) {
+          console.debug('[HomePage] featuredProjects', featured);
+        }
       } catch {
         if (!isActive) return;
-        setSections({});
-        setFeaturedProjects([]);
       }
     };
 
@@ -57,16 +64,16 @@ export function HomePage() {
   return (
     <>
       <section id="home">
-        <Hero translations={translations} scrollY={scrollY} content={sections.HERO} />
+        <Hero translations={translations} scrollY={scrollY} section={sections.HERO} />
       </section>
       <section id="about">
-        <About translations={translations} content={sections.ABOUT} />
+        <About translations={translations} section={sections.ABOUT} />
       </section>
       <section id="projects">
-        <Projects translations={translations} projects={featuredProjects} content={sections.PROJECTS} />
+        <Projects translations={translations} projects={featuredProjects} section={sections.PROJECTS} />
       </section>
       <section id="contact">
-        <Contact translations={translations} content={sections.CONTACT} />
+        <Contact translations={translations} section={sections.CONTACT} />
       </section>
     </>
   );

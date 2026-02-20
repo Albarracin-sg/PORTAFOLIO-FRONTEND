@@ -3,6 +3,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from '@/features/theme';
 import { LanguageProvider } from '@/features/language';
 import { AdminAuthProvider } from '@/features/admin/AdminAuthProvider';
+import { EditModeProvider } from '@/features/admin/EditModeProvider';
 import App from './App';
 import './styles/index.css';
 
@@ -11,7 +12,9 @@ createRoot(document.getElementById('root')!).render(
     <ThemeProvider>
       <LanguageProvider>
         <AdminAuthProvider>
-          <App />
+          <EditModeProvider>
+            <App />
+          </EditModeProvider>
         </AdminAuthProvider>
       </LanguageProvider>
     </ThemeProvider>

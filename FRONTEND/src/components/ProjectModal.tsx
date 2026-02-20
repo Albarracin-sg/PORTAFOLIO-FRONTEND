@@ -68,7 +68,7 @@ export default function ProjectModal({
             {/* Technologies */}
             <div>
               <h4 className="mb-2 text-sm font-medium text-gray-900 dark:text-gray-100">
-                {translations.projects.technologies}
+                {translations?.projects?.technologies ?? ''}
               </h4>
               <div className="flex flex-wrap gap-2">
                 {project.technologies.map((tech) => (
@@ -82,7 +82,7 @@ export default function ProjectModal({
             {/* Problem */}
             <div>
               <h4 className="mb-1 text-sm font-medium text-violet-600 dark:text-violet-400">
-                {translations.projects.modal.problem}
+                {translations?.projects?.modal?.problem ?? ''}
               </h4>
               <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                 {project.problem}
@@ -92,7 +92,7 @@ export default function ProjectModal({
             {/* Challenge */}
             <div>
               <h4 className="mb-1 text-sm font-medium text-violet-600 dark:text-violet-400">
-                {translations.projects.modal.challenge}
+                {translations?.projects?.modal?.challenge ?? ''}
               </h4>
               <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                 {project.challenge}
@@ -102,7 +102,7 @@ export default function ProjectModal({
             {/* Solution */}
             <div>
               <h4 className="mb-1 text-sm font-medium text-violet-600 dark:text-violet-400">
-                {translations.projects.modal.solution}
+                {translations?.projects?.modal?.solution ?? ''}
               </h4>
               <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                 {project.solution}
@@ -118,7 +118,7 @@ export default function ProjectModal({
                   rel="noopener noreferrer"
                 >
                   <Github className="h-4 w-4" />
-                  {translations.projects.modal.viewGithub}
+                  {translations?.projects?.modal?.viewGithub ?? ''}
                 </a>
               </Button>
               {project.liveUrl && (
@@ -129,7 +129,7 @@ export default function ProjectModal({
                     rel="noopener noreferrer"
                   >
                     <ExternalLink className="h-4 w-4" />
-                    {translations.projects.modal.viewLive}
+                    {translations?.projects?.modal?.viewLive ?? ''}
                   </a>
                 </Button>
               )}

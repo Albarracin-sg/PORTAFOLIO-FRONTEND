@@ -15,13 +15,15 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { sendContactMessage } from "@/shared/api/public";
+import { EditableText } from "@/features/admin/InlineEdit";
+import { useSectionEditor } from "@/features/admin/hooks/useSectionEditor";
 
 interface ContactProps {
   translations: any;
-  content?: Record<string, unknown>;
+  section?: { id: string; type: string; content: Record<string, unknown> };
 }
 
-export default function Contact({ translations, content }: ContactProps) {
+export default function Contact({ translations, section }: ContactProps) {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -47,7 +49,7 @@ export default function Contact({ translations, content }: ContactProps) {
     try {
       await sendContactMessage(formData);
       setIsSubmitted(true);
-      toast.success(translations.contact.form.successMessage);
+      toast.success(translations?.contact?.form?.successMessage ?? '');
       setTimeout(() => {
         setIsSubmitted(false);
         setFormData({ name: "", email: "", message: "" });
@@ -61,53 +63,21 @@ export default function Contact({ translations, content }: ContactProps) {
     }
   };
 
-  const fallbackContactInfo = [
-    {
-      icon: Mail,
-      label: translations.contact.info.email,
-      value: "hello@developer.com",
-      link: "mailto:hello@developer.com",
-    },
-    {
-      icon: Phone,
-      label: translations.contact.info.phone,
-      value: "+34 123 456 789",
-      link: "tel:+34123456789",
-    },
-    {
-      icon: MapPin,
-      label: translations.contact.info.location,
-      value: "Madrid, España",
-      link: null,
-    },
-  ];
+  const fallbackContactInfo: Array<Record<string, string>> = [];
+  const fallbackSocialLinks: Array<Record<string, string>> = [];
 
-  const fallbackSocialLinks = [
-    {
-      icon: Github,
-      label: "GitHub",
-      link: "https://github.com",
-      color: "hover:text-gray-900 dark:hover:text-white",
-    },
-    {
-      icon: Linkedin,
-      label: "LinkedIn",
-      link: "https://linkedin.com",
-      color: "hover:text-blue-600",
-    },
-    {
-      icon: Mail,
-      label: "Email",
-      link: "mailto:hello@developer.com",
-      color: "hover:text-red-500",
-    },
-  ];
-
-  const contactContent = content ?? {};
-  const infoItems = (contactContent.info as Array<Record<string, string>>) ?? fallbackContactInfo;
-  const socialItems = (contactContent.social as Array<Record<string, string>>) ?? fallbackSocialLinks;
-  const infoTitle = (contactContent.infoTitle as string) ?? translations.contact.info.title;
-  const socialTitle = (contactContent.socialTitle as string) ?? translations.contact.social.title;
+  const contactContent = section?.content ?? {};
+  const { draft, updateField } = useSectionEditor(section as any);
+  const infoItems =
+    (draft.info as Array<Record<string, string>>) ??
+    (contactContent.info as Array<Record<string, string>>) ??
+    fallbackContactInfo;
+  const socialItems =
+    (draft.social as Array<Record<string, string>>) ??
+    (contactContent.social as Array<Record<string, string>>) ??
+    fallbackSocialLinks;
+  const infoTitle = (contactContent.infoTitle as string) ?? translations?.contact?.info?.title ?? '';
+  const socialTitle = (contactContent.socialTitle as string) ?? translations?.contact?.social?.title ?? '';
 
   return (
     <section className="py-16 px-4 sm:px-6 lg:px-8">
@@ -115,10 +85,17 @@ export default function Contact({ translations, content }: ContactProps) {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl mb-4 text-gray-900 dark:text-gray-100">
-            {String(contactContent.title ?? translations.contact.title)}
+            <EditableText
+              value={String(draft.title ?? contactContent.title ?? '')}
+              onSave={(value) => updateField('title', value)}
+            />
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            {String(contactContent.subtitle ?? translations.contact.subtitle)}
+            <EditableText
+              value={String(draft.subtitle ?? contactContent.subtitle ?? '')}
+              onSave={(value) => updateField('subtitle', value)}
+              multiline
+            />
           </p>
         </div>
 
@@ -127,7 +104,10 @@ export default function Contact({ translations, content }: ContactProps) {
           <Card className="border-gray-200 dark:border-gray-700">
             <CardHeader>
               <CardTitle className="text-gray-900 dark:text-gray-100">
-                {String(contactContent.form?.title ?? translations.contact.form.title)}
+                <EditableText
+                  value={String(draft.form?.title ?? contactContent.form?.title ?? '')}
+                  onSave={(value) => updateField('form.title', value)}
+                />
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -135,7 +115,10 @@ export default function Contact({ translations, content }: ContactProps) {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <Label htmlFor="name">
-                      {String(contactContent.form?.name ?? translations.contact.form.name)}
+                      <EditableText
+                        value={String(draft.form?.name ?? contactContent.form?.name ?? '')}
+                        onSave={(value) => updateField('form.name', value)}
+                      />
                     </Label>
                     <Input
                       id="name"
@@ -150,7 +133,10 @@ export default function Contact({ translations, content }: ContactProps) {
 
                   <div>
                     <Label htmlFor="email">
-                      {String(contactContent.form?.email ?? translations.contact.form.email)}
+                      <EditableText
+                        value={String(draft.form?.email ?? contactContent.form?.email ?? '')}
+                        onSave={(value) => updateField('form.email', value)}
+                      />
                     </Label>
                     <Input
                       id="email"
@@ -166,7 +152,10 @@ export default function Contact({ translations, content }: ContactProps) {
 
                   <div>
                     <Label htmlFor="message">
-                      {String(contactContent.form?.message ?? translations.contact.form.message)}
+                      <EditableText
+                        value={String(draft.form?.message ?? contactContent.form?.message ?? '')}
+                        onSave={(value) => updateField('form.message', value)}
+                      />
                     </Label>
                     <Textarea
                       id="message"
@@ -188,12 +177,12 @@ export default function Contact({ translations, content }: ContactProps) {
                     {isSubmitting ? (
                       <>
                         <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        {String(contactContent.form?.sending ?? translations.contact.form.sending)}
+                        {String(draft.form?.sending ?? contactContent.form?.sending ?? '')}
                       </>
                     ) : (
                       <>
                         <Send className="h-4 w-4" />
-                        {String(contactContent.form?.send ?? translations.contact.form.send)}
+                        {String(draft.form?.send ?? contactContent.form?.send ?? '')}
                       </>
                     )}
                   </Button>
@@ -202,10 +191,10 @@ export default function Contact({ translations, content }: ContactProps) {
                 <div className="text-center py-8">
                   <CheckCircle className="h-16 w-16 text-green-500 mx-auto mb-4" />
                   <h3 className="font-display text-lg font-semibold mb-2 text-foreground dark:text-gray-100">
-                    {String(contactContent.form?.thankYou ?? translations.contact.form.thankYou)}
+                    {String(draft.form?.thankYou ?? contactContent.form?.thankYou ?? '')}
                   </h3>
                   <p className="text-muted-foreground dark:text-gray-400">
-                    {String(contactContent.form?.responseTime ?? translations.contact.form.responseTime)}
+                    {String(draft.form?.responseTime ?? contactContent.form?.responseTime ?? '')}
                   </p>
                 </div>
               )}
@@ -229,10 +218,16 @@ export default function Contact({ translations, content }: ContactProps) {
                       </div>
                       <div>
                         <div className="text-sm text-muted-foreground dark:text-gray-400">
-                          {String(item.label)}
+                        <EditableText
+                          value={String(item.label)}
+                          onSave={(value) => updateField(`info.${index}.label`, value)}
+                        />
                         </div>
                         <div className="text-foreground dark:text-gray-100">
-                          {String(item.value)}
+                          <EditableText
+                            value={String(item.value)}
+                            onSave={(value) => updateField(`info.${index}.value`, value)}
+                          />
                         </div>
                       </div>
                     </div>
@@ -273,7 +268,12 @@ export default function Contact({ translations, content }: ContactProps) {
                         className={`flex flex-col items-center gap-2 p-4 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 transition-colors ${String(social.color ?? '')}`}
                       >
                         <Icon className="h-6 w-6" />
-                        <span className="text-sm">{String(social.label)}</span>
+                        <span className="text-sm">
+                          <EditableText
+                            value={String(social.label)}
+                            onSave={(value) => updateField(`social.${index}.label`, value)}
+                          />
+                        </span>
                       </a>
                     );
                   })}

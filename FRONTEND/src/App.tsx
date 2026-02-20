@@ -11,6 +11,7 @@ import { AdminContentPage } from '@/pages/Admin/ContentPage';
 import { AdminProjectsPage } from '@/pages/Admin/ProjectsPage';
 import { AdminTranslationsPage } from '@/pages/Admin/TranslationsPage';
 import { AdminMessagesPage } from '@/pages/Admin/MessagesPage';
+import { AdminLiveEditorPage } from '@/pages/Admin/LiveEditorPage';
 
 const StatsPage = lazy(() => import('@/pages/StatsPage').then((m) => ({ default: m.StatsPage })));
 const AllProjectsPage = lazy(() => import('@/pages/AllProjectsPage').then((m) => ({ default: m.AllProjectsPage })));
@@ -36,6 +37,7 @@ export default function App() {
         }
       >
         <Route index element={<AdminDashboardPage />} />
+        <Route path="live" element={<AdminLiveEditorPage />} />
         <Route path="content" element={<AdminContentPage />} />
         <Route path="projects" element={<AdminProjectsPage />} />
         <Route path="translations" element={<AdminTranslationsPage />} />

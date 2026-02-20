@@ -2,18 +2,25 @@ import { Button } from "./ui/button";
 import { ArrowRight, Mail } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useState } from "react";
+import { EditableText, EditableImage } from "@/features/admin/InlineEdit";
+import { useSectionEditor } from "@/features/admin/hooks/useSectionEditor";
 
 interface HeroProps {
   translations: any;
   scrollY?: number;
-  content?: Record<string, unknown>;
+  section?: { id: string; type: string; content: Record<string, unknown> };
 }
 
-export default function Hero({ translations, content }: HeroProps) {
+export default function Hero({ translations, section }: HeroProps) {
   const [isImageHovered, setIsImageHovered] = useState(false);
-  const heroContent = content ?? {};
+  const heroContent = section?.content ?? {};
   const stats = (heroContent.stats as { yearsExperience?: string; projectsCompleted?: string; technologies?: string }) ?? {};
   const cta = (heroContent.cta as { viewProjects?: string; contactMe?: string }) ?? {};
+  const { draft, updateField } = useSectionEditor(section as any);
+  const draftStats = (draft.stats as { yearsExperience?: string; projectsCompleted?: string; technologies?: string }) ?? stats;
+  const draftCta = (draft.cta as { viewProjects?: string; contactMe?: string }) ?? cta;
+  const primaryImage = String(heroContent.primaryImage ?? '');
+  const secondaryImage = String(heroContent.secondaryImage ?? '');
 
   return (
     <section className="min-h-[calc(100vh-4rem)] flex items-center py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -23,13 +30,28 @@ export default function Hero({ translations, content }: HeroProps) {
           <div className="space-y-8">
             <div className="space-y-4">
               <h1 className="text-4xl sm:text-5xl lg:text-6xl text-gray-900 dark:text-gray-100">
-                {String(heroContent.greeting ?? translations.hero.greeting)}
+                <EditableText
+                  value={String(draft.greeting ?? heroContent.greeting ?? '')}
+                  displayValue={String(heroContent.greeting ?? '')}
+                  onSave={(value) => updateField('greeting', value)}
+                  className="w-full"
+                />
                 <span className="text-violet-600 dark:text-violet-400 block">
-                  {String(heroContent.role ?? translations.hero.role)}
+                  <EditableText
+                    value={String(draft.role ?? heroContent.role ?? '')}
+                    displayValue={String(heroContent.role ?? '')}
+                    onSave={(value) => updateField('role', value)}
+                    className="w-full"
+                  />
                 </span>
               </h1>
               <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl">
-                {String(heroContent.subtitle ?? translations.hero.subtitle)}
+                <EditableText
+                  value={String(draft.subtitle ?? heroContent.subtitle ?? '')}
+                  displayValue={String(heroContent.subtitle ?? '')}
+                  onSave={(value) => updateField('subtitle', value)}
+                  multiline
+                />
               </p>
             </div>
 
@@ -48,7 +70,11 @@ export default function Hero({ translations, content }: HeroProps) {
                   }
                 }}
               >
-                {String(cta.viewProjects ?? translations.hero.viewProjects)}
+                <EditableText
+                  value={String(draftCta.viewProjects ?? '')}
+                  displayValue={String(cta.viewProjects ?? '')}
+                  onSave={(value) => updateField('cta.viewProjects', value)}
+                />
                 <ArrowRight className="h-5 w-5" />
               </Button>
               <Button
@@ -66,7 +92,11 @@ export default function Hero({ translations, content }: HeroProps) {
                 }}
               >
                 <Mail className="h-5 w-5" />
-                {String(cta.contactMe ?? translations.hero.contactMe)}
+                <EditableText
+                  value={String(draftCta.contactMe ?? '')}
+                  displayValue={String(cta.contactMe ?? '')}
+                  onSave={(value) => updateField('cta.contactMe', value)}
+                />
               </Button>
             </div>
 
@@ -74,26 +104,38 @@ export default function Hero({ translations, content }: HeroProps) {
             <div className="grid grid-cols-3 gap-8 pt-8 border-t border-border dark:border-gray-700">
               <div className="text-center">
                 <div className="font-display text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
-                  {stats.yearsExperience ?? '3+'}
+                  <EditableText
+                    value={String(draftStats.yearsExperience ?? stats.yearsExperience ?? '')}
+                    displayValue={String(stats.yearsExperience ?? '')}
+                    onSave={(value) => updateField('stats.yearsExperience', value)}
+                  />
                 </div>
                 <div className="text-sm text-muted-foreground dark:text-gray-400">
-                  {translations.hero.yearsExperience}
+                  {translations?.hero?.yearsExperience ?? ''}
                 </div>
               </div>
               <div className="text-center">
                 <div className="font-display text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
-                  {stats.projectsCompleted ?? '15+'}
+                  <EditableText
+                    value={String(draftStats.projectsCompleted ?? stats.projectsCompleted ?? '')}
+                    displayValue={String(stats.projectsCompleted ?? '')}
+                    onSave={(value) => updateField('stats.projectsCompleted', value)}
+                  />
                 </div>
                 <div className="text-sm text-muted-foreground dark:text-gray-400">
-                  {translations.hero.projectsCompleted}
+                  {translations?.hero?.projectsCompleted ?? ''}
                 </div>
               </div>
               <div className="text-center">
                 <div className="font-display text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
-                  {stats.technologies ?? '5+'}
+                  <EditableText
+                    value={String(draftStats.technologies ?? stats.technologies ?? '')}
+                    displayValue={String(stats.technologies ?? '')}
+                    onSave={(value) => updateField('stats.technologies', value)}
+                  />
                 </div>
                 <div className="text-sm text-muted-foreground dark:text-gray-400">
-                  {translations.hero.technologies}
+                  {translations?.hero?.technologies ?? ''}
                 </div>
               </div>
             </div>
@@ -119,9 +161,10 @@ export default function Hero({ translations, content }: HeroProps) {
                       : "opacity-100 scale-100"
                   }`}
                 >
-                  <ImageWithFallback
-                    src="https://images.unsplash.com/photo-1666875758376-25755544ba8d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkZXZlbG9wZXIlMjBpbGx1c3RyYXRpb24lMjBjYXJ0b29uJTIwcGVyc29uJTIwY29kaW5nfGVufDF8fHx8MTc1NzIyMDk0N3ww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+                  <EditableImage
+                    src={String(draft.primaryImage ?? primaryImage)}
                     alt="Developer Illustration"
+                    onSave={(value) => updateField('primaryImage', value)}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -134,9 +177,10 @@ export default function Hero({ translations, content }: HeroProps) {
                       : "opacity-0 scale-90"
                   }`}
                 >
-                  <ImageWithFallback
-                    src="https://images.unsplash.com/photo-1737574107736-9e02ca5d5387?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBkZXZlbG9wZXIlMjBwb3J0cmFpdCUyMHNvZnR3YXJlJTIwZW5naW5lZXJ8ZW58MXx8fHwxNzU3MjIwOTUwfDA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
+                  <EditableImage
+                    src={String(draft.secondaryImage ?? secondaryImage)}
                     alt="Professional Portrait"
+                    onSave={(value) => updateField('secondaryImage', value)}
                     className="w-full h-full object-cover"
                   />
                 </div>
