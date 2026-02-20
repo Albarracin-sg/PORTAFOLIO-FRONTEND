@@ -5,24 +5,62 @@ import { Code, GitBranch, Award, Users, ArrowLeft } from "lucide-react";
 import { Button } from "./ui/button";
 import { EditableText } from "@/features/admin/InlineEdit";
 import { useSectionEditor } from "@/features/admin/hooks/useSectionEditor";
+import type { GithubStats } from "@/shared/api/public";
 
 interface StatisticsProps {
   translations: any;
   section?: { id: string; type: string; content: Record<string, unknown> };
+  githubStats?: GithubStats | null;
 }
 
-export default function Statistics({ translations, section }: StatisticsProps) {
+export default function Statistics({ translations, section, githubStats }: StatisticsProps) {
   const statsContent = section?.content ?? {};
   const { draft, updateField } = useSectionEditor(section as any);
   const chartData = (statsContent.charts as Record<string, unknown>) ?? {};
-  const cards = (draft.cards as Array<Record<string, string>>) ?? (statsContent.cards as Array<Record<string, string>>) ?? [];
+  const isSpanish = translations?.common?.back === 'Volver';
+  const githubCards = githubStats
+    ? [
+        {
+          title: isSpanish ? 'Repos Publicos' : 'Public Repos',
+          value: String(githubStats.publicRepos),
+          description: isSpanish ? 'Repositorios en GitHub' : 'GitHub repositories',
+        },
+        {
+          title: 'Stars',
+          value: String(githubStats.stars),
+          description: isSpanish ? 'Estrellas totales' : 'Total stars',
+        },
+        {
+          title: 'Forks',
+          value: String(githubStats.forks),
+          description: isSpanish ? 'Forks totales' : 'Total forks',
+        },
+        {
+          title: isSpanish ? 'Seguidores' : 'Followers',
+          value: String(githubStats.followers),
+          description: isSpanish ? 'Seguidores en GitHub' : 'GitHub followers',
+        },
+      ]
+    : null;
+
+  const cards =
+    githubCards ??
+    (draft.cards as Array<Record<string, string>>) ??
+    (statsContent.cards as Array<Record<string, string>>) ??
+    [];
   const quality = (draft.quality as Record<string, string>) ?? (statsContent.quality as Record<string, string>) ?? {};
 
-  const languageData = (chartData.languageData as Array<Record<string, unknown>>) ?? [];
+  const languageData =
+    (githubStats?.languageData as Array<Record<string, unknown>>) ??
+    (chartData.languageData as Array<Record<string, unknown>>) ?? [];
 
-  const projectsData = (chartData.projectsData as Array<Record<string, unknown>>) ?? [];
+  const projectsData =
+    (githubStats?.projectsData as Array<Record<string, unknown>>) ??
+    (chartData.projectsData as Array<Record<string, unknown>>) ?? [];
 
-  const githubActivity = (chartData.githubActivity as Array<Record<string, unknown>>) ?? [];
+  const githubActivity =
+    (githubStats?.githubActivity as Array<Record<string, unknown>>) ??
+    (chartData.githubActivity as Array<Record<string, unknown>>) ?? [];
 
   const stats = cards.length > 0 ? cards : [];
 

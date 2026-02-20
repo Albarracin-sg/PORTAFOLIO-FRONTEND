@@ -41,6 +41,18 @@ export type PublicTranslationRecord = {
   content: Record<string, unknown>;
 };
 
+export type GithubStats = {
+  username: string;
+  publicRepos: number;
+  followers: number;
+  following: number;
+  stars: number;
+  forks: number;
+  languageData: Array<{ name: string; value: number; color: string }>;
+  projectsData: Array<{ month: string; projects: number }>;
+  githubActivity: Array<{ day: string; commits: number }>;
+};
+
 export async function fetchPublicPage(slug: string) {
   return apiRequest<PublicPage>(`/public/pages/${slug}`, { cache: 'no-store' });
 }
@@ -59,4 +71,8 @@ export async function sendContactMessage(payload: {
 
 export async function fetchPublicTranslations(lang: string) {
   return apiRequest<PublicTranslationRecord[]>(`/public/translations?lang=${lang}`, { cache: 'no-store' });
+}
+
+export async function fetchGithubStats() {
+  return apiRequest<GithubStats>('/public/github/stats', { cache: 'no-store' });
 }

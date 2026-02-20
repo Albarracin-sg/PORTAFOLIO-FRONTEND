@@ -33,6 +33,11 @@ export default function ProjectModal({
 
   const dialogOpen = isOpen !== undefined ? isOpen : !!project;
 
+  const technologies = project.technologies ?? [];
+  const hasProblem = Boolean(project.problem?.trim());
+  const hasChallenge = Boolean(project.challenge?.trim());
+  const hasSolution = Boolean(project.solution?.trim());
+
   return (
     <Dialog open={dialogOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 gap-0">
@@ -68,46 +73,58 @@ export default function ProjectModal({
             {/* Technologies */}
             <div>
               <h4 className="mb-2 text-sm font-medium text-gray-900 dark:text-gray-100">
-                {translations?.projects?.technologies ?? ''}
+                {translations?.projects?.modal?.tags ?? translations?.projects?.technologies ?? 'Lenguajes y etiquetas'}
               </h4>
               <div className="flex flex-wrap gap-2">
-                {project.technologies.map((tech) => (
-                  <Badge key={tech} variant="secondary">
-                    {tech}
-                  </Badge>
-                ))}
+                {technologies.length > 0 ? (
+                  technologies.map((tech) => (
+                    <Badge key={tech} variant="secondary">
+                      {tech}
+                    </Badge>
+                  ))
+                ) : (
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    {translations?.projects?.modal?.noTags ?? 'Sin etiquetas'}
+                  </span>
+                )}
               </div>
             </div>
 
             {/* Problem */}
-            <div>
-              <h4 className="mb-1 text-sm font-medium text-violet-600 dark:text-violet-400">
-                {translations?.projects?.modal?.problem ?? ''}
-              </h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                {project.problem}
-              </p>
-            </div>
+            {hasProblem && (
+              <div>
+                <h4 className="mb-1 text-sm font-medium text-violet-600 dark:text-violet-400">
+                  {translations?.projects?.modal?.problem ?? ''}
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                  {project.problem}
+                </p>
+              </div>
+            )}
 
             {/* Challenge */}
-            <div>
-              <h4 className="mb-1 text-sm font-medium text-violet-600 dark:text-violet-400">
-                {translations?.projects?.modal?.challenge ?? ''}
-              </h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                {project.challenge}
-              </p>
-            </div>
+            {hasChallenge && (
+              <div>
+                <h4 className="mb-1 text-sm font-medium text-violet-600 dark:text-violet-400">
+                  {translations?.projects?.modal?.challenge ?? ''}
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                  {project.challenge}
+                </p>
+              </div>
+            )}
 
             {/* Solution */}
-            <div>
-              <h4 className="mb-1 text-sm font-medium text-violet-600 dark:text-violet-400">
-                {translations?.projects?.modal?.solution ?? ''}
-              </h4>
-              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                {project.solution}
-              </p>
-            </div>
+            {hasSolution && (
+              <div>
+                <h4 className="mb-1 text-sm font-medium text-violet-600 dark:text-violet-400">
+                  {translations?.projects?.modal?.solution ?? ''}
+                </h4>
+                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                  {project.solution}
+                </p>
+              </div>
+            )}
 
             {/* Actions */}
             <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
