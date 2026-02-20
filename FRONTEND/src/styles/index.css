@@ -43,3 +43,10 @@
   --color-popover-foreground: #fafafa;
   --color-input-background: #27272a;
 }
+
+html,
+body,
+#root {
+  width: 100%;
+  overflow-x: hidden;
+}

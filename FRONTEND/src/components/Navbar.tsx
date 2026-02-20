@@ -137,7 +137,7 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
           onClick={() => setIsMobileMenuOpen(false)}
         />
         <aside
-          className={`absolute right-0 top-0 h-full w-72 bg-white/100 text-foreground shadow-2xl border-l border-black/10 backdrop-blur-none transition-transform duration-300 dark:bg-slate-950/100 dark:border-white/10 ${
+          className={`absolute right-0 top-0 h-full w-72 bg-white text-foreground shadow-2xl border-l border-black/10 opacity-100 backdrop-blur-none transition-transform duration-300 dark:bg-slate-950 dark:border-white/10 ${
             isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
         >
