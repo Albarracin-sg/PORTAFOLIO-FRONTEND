@@ -134,7 +134,7 @@ export default function AllProjects({ translations }: AllProjectsProps) {
     });
 
     return filtered;
-  }, [searchTerm, selectedCategory, selectedTech, sortBy, sortOrder]);
+  }, [allProjects, searchTerm, selectedCategory, selectedTech, sortBy, sortOrder]);
 
   const getStatusColor = (status: string) => {
     switch (status) {
