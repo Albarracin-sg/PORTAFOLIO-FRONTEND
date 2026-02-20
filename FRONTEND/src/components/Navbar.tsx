@@ -118,7 +118,7 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
           <div className="md:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className="p-2 text-muted-foreground hover:text-primary"
+              className="rounded-md border border-white/20 bg-white/10 p-2 text-white shadow-sm transition-colors hover:bg-white/20"
             >
               <Menu className="h-6 w-6" />
             </button>
@@ -137,7 +137,7 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
           onClick={() => setIsMobileMenuOpen(false)}
         />
         <aside
-          className={`absolute right-0 top-0 h-full w-72 bg-background shadow-2xl border-l border-white/10 transition-transform duration-300 ${
+          className={`absolute right-0 top-0 h-full w-72 bg-white/100 text-foreground shadow-2xl border-l border-black/10 backdrop-blur-none transition-transform duration-300 dark:bg-slate-950/100 dark:border-white/10 ${
             isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
         >
