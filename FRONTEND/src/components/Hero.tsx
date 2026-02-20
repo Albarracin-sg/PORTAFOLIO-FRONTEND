@@ -4,6 +4,9 @@ import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useState } from "react";
 import { EditableText, EditableImage } from "@/features/admin/InlineEdit";
 import { useSectionEditor } from "@/features/admin/hooks/useSectionEditor";
+import { useAdminAuth } from "@/features/admin/AdminAuthProvider";
+import { useEditMode } from "@/features/admin/EditModeProvider";
+import { uploadMedia } from "@/features/admin/api/media";
 
 interface HeroProps {
   translations: any;
@@ -17,10 +20,25 @@ export default function Hero({ translations, section }: HeroProps) {
   const stats = (heroContent.stats as { yearsExperience?: string; projectsCompleted?: string; technologies?: string }) ?? {};
   const cta = (heroContent.cta as { viewProjects?: string; contactMe?: string }) ?? {};
   const { draft, updateField } = useSectionEditor(section as any);
+  const { token } = useAdminAuth();
+  const { isEditMode } = useEditMode();
+  const [uploading, setUploading] = useState<'primary' | 'secondary' | null>(null);
   const draftStats = (draft.stats as { yearsExperience?: string; projectsCompleted?: string; technologies?: string }) ?? stats;
   const draftCta = (draft.cta as { viewProjects?: string; contactMe?: string }) ?? cta;
   const primaryImage = String(heroContent.primaryImage ?? '');
   const secondaryImage = String(heroContent.secondaryImage ?? '');
+  const canEditImages = isEditMode && !!token && window.location.pathname.startsWith('/admin/live');
+
+  const handleImageChange = (kind: 'primary' | 'secondary') => async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (!event.target.files?.[0] || !token) return;
+    setUploading(kind);
+    try {
+      const result = await uploadMedia(token, event.target.files[0]);
+      updateField(kind === 'primary' ? 'primaryImage' : 'secondaryImage', result.url);
+    } finally {
+      setUploading(null);
+    }
+  };
 
   return (
     <section className="min-h-[calc(100vh-4rem)] flex items-center py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -144,6 +162,18 @@ export default function Hero({ translations, section }: HeroProps) {
           {/* Profile Image */}
           <div className="flex justify-center lg:justify-end">
             <div className="relative">
+              {canEditImages && (
+                <div className="absolute top-3 right-3 z-20 flex gap-2">
+                  <label className="rounded-md bg-black/60 px-2.5 py-1 text-xs text-white cursor-pointer">
+                    {uploading === 'primary' ? 'Subiendo...' : 'Base'}
+                    <input type="file" accept="image/*" className="hidden" onChange={handleImageChange('primary')} />
+                  </label>
+                  <label className="rounded-md bg-black/60 px-2.5 py-1 text-xs text-white cursor-pointer">
+                    {uploading === 'secondary' ? 'Subiendo...' : 'Hover'}
+                    <input type="file" accept="image/*" className="hidden" onChange={handleImageChange('secondary')} />
+                  </label>
+                </div>
+              )}
               <div
                 className="w-80 h-80 lg:w-96 lg:h-96 rounded-2xl overflow-hidden bg-linear-to-br from-violet-500/30 to-violet-400/20 dark:from-violet-600/40 dark:to-violet-500/30 ring-1 ring-gray-300 dark:ring-gray-600 cursor-pointer transition-all duration-500 hover:ring-2 hover:ring-violet-500 dark:hover:ring-violet-400 hover:shadow-2xl hover:shadow-violet-500/20 group"
                 onMouseEnter={() => setIsImageHovered(true)}

@@ -116,6 +116,7 @@ export function EditableImage({ src, alt, onSave, className }: EditableImageProp
   const { token } = useAdminAuth();
   const [loading, setLoading] = useState(false);
   const isEnabled = isEditMode && !!token && window.location.pathname.startsWith('/admin/live');
+  const hasImage = !!src;
 
   const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files?.[0] || !token) return;
@@ -130,12 +131,27 @@ export function EditableImage({ src, alt, onSave, className }: EditableImageProp
 
   return (
     <div className="relative">
-      <img src={src} alt={alt} className={className} />
+      {hasImage ? (
+        <img src={src} alt={alt} className={className} />
+      ) : (
+        <div
+          className={`flex h-full w-full items-center justify-center rounded-md border border-dashed border-white/20 bg-white/5 text-xs text-white/70 ${
+            className ?? ''
+          }`}
+        >
+          Sin imagen
+        </div>
+      )}
       {isEnabled && (
-        <label className="absolute bottom-3 right-3 rounded-md bg-black/60 px-3 py-1 text-xs text-white cursor-pointer">
-          {loading ? 'Subiendo...' : 'Cambiar'}
-          <input type="file" accept="image/*" className="hidden" onChange={handleChange} />
-        </label>
+        <>
+          <label className="absolute inset-0 z-10 cursor-pointer">
+            <input type="file" accept="image/*" className="hidden" onChange={handleChange} />
+          </label>
+          <label className="absolute bottom-3 right-3 z-20 rounded-md bg-black/60 px-3 py-1 text-xs text-white cursor-pointer">
+            {loading ? 'Subiendo...' : 'Cambiar'}
+            <input type="file" accept="image/*" className="hidden" onChange={handleChange} />
+          </label>
+        </>
       )}
     </div>
   );
