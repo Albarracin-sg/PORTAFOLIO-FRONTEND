@@ -28,10 +28,11 @@ export default function Projects({ projects, section }: ProjectsProps) {
   const carouselProjects = Array.isArray(projects) ? projects : [];
   const { draft, updateField } = useSectionEditor(section as any);
 
+  // Efecto para el Autoplay y la barra de progreso
   useEffect(() => {
-    if (!api || isPaused) return;
+    if (!api || isPaused || isModalOpen) return;
 
-    const step = 100 / (AUTOPLAY_INTERVAL / 100); // Actualizar cada 100ms
+    const step = 100 / (AUTOPLAY_INTERVAL / 50); // Actualizar cada 50ms para más suavidad
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
@@ -40,20 +41,27 @@ export default function Projects({ projects, section }: ProjectsProps) {
         }
         return prev + step;
       });
-    }, 100);
+    }, 50);
 
     return () => clearInterval(interval);
-  }, [api, isPaused]);
+  }, [api, isPaused, isModalOpen]);
 
-  // Reset progress when slide changes manually
+  // Manejar eventos de interacción directamente desde la API de Embla
   useEffect(() => {
     if (!api) return;
     
     const onSelect = () => setProgress(0);
+    const onPointerDown = () => setIsPaused(true);
+    const onPointerUp = () => setIsPaused(false);
+
     api.on("select", onSelect);
+    api.on("pointerDown", onPointerDown);
+    api.on("pointerUp", onPointerUp);
     
     return () => {
       api.off("select", onSelect);
+      api.off("pointerDown", onPointerDown);
+      api.off("pointerUp", onPointerUp);
     };
   }, [api]);
 
@@ -103,10 +111,16 @@ export default function Projects({ projects, section }: ProjectsProps) {
         <div 
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
         >
           <Carousel
             setApi={setApi}
-            opts={{ align: "start", loop: true }}
+            opts={{ 
+              align: "start", 
+              loop: true,
+              duration: 50 // Aumentamos la duración para un movimiento más suave (poco a poco)
+            }}
             className="w-full"
           >
             <CarouselContent className="-ml-4">
@@ -210,7 +224,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
               
               <div className="relative h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
                 <div 
-                  className="absolute left-0 top-0 h-full bg-violet-500 transition-all duration-100 ease-linear"
+                  className="absolute left-0 top-0 h-full bg-violet-500 transition-all duration-50 ease-linear"
                   style={{ width: `${progress}%` }}
                 />
               </div>
