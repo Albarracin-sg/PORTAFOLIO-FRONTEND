@@ -29,6 +29,8 @@ import {
 } from "./ui/select";
 import { mapPublicProjectToList } from "@/shared/api/mappers";
 import { fetchPublicProjects } from "@/shared/api/public";
+import { LoadingScreen } from "./ui/LoadingScreen";
+import { Skeleton } from "./ui/skeleton";
 
 type ProjectItem = ReturnType<typeof mapPublicProjectToList>;
 
@@ -43,6 +45,7 @@ export default function AllProjects() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [currentPage, setCurrentPage] = useState(1);
   const [allProjects, setAllProjects] = useState<ProjectItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const pageSize = 9;
 
   useEffect(() => {
@@ -50,12 +53,15 @@ export default function AllProjects() {
 
     const load = async () => {
       try {
+        setIsLoading(true);
         const projects = await fetchPublicProjects();
         if (!isActive) return;
         setAllProjects(projects.map(mapPublicProjectToList));
       } catch {
         if (!isActive) return;
         setAllProjects([]);
+      } finally {
+        if (isActive) setIsLoading(false);
       }
     };
 
@@ -195,6 +201,7 @@ export default function AllProjects() {
 
   return (
     <section className="min-h-screen px-4 py-24 sm:px-6 lg:px-8">
+      {isLoading && <LoadingScreen />}
       <div className="mx-auto max-w-7xl">
         <div className="mb-12">
           <Button
@@ -222,9 +229,19 @@ export default function AllProjects() {
         </div>
 
         <div className="mb-8 grid gap-6 md:grid-cols-3">
-          <SummaryCard label={t("projects.totalProjects")} value={String(filteredAndSortedProjects.length)} />
-          <SummaryCard label={t("projects.featuredProjects")} value={String(featuredCount)} />
-          <SummaryCard label={t("projects.technologiesTracked")} value={String(trackedTechnologies)} />
+          {isLoading ? (
+            <>
+              <Skeleton className="h-28 w-full rounded-xl" />
+              <Skeleton className="h-28 w-full rounded-xl" />
+              <Skeleton className="h-28 w-full rounded-xl" />
+            </>
+          ) : (
+            <>
+              <SummaryCard label={t("projects.totalProjects")} value={String(filteredAndSortedProjects.length)} />
+              <SummaryCard label={t("projects.featuredProjects")} value={String(featuredCount)} />
+              <SummaryCard label={t("projects.technologiesTracked")} value={String(trackedTechnologies)} />
+            </>
+          )}
         </div>
 
         <Card className="mb-8 border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
@@ -305,7 +322,27 @@ export default function AllProjects() {
           </CardContent>
         </Card>
 
-        {filteredAndSortedProjects.length === 0 ? (
+        {isLoading ? (
+          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <Card key={i} className="overflow-hidden border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
+                <Skeleton className="aspect-video w-full" />
+                <div className="p-6 space-y-4">
+                  <Skeleton className="h-6 w-3/4" />
+                  <Skeleton className="h-16 w-full" />
+                  <div className="flex gap-2">
+                    <Skeleton className="h-5 w-16 rounded-full" />
+                    <Skeleton className="h-5 w-16 rounded-full" />
+                    <Skeleton className="h-5 w-16 rounded-full" />
+                  </div>
+                  <div className="pt-4">
+                    <Skeleton className="h-10 w-full rounded-md" />
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        ) : filteredAndSortedProjects.length === 0 ? (
           <Card className="border-slate-200 bg-white/85 text-center dark:border-white/[0.07] dark:bg-white/[0.025]">
             <CardContent className="py-12">
               <p className="mb-4 text-slate-600 dark:text-slate-400">{t("projects.noProjects")}</p>

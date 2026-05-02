@@ -286,6 +286,21 @@
     "avgResponseTime": "Average Response Time",
     "projectSuccess": "Project Success"
   },
+  "loading": {
+    "didYouKnow": "Did you know?",
+    "facts": [
+      "JavaScript was originally named Mocha, then LiveScript, and finally JavaScript to capitalize on Java's popularity.",
+      "The first computer 'bug' was a real moth trapped in a Mark II computer in 1947.",
+      "Python is not named after the snake, but after the comedy group Monty Python.",
+      "The first domain ever registered was symbolics.com on March 15, 1985.",
+      "Ada Lovelace is considered the first computer programmer for her work on the Analytical Engine.",
+      "The PHP language originally stood for 'Personal Home Page'.",
+      "It is estimated that 90% of the world's data has been created in the last two years.",
+      "The first webcam was used to monitor a coffee pot at the University of Cambridge.",
+      "The Apollo 11 source code contained jokes and poetic references.",
+      "The term 'open source' was coined in 1998."
+    ]
+  },
   "footer": {
     "rights": "All rights reserved.",
     "builtWith": "Built with",

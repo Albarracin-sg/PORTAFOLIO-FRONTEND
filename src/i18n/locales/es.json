@@ -286,6 +286,21 @@
     "avgResponseTime": "Tiempo de Respuesta Promedio",
     "projectSuccess": "Éxito de Proyectos"
   },
+  "loading": {
+    "didYouKnow": "¿Sabías que?",
+    "facts": [
+      "JavaScript se llamó Mocha, luego LiveScript, y finalmente JavaScript para aprovechar la popularidad de Java.",
+      "El primer 'bug' informático fue una polilla real atrapada en una computadora Mark II en 1947.",
+      "Python no lleva el nombre de la serpiente, sino del grupo de comedia Monty Python.",
+      "El primer dominio registrado fue symbolics.com el 15 de marzo de 1985.",
+      "Ada Lovelace es considerada la primera programadora por su trabajo en la máquina analítica.",
+      "El lenguaje PHP originalmente significaba 'Personal Home Page'.",
+      "Se estima que el 90% de los datos del mundo se han creado en los últimos dos años.",
+      "La primera cámara web se utilizó para vigilar una cafetera en la Universidad de Cambridge.",
+      "El código fuente del Apollo 11 contenía bromas y referencias poéticas.",
+      "El término 'open source' fue acuñado en 1998."
+    ]
+  },
   "footer": {
     "rights": "Todos los derechos reservados.",
     "builtWith": "Construido con",
