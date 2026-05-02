@@ -1,6 +1,6 @@
 import { Button } from "./ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { FileText, Menu } from "lucide-react";
+import { Check, FileText, Menu, Moon, Sun } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { AdminLoginModal } from "@/features/admin/AdminLoginModal";
@@ -95,14 +95,27 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
     { value: 'en', label: 'English', flag: '🇺🇸', shortLabel: 'EN' },
   ] as const;
   const currentLanguage = languageOptions.find((option) => option.value === language) ?? languageOptions[0];
+  const themeLabel = language === 'es' ? 'Tema' : 'Theme';
+  const themeModeLabel = isDark
+    ? language === 'es' ? 'Claro' : 'Light'
+    : language === 'es' ? 'Oscuro' : 'Dark';
+  const themeAriaLabel = isDark
+    ? language === 'es' ? 'Cambiar a modo claro' : 'Switch to light mode'
+    : language === 'es' ? 'Cambiar a modo oscuro' : 'Switch to dark mode';
   const activeLogo = isDark ? '/logoNigth.png' : logoImg;
   const mobileSurfaceClass = isDark
-    ? 'bg-[#0b1a2b] text-white border-white/10'
-    : 'bg-white text-slate-900 border-slate-200';
+    ? 'bg-background text-white border-white/10'
+    : 'bg-background text-slate-900 border-slate-200';
   const mobileCardClass = isDark
     ? 'border-white/10 bg-[#13253a] text-white'
     : 'border-slate-200 bg-slate-50 text-slate-900';
   const mobileMutedClass = isDark ? 'text-white/70' : 'text-slate-500';
+  const mobileActionButtonClass = isDark
+    ? 'bg-white/[0.04] text-white/80 hover:bg-white/[0.08]'
+    : 'bg-slate-50 text-slate-700 hover:bg-slate-100';
+  const mobileActiveButtonClass = isDark
+    ? 'bg-violet-500/15 text-violet-300 shadow-[0_0_0_1px_rgba(139,92,246,0.22)]'
+    : 'bg-violet-50 text-violet-700 shadow-[0_0_0_1px_rgba(139,92,246,0.12)]';
 
   const scrollToSection = (sectionId: string) => {
     if (sectionId === 'stats') {
@@ -224,10 +237,9 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
 
       {/* Mobile Slide-over */}
       <div
-        className={`fixed inset-0 z-[70] md:hidden transition-opacity ${
+        className={`fixed inset-0 z-[70] bg-background transition-opacity md:hidden ${
           isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
         }`}
-        style={{ backgroundColor: isDark ? '#0b1a2b' : '#ffffff' }}
       >
         <aside
           className={`absolute inset-0 flex h-full w-full max-w-none flex-col border-l shadow-2xl opacity-100 transition-transform duration-300 ${mobileSurfaceClass} ${
@@ -244,7 +256,7 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
               Cerrar
             </button>
           </div>
-          <div className="flex-1 overflow-y-auto px-5 py-5" style={{ backgroundColor: isDark ? '#0b1a2b' : '#ffffff', overscrollBehavior: 'contain' }}>
+          <div className="flex-1 overflow-y-auto bg-background px-5 py-5" style={{ overscrollBehavior: 'contain' }}>
             <div className="space-y-2">
             {navItems.map((item, index) => (
               <button
@@ -273,48 +285,41 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
             ))}
             </div>
 
-            <div className={`mt-6 rounded-2xl border p-4 ${mobileCardClass}`}>
-              <div className="flex items-center justify-between">
-                <span className={`text-sm font-medium ${mobileMutedClass}`}>Theme</span>
-                <ThemeToggle isDark={isDark} onToggle={onThemeToggle} />
-              </div>
-            </div>
+            <div className="mt-6 space-y-2">
+              <button
+                type="button"
+                onClick={onThemeToggle}
+                className={`flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 ${mobileActionButtonClass}`}
+                aria-label={themeAriaLabel}
+              >
+                <span className="flex items-center gap-3">
+                  {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+                  <span>{themeLabel}</span>
+                </span>
+                <span className={`text-sm ${mobileMutedClass}`}>{themeModeLabel}</span>
+              </button>
 
-            <div className={`mt-3 rounded-2xl border p-4 ${mobileCardClass}`}>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className={`text-sm font-medium ${mobileMutedClass}`}>Idioma</span>
-                  <span className={`text-sm ${mobileMutedClass}`}>{currentLanguage.flag} {currentLanguage.label}</span>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {languageOptions.map((option) => {
-                    const isActive = language === option.value;
+              {languageOptions.map((option) => {
+                const isActive = language === option.value;
 
-                    return (
-                      <button
-                        key={option.value}
-                        type="button"
-                        onClick={() => onLanguageChange(option.value)}
-                        className={`rounded-xl border px-4 py-3 text-sm font-medium transition-all ${
-                          isActive
-                            ? isDark
-                              ? 'border-violet-400/40 bg-violet-500/15 text-violet-200'
-                              : 'border-violet-200 bg-violet-50 text-violet-700'
-                            : isDark
-                              ? 'border-white/10 bg-[#17304a] text-white/80 hover:bg-[#1b3a59]'
-                              : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
-                        }`}
-                        aria-pressed={isActive}
-                      >
-                        <span className="flex items-center justify-center gap-2">
-                          <span>{option.flag}</span>
-                          <span>{option.label}</span>
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    onClick={() => onLanguageChange(option.value)}
+                    className={`flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 ${
+                      isActive ? mobileActiveButtonClass : mobileActionButtonClass
+                    }`}
+                    aria-pressed={isActive}
+                  >
+                    <span className="flex items-center gap-3">
+                      <span>{option.flag}</span>
+                      <span>{option.label}</span>
+                    </span>
+                    {isActive ? <Check className="h-4 w-4" /> : <span className={`text-sm ${mobileMutedClass}`}>{option.shortLabel}</span>}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
