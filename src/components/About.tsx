@@ -139,7 +139,7 @@ export default function About(_props: AboutProps) {
           {/* SKILLS MARQUEE — 2 rows, monochrome */}
           <div className="mb-16 fu2">
               <SectionLabel icon={<Code2 className="h-3.5 w-3.5" />} label={about.technicalSkills} />
-              <div className="mt-5">
+              <div className="mt-6">
                 <SkillMarquee groups={technicalSkillGroups} />
               </div>
             </div>
@@ -147,7 +147,7 @@ export default function About(_props: AboutProps) {
           {/* SOFT SKILLS */}
           <div className="mb-16 fu3">
             <SectionLabel icon={<Brain className="h-3.5 w-3.5" />} label={about.softSkillsTitle} />
-            <div className="mt-5 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="mt-6 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
               {about.softSkillsList.map((skill, i) => (
                 <div
                   key={skill}
@@ -276,9 +276,9 @@ export default function About(_props: AboutProps) {
 // Shared section label
 function SectionLabel({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-4">
       <div className="h-px flex-1 bg-slate-200 dark:bg-white/[0.07]" />
-      <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-slate-500 dark:text-slate-500">
+      <span className="flex items-center gap-2.5 text-lg font-semibold tracking-tight text-slate-900 dark:text-white sm:text-xl">
         {icon}
         {label}
       </span>

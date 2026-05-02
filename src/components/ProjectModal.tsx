@@ -61,7 +61,7 @@ export default function ProjectModal({
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <div className="text-gray-500 dark:text-gray-400">
-                    Project Preview
+                      {t('projects.modal.preview')}
                   </div>
                 </div>
               )}
@@ -84,7 +84,7 @@ export default function ProjectModal({
                   ))
                 ) : (
                   <span className="text-sm text-gray-600 dark:text-gray-400">
-                    {t('projects.modal.noTags', 'Sin etiquetas')}
+                    {t('projects.modal.noTags')}
                   </span>
                 )}
               </div>

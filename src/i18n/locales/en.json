@@ -108,16 +108,40 @@
     "title": "My Projects",
     "subtitle": "Projects that demonstrate my skills in backend development and distributed architecture.",
     "allProjects": "All projects",
+    "description": "Complete repository of projects focused on technical implementation, stack choices, and solution details.",
     "technologies": "Technologies used",
     "viewMore": "View more",
     "noProjects": "No projects match the selected filter.",
-    "totalProjects": "15+",
+    "totalProjects": "Total projects",
+    "featuredProjects": "Featured projects",
+    "technologiesTracked": "Tracked technologies",
+    "updatedOn": "Updated",
+    "badges": {
+      "featured": "Featured"
+    },
+    "status": {
+      "production": "Production",
+      "development": "Development",
+      "prototype": "Prototype",
+      "unknown": "Unknown"
+    },
+    "actions": {
+      "github": "View repository",
+      "live": "View demo"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {current} of {total}"
+    },
     "modal": {
       "problem": "Problem",
       "challenge": "Challenge",
       "solution": "Solution",
       "viewGithub": "View on GitHub",
-      "viewLive": "View project"
+      "viewLive": "View project",
+      "preview": "Project preview",
+      "noTags": "No tags"
     },
     "filters": {
       "searchLabel": "Search",
@@ -157,9 +181,12 @@
     "subtitle": "Interested in working together or collaborating on a project?",
     "form": {
       "title": "Send me a message",
-      "name": "Name",
+      "name": "Full name",
+      "namePlaceholder": "Your full name",
       "email": "Email",
+      "emailPlaceholder": "your@email.com",
       "message": "Message",
+      "messagePlaceholder": "Tell me briefly how I can help you",
       "send": "Send message",
       "sending": "Sending...",
       "thankYou": "Thank you for your message!",
@@ -221,9 +248,23 @@
     "openSourceDescription": "Community contributions",
     "collaborations": "Collaborations",
     "collaborationsDescription": "Team projects",
+    "totalRepos": "Repositories",
+    "totalReposDescription": "{{public}} public / {{private}} private",
+    "publicReposDescription": "{{public}} public repositories",
+    "totalStars": "Stars",
+    "totalStarsDescription": "Accumulated stars on GitHub",
+    "totalForks": "Forks",
+    "totalForksDescription": "Accumulated forks across your repositories",
+    "followers": "Followers",
+    "followersDescription": "Followers on GitHub",
+    "publicRepos": "Public repos",
+    "privateRepos": "Private repos",
+    "pullRequests": "Pull requests",
+    "following": "Following",
+    "languagesTracked": "Tracked languages",
     "languagesUsed": "Most Used Languages",
     "projectsTimeline": "Projects per Month",
-    "githubActivity": "GitHub Activity (Last Week)",
+    "githubActivity": "GitHub Commits (Last 7 Days)",
     "codeQuality": "Code Quality",
     "avgResponseTime": "Average Response Time",
     "projectSuccess": "Project Success"

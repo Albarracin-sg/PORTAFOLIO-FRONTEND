@@ -45,14 +45,14 @@ export default function Hero({ section }: HeroProps) {
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <div className="space-y-8">
-            <div className="space-y-5 max-w-3xl">
-              <h1 className="text-4xl leading-tight sm:text-5xl lg:text-6xl text-gray-900 dark:text-gray-100">
+            <div className="max-w-3xl space-y-5">
+              <h1 className="text-4xl font-semibold leading-tight tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl lg:text-6xl">
                 {t('hero.greeting')}
               </h1>
-              <div className="max-w-2xl text-xl font-medium leading-snug text-violet-600 dark:text-violet-400 sm:text-2xl lg:text-3xl">
+              <div className="max-w-3xl text-2xl font-semibold leading-tight tracking-tight text-violet-600 dark:text-violet-400 sm:text-3xl lg:text-4xl">
                 {t('hero.role')}
               </div>
-              <p className="max-w-2xl text-base leading-7 text-gray-600 dark:text-gray-400 sm:text-lg">
+              <p className="max-w-3xl text-sm leading-7 text-gray-600 dark:text-gray-400 sm:text-base">
                 {t('hero.subtitle')}
               </p>
             </div>

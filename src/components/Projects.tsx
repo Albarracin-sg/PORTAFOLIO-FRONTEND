@@ -30,16 +30,16 @@ export default function Projects({ projects, section }: ProjectsProps) {
   return (
     <section className="px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl text-center lg:text-left">
-            <h2 className="mb-4 text-4xl text-gray-900 dark:text-gray-100">
+            <h2 className="mb-4 text-4xl font-semibold tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl">
               <EditableText
                 value={String(draft.title ?? t('projects.title'))}
                 displayValue={String(t('projects.title'))}
                 onSave={(value) => updateField("title", value)}
               />
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-400">
+            <p className="max-w-3xl text-sm leading-7 text-gray-600 dark:text-gray-400 sm:text-base">
               <EditableText
                 value={String(draft.subtitle ?? t('projects.subtitle'))}
                 displayValue={String(t('projects.subtitle'))}

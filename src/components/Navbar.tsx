@@ -163,10 +163,10 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
                 <button
                   key={item.key}
                   onClick={() => scrollToSection(item.key)}
-                  className={`px-3 py-2 text-sm transition-colors hover:text-primary ${
+                  className={`relative px-3 py-2 text-sm transition-colors after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-[calc(100%-1.5rem)] after:-translate-x-1/2 after:rounded-full after:bg-violet-500 after:transition-transform after:duration-300 ${
                     currentPage === item.key
-                      ? 'text-primary border-b-2 border-primary'
-                      : 'text-muted-foreground'
+                      ? 'text-primary after:scale-x-100'
+                      : 'text-muted-foreground after:scale-x-0 hover:text-primary hover:after:scale-x-100'
                   }`}
                 >
                   {item.label}
@@ -181,8 +181,8 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
             <ThemeToggle isDark={isDark} onToggle={onThemeToggle} />
             
              {/* Language Selector */}
-             <Select value={language} onValueChange={onLanguageChange}>
-               <SelectTrigger className="w-24">
+               <Select value={language} onValueChange={onLanguageChange}>
+                <SelectTrigger className="w-24 cursor-pointer">
                   <SelectValue>
                     <span className="flex items-center gap-2 whitespace-nowrap">
                       <span>{currentLanguage.flag}</span>
@@ -192,7 +192,7 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
                 </SelectTrigger>
                 <SelectContent>
                   {languageOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
+                    <SelectItem key={option.value} value={option.value} className="cursor-pointer">
                       <span className="flex items-center gap-2 whitespace-nowrap">
                         <span>{option.flag}</span>
                         <span>{option.shortLabel}</span>

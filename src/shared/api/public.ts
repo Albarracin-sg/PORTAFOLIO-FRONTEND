@@ -36,7 +36,10 @@ export type PublicProject = {
 
 export type GithubStats = {
   username: string;
+  totalRepos: number;
   publicRepos: number;
+  privateRepos: number;
+  pullRequests: number;
   followers: number;
   following: number;
   stars: number;

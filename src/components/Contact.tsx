@@ -135,8 +135,8 @@ export default function Contact({ section }: ContactProps) {
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}
-        <div className="mb-10">
-          <h1 className="text-5xl font-medium tracking-tight text-gray-900 dark:text-gray-100 leading-none mb-3">
+        <div className="mb-12">
+          <h1 className="mb-4 text-5xl font-semibold leading-none tracking-tight text-gray-900 dark:text-gray-100 sm:text-6xl">
             <EditableText
               value={String(typedDraft.title ?? t("contact.title"))}
               displayValue={String(t("contact.title"))}
@@ -144,7 +144,7 @@ export default function Contact({ section }: ContactProps) {
             />
             <span className="text-violet-500"> .</span>
           </h1>
-          <p className="text-base text-gray-500 dark:text-gray-400 max-w-md leading-relaxed">
+          <p className="max-w-3xl text-sm leading-7 text-gray-600 dark:text-gray-400 sm:text-base">
             <EditableText
               value={String(typedDraft.subtitle ?? t("contact.subtitle"))}
               displayValue={String(t("contact.subtitle"))}
@@ -176,6 +176,7 @@ export default function Contact({ section }: ContactProps) {
                   name="name"
                   value={formData.name}
                   onChange={handleInputChange}
+                  placeholder={String(t("contact.form.namePlaceholder"))}
                   required
                   disabled={isSubmitting}
                   className="bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700 focus-visible:ring-violet-500"
@@ -196,6 +197,7 @@ export default function Contact({ section }: ContactProps) {
                   type="email"
                   value={formData.email}
                   onChange={handleInputChange}
+                  placeholder={String(t("contact.form.emailPlaceholder"))}
                   required
                   disabled={isSubmitting}
                   className="bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700 focus-visible:ring-violet-500"
@@ -215,6 +217,7 @@ export default function Contact({ section }: ContactProps) {
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
+                  placeholder={String(t("contact.form.messagePlaceholder"))}
                   required
                   disabled={isSubmitting}
                   className="flex-1 min-h-[140px] bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700 focus-visible:ring-violet-500 resize-none"

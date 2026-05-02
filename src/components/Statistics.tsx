@@ -1,12 +1,27 @@
 import { Link } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts";
-import { Code, GitBranch, Award, Users, ArrowLeft } from "lucide-react";
-import { Button } from "./ui/button";
-import { EditableText } from "@/features/admin/InlineEdit";
-import { useSectionEditor } from "@/features/admin/hooks/useSectionEditor";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  XAxis,
+  YAxis,
+} from "recharts";
+import { ArrowLeft, FolderGit2, GitBranch, Star, Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import i18n from "@/i18n";
+
+import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "./ui/chart";
 import type { GithubStats } from "@/shared/api/public";
 
 interface StatisticsProps {
@@ -14,126 +29,159 @@ interface StatisticsProps {
   githubStats?: GithubStats | null;
 }
 
-export default function Statistics({ section, githubStats }: StatisticsProps) {
-  const { t } = useTranslation();
-  const statsContent = section?.content ?? {};
-  const { draft, updateField } = useSectionEditor(section as any);
-  const chartData = (statsContent.charts as Record<string, unknown>) ?? {};
-  const isSpanish = i18n.language.startsWith('es');
-  const githubCards = githubStats
-    ? [
-        {
-          title: isSpanish ? 'Repos Publicos' : 'Public Repos',
-          value: String(githubStats.publicRepos),
-          description: isSpanish ? 'Repositorios en GitHub' : 'GitHub repositories',
-        },
-        {
-          title: 'Stars',
-          value: String(githubStats.stars),
-          description: isSpanish ? 'Estrellas totales' : 'Total stars',
-        },
-        {
-          title: 'Forks',
-          value: String(githubStats.forks),
-          description: isSpanish ? 'Forks totales' : 'Total forks',
-        },
-        {
-          title: isSpanish ? 'Seguidores' : 'Followers',
-          value: String(githubStats.followers),
-          description: isSpanish ? 'Seguidores en GitHub' : 'GitHub followers',
-        },
-      ]
-    : null;
+type StatsCard = {
+  title: string;
+  value: string;
+  description: string;
+  icon: React.ComponentType<{ className?: string }>;
+};
 
-  const cards =
-    githubCards ??
-    (draft.cards as Array<Record<string, string>>) ??
-    (statsContent.cards as Array<Record<string, string>>) ??
-    [];
-  const quality = (draft.quality as Record<string, string>) ?? (statsContent.quality as Record<string, string>) ?? {};
+export default function Statistics({ section, githubStats }: StatisticsProps) {
+  const { t, i18n } = useTranslation();
+  const isSpanish = i18n.language.startsWith("es");
+  const statsContent = section?.content ?? {};
+  const chartData = (statsContent.charts as Record<string, unknown>) ?? {};
 
   const languageData =
     (githubStats?.languageData as Array<Record<string, unknown>>) ??
-    (chartData.languageData as Array<Record<string, unknown>>) ?? [];
+    (chartData.languageData as Array<Record<string, unknown>>) ??
+    [];
 
   const projectsData =
     (githubStats?.projectsData as Array<Record<string, unknown>>) ??
-    (chartData.projectsData as Array<Record<string, unknown>>) ?? [];
+    (chartData.projectsData as Array<Record<string, unknown>>) ??
+    [];
 
   const githubActivity =
     (githubStats?.githubActivity as Array<Record<string, unknown>>) ??
-    (chartData.githubActivity as Array<Record<string, unknown>>) ?? [];
+    (chartData.githubActivity as Array<Record<string, unknown>>) ??
+    [];
 
-  const stats = cards.length > 0 ? cards : [];
+  const cards: StatsCard[] = githubStats
+    ? [
+        {
+          title: t("stats.totalRepos"),
+          value: String(githubStats.totalRepos),
+          description:
+            githubStats.privateRepos > 0
+              ? t("stats.totalReposDescription", {
+                  public: githubStats.publicRepos,
+                  private: githubStats.privateRepos,
+                })
+              : t("stats.publicReposDescription", { public: githubStats.publicRepos }),
+          icon: FolderGit2,
+        },
+        {
+          title: t("stats.totalStars"),
+          value: String(githubStats.stars),
+          description: t("stats.totalStarsDescription"),
+          icon: Star,
+        },
+        {
+          title: t("stats.totalForks"),
+          value: String(githubStats.forks),
+          description: t("stats.totalForksDescription"),
+          icon: GitBranch,
+        },
+        {
+          title: t("stats.followers"),
+          value: String(githubStats.followers),
+          description: t("stats.followersDescription"),
+          icon: Users,
+        },
+      ]
+    : [];
+
+  const factualMetrics = githubStats
+    ? [
+        { label: t("stats.pullRequests"), value: String(githubStats.pullRequests) },
+        { label: t("stats.following"), value: String(githubStats.following) },
+        { label: t("stats.languagesTracked"), value: String(languageData.length) },
+      ]
+    : [
+        { label: t("stats.languagesTracked"), value: String(languageData.length) },
+        { label: t("stats.projectsTimeline"), value: String(projectsData.length) },
+        { label: t("stats.githubCommits"), value: String(githubActivity.length) },
+      ];
+
+  const languageChartConfig = {
+    value: {
+      label: isSpanish ? "Uso" : "Usage",
+      color: "#8b5cf6",
+    },
+    ...Object.fromEntries(
+      languageData.map((item) => [
+        String(item.name),
+        {
+          label: String(item.name),
+          color: String(item.color ?? "#8b5cf6"),
+        },
+      ]),
+    ),
+  } satisfies ChartConfig;
+
+  const projectChartConfig = {
+    projects: {
+      label: t("stats.projectsTimeline"),
+      color: "#8b5cf6",
+    },
+  } satisfies ChartConfig;
+
+  const activityChartConfig = {
+    commits: {
+      label: t("stats.githubActivity"),
+      color: "#8b5cf6",
+    },
+  } satisfies ChartConfig;
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Back button */}
+    <section className="px-4 py-24 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
         <div className="mb-8">
           <Button
             variant="ghost"
             asChild
-            className="gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 transition-colors"
+            className="group rounded-full border border-slate-200 bg-white/80 px-4 text-slate-600 transition-all hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-300 dark:hover:border-violet-400/30 dark:hover:bg-violet-500/10 dark:hover:text-violet-200"
           >
             <Link to="/">
-              <ArrowLeft className="h-4 w-4" />
-              {t('common.back')}
+              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+              {t("common.back")}
             </Link>
           </Button>
         </div>
 
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl mb-4 text-gray-900 dark:text-gray-100">
-            <EditableText
-              value={String(draft.title ?? statsContent.title ?? '')}
-              onSave={(value) => updateField('title', value)}
-            />
+        <div className="mx-auto mb-14 max-w-4xl text-center">
+          <h1 className="text-5xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-6xl">
+            {t("stats.title")}
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
-            <EditableText
-              value={String(draft.subtitle ?? statsContent.subtitle ?? '')}
-              onSave={(value) => updateField('subtitle', value)}
-              multiline
-            />
+          <p className="mx-auto mt-5 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-400 sm:text-base">
+            {t("stats.subtitle")}
           </p>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {stats.map((stat, index) => {
-            const Icon = (stat as { icon?: typeof Code }).icon;
+        <div className="mb-12 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+          {cards.map((stat) => {
+            const Icon = stat.icon;
+
             return (
-              <Card key={index} className="text-center border-gray-200 dark:border-gray-700 hover:border-violet-500/50 dark:hover:border-violet-400/50 transition-colors">
-                <CardHeader className="pb-2">
-                  <div className="w-12 h-12 bg-violet-100 dark:bg-violet-900/50 rounded-lg flex items-center justify-center mx-auto mb-2 ring-1 ring-gray-200 dark:ring-gray-600">
-                    {Icon ? (
-                      <Icon className="h-6 w-6 text-violet-600 dark:text-violet-400" />
-                    ) : (
-                      <div className="h-6 w-6 rounded bg-violet-200/40" />
-                    )}
+              <Card
+                key={stat.title}
+                className="border-slate-200 bg-white/85 transition-colors hover:border-violet-400/30 hover:bg-white dark:border-white/[0.07] dark:bg-white/[0.025] dark:hover:bg-white/[0.04]"
+              >
+                <CardHeader className="pb-3">
+                  <div className="mb-3 flex h-11 w-11 items-center justify-center rounded-xl border border-slate-200 bg-violet-50 text-violet-700 dark:border-violet-400/20 dark:bg-violet-500/10 dark:text-violet-300">
+                    <Icon className="h-5 w-5" />
                   </div>
-                  <CardTitle className="text-sm text-gray-500 dark:text-gray-400">
-                    <EditableText
-                      value={String(stat.title)}
-                      onSave={(value) => updateField(`cards.${index}.title`, value)}
-                    />
+                  <CardTitle className="text-base font-semibold tracking-tight text-slate-900 dark:text-white">
+                    {stat.title}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">
-                    <EditableText
-                      value={String(stat.value)}
-                      onSave={(value) => updateField(`cards.${index}.value`, value)}
-                    />
+                  <div className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
+                    {stat.value}
                   </div>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
-                    <EditableText
-                      value={String(stat.description)}
-                      onSave={(value) => updateField(`cards.${index}.description`, value)}
-                      multiline
-                    />
+                  <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">
+                    {stat.description}
                   </p>
                 </CardContent>
               </Card>
@@ -141,162 +189,114 @@ export default function Statistics({ section, githubStats }: StatisticsProps) {
           })}
         </div>
 
-        {/* Charts Grid */}
-        <div className="grid lg:grid-cols-2 gap-8">
-          {/* Languages Chart */}
-          <Card className="border-gray-200 dark:border-gray-700">
+        <div className="grid gap-8 lg:grid-cols-2">
+          <Card className="border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
             <CardHeader>
-              <CardTitle className="text-gray-900 dark:text-gray-100">
-                <EditableText
-                  value={String(draft.languagesUsed ?? statsContent.languagesUsed ?? '')}
-                  onSave={(value) => updateField('languagesUsed', value)}
-                />
+              <CardTitle className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
+                {t("stats.languagesUsed")}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={languageData}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={60}
-                      outerRadius={120}
-                      paddingAngle={5}
-                      dataKey="value"
-                    >
-                      {languageData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip formatter={(value) => [`${value}%`, "Usage"]} />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-              <div className="grid grid-cols-2 gap-2 mt-4">
-                {languageData.map((item, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <div 
-                      className="w-3 h-3 rounded-full" 
-                      style={{ backgroundColor: item.color }}
-                    ></div>
-                    <span className="text-sm text-gray-700 dark:text-gray-300">{item.name}</span>
+              <ChartContainer config={languageChartConfig} className="h-80 w-full">
+                <PieChart>
+                  <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+                  <Pie
+                    data={languageData}
+                    dataKey="value"
+                    nameKey="name"
+                    innerRadius={70}
+                    outerRadius={110}
+                    paddingAngle={4}
+                  >
+                    {languageData.map((entry, index) => (
+                      <Cell key={`language-${index}`} fill={String(entry.color ?? "#8b5cf6")} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ChartContainer>
+              <div className="mt-5 flex flex-wrap gap-3">
+                {languageData.map((entry, index) => (
+                  <div
+                    key={`language-legend-${index}`}
+                    className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300"
+                  >
+                    <span
+                      className="h-2.5 w-2.5 rounded-full"
+                      style={{ backgroundColor: String(entry.color ?? "#8b5cf6") }}
+                    />
+                    <span>{String(entry.name)}</span>
+                    <span className="text-slate-400 dark:text-slate-500">{String(entry.value)}%</span>
                   </div>
                 ))}
               </div>
             </CardContent>
           </Card>
 
-          {/* Projects Timeline */}
-          <Card className="border-gray-200 dark:border-gray-700">
+          <Card className="border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
             <CardHeader>
-              <CardTitle className="text-gray-900 dark:text-gray-100">
-                <EditableText
-                  value={String(draft.projectsTimeline ?? statsContent.projectsTimeline ?? '')}
-                  onSave={(value) => updateField('projectsTimeline', value)}
-                />
+              <CardTitle className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
+                {t("stats.projectsTimeline")}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={projectsData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="projects" fill="#7c3aed" radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
+              <ChartContainer config={projectChartConfig} className="h-80 w-full">
+                <BarChart data={projectsData}>
+                  <CartesianGrid vertical={false} />
+                  <XAxis dataKey="month" tickLine={false} axisLine={false} />
+                  <YAxis tickLine={false} axisLine={false} allowDecimals={false} />
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Bar dataKey="projects" fill="var(--color-projects)" radius={[10, 10, 0, 0]} />
+                </BarChart>
+              </ChartContainer>
             </CardContent>
           </Card>
 
-          {/* GitHub Activity */}
-          <Card className="lg:col-span-2 border-gray-200 dark:border-gray-700">
+          <Card className="border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025] lg:col-span-2">
             <CardHeader>
-              <CardTitle className="text-gray-900 dark:text-gray-100">
-                <EditableText
-                  value={String(draft.githubActivity ?? statsContent.githubActivity ?? '')}
-                  onSave={(value) => updateField('githubActivity', value)}
-                />
+              <CardTitle className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
+                {t("stats.githubActivity")}
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={githubActivity}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="day" />
-                    <YAxis />
-                    <Tooltip />
-                    <Line 
-                      type="monotone" 
-                      dataKey="commits" 
-                      stroke="#7c3aed" 
-                      strokeWidth={2}
-                      dot={{ fill: "#7c3aed", strokeWidth: 2, r: 4 }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
+              <ChartContainer config={activityChartConfig} className="h-80 w-full">
+                <LineChart data={githubActivity}>
+                  <CartesianGrid vertical={false} />
+                  <XAxis dataKey="day" tickLine={false} axisLine={false} />
+                  <YAxis tickLine={false} axisLine={false} allowDecimals={false} />
+                  <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
+                  <Line
+                    type="monotone"
+                    dataKey="commits"
+                    stroke="var(--color-commits)"
+                    strokeWidth={2.5}
+                    dot={{ fill: "var(--color-commits)", r: 4 }}
+                    activeDot={{ r: 6 }}
+                  />
+                </LineChart>
+              </ChartContainer>
             </CardContent>
           </Card>
         </div>
 
-        {/* Additional Metrics */}
-        <div className="mt-12 text-center">
-          <Card className="inline-block border-gray-200 dark:border-gray-700">
-            <CardContent className="pt-6">
-              <div className="grid grid-cols-3 gap-8">
-                <div>
-                  <div className="text-2xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">
-                    <EditableText
-                      value={String(quality.codeQuality ?? '98%')}
-                      onSave={(value) => updateField('quality.codeQuality', value)}
-                    />
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    <EditableText
-                      value={String(draft.codeQuality ?? statsContent.codeQuality ?? '')}
-                      onSave={(value) => updateField('codeQuality', value)}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="text-2xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">
-                    <EditableText
-                      value={String(quality.avgResponseTime ?? '24h')}
-                      onSave={(value) => updateField('quality.avgResponseTime', value)}
-                    />
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    <EditableText
-                      value={String(draft.avgResponseTime ?? statsContent.avgResponseTime ?? '')}
-                      onSave={(value) => updateField('avgResponseTime', value)}
-                    />
-                  </div>
-                </div>
-                <div>
-                  <div className="text-2xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">
-                    <EditableText
-                      value={String(quality.projectSuccess ?? '100%')}
-                      onSave={(value) => updateField('quality.projectSuccess', value)}
-                    />
-                  </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    <EditableText
-                      value={String(draft.projectSuccess ?? statsContent.projectSuccess ?? '')}
-                      onSave={(value) => updateField('projectSuccess', value)}
-                    />
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        <div className="mt-12 grid gap-6 md:grid-cols-3">
+          {factualMetrics.map((metric) => (
+            <MetricCard key={metric.label} label={metric.label} value={metric.value} />
+          ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function MetricCard({ label, value }: { label: string; value: string }) {
+  return (
+    <Card className="border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
+      <CardContent className="pt-6">
+        <div className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
+          {value}
+        </div>
+        <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">{label}</p>
+      </CardContent>
+    </Card>
   );
 }

@@ -1,8 +1,24 @@
-import { useState, useMemo, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Button } from "./ui/button";
+import {
+  ArrowLeft,
+  Calendar,
+  Code,
+  ExternalLink,
+  Eye,
+  Github,
+  GitFork,
+  Grid3X3,
+  List,
+  Search,
+  Star,
+} from "lucide-react";
+import { useTranslation } from "react-i18next";
+
+import ProjectModal from "./ProjectModal";
 import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
 import {
   Select,
@@ -11,35 +27,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import ProjectModal from "./ProjectModal";
-import { fetchPublicProjects } from "@/shared/api/public";
 import { mapPublicProjectToList } from "@/shared/api/mappers";
-import {
-  Search,
-  Calendar,
-  Code,
-  ExternalLink,
-  Github,
-  Star,
-  GitFork,
-  Eye,
-  ArrowLeft,
-  Grid3X3,
-  List,
-} from "lucide-react";
-import { useTranslation } from "react-i18next";
+import { fetchPublicProjects } from "@/shared/api/public";
+
+type ProjectItem = ReturnType<typeof mapPublicProjectToList>;
 
 export default function AllProjects() {
-  const { t } = useTranslation();
-  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const { t, i18n } = useTranslation();
+  const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedTech, setSelectedTech] = useState("all");
   const [sortBy, setSortBy] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-
-  const [allProjects, setAllProjects] = useState<any[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [allProjects, setAllProjects] = useState<ProjectItem[]>([]);
+  const pageSize = 9;
 
   useEffect(() => {
     let isActive = true;
@@ -62,45 +66,46 @@ export default function AllProjects() {
     };
   }, []);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, selectedCategory, selectedTech, sortBy, sortOrder]);
+
   const categories = [
-    { value: "all", label: t('projects.categories.all') },
-    { value: "fullstack", label: t('projects.categories.fullstack') },
-    { value: "web", label: t('projects.categories.web') },
-    { value: "devops", label: t('projects.categories.devops') },
-    { value: "ml", label: t('projects.categories.ml') },
-    { value: "blockchain", label: t('projects.categories.blockchain') },
-    { value: "data", label: t('projects.categories.data') },
+    { value: "all", label: t("projects.categories.all") },
+    { value: "fullstack", label: t("projects.categories.fullstack") },
+    { value: "web", label: t("projects.categories.web") },
+    { value: "devops", label: t("projects.categories.devops") },
+    { value: "ml", label: t("projects.categories.ml") },
+    { value: "blockchain", label: t("projects.categories.blockchain") },
+    { value: "data", label: t("projects.categories.data") },
   ];
 
   const technologies = useMemo(() => {
     const allTechs = allProjects.flatMap((project) => project.technologies);
     const uniqueTechs = [...new Set(allTechs)].sort();
+
     return [
-      { value: "all", label: "All Technologies" },
+      { value: "all", label: t("projects.allTech") },
       ...uniqueTechs.map((tech) => ({ value: tech, label: tech })),
     ];
-  }, [allProjects]);
+  }, [allProjects, t]);
 
   const filteredAndSortedProjects = useMemo(() => {
-    let filtered = allProjects.filter((project) => {
+    const filtered = allProjects.filter((project) => {
       const matchesSearch =
         project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        project.technologies.some((tech) =>
-          tech.toLowerCase().includes(searchTerm.toLowerCase()),
-        );
+        project.technologies.some((tech) => tech.toLowerCase().includes(searchTerm.toLowerCase()));
 
-      const matchesCategory =
-        selectedCategory === "all" || project.category === selectedCategory;
-      const matchesTech =
-        selectedTech === "all" || project.technologies.includes(selectedTech);
+      const matchesCategory = selectedCategory === "all" || project.category === selectedCategory;
+      const matchesTech = selectedTech === "all" || project.technologies.includes(selectedTech);
 
       return matchesSearch && matchesCategory && matchesTech;
     });
 
-    // Sort projects
     filtered.sort((a, b) => {
-      let aValue, bValue;
+      let aValue: string | number;
+      let bValue: string | number;
 
       switch (sortBy) {
         case "date":
@@ -125,342 +130,263 @@ export default function AllProjects() {
 
       if (sortOrder === "asc") {
         return aValue > bValue ? 1 : -1;
-      } else {
-        return aValue < bValue ? 1 : -1;
       }
+
+      return aValue < bValue ? 1 : -1;
     });
 
     return filtered;
   }, [allProjects, searchTerm, selectedCategory, selectedTech, sortBy, sortOrder]);
 
+  const featuredCount = useMemo(
+    () => filteredAndSortedProjects.filter((project) => project.featured).length,
+    [filteredAndSortedProjects],
+  );
+
+  const totalPages = Math.max(1, Math.ceil(filteredAndSortedProjects.length / pageSize));
+  const paginatedProjects = filteredAndSortedProjects.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize,
+  );
+
+  const trackedTechnologies = useMemo(
+    () => new Set(filteredAndSortedProjects.flatMap((project) => project.technologies)).size,
+    [filteredAndSortedProjects],
+  );
+
+  const formatDate = (value: string) =>
+    new Intl.DateTimeFormat(i18n.language, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }).format(new Date(value));
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "production":
-        return "bg-green-500/20 text-green-400 border-green-500/30";
+        return "border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300";
       case "development":
-        return "bg-blue-500/20 text-blue-400 border-blue-500/30";
+        return "border-sky-300 bg-sky-50 text-sky-700 dark:border-sky-500/30 dark:bg-sky-500/10 dark:text-sky-300";
       case "prototype":
-        return "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
+        return "border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300";
       default:
-        return "bg-gray-500/20 text-gray-400 border-gray-500/30";
+        return "border-slate-300 bg-slate-50 text-slate-700 dark:border-slate-500/30 dark:bg-slate-500/10 dark:text-slate-300";
     }
   };
 
-  const ProjectCard = ({
-    project,
-    isListView = false,
-  }: {
-    project: any;
-    isListView?: boolean;
-  }) => (
-    <Card
-      className={`group border-gray-200 dark:border-gray-700 hover:border-violet-500/50 dark:hover:border-violet-400/50 transition-all duration-300 ${isListView ? "flex-row overflow-hidden" : ""} hover:shadow-2xl hover:shadow-violet-500/20`}
-    >
-      <div
-        className={`${isListView ? "w-48 shrink-0" : ""} relative overflow-hidden ${isListView ? "" : "aspect-video"}`}
-      >
-        <img
-          src={project.image}
-          alt={project.title}
-          className={`${isListView ? "w-full h-full" : "w-full h-full"} object-cover transition-transform duration-300 group-hover:scale-105`}
-        />
-        {project.featured && (
-          <div className="absolute top-3 left-3">
-            <Badge className="bg-violet-600 dark:bg-violet-500 text-white">
-              <Star className="w-3 h-3 mr-1 fill-current" />
-              Featured
-            </Badge>
-          </div>
-        )}
-        <div className="absolute top-3 right-3">
-          <Badge className={getStatusColor(project.status)}>
-            {project.status}
-          </Badge>
-        </div>
-      </div>
+  const getStatusLabel = (status: string) => {
+    const normalized = status?.toLowerCase?.() ?? "unknown";
+    return String(
+      t(`projects.status.${normalized}` as never, {
+        defaultValue: t("projects.status.unknown"),
+      }),
+    );
+  };
 
-      <div className={`${isListView ? "flex-1" : ""} p-6`}>
-        <CardHeader className="p-0 mb-4">
-          <CardTitle className="mb-2 text-gray-900 dark:text-gray-100">
-            {project.title}
-          </CardTitle>
-          <p className="text-gray-600 dark:text-gray-400">
-            {project.description}
-          </p>
-        </CardHeader>
+  const clearFilters = () => {
+    setSearchTerm("");
+    setSelectedCategory("all");
+    setSelectedTech("all");
+  };
 
-        <CardContent className="p-0 space-y-4">
-          <div className="flex flex-wrap gap-2">
-            {project.technologies
-              .slice(0, isListView ? 6 : 4)
-              .map((tech: string) => (
-                <Badge key={tech} variant="secondary" className="text-xs">
-                  {tech}
-                </Badge>
-              ))}
-            {project.technologies.length > (isListView ? 6 : 4) && (
-              <Badge variant="outline" className="text-xs">
-                +{project.technologies.length - (isListView ? 6 : 4)}
-              </Badge>
-            )}
-          </div>
-
-          <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-1">
-                <Star className="w-4 h-4" />
-                <span>{project.stars}</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <GitFork className="w-4 h-4" />
-                <span>{project.forks}</span>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Eye className="w-4 h-4" />
-                <span>{project.views}</span>
-              </div>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Calendar className="w-4 h-4" />
-              <span>{new Date(project.date).toLocaleDateString()}</span>
-            </div>
-          </div>
-
-          <div className="flex space-x-2 pt-2">
-            <Button
-              size="sm"
-              onClick={() => setSelectedProject(project)}
-              className="flex-1"
-            >
-              <Code className="w-4 h-4 mr-2" />
-              {t('projects.filters.viewDetails')}
-            </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => window.open(project.github, "_blank")}
-            >
-              <Github className="w-4 h-4" />
-            </Button>
-            {project.liveDemo && (
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => window.open(project.liveDemo, "_blank")}
-              >
-                <ExternalLink className="w-4 h-4" />
-              </Button>
-            )}
-          </div>
-        </CardContent>
-      </div>
-    </Card>
-  );
+  const projectCountLabel = (t("projects.filters.showing") as string)
+    .replace("{count}", String(filteredAndSortedProjects.length))
+    .replace("{total}", String(allProjects.length));
 
   return (
-    <div className="min-h-screen py-16 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <Button
-              variant="ghost"
-              asChild
-              className="gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 mb-4"
-            >
-              <Link to="/">
-                <ArrowLeft className="h-4 w-4" />
-                {t('common.back')}
-              </Link>
-            </Button>
+    <section className="min-h-screen px-4 py-24 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-12">
+          <Button
+            variant="ghost"
+            asChild
+            className="group mb-6 rounded-full border border-slate-200 bg-white/80 px-4 text-slate-600 transition-all hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-300 dark:hover:border-violet-400/30 dark:hover:bg-violet-500/10 dark:hover:text-violet-200"
+          >
+            <Link to="/">
+              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+              {t("common.back")}
+            </Link>
+          </Button>
 
-            <h1 className="text-4xl mb-4 text-gray-900 dark:text-gray-100">
-              All Projects
-            </h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400">
-              Complete portfolio of software engineering projects with detailed
-              technical implementations
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-violet-600 dark:text-violet-400">
+              {t("projects.title")}
             </p>
-          </div>
-
-          <div className="text-right">
-            <div className="text-2xl mb-1 text-gray-900 dark:text-gray-100 font-semibold">
-              {filteredAndSortedProjects.length}
-            </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              {t('projects.filters.projectsFound')}
-            </div>
+            <h1 className="mt-3 text-5xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-6xl">
+              {t("projects.allProjects")}
+            </h1>
+            <p className="mx-auto mt-5 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-400 sm:text-base">
+              {t("projects.description")}
+            </p>
           </div>
         </div>
 
-        {/* Filtros: barra clara con etiquetas y controles bien definidos */}
-        <div className="mb-8 rounded-xl border border-gray-200/80 dark:border-gray-700/80 bg-white dark:bg-gray-900/80 shadow-sm dark:shadow-none ring-1 ring-gray-200/50 dark:ring-gray-700/50 overflow-hidden">
-          <div className="p-5 sm:p-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
-              {/* Búsqueda */}
+        <div className="mb-8 grid gap-6 md:grid-cols-3">
+          <SummaryCard label={t("projects.totalProjects")} value={String(filteredAndSortedProjects.length)} />
+          <SummaryCard label={t("projects.featuredProjects")} value={String(featuredCount)} />
+          <SummaryCard label={t("projects.technologiesTracked")} value={String(trackedTechnologies)} />
+        </div>
+
+        <Card className="mb-8 border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
+          <CardContent className="p-5 sm:p-6">
+            <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
               <div className="lg:col-span-2">
-                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
-                  {t('projects.filters.searchLabel')}
+                <label className="mb-1.5 block text-xs font-medium text-slate-500 dark:text-slate-400">
+                  {t("projects.filters.searchLabel")}
                 </label>
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 dark:text-gray-500" />
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
                   <Input
-                    placeholder={t('projects.filters.searchPlaceholder')}
+                    placeholder={t("projects.filters.searchPlaceholder")}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 h-10 bg-gray-50/80 dark:bg-gray-800/50 border-gray-200 dark:border-gray-600 rounded-lg focus-visible:ring-violet-500/50"
+                    className="h-10 rounded-lg border-slate-200 bg-slate-50/80 pl-10 focus-visible:ring-violet-500/50 dark:border-gray-600 dark:bg-gray-800/50"
                   />
                 </div>
               </div>
 
-              {/* Categoría */}
-              <div>
-                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
-                  {t('projects.filters.category')}
-                </label>
-                <Select
-                  value={selectedCategory}
-                  onValueChange={setSelectedCategory}
-                >
-                  <SelectTrigger className="h-10 bg-gray-50/80 dark:bg-gray-800/50 border-gray-200 dark:border-gray-600 rounded-lg">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((cat) => (
-                      <SelectItem key={cat.value} value={cat.value}>
-                        {cat.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <FilterSelect
+                label={t("projects.filters.category")}
+                value={selectedCategory}
+                onChange={setSelectedCategory}
+                options={categories}
+              />
 
-              {/* Tecnología */}
-              <div>
-                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
-                  {t('projects.filters.technology')}
-                </label>
-                <Select value={selectedTech} onValueChange={setSelectedTech}>
-                  <SelectTrigger className="h-10 bg-gray-50/80 dark:bg-gray-800/50 border-gray-200 dark:border-gray-600 rounded-lg">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {technologies.map((tech) => (
-                      <SelectItem key={tech.value} value={tech.value}>
-                        {tech.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              <FilterSelect
+                label={t("projects.filters.technology")}
+                value={selectedTech}
+                onChange={setSelectedTech}
+                options={technologies}
+              />
 
-              {/* Ordenar */}
-              <div>
-                <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">
-                  {t('projects.filters.sortBy')}
-                </label>
-                <Select
-                  value={`${sortBy}-${sortOrder}`}
-                  onValueChange={(value) => {
-                    const [newSortBy, newSortOrder] = value.split("-");
-                    setSortBy(newSortBy);
-                    setSortOrder(newSortOrder);
-                  }}
-                >
-                  <SelectTrigger className="h-10 bg-gray-50/80 dark:bg-gray-800/50 border-gray-200 dark:border-gray-600 rounded-lg">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="date-desc">
-                      {t('projects.sortOptions.dateDesc')}
-                    </SelectItem>
-                    <SelectItem value="date-asc">
-                      {t('projects.sortOptions.dateAsc')}
-                    </SelectItem>
-                    <SelectItem value="stars-desc">
-                      {t('projects.sortOptions.starsDesc')}
-                    </SelectItem>
-                    <SelectItem value="stars-asc">
-                      {t('projects.sortOptions.starsAsc')}
-                    </SelectItem>
-                    <SelectItem value="views-desc">
-                      {t('projects.sortOptions.viewsDesc')}
-                    </SelectItem>
-                    <SelectItem value="name-asc">
-                      {t('projects.sortOptions.nameAsc')}
-                    </SelectItem>
-                    <SelectItem value="name-desc">
-                      {t('projects.sortOptions.nameDesc')}
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <FilterSelect
+                label={t("projects.filters.sortBy")}
+                value={`${sortBy}-${sortOrder}`}
+                onChange={(value) => {
+                  const [newSortBy, newSortOrder] = value.split("-");
+                  setSortBy(newSortBy);
+                  setSortOrder(newSortOrder);
+                }}
+                options={[
+                  { value: "date-desc", label: t("projects.sortOptions.dateDesc") },
+                  { value: "date-asc", label: t("projects.sortOptions.dateAsc") },
+                  { value: "stars-desc", label: t("projects.sortOptions.starsDesc") },
+                  { value: "stars-asc", label: t("projects.sortOptions.starsAsc") },
+                  { value: "views-desc", label: t("projects.sortOptions.viewsDesc") },
+                  { value: "name-asc", label: t("projects.sortOptions.nameAsc") },
+                  { value: "name-desc", label: t("projects.sortOptions.nameDesc") },
+                ]}
+              />
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-3 mt-5 pt-5 border-t border-gray-200 dark:border-gray-700">
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                {(t('projects.filters.showing') as string)
-                  .replace("{count}", String(filteredAndSortedProjects.length))
-                  .replace("{total}", String(allProjects.length))}
-              </p>
-              <div className="flex items-center gap-1 rounded-lg bg-gray-100 dark:bg-gray-800/60 p-1">
+            <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 pt-5 dark:border-white/[0.07]">
+              <p className="text-sm text-slate-600 dark:text-slate-400">{projectCountLabel}</p>
+              <div className="flex items-center gap-1 rounded-lg bg-slate-100 p-1 dark:bg-gray-800/60">
                 <Button
                   variant={viewMode === "grid" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setViewMode("grid")}
-                  className="rounded-md h-8"
-                  title={t('projects.filters.viewGrid')}
+                  className="h-8 rounded-md"
+                  title={t("projects.filters.viewGrid")}
                 >
-                  <Grid3X3 className="w-4 h-4" />
+                  <Grid3X3 className="h-4 w-4" />
                 </Button>
                 <Button
                   variant={viewMode === "list" ? "default" : "ghost"}
                   size="sm"
                   onClick={() => setViewMode("list")}
-                  className="rounded-md h-8"
-                  title={t('projects.filters.viewList')}
+                  className="h-8 rounded-md"
+                  title={t("projects.filters.viewList")}
                 >
-                  <List className="w-4 h-4" />
+                  <List className="h-4 w-4" />
                 </Button>
               </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
 
-        {/* Projects Grid/List */}
-        {viewMode === "grid" ? (
-          <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
-            {filteredAndSortedProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
+        {filteredAndSortedProjects.length === 0 ? (
+          <Card className="border-slate-200 bg-white/85 text-center dark:border-white/[0.07] dark:bg-white/[0.025]">
+            <CardContent className="py-12">
+              <p className="mb-4 text-slate-600 dark:text-slate-400">{t("projects.noProjects")}</p>
+              <Button variant="outline" onClick={clearFilters}>
+                {t("projects.filters.clearFilters")}
+              </Button>
+            </CardContent>
+          </Card>
+        ) : viewMode === "grid" ? (
+          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+            {paginatedProjects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                formatDate={formatDate}
+                getStatusColor={getStatusColor}
+                getStatusLabel={getStatusLabel}
+                onSelect={setSelectedProject}
+                t={t}
+              />
             ))}
           </div>
         ) : (
           <div className="space-y-6">
-            {filteredAndSortedProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} isListView />
+            {paginatedProjects.map((project) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                isListView
+                formatDate={formatDate}
+                getStatusColor={getStatusColor}
+                getStatusLabel={getStatusLabel}
+                onSelect={setSelectedProject}
+                t={t}
+              />
             ))}
           </div>
         )}
 
-        {filteredAndSortedProjects.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-600 dark:text-gray-400 mb-4">
-              {t('projects.noProjects')}
+        {filteredAndSortedProjects.length > pageSize && (
+          <div className="mt-10 flex flex-col items-center gap-4">
+            <p className="text-sm text-slate-600 dark:text-slate-400">
+              {String(t("projects.pagination.page"))
+                .replace("{current}", String(currentPage))
+                .replace("{total}", String(totalPages))}
             </p>
-            <Button
-              variant="outline"
-              onClick={() => {
-                setSearchTerm("");
-                setSelectedCategory("all");
-                setSelectedTech("all");
-              }}
-            >
-              {t('projects.filters.clearFilters')}
-            </Button>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+                disabled={currentPage === 1}
+              >
+                {t("projects.pagination.previous")}
+              </Button>
+              {Array.from({ length: totalPages }).map((_, index) => {
+                const page = index + 1;
+                return (
+                  <Button
+                    key={page}
+                    variant={page === currentPage ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setCurrentPage(page)}
+                    className="min-w-9"
+                  >
+                    {page}
+                  </Button>
+                );
+              })}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}
+                disabled={currentPage === totalPages}
+              >
+                {t("projects.pagination.next")}
+              </Button>
+            </div>
           </div>
         )}
 
-        {/* Project Modal */}
         {selectedProject && (
           <ProjectModal
             project={{
@@ -472,8 +398,7 @@ export default function AllProjects() {
               problem: selectedProject.problem ?? "",
               challenge: selectedProject.challenge ?? "",
               solution: selectedProject.solution ?? "",
-              githubUrl:
-                selectedProject.github ?? selectedProject.githubUrl ?? "",
+              githubUrl: selectedProject.github ?? selectedProject.githubUrl ?? "",
               liveUrl: selectedProject.liveDemo ?? selectedProject.liveUrl,
             }}
             isOpen={!!selectedProject}
@@ -481,6 +406,188 @@ export default function AllProjects() {
           />
         )}
       </div>
+    </section>
+  );
+}
+
+function FilterSelect({
+  label,
+  value,
+  onChange,
+  options,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: Array<{ value: string; label: string }>;
+}) {
+  return (
+    <div>
+      <label className="mb-1.5 block text-xs font-medium text-slate-500 dark:text-slate-400">
+        {label}
+      </label>
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger className="h-10 rounded-lg border-slate-200 bg-slate-50/80 dark:border-gray-600 dark:bg-gray-800/50">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
+  );
+}
+
+function ProjectCard({
+  project,
+  isListView = false,
+  formatDate,
+  getStatusColor,
+  getStatusLabel,
+  onSelect,
+  t,
+}: {
+  project: ProjectItem;
+  isListView?: boolean;
+  formatDate: (value: string) => string;
+  getStatusColor: (value: string) => string;
+  getStatusLabel: (value: string) => string;
+  onSelect: (project: ProjectItem) => void;
+  t: (key: string) => string;
+}) {
+  return (
+    <Card
+      className={`group overflow-hidden border-slate-200 bg-white/85 transition-all duration-300 hover:border-violet-400/30 hover:bg-white dark:border-white/[0.07] dark:bg-white/[0.025] dark:hover:bg-white/[0.04] ${
+        isListView ? "flex flex-col lg:flex-row" : ""
+      }`}
+    >
+      <div
+        className={`${isListView ? "h-56 shrink-0 lg:h-auto lg:w-72 xl:w-80" : "aspect-video"} relative overflow-hidden`}
+      >
+        {project.image ? (
+          <img
+            src={project.image}
+            alt={project.title}
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-violet-100 to-slate-200 px-6 text-center text-sm font-medium text-slate-600 dark:from-violet-500/10 dark:to-slate-800 dark:text-slate-300">
+            {project.title}
+          </div>
+        )}
+        {project.featured && (
+          <div className="absolute left-3 top-3">
+            <Badge className="bg-violet-600 text-white dark:bg-violet-500">
+              <Star className="mr-1 h-3 w-3 fill-current" />
+              {t("projects.badges.featured")}
+            </Badge>
+          </div>
+        )}
+        <div className="absolute right-3 top-3">
+          <Badge className={getStatusColor(project.status)}>{getStatusLabel(project.status)}</Badge>
+        </div>
+      </div>
+
+      <div className={`${isListView ? "flex flex-1 flex-col p-6 lg:flex-row lg:gap-6" : "p-6"}`}>
+        <div className={`${isListView ? "min-w-0 flex-1" : ""}`}>
+          <CardHeader className="mb-4 p-0">
+            <CardTitle className="mb-2 text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
+              {project.title}
+            </CardTitle>
+            <p className="text-sm leading-7 text-slate-600 dark:text-slate-400">{project.description}</p>
+          </CardHeader>
+
+          <CardContent className="space-y-4 p-0">
+            <div className="flex flex-wrap gap-2">
+              {project.technologies.slice(0, isListView ? 8 : 4).map((tech) => (
+                <Badge
+                  key={tech}
+                  variant="secondary"
+                  className="border-slate-200 bg-slate-50 text-xs text-slate-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300"
+                >
+                  {tech}
+                </Badge>
+              ))}
+              {project.technologies.length > (isListView ? 8 : 4) && (
+                <Badge variant="outline" className="text-xs">
+                  +{project.technologies.length - (isListView ? 8 : 4)}
+                </Badge>
+              )}
+            </div>
+          </CardContent>
+        </div>
+
+        <div className={`${isListView ? "mt-6 lg:mt-0 lg:w-64 lg:border-l lg:border-slate-200 lg:pl-6 dark:lg:border-white/[0.07]" : "mt-4"}`}>
+          <CardContent className="space-y-4 p-0">
+            <div className={`text-sm text-slate-600 dark:text-slate-400 ${isListView ? "space-y-3" : "flex items-center justify-between"}`}>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center space-x-1">
+                  <Star className="h-4 w-4" />
+                  <span>{project.stars}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <GitFork className="h-4 w-4" />
+                  <span>{project.forks}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Eye className="h-4 w-4" />
+                  <span>{project.views}</span>
+                </div>
+              </div>
+              <div className="flex items-center space-x-1">
+                <Calendar className="h-4 w-4" />
+                <span>
+                  {t("projects.updatedOn")}: {formatDate(project.date)}
+                </span>
+              </div>
+            </div>
+
+            <div className={`flex ${isListView ? "flex-col gap-2" : "space-x-2 pt-2"}`}>
+              <Button size="sm" onClick={() => onSelect(project)} className={isListView ? "w-full" : "flex-1"}>
+                <Code className="mr-2 h-4 w-4" />
+                {t("projects.filters.viewDetails")}
+              </Button>
+              <div className={`flex gap-2 ${isListView ? "w-full" : ""}`}>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => window.open(project.github, "_blank")}
+                  aria-label={t("projects.actions.github")}
+                  className={isListView ? "flex-1" : ""}
+                >
+                  <Github className="h-4 w-4" />
+                </Button>
+                {project.liveDemo && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => window.open(project.liveDemo, "_blank")}
+                    aria-label={t("projects.actions.live")}
+                    className={isListView ? "flex-1" : ""}
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                  </Button>
+                )}
+              </div>
+            </div>
+          </CardContent>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+function SummaryCard({ label, value }: { label: string; value: string }) {
+  return (
+    <Card className="border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
+      <CardContent className="pt-6 text-center">
+        <div className="text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">{value}</div>
+        <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-400">{label}</p>
+      </CardContent>
+    </Card>
   );
 }

@@ -108,16 +108,40 @@
     "title": "Mis Proyectos",
     "subtitle": "Proyectos que demuestran mis habilidades en desarrollo backend y arquitectura distribuida.",
     "allProjects": "Todos los proyectos",
+    "description": "Repositorio completo de proyectos con foco en implementación técnica, stack utilizado y detalle de cada solución.",
     "technologies": "Tecnologías utilizadas",
     "viewMore": "Ver más",
     "noProjects": "No hay proyectos que coincidan con el filtro seleccionado.",
-    "totalProjects": "15+",
+    "totalProjects": "Total de proyectos",
+    "featuredProjects": "Proyectos destacados",
+    "technologiesTracked": "Tecnologías detectadas",
+    "updatedOn": "Actualizado",
+    "badges": {
+      "featured": "Destacado"
+    },
+    "status": {
+      "production": "Producción",
+      "development": "Desarrollo",
+      "prototype": "Prototipo",
+      "unknown": "Sin estado"
+    },
+    "actions": {
+      "github": "Ver repositorio",
+      "live": "Ver demo"
+    },
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Página {current} de {total}"
+    },
     "modal": {
       "problem": "Problema",
       "challenge": "Reto",
       "solution": "Solución",
       "viewGithub": "Ver en GitHub",
-      "viewLive": "Ver proyecto"
+      "viewLive": "Ver proyecto",
+      "preview": "Vista previa del proyecto",
+      "noTags": "Sin etiquetas"
     },
     "filters": {
       "searchLabel": "Buscar",
@@ -157,9 +181,12 @@
     "subtitle": "¿Interesado en trabajar conmigo o colaborar en un proyecto?",
     "form": {
       "title": "Envíame un mensaje",
-      "name": "Nombre",
+      "name": "Nombre y apellido",
+      "namePlaceholder": "Tu nombre y apellido",
       "email": "Email",
+      "emailPlaceholder": "tu@email.com",
       "message": "Mensaje",
+      "messagePlaceholder": "Contame brevemente en qué puedo ayudarte",
       "send": "Enviar mensaje",
       "sending": "Enviando...",
       "thankYou": "¡Gracias por tu mensaje!",
@@ -221,9 +248,23 @@
     "openSourceDescription": "Contribuciones a la comunidad",
     "collaborations": "Colaboraciones",
     "collaborationsDescription": "Proyectos en equipo",
+    "totalRepos": "Repositorios",
+    "totalReposDescription": "{{public}} públicos / {{private}} privados",
+    "publicReposDescription": "{{public}} repositorios públicos",
+    "totalStars": "Stars",
+    "totalStarsDescription": "Estrellas acumuladas en GitHub",
+    "totalForks": "Forks",
+    "totalForksDescription": "Forks acumulados en tus repositorios",
+    "followers": "Followers",
+    "followersDescription": "Seguidores en GitHub",
+    "publicRepos": "Repos públicos",
+    "privateRepos": "Repos privados",
+    "pullRequests": "Pull requests",
+    "following": "Siguiendo",
+    "languagesTracked": "Lenguajes detectados",
     "languagesUsed": "Lenguajes Más Utilizados",
     "projectsTimeline": "Proyectos por Mes",
-    "githubActivity": "Actividad en GitHub (Última Semana)",
+    "githubActivity": "Commits de GitHub (Últimos 7 días)",
     "codeQuality": "Calidad del Código",
     "avgResponseTime": "Tiempo de Respuesta Promedio",
     "projectSuccess": "Éxito de Proyectos"
