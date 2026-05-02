@@ -23,15 +23,13 @@ export default function Projects({ projects, section }: ProjectsProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [api, setApi] = useState<CarouselApi>();
   const [progress, setProgress] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const [currentSnap, setCurrentSnap] = useState(0);
 
   const carouselProjects = Array.isArray(projects) ? projects : [];
   const { draft, updateField } = useSectionEditor(section as any);
 
   // Efecto para el Autoplay y la barra de progreso
   useEffect(() => {
-    if (!api || isPaused || isModalOpen) return;
+    if (!api || isModalOpen) return;
 
     const step = 100 / (AUTOPLAY_INTERVAL / 50);
     const interval = setInterval(() => {
@@ -45,34 +43,24 @@ export default function Projects({ projects, section }: ProjectsProps) {
     }, 50);
 
     return () => clearInterval(interval);
-  }, [api, isPaused, isModalOpen]);
+  }, [api, isModalOpen]);
 
-  // Manejar eventos de interacción directamente desde la API de Embla
+  // Manejar el reinicio de la barra cuando cambia el slide
   useEffect(() => {
     if (!api) return;
     
     const onSelect = () => {
-      const newSnap = api.selectedScrollSnap();
-      // Solo reseteamos si realmente cambió el slide
-      if (newSnap !== currentSnap) {
-        setProgress(0);
-        setCurrentSnap(newSnap);
-      }
+      setProgress(0);
     };
 
-    const onPointerDown = () => setIsPaused(true);
-    const onPointerUp = () => setIsPaused(false);
-
     api.on("select", onSelect);
-    api.on("pointerDown", onPointerDown);
-    api.on("pointerUp", onPointerUp);
+    api.on("reInit", onSelect); // También al reinicializar
     
     return () => {
       api.off("select", onSelect);
-      api.off("pointerDown", onPointerDown);
-      api.off("pointerUp", onPointerUp);
+      api.off("reInit", onSelect);
     };
-  }, [api, currentSnap]);
+  }, [api]);
 
   const handleViewMore = (project: any) => {
     setSelectedProject(project);
@@ -117,12 +105,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
           </Button>
         </div>
 
-        <div 
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          onTouchStart={() => setIsPaused(true)}
-          onTouchEnd={() => setIsPaused(false)}
-        >
+        <div>
           <Carousel
             setApi={setApi}
             opts={{ 
