@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ExternalLink, Music2, PauseCircle, Radio, Waves } from 'lucide-react';
+import { ExternalLink, Loader2, Music2, PauseCircle, Radio, Waves } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from './ui/card';
 import { fetchNowPlaying, type SpotifyTrack } from '@/shared/api/public';
@@ -59,11 +59,18 @@ export function SpotifyNowPlayingCard() {
     return (
       <Card className="group mt-6 overflow-hidden border-violet-500/20 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-violet-500/10 dark:bg-slate-950/70">
         <CardContent className="flex items-center gap-3 p-3.5 sm:gap-4 sm:p-4">
-          <div className="h-14 w-14 animate-pulse rounded-2xl bg-violet-100 dark:bg-violet-500/15" />
+          <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-violet-100 dark:bg-violet-500/15">
+            <Loader2 className="h-6 w-6 animate-spin text-violet-600 dark:text-violet-400" />
+          </div>
           <div className="flex-1 space-y-2">
-            <div className="h-3 w-24 animate-pulse rounded-full bg-violet-100 dark:bg-violet-500/15" />
-            <div className="h-4 w-40 animate-pulse rounded-full bg-slate-200 dark:bg-slate-800" />
-            <div className="h-3 w-32 animate-pulse rounded-full bg-slate-200 dark:bg-slate-800" />
+            <div className="flex items-center gap-2">
+              <div className="h-3 w-3 animate-pulse rounded-full bg-violet-400" />
+              <div className="h-3 w-24 animate-pulse rounded-full bg-violet-100 dark:bg-violet-500/15" />
+            </div>
+            <p className="animate-pulse text-sm font-medium text-slate-600 dark:text-slate-300">
+              {t('spotify.loading')}
+            </p>
+            <div className="h-2 w-full max-w-[120px] animate-pulse rounded-full bg-slate-200 dark:bg-slate-800" />
           </div>
         </CardContent>
       </Card>

@@ -8,7 +8,9 @@
     "comeBackLater": "Come back later to see my musical activity.",
     "nowPlaying": "Now playing",
     "lastPlayed": "Last played",
-    "openInSpotify": "Open in Spotify"
+    "openInSpotify": "Open in Spotify",
+    "loading": "Tuning into Spotify...",
+    "fetching": "Fetching recent activity..."
   },
   "nav": {
     "home": "Home",
