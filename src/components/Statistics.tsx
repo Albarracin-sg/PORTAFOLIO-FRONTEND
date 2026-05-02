@@ -135,9 +135,9 @@ export default function Statistics({ section, githubStats }: StatisticsProps) {
   } satisfies ChartConfig;
 
   return (
-    <section className="px-4 py-12 sm:py-24 sm:px-6 lg:px-8">
+    <section className="px-4 pb-12 pt-28 sm:pb-24 sm:pt-32 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-8">
+        <div className="mb-10 sm:mb-12">
           <Button
             variant="ghost"
             asChild
@@ -199,7 +199,11 @@ export default function Statistics({ section, githubStats }: StatisticsProps) {
             <CardContent>
               <ChartContainer config={languageChartConfig} className="aspect-square h-64 sm:aspect-video sm:h-80 w-full">
                 <PieChart>
-                  <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+                  <ChartTooltip 
+                    cursor={false}
+                    content={<ChartTooltipContent hideLabel />} 
+                    trigger="hover" // Recharts mapea hover a touch en mobile
+                  />
                   <Pie
                     data={languageData}
                     dataKey="value"
@@ -207,9 +211,14 @@ export default function Statistics({ section, githubStats }: StatisticsProps) {
                     innerRadius="60%"
                     outerRadius="90%"
                     paddingAngle={4}
+                    isAnimationActive={false} // Desactivar para respuesta inmediata al toque
                   >
                     {languageData.map((entry, index) => (
-                      <Cell key={`language-${index}`} fill={String(entry.color ?? "#8b5cf6")} />
+                      <Cell 
+                        key={`language-${index}`} 
+                        fill={String(entry.color ?? "#8b5cf6")}
+                        className="cursor-pointer outline-none" 
+                      />
                     ))}
                   </Pie>
                 </PieChart>
@@ -244,8 +253,17 @@ export default function Statistics({ section, githubStats }: StatisticsProps) {
                   <CartesianGrid vertical={false} />
                   <XAxis dataKey="month" tickLine={false} axisLine={false} tick={{ fontSize: 12 }} />
                   <YAxis tickLine={false} axisLine={false} allowDecimals={false} tick={{ fontSize: 12 }} />
-                  <ChartTooltip content={<ChartTooltipContent />} />
-                  <Bar dataKey="projects" fill="var(--color-projects)" radius={[10, 10, 0, 0]} />
+                  <ChartTooltip 
+                    cursor={{ fill: "rgba(139, 92, 246, 0.1)" }}
+                    content={<ChartTooltipContent />} 
+                  />
+                  <Bar 
+                    dataKey="projects" 
+                    fill="var(--color-projects)" 
+                    radius={[10, 10, 0, 0]}
+                    isAnimationActive={false}
+                    className="cursor-pointer"
+                  />
                 </BarChart>
               </ChartContainer>
             </CardContent>
@@ -263,14 +281,17 @@ export default function Statistics({ section, githubStats }: StatisticsProps) {
                   <CartesianGrid vertical={false} />
                   <XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fontSize: 12 }} />
                   <YAxis tickLine={false} axisLine={false} allowDecimals={false} tick={{ fontSize: 12 }} />
-                  <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
+                  <ChartTooltip 
+                    content={<ChartTooltipContent indicator="line" />} 
+                  />
                   <Line
                     type="monotone"
                     dataKey="commits"
                     stroke="var(--color-commits)"
                     strokeWidth={2.5}
                     dot={{ fill: "var(--color-commits)", r: 4 }}
-                    activeDot={{ r: 6 }}
+                    activeDot={{ r: 6, className: "cursor-pointer" }}
+                    isAnimationActive={false}
                   />
                 </LineChart>
               </ChartContainer>
