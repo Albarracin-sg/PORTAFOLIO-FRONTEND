@@ -45,6 +45,7 @@ type SubmitFeedback = {
   type: "success" | "error";
   title: string;
   description: string;
+  emailStatus?: "sent" | "failed";
 };
 
 type IconComponent = typeof Mail;
@@ -89,16 +90,20 @@ export default function Contact({ section }: ContactProps) {
 
   const onSubmit = async (data: ContactFormData) => {
     try {
-      await sendContactMessage({
+      const response = await sendContactMessage({
         ...data,
         subject: "Consulta desde Portfolio",
       });
+      
+      const emailStatus = (response as any)?.emailStatus;
+      
       reset();
       setSubmitFeedback({
         open: true,
         type: "success",
         title: t("contact.form.modal.successTitle"),
         description: t("contact.form.modal.successDescription"),
+        emailStatus: emailStatus,
       });
     } catch (error) {
       setSubmitFeedback({
@@ -435,6 +440,16 @@ export default function Contact({ section }: ContactProps) {
               </AlertDialogTitle>
               <AlertDialogDescription className="text-sm leading-relaxed text-gray-500 dark:text-gray-400">
                 {submitFeedback.description}
+                {submitFeedback.emailStatus === "failed" && (
+                  <p className="mt-2 text-amber-600 dark:text-amber-400">
+                    ⚠️ El mensaje se guardó, pero el correo no pudo enviarse. Revisá la configuración del servidor.
+                  </p>
+                )}
+                {submitFeedback.emailStatus === "sent" && (
+                  <p className="mt-2 text-emerald-600 dark:text-emerald-400">
+                    ✓ Correo enviado correctamente.
+                  </p>
+                )}
               </AlertDialogDescription>
             </AlertDialogHeader>
             
