@@ -387,6 +387,7 @@ export default function AllProjects() {
             ))}
           </div>
         )}
+        </div>
 
         {filteredAndSortedProjects.length > pageSize && (
           <div className="mt-10 flex flex-col items-center gap-4">
