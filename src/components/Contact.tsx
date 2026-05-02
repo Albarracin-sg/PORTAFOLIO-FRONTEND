@@ -206,7 +206,7 @@ export default function Contact({ section }: ContactProps) {
                   id="name"
                   {...register("name", {
                     required: true,
-                    minLength: { value: 2 },
+                    minLength: 2,
                   })}
                   placeholder={String(t("contact.form.namePlaceholder"))}
                   disabled={isSubmitting}
@@ -236,9 +236,7 @@ export default function Contact({ section }: ContactProps) {
                   type="email"
                   {...register("email", {
                     required: true,
-                    pattern: {
-                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    },
+                    pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                   })}
                   placeholder={String(t("contact.form.emailPlaceholder"))}
                   disabled={isSubmitting}
@@ -286,7 +284,7 @@ export default function Contact({ section }: ContactProps) {
                   id="message"
                   {...register("message", {
                     required: true,
-                    minLength: { value: 5 },
+                    minLength: 5,
                   })}
                   placeholder={String(t("contact.form.messagePlaceholder"))}
                   disabled={isSubmitting}
