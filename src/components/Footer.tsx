@@ -75,8 +75,12 @@ export default function Footer({ isDark, onPageChange, currentPage }: FooterProp
         
        <div className="block lg:hidden text-center mb-20 space-y-8">
            <div className="space-y-6">
-             <Link to="/" onClick={() => scrollToSection("home")} className="inline-block transition-transform hover:scale-105 duration-300">
-               <img src={activeLogo} alt="Juan Albarracín" className="h-16 w-auto mx-auto" />
+             <Link to="/" onClick={() => scrollToSection("home")} className="inline-block group">
+               <div className="relative p-1 rounded-2xl bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 shadow-lg shadow-violet-500/25 group-hover:shadow-violet-500/50 group-hover:scale-105 transition-all duration-500">
+                 <div className="bg-background rounded-xl p-3">
+                   <img src={activeLogo} alt="Juan Albarracín" className="h-12 w-auto mx-auto" />
+                 </div>
+               </div>
              </Link>
              <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">
                {t("footer.description")}
@@ -118,8 +122,12 @@ export default function Footer({ isDark, onPageChange, currentPage }: FooterProp
            
            {/* Col 1: Identity */}
            <div className="space-y-8">
-             <Link to="/" onClick={() => scrollToSection("home")} className="inline-block transition-transform hover:scale-105 duration-300">
-               <img src={activeLogo} alt="Juan Albarracín" className="h-20 w-auto" />
+             <Link to="/" onClick={() => scrollToSection("home")} className="inline-block group">
+               <div className="relative p-1 rounded-2xl bg-gradient-to-r from-violet-500 via-purple-500 to-fuchsia-500 shadow-lg shadow-violet-500/25 group-hover:shadow-violet-500/50 group-hover:scale-105 transition-all duration-500">
+                 <div className="bg-background rounded-xl p-4">
+                   <img src={activeLogo} alt="Juan Albarracín" className="h-16 w-auto" />
+                 </div>
+               </div>
              </Link>
              <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
                {t("footer.description")}
