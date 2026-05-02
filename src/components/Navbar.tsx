@@ -20,7 +20,14 @@ interface NavbarProps {
   onThemeToggle: () => void;
 }
 
-export default function Navbar({ currentPage, onPageChange, language, onLanguageChange, isDark, onThemeToggle }: NavbarProps) {
+export default function Navbar({
+  currentPage,
+  onPageChange,
+  language,
+  onLanguageChange,
+  isDark,
+  onThemeToggle,
+}: NavbarProps) {
   const { t } = useTranslation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -31,6 +38,7 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
+
       if (currentScrollY < 24) {
         setIsVisible(true);
       } else if (currentScrollY < lastScrollY.current) {
@@ -38,46 +46,55 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
       } else if (currentScrollY > lastScrollY.current) {
         setIsVisible(false);
       }
+
       lastScrollY.current = currentScrollY;
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
     if (!isMobileMenuOpen) {
       const previousScrollY = lockedScrollY.current;
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.body.style.width = '';
+
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.width = "";
+
       if (previousScrollY) {
         window.scrollTo(0, previousScrollY);
       }
+
       return;
     }
 
     lockedScrollY.current = window.scrollY;
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
+
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.overflow = "hidden";
+    document.body.style.position = "fixed";
     document.body.style.top = `-${lockedScrollY.current}px`;
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.width = '100%';
+    document.body.style.left = "0";
+    document.body.style.right = "0";
+    document.body.style.width = "100%";
+
     return () => {
       const previousScrollY = lockedScrollY.current;
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.top = '';
-      document.body.style.left = '';
-      document.body.style.right = '';
-      document.body.style.width = '';
+
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.width = "";
+
       if (previousScrollY) {
         window.scrollTo(0, previousScrollY);
       }
@@ -85,104 +102,120 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
   }, [isMobileMenuOpen]);
 
   const navItems = [
-    { key: 'home', label: t('nav.home') },
-    { key: 'about', label: t('nav.about') },
-    { key: 'projects', label: t('nav.projects') },
-    { key: 'stats', label: t('nav.stats') },
-    { key: 'contact', label: t('nav.contact') },
+    { key: "home", label: t("nav.home") },
+    { key: "about", label: t("nav.about") },
+    { key: "projects", label: t("nav.projects") },
+    { key: "stats", label: t("nav.stats") },
+    { key: "contact", label: t("nav.contact") },
   ];
+
   const languageOptions = [
-    { value: 'es', label: 'Español', flag: '🇨🇴', shortLabel: 'ES' },
-    { value: 'en', label: 'English', flag: '🇺🇸', shortLabel: 'EN' },
+    { value: "es", label: "Español", flag: "🇨🇴", shortLabel: "ES" },
+    { value: "en", label: "English", flag: "🇺🇸", shortLabel: "EN" },
   ] as const;
-  const currentLanguage = languageOptions.find((option) => option.value === language) ?? languageOptions[0];
-  const themeLabel = language === 'es' ? 'Tema' : 'Theme';
+
+  const currentLanguage =
+    languageOptions.find((option) => option.value === language) ?? languageOptions[0];
+
+  const themeLabel = language === "es" ? "Tema" : "Theme";
+
   const themeModeLabel = isDark
-    ? language === 'es' ? 'Claro' : 'Light'
-    : language === 'es' ? 'Oscuro' : 'Dark';
+    ? language === "es"
+      ? "Claro"
+      : "Light"
+    : language === "es"
+      ? "Oscuro"
+      : "Dark";
+
   const themeAriaLabel = isDark
-    ? language === 'es' ? 'Cambiar a modo claro' : 'Switch to light mode'
-    : language === 'es' ? 'Cambiar a modo oscuro' : 'Switch to dark mode';
-  const activeLogo = isDark ? '/logoNigth.png' : logoImg;
+    ? language === "es"
+      ? "Cambiar a modo claro"
+      : "Switch to light mode"
+    : language === "es"
+      ? "Cambiar a modo oscuro"
+      : "Switch to dark mode";
+
+  const activeLogo = isDark ? "/logoNigth.png" : logoImg;
+
   const mobileSurfaceClass = isDark
-    ? 'bg-background text-white border-white/10'
-    : 'bg-background text-slate-900 border-slate-200';
-  const mobileCardClass = isDark
-    ? 'border-white/10 bg-[#13253a] text-white'
-    : 'border-slate-200 bg-slate-50 text-slate-900';
-  const mobileMutedClass = isDark ? 'text-white/70' : 'text-slate-500';
+    ? "bg-background text-white border-white/10"
+    : "bg-background text-slate-900 border-slate-200";
+
+  const mobileMutedClass = isDark ? "text-white/70" : "text-slate-500";
+
   const mobileActionButtonClass = isDark
-    ? 'bg-white/[0.04] text-white/80 hover:bg-white/[0.08]'
-    : 'bg-slate-50 text-slate-700 hover:bg-slate-100';
+    ? "bg-white/[0.04] text-white/80 hover:bg-white/[0.08]"
+    : "bg-slate-50 text-slate-700 hover:bg-slate-100";
+
   const mobileActiveButtonClass = isDark
-    ? 'bg-violet-500/15 text-violet-300 shadow-[0_0_0_1px_rgba(139,92,246,0.22)]'
-    : 'bg-violet-50 text-violet-700 shadow-[0_0_0_1px_rgba(139,92,246,0.12)]';
+    ? "bg-violet-500/15 text-violet-300 shadow-[0_0_0_1px_rgba(139,92,246,0.22)]"
+    : "bg-violet-50 text-violet-700 shadow-[0_0_0_1px_rgba(139,92,246,0.12)]";
 
   const scrollToSection = (sectionId: string) => {
-    if (sectionId === 'stats') {
-      onPageChange('stats');
+    if (sectionId === "stats") {
+      onPageChange("stats");
       return;
     }
-    
-    // If we're currently on separate pages, first go back to main page
-    if (currentPage === 'stats' || currentPage === 'all-projects') {
+
+    if (currentPage === "stats" || currentPage === "all-projects") {
       onPageChange(sectionId);
-      // Wait for the page to render, then scroll to the section
+
       setTimeout(() => {
         const element = document.getElementById(sectionId);
+
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
         }
       }, 100);
+
       return;
     }
-    
-    // Normal scroll behavior for sections on main page
+
     const element = document.getElementById(sectionId);
+
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
       onPageChange(sectionId);
     }
   };
 
   return (
     <>
-      <nav className={`fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+      <nav
+        className={`fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 transition-transform duration-300 ${
+          isVisible ? "translate-y-0" : "-translate-y-full"
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-18 min-h-[4.5rem]">
-          {/* Logo/Brand */}
-          <div className="flex-shrink-0">
-            <Link to="/">
-              <img src={activeLogo} alt="Juan Albarracín" className="h-12 w-auto" />
-            </Link>
-          </div>
-
-          {/* Desktop Navigation */}
-          <div className="hidden md:block">
-            <div className="ml-10 flex items-baseline space-x-8">
-              {navItems.map((item) => (
-                <button
-                  key={item.key}
-                  onClick={() => scrollToSection(item.key)}
-                  className={`relative px-3 py-2 text-sm transition-colors after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-[calc(100%-1.5rem)] after:-translate-x-1/2 after:rounded-full after:bg-violet-500 after:transition-transform after:duration-300 ${
-                    currentPage === item.key
-                      ? 'text-primary after:scale-x-100'
-                      : 'text-muted-foreground after:scale-x-0 hover:text-primary hover:after:scale-x-100'
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
+            <div className="flex-shrink-0">
+              <Link to="/">
+                <img src={activeLogo} alt="Juan Albarracín" className="h-12 w-auto" />
+              </Link>
             </div>
-          </div>
 
-          {/* Right side items */}
-          <div className="hidden md:flex items-center space-x-4">
-            {/* Theme Toggle */}
-            <ThemeToggle isDark={isDark} onToggle={onThemeToggle} />
-            
-             {/* Language Selector */}
-               <Select value={language} onValueChange={onLanguageChange}>
+            <div className="hidden md:block">
+              <div className="ml-10 flex items-baseline space-x-8">
+                {navItems.map((item) => (
+                  <button
+                    key={item.key}
+                    onClick={() => scrollToSection(item.key)}
+                    className={`relative px-3 py-2 text-sm transition-colors after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-[calc(100%-1.5rem)] after:-translate-x-1/2 after:rounded-full after:bg-violet-500 after:transition-transform after:duration-300 ${
+                      currentPage === item.key
+                        ? "text-primary after:scale-x-100"
+                        : "text-muted-foreground after:scale-x-0 hover:text-primary hover:after:scale-x-100"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="hidden md:flex items-center space-x-4">
+              <ThemeToggle isDark={isDark} onToggle={onThemeToggle} />
+
+              <Select value={language} onValueChange={onLanguageChange}>
                 <SelectTrigger className="w-24 cursor-pointer">
                   <SelectValue>
                     <span className="flex items-center gap-2 whitespace-nowrap">
@@ -191,42 +224,46 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
                     </span>
                   </SelectValue>
                 </SelectTrigger>
+
                 <SelectContent>
                   {languageOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value} className="cursor-pointer">
+                    <SelectItem
+                      key={option.value}
+                      value={option.value}
+                      className="cursor-pointer"
+                    >
                       <span className="flex items-center gap-2 whitespace-nowrap">
                         <span>{option.flag}</span>
                         <span>{option.shortLabel}</span>
                       </span>
-                   </SelectItem>
-                 ))}
-               </SelectContent>
-             </Select>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
-             {/* Admin + CV */}
-             {token ? (
-               <Button variant="outline" className="gap-2" asChild>
-                 <Link to="/admin">Admin</Link>
-               </Button>
-             ) : (
-               <AdminLoginModal />
-             )}
+              {token ? (
                 <Button variant="outline" className="gap-2" asChild>
-                  <a href={cvPdf} target="_blank" rel="noreferrer">
-                    <FileText className="h-4 w-4" />
-                    {t('nav.downloadCV')}
-                  </a>
+                  <Link to="/admin">Admin</Link>
                 </Button>
-          </div>
+              ) : (
+                <AdminLoginModal />
+              )}
 
-            {/* Mobile menu button */}
+              <Button variant="outline" className="gap-2" asChild>
+                <a href={cvPdf} target="_blank" rel="noreferrer">
+                  <FileText className="h-4 w-4" />
+                  {t("nav.downloadCV")}
+                </a>
+              </Button>
+            </div>
+
             <div className="md:hidden">
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
                 className={`rounded-xl border p-2.5 shadow-sm transition-all duration-300 ${
                   isDark
-                    ? 'border-white/20 bg-white/10 text-white hover:bg-white/20'
-                    : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                    ? "border-white/20 bg-white/10 text-white hover:bg-white/20"
+                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
                 }`}
               >
                 <Menu className="h-6 w-6" />
@@ -236,20 +273,20 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
         </div>
       </nav>
 
-      {/* Mobile Slide-over */}
       <div
         className={`fixed inset-0 z-[70] bg-background transition-opacity md:hidden ${
-          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+          isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >
         <aside
           className={`absolute inset-0 flex h-full w-full max-w-none flex-col border-l shadow-2xl opacity-100 transition-transform duration-300 ${mobileSurfaceClass} ${
-            isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+            isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
           }`}
-          style={{ overscrollBehavior: 'contain' }}
+          style={{ overscrollBehavior: "contain" }}
         >
           <div className={`flex items-center justify-between border-b px-5 py-5 ${mobileSurfaceClass}`}>
             <img src={activeLogo} alt="Juan Albarracín" className="h-10 w-auto" />
+
             <button
               onClick={() => setIsMobileMenuOpen(false)}
               className={`text-sm font-medium transition-colors ${mobileMutedClass}`}
@@ -257,33 +294,37 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
               Cerrar
             </button>
           </div>
-          <div className="flex-1 overflow-y-auto bg-background px-5 py-5" style={{ overscrollBehavior: 'contain' }}>
+
+          <div
+            className="flex-1 overflow-y-auto bg-background px-5 py-5"
+            style={{ overscrollBehavior: "contain" }}
+          >
             <div className="space-y-2">
-            {navItems.map((item, index) => (
-              <button
-                key={item.key}
-                onClick={() => {
-                  scrollToSection(item.key);
-                  setIsMobileMenuOpen(false);
-                }}
-                className={`w-full rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 ${
-                  currentPage === item.key
-                    ? isDark
-                      ? 'bg-violet-500/15 text-violet-300 shadow-[0_0_0_1px_rgba(139,92,246,0.22)]'
-                      : 'bg-violet-50 text-violet-700 shadow-[0_0_0_1px_rgba(139,92,246,0.12)]'
-                    : isDark
-                      ? 'bg-white/[0.04] text-white/80 hover:bg-white/[0.08]'
-                      : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
-                }`}
-                style={{
-                  transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(10px)',
-                  opacity: isMobileMenuOpen ? 1 : 0,
-                  transitionDelay: isMobileMenuOpen ? `${index * 40}ms` : '0ms',
-                }}
-              >
-                {item.label}
-              </button>
-            ))}
+              {navItems.map((item, index) => (
+                <button
+                  key={item.key}
+                  onClick={() => {
+                    scrollToSection(item.key);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`w-full rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 ${
+                    currentPage === item.key
+                      ? isDark
+                        ? "bg-violet-500/15 text-violet-300 shadow-[0_0_0_1px_rgba(139,92,246,0.22)]"
+                        : "bg-violet-50 text-violet-700 shadow-[0_0_0_1px_rgba(139,92,246,0.12)]"
+                      : isDark
+                        ? "bg-white/[0.04] text-white/80 hover:bg-white/[0.08]"
+                        : "bg-slate-50 text-slate-700 hover:bg-slate-100"
+                  }`}
+                  style={{
+                    transform: isMobileMenuOpen ? "translateY(0)" : "translateY(10px)",
+                    opacity: isMobileMenuOpen ? 1 : 0,
+                    transitionDelay: isMobileMenuOpen ? `${index * 40}ms` : "0ms",
+                  }}
+                >
+                  {item.label}
+                </button>
+              ))}
             </div>
 
             <div className="mt-6 space-y-2">
@@ -297,6 +338,7 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
                   {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                   <span>{themeLabel}</span>
                 </span>
+
                 <span className={`text-sm ${mobileMutedClass}`}>{themeModeLabel}</span>
               </button>
 
@@ -317,7 +359,14 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
                       <span>{option.flag}</span>
                       <span>{option.label}</span>
                     </span>
-                    {isActive ? <Check className="h-4 w-4" /> : <span className={`text-sm ${mobileMutedClass}`}>{option.shortLabel}</span>}
+
+                    {isActive ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <span className={`text-sm ${mobileMutedClass}`}>
+                        {option.shortLabel}
+                      </span>
+                    )}
                   </button>
                 );
               })}
@@ -327,16 +376,33 @@ export default function Navbar({ currentPage, onPageChange, language, onLanguage
           <div className={`border-t px-5 py-5 ${mobileSurfaceClass}`}>
             <div className="space-y-3">
               {token ? (
-                <Button variant="outline" className={`w-full gap-2 ${isDark ? 'border-white/10 bg-[#13253a] text-white hover:bg-[#17304a]' : 'border-slate-200 bg-slate-50 text-slate-900 hover:bg-slate-100'}`} asChild>
+                <Button
+                  variant="outline"
+                  className={`w-full gap-2 ${
+                    isDark
+                      ? "border-white/10 bg-[#13253a] text-white hover:bg-[#17304a]"
+                      : "border-slate-200 bg-slate-50 text-slate-900 hover:bg-slate-100"
+                  }`}
+                  asChild
+                >
                   <Link to="/admin">Admin</Link>
                 </Button>
               ) : (
                 <AdminLoginModal triggerLabel="Admin" triggerClassName="w-full" />
               )}
-              <Button variant="outline" className={`w-full gap-2 ${isDark ? 'border-white/10 bg-[#13253a] text-white hover:bg-[#17304a]' : 'border-slate-200 bg-slate-50 text-slate-900 hover:bg-slate-100'}`} asChild>
+
+              <Button
+                variant="outline"
+                className={`w-full gap-2 ${
+                  isDark
+                    ? "border-white/10 bg-[#13253a] text-white hover:bg-[#17304a]"
+                    : "border-slate-200 bg-slate-50 text-slate-900 hover:bg-slate-100"
+                }`}
+                asChild
+              >
                 <a href={cvPdf} target="_blank" rel="noreferrer">
                   <FileText className="h-4 w-4" />
-                  {t('nav.downloadCV')}
+                  {t("nav.downloadCV")}
                 </a>
               </Button>
             </div>
