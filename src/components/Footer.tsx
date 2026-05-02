@@ -73,98 +73,138 @@ export default function Footer({ isDark, onPageChange, currentPage }: FooterProp
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         
-        {/* Main Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-20">
-          
-          {/* Col 1: Identity */}
-          <div className="space-y-8">
-            <Link to="/" onClick={() => scrollToSection("home")} className="inline-block transition-transform hover:scale-105 duration-300">
-              <img src={activeLogo} alt="Juan Albarracín" className="h-20 w-auto" />
-            </Link>
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              {t("footer.description")}
-            </p>
-            <div className="flex gap-4">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2.5 rounded-xl bg-muted/50 text-muted-foreground hover:text-violet-500 hover:bg-violet-500/10 border border-white/5 transition-all duration-300"
-                >
-                  {social.icon}
-                </a>
-              ))}
-            </div>
-          </div>
+       <div className="block lg:hidden text-center mb-20 space-y-8">
+           <div className="space-y-6">
+             <Link to="/" onClick={() => scrollToSection("home")} className="inline-block transition-transform hover:scale-105 duration-300">
+               <img src={activeLogo} alt="Juan Albarracín" className="h-16 w-auto mx-auto" />
+             </Link>
+             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">
+               {t("footer.description")}
+             </p>
+             <div className="flex gap-4 justify-center">
+               {socialLinks.map((social) => (
+                 <a
+                   key={social.label}
+                   href={social.href}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   className="p-2.5 rounded-xl bg-muted/50 text-muted-foreground hover:text-violet-500 hover:bg-violet-500/10 border border-white/5 transition-all duration-300"
+                 >
+                   {social.icon}
+                 </a>
+               ))}
+             </div>
+           </div>
+           
+           <nav>
+             <ul className="flex flex-wrap justify-center gap-4">
+               {navItems.map((item) => (
+                 <li key={item.key}>
+                   <button
+                     onClick={() => scrollToSection(item.key)}
+                     className={`text-sm transition-colors hover:text-violet-500 ${
+                       currentPage === item.key ? "text-violet-500 font-semibold" : "text-muted-foreground"
+                     }`}
+                   >
+                     {item.label}
+                   </button>
+                 </li>
+               ))}
+             </ul>
+           </nav>
+         </div>
 
-          {/* Col 2: Exploration */}
-          <div className="space-y-8">
-            <h3 className="text-[11px] font-bold uppercase tracking-[0.3em] text-violet-500/80">
-              {t("footer.navigation")}
-            </h3>
-            <ul className="space-y-4">
-              {navItems.map((item) => (
-                <li key={item.key}>
-                  <button
-                    onClick={() => scrollToSection(item.key)}
-                    className={`group flex items-center text-sm transition-colors hover:text-violet-500 ${
-                      currentPage === item.key ? "text-violet-500 font-semibold" : "text-muted-foreground"
-                    }`}
-                  >
-                    {item.label}
-                    <ArrowUpRight className={`ml-1.5 h-3.5 w-3.5 opacity-0 -translate-y-1 translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 ${currentPage === item.key ? "opacity-100 translate-y-0 translate-x-0" : ""}`} />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Col 3: Contact */}
-          <div className="space-y-8">
-            <h3 className="text-[11px] font-bold uppercase tracking-[0.3em] text-violet-500/80">
-              {t("contact.info.title")}
-            </h3>
-            <div className="space-y-6">
-              <a href="mailto:albarrajuan5@gmail.com" className="group block space-y-2">
-                <span className="text-[10px] text-muted-foreground/50 uppercase tracking-widest block">Direct Email</span>
-                <span className="text-sm font-medium text-foreground group-hover:text-violet-500 transition-colors flex items-center gap-2">
-                  albarrajuan5@gmail.com
-                  <Mail className="h-4 w-4 opacity-50" />
-                </span>
-              </a>
-            </div>
-          </div>
-
-          {/* Col 4: Status / Location */}
-          <div className="space-y-8">
-            <h3 className="text-[11px] font-bold uppercase tracking-[0.3em] text-violet-500/80">
-              Presence
-            </h3>
-            <div className="space-y-6">
-              <div className="flex items-start gap-3">
-                <div className="mt-1 p-2 rounded-lg bg-muted/50 border border-white/5">
-                  <MapPin className="h-4 w-4 text-violet-500" />
-                </div>
-                <div>
-                  <span className="text-sm font-medium block">Bogotá, Colombia</span>
-                  <span className="text-xs text-muted-foreground">GMT-5 (Local Time)</span>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <div className="mt-1 p-2 rounded-lg bg-muted/50 border border-white/5">
-                  <Globe className="h-4 w-4 text-violet-500" />
-                </div>
-                <div>
-                  <span className="text-sm font-medium block">Worldwide</span>
-                  <span className="text-xs text-muted-foreground">Remote expert</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
+         <div className="hidden lg:grid lg:grid-cols-4 gap-8 mb-20">
+           
+           {/* Col 1: Identity */}
+           <div className="space-y-8">
+             <Link to="/" onClick={() => scrollToSection("home")} className="inline-block transition-transform hover:scale-105 duration-300">
+               <img src={activeLogo} alt="Juan Albarracín" className="h-20 w-auto" />
+             </Link>
+             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
+               {t("footer.description")}
+             </p>
+             <div className="flex gap-4">
+               {socialLinks.map((social) => (
+                 <a
+                   key={social.label}
+                   href={social.href}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   className="p-2.5 rounded-xl bg-muted/50 text-muted-foreground hover:text-violet-500 hover:bg-violet-500/10 border border-white/5 transition-all duration-300"
+                 >
+                   {social.icon}
+                 </a>
+               ))}
+             </div>
+           </div>
+           
+           {/* Col 2: Navigation */}
+           <div className="space-y-8">
+             <h3 className="text-[11px] font-bold uppercase tracking-[0.3em] text-violet-500/80">
+               {t("footer.navigation")}
+             </h3>
+             <ul className="space-y-4">
+               {navItems.map((item) => (
+                 <li key={item.key}>
+                   <button
+                     onClick={() => scrollToSection(item.key)}
+                     className={`group flex items-center text-sm transition-colors hover:text-violet-500 ${
+                       currentPage === item.key ? "text-violet-500 font-semibold" : "text-muted-foreground"
+                     }`}
+                   >
+                     {item.label}
+                     <ArrowUpRight className={`ml-1.5 h-3.5 w-3.5 opacity-0 -translate-y-1 translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 ${currentPage === item.key ? "opacity-100 translate-y-0 translate-x-0" : ""}`} />
+                   </button>
+                 </li>
+               ))}
+             </ul>
+           </div>
+           
+           {/* Col 3: Contact */}
+           <div className="space-y-8">
+             <h3 className="text-[11px] font-bold uppercase tracking-[0.3em] text-violet-500/80">
+               {t("contact.info.title")}
+             </h3>
+             <div className="space-y-6">
+               <a href="mailto:albarrajuan5@gmail.com" className="group block space-y-2">
+                 <span className="text-[10px] text-muted-foreground/50 uppercase tracking-widest block">Direct Email</span>
+                 <span className="text-sm font-medium text-foreground group-hover:text-violet-500 transition-colors flex items-center gap-2">
+                   albarrajuan5@gmail.com
+                   <Mail className="h-4 w-4 opacity-50" />
+                 </span>
+               </a>
+             </div>
+           </div>
+           
+           {/* Col 4: Status / Location */}
+           <div className="space-y-8">
+             <h3 className="text-[11px] font-bold uppercase tracking-[0.3em] text-violet-500/80">
+               Presence
+             </h3>
+             <div className="space-y-6">
+               <div className="flex items-start gap-3">
+                 <div className="mt-1 p-2 rounded-lg bg-muted/50 border border-white/5">
+                   <MapPin className="h-4 w-4 text-violet-500" />
+                 </div>
+                 <div>
+                   <span className="text-sm font-medium block">Bogotá, Colombia</span>
+                   <span className="text-xs text-muted-foreground">GMT-5 (Local Time)</span>
+                 </div>
+               </div>
+               <div className="flex items-start gap-3">
+                 <div className="mt-1 p-2 rounded-lg bg-muted/50 border border-white/5">
+                   <Globe className="h-4 w-4 text-violet-500" />
+                 </div>
+                 <div>
+                   <span className="text-sm font-medium block">Worldwide</span>
+                   <span className="text-xs text-muted-foreground">Remote expert</span>
+                 </div>
+               </div>
+             </div>
+           </div>
+           
+         </div>
 
         {/* Bottom Bar: Visible & Refined */}
         <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
