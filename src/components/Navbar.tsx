@@ -9,12 +9,13 @@ import ThemeToggle from "./ThemeToggle";
 import { useTranslation } from "react-i18next";
 import logoImg from "@/assets/logo.png";
 import cvPdf from "@/assets/cv/JUAN_ALBARRACIN_CV.pdf";
+import type { Language } from "@/features/language";
 
 interface NavbarProps {
   currentPage: string;
   onPageChange: (page: string) => void;
-  language: string;
-  onLanguageChange: (lang: string) => void;
+  language: Language;
+  onLanguageChange: (lang: Language) => void;
   isDark: boolean;
   onThemeToggle: () => void;
 }

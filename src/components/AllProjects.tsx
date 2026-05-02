@@ -459,6 +459,8 @@ function ProjectCard({
   onSelect: (project: ProjectItem) => void;
   t: (key: string) => string;
 }) {
+  const effectiveStatus = project.liveDemo ? "production" : project.status;
+
   return (
     <Card
       className={`group overflow-hidden border-slate-200 bg-white/85 transition-all duration-300 hover:border-violet-400/30 hover:bg-white dark:border-white/[0.07] dark:bg-white/[0.025] dark:hover:bg-white/[0.04] ${
@@ -488,7 +490,7 @@ function ProjectCard({
           </div>
         )}
         <div className="absolute right-3 top-3">
-          <Badge className={getStatusColor(project.status)}>{getStatusLabel(project.status)}</Badge>
+          <Badge className={getStatusColor(effectiveStatus)}>{getStatusLabel(effectiveStatus)}</Badge>
         </div>
       </div>
 
