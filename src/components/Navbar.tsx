@@ -1,6 +1,6 @@
 import { Button } from "./ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Check, FileText, Menu, Moon, Sun } from "lucide-react";
+import { Check, FileText, Loader2, Menu, Moon, Sun } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { AdminLoginModal } from "@/features/admin/AdminLoginModal";
@@ -18,6 +18,7 @@ interface NavbarProps {
   onLanguageChange: (lang: Language) => void;
   isDark: boolean;
   onThemeToggle: () => void;
+  isChangingLang?: boolean;
 }
 
 export default function Navbar({
@@ -27,6 +28,7 @@ export default function Navbar({
   onLanguageChange,
   isDark,
   onThemeToggle,
+  isChangingLang,
 }: NavbarProps) {
   const { t } = useTranslation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -228,10 +230,14 @@ export default function Navbar({
               <Select value={language} onValueChange={onLanguageChange}>
                 <SelectTrigger className="w-24 cursor-pointer">
                   <SelectValue>
-                    <span className="flex items-center gap-2 whitespace-nowrap">
-                      <span>{currentLanguage.flag}</span>
-                      <span>{currentLanguage.shortLabel}</span>
-                    </span>
+                    {isChangingLang ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <span className="flex items-center gap-2 whitespace-nowrap">
+                        <span>{currentLanguage.flag}</span>
+                        <span>{currentLanguage.shortLabel}</span>
+                      </span>
+                    )}
                   </SelectValue>
                 </SelectTrigger>
 
@@ -362,7 +368,7 @@ export default function Navbar({
 
               {languageOptions.map((option) => {
                 const isActive = language === option.value;
-
+ 
                 return (
                   <button
                     key={option.value}
@@ -372,13 +378,20 @@ export default function Navbar({
                       isActive ? mobileActiveButtonClass : mobileActionButtonClass
                     }`}
                     aria-pressed={isActive}
+                    disabled={isChangingLang}
                   >
                     <span className="flex items-center gap-3">
-                      <span>{option.flag}</span>
+                      {isChangingLang && isActive ? (
+                        <Loader2 className="h-5 w-5 animate-spin" />
+                      ) : (
+                        <span>{option.flag}</span>
+                      )}
                       <span>{option.label}</span>
                     </span>
-
-                    {isActive ? (
+ 
+                    {isChangingLang && isActive ? (
+                      <span className={`text-sm ${mobileMutedClass}`}>Loading...</span>
+                    ) : isActive ? (
                       <Check className="h-4 w-4" />
                     ) : (
                       <span className={`text-sm ${mobileMutedClass}`}>

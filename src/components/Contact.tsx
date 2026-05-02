@@ -70,7 +70,7 @@ export default function Contact({ section }: ContactProps) {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<ContactFormData>();
+  } = useForm<ContactFormData>({ mode: "onBlur" });
 
   const [submitFeedback, setSubmitFeedback] = useState<SubmitFeedback>({
     open: false,
@@ -205,8 +205,8 @@ export default function Contact({ section }: ContactProps) {
                 <Input
                   id="name"
                   {...register("name", {
-                    required: t("contact.form.errors.required") || "Required",
-                    minLength: { value: 2, message: t("contact.form.errors.minLength") || "Too short" },
+                    required: true,
+                    minLength: { value: 2 },
                   })}
                   placeholder={String(t("contact.form.namePlaceholder"))}
                   disabled={isSubmitting}
@@ -215,7 +215,11 @@ export default function Contact({ section }: ContactProps) {
                   }`}
                 />
                 {errors.name && (
-                  <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.name.type === "required"
+                      ? t("contact.form.errors.required")
+                      : t("contact.form.errors.minLength")}
+                  </p>
                 )}
               </div>
 
@@ -231,10 +235,9 @@ export default function Contact({ section }: ContactProps) {
                   id="email"
                   type="email"
                   {...register("email", {
-                    required: t("contact.form.errors.required") || "Required",
+                    required: true,
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                      message: t("contact.form.errors.invalidEmail") || "Invalid email",
                     },
                   })}
                   placeholder={String(t("contact.form.emailPlaceholder"))}
@@ -244,7 +247,13 @@ export default function Contact({ section }: ContactProps) {
                   }`}
                 />
                 {errors.email && (
-                  <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.email.type === "required"
+                      ? t("contact.form.errors.required")
+                      : errors.email.type === "pattern"
+                      ? t("contact.form.errors.invalidEmail")
+                      : t("contact.form.errors.required")}
+                  </p>
                 )}
               </div>
 
@@ -276,8 +285,8 @@ export default function Contact({ section }: ContactProps) {
                 <Textarea
                   id="message"
                   {...register("message", {
-                    required: t("contact.form.errors.required") || "Required",
-                    minLength: { value: 5, message: t("contact.form.errors.minLength") || "Too short" },
+                    required: true,
+                    minLength: { value: 5 },
                   })}
                   placeholder={String(t("contact.form.messagePlaceholder"))}
                   disabled={isSubmitting}
@@ -286,7 +295,11 @@ export default function Contact({ section }: ContactProps) {
                   }`}
                 />
                 {errors.message && (
-                  <p className="text-xs text-red-500 mt-1">{errors.message.message}</p>
+                  <p className="text-xs text-red-500 mt-1">
+                    {errors.message.type === "required"
+                      ? t("contact.form.errors.required")
+                      : t("contact.form.errors.minLength")}
+                  </p>
                 )}
               </div>
 

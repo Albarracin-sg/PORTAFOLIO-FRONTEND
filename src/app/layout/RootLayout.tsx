@@ -20,7 +20,7 @@ function getCurrentPage(pathname: string, hash: string): string {
 export function RootLayout() {
   const { pathname, hash } = useLocation();
   const navigate = useNavigate();
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, isChangingLang } = useLanguage();
   const { isDark, toggleTheme } = useTheme();
 
   const currentPage = getCurrentPage(pathname, hash);
@@ -47,6 +47,7 @@ export function RootLayout() {
         onLanguageChange={setLanguage}
         isDark={isDark}
         onThemeToggle={toggleTheme}
+        isChangingLang={isChangingLang}
       />
       <main className="flex-grow">
         <Outlet />
