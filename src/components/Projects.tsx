@@ -24,6 +24,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
   const [api, setApi] = useState<CarouselApi>();
   const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [currentSnap, setCurrentSnap] = useState(0);
 
   const carouselProjects = Array.isArray(projects) ? projects : [];
   const { draft, updateField } = useSectionEditor(section as any);
@@ -32,7 +33,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
   useEffect(() => {
     if (!api || isPaused || isModalOpen) return;
 
-    const step = 100 / (AUTOPLAY_INTERVAL / 50); // Actualizar cada 50ms para más suavidad
+    const step = 100 / (AUTOPLAY_INTERVAL / 50);
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
@@ -50,7 +51,15 @@ export default function Projects({ projects, section }: ProjectsProps) {
   useEffect(() => {
     if (!api) return;
     
-    const onSelect = () => setProgress(0);
+    const onSelect = () => {
+      const newSnap = api.selectedScrollSnap();
+      // Solo reseteamos si realmente cambió el slide
+      if (newSnap !== currentSnap) {
+        setProgress(0);
+        setCurrentSnap(newSnap);
+      }
+    };
+
     const onPointerDown = () => setIsPaused(true);
     const onPointerUp = () => setIsPaused(false);
 
@@ -63,7 +72,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
       api.off("pointerDown", onPointerDown);
       api.off("pointerUp", onPointerUp);
     };
-  }, [api]);
+  }, [api, currentSnap]);
 
   const handleViewMore = (project: any) => {
     setSelectedProject(project);
