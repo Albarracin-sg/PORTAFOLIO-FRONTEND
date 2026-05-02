@@ -2,7 +2,7 @@
 
 A high-performance, responsive personal portfolio built with **React**, **TypeScript**, and **Vite**. This project focuses on clean architecture, internationalization, and a seamless developer experience through integrated CI/CD workflows.
 
-## 🚀 Key Features
+## Key Features
 
 - **Responsive Design**: Mobile-first approach using Tailwind CSS.
 - **Internationalization (i18n)**: Multi-language support (English/Spanish) using `react-i18next`.
@@ -12,7 +12,7 @@ A high-performance, responsive personal portfolio built with **React**, **TypeSc
 - **Floating Actions**: Quick access to contact, GitHub, and an AI-driven chatbot dialog.
 - **Performance Optimized**: Fast builds and hot reloading with Vite and Bun.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Framework**: [React 18](https://reactjs.org/)
 - **Build Tool**: [Vite](https://vitejs.dev/)
@@ -23,7 +23,7 @@ A high-performance, responsive personal portfolio built with **React**, **TypeSc
 - **Forms**: [React Hook Form](https://react-hook-form.com/)
 - **Icons**: [Lucide React](https://lucide.dev/)
 
-## 📂 Architecture
+## Architecture
 
 The project follows a **Feature-based Modular Architecture** for better maintainability and scalability:
 
@@ -39,7 +39,7 @@ src/
 └── styles/         # Global CSS and themes
 ```
 
-## ⚙️ Development Setup
+## Development Setup
 
 ### Prerequisites
 - [Bun](https://bun.sh/) (Recommended) or Node.js
@@ -65,7 +65,7 @@ bunx @biomejs/biome check .    # Lint & Format
 bun run tsc --noEmit           # Type check
 ```
 
-## 🤖 CI/CD Workflow
+## CI/CD Workflow
 
 This project uses **GitHub Actions** to ensure code quality and security:
 
@@ -74,9 +74,9 @@ This project uses **GitHub Actions** to ensure code quality and security:
 - **Dependabot**: Weekly dependency updates to keep the stack modern and secure.
 - **Stale**: Automated maintenance of inactive issues and pull requests.
 
-## 📝 Contribution
+## Contribution
 
 Please use the provided **Issue Templates** for bug reports and feature requests. All Pull Requests should follow the **PR Template** and pass the CI checks before merging.
 
 ---
-Built with ❤️ by [Juan Albarracín](https://github.com/Albarracin-sg)
+Built by [Juan Albarracín](https://github.com/Albarracin-sg)
