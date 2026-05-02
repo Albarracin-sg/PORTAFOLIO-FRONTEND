@@ -185,6 +185,8 @@
       "namePlaceholder": "Your full name",
       "email": "Email",
       "emailPlaceholder": "your@email.com",
+      "company": "Company (Optional)",
+      "companyPlaceholder": "Where do you work?",
       "message": "Message",
       "messagePlaceholder": "Tell me briefly how I can help you",
       "send": "Send message",
@@ -193,6 +195,11 @@
       "responseTime": "I will respond within the next 24 hours.",
       "successMessage": "Message sent successfully",
       "errorMessage": "Could not send the message",
+      "errors": {
+        "required": "This field is required",
+        "minLength": "Too short",
+        "invalidEmail": "Invalid email"
+      },
       "modal": {
         "successTitle": "Message sent",
         "successDescription": "Your message was sent successfully. I will get back to you as soon as possible.",

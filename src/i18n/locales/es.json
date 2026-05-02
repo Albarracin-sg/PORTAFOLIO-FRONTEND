@@ -185,6 +185,8 @@
       "namePlaceholder": "Tu nombre y apellido",
       "email": "Email",
       "emailPlaceholder": "tu@email.com",
+      "company": "Empresa (Opcional)",
+      "companyPlaceholder": "¿Dónde trabajas?",
       "message": "Mensaje",
       "messagePlaceholder": "Contame brevemente en qué puedo ayudarte",
       "send": "Enviar mensaje",
@@ -193,6 +195,11 @@
       "responseTime": "Te responderé dentro de las próximas 24 horas.",
       "successMessage": "Mensaje enviado correctamente",
       "errorMessage": "No se pudo enviar el mensaje",
+      "errors": {
+        "required": "Este campo es obligatorio",
+        "minLength": "Es demasiado corto",
+        "invalidEmail": "Email inválido"
+      },
       "modal": {
         "successTitle": "Mensaje enviado",
         "successDescription": "Tu mensaje fue enviado correctamente. Te responderé lo antes posible.",

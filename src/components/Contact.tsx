@@ -22,7 +22,7 @@ import {
 type ContactFormData = {
   name: string;
   email: string;
-  subject: string;
+  company?: string;
   message: string;
 };
 
@@ -222,6 +222,23 @@ export default function Contact({ section }: ContactProps) {
                 {errors.email && (
                   <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
                 )}
+              </div>
+
+              <div>
+                <Label htmlFor="company" className="text-sm text-gray-600 dark:text-gray-400 mb-1.5 block">
+                  <EditableText
+                    value={String(t("contact.form.company") || "Company (Optional)")}
+                    displayValue={String(t("contact.form.company") || "Company (Optional)")}
+                    onSave={(value) => updateField("form.company", value)}
+                  />
+                </Label>
+                <Input
+                  id="company"
+                  {...register("company")}
+                  placeholder={String(t("contact.form.companyPlaceholder") || "Where do you work?")}
+                  disabled={isSubmitting}
+                  className="bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700 focus-visible:ring-violet-500"
+                />
               </div>
 
               <div className="flex flex-col flex-1">
