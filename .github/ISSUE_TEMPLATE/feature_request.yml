@@ -1,0 +1,33 @@
+name: "Sugerencia de Feature"
+description: "Propone una nueva funcionalidad o mejora."
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Toda idea es bienvenida para mejorar el portafolio.
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: "Cual es tu idea?"
+      description: "Describe de forma clara y concisa la funcionalidad que te gustaria ver."
+      placeholder: "Ej: Agregar un filtro por tags en la seccion de proyectos..."
+    validations:
+      required: true
+  - type: textarea
+    id: problem-solved
+    attributes:
+      label: "Que problema resuelve?"
+      description: "Hay algun dolor o necesidad que esta feature solucione?"
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "Alternativas"
+      description: "Pensaste en otras formas de lograr lo mismo?"
+  - type: textarea
+    id: visual-idea
+    attributes:
+      label: "Ideas Visuales"
+      description: "Si tienes algun mockup, link de referencia o idea de UI, ponelo aca."

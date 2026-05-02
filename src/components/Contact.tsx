@@ -22,7 +22,6 @@ import {
 type ContactFormData = {
   name: string;
   email: string;
-  subject: string;
   message: string;
 };
 
@@ -81,7 +80,10 @@ export default function Contact({ section }: ContactProps) {
 
   const onSubmit = async (data: ContactFormData) => {
     try {
-      await sendContactMessage(data);
+      await sendContactMessage({
+        ...data,
+        subject: "Consulta desde Portfolio",
+      });
       reset();
       setSubmitFeedback({
         open: true,
@@ -218,31 +220,6 @@ export default function Contact({ section }: ContactProps) {
                 />
                 {errors.email && (
                   <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
-                )}
-              </div>
-
-              <div>
-                <Label htmlFor="subject" className="text-sm text-gray-600 dark:text-gray-400 mb-1.5 block">
-                  <EditableText
-                    value={String(t("contact.form.subject") || "Subject")}
-                    displayValue={String(t("contact.form.subject") || "Subject")}
-                    onSave={(value) => updateField("form.subject", value)}
-                  />
-                </Label>
-                <Input
-                  id="subject"
-                  {...register("subject", {
-                    required: t("contact.form.errors.required") || "Required",
-                    minLength: { value: 3, message: t("contact.form.errors.minLength") || "Too short" },
-                  })}
-                  placeholder={String(t("contact.form.subjectPlaceholder") || "How can I help you?")}
-                  disabled={isSubmitting}
-                  className={`bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700 focus-visible:ring-violet-500 ${
-                    errors.subject ? "border-red-500 focus-visible:ring-red-500" : ""
-                  }`}
-                />
-                {errors.subject && (
-                  <p className="text-xs text-red-500 mt-1">{errors.subject.message}</p>
                 )}
               </div>
 

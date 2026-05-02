@@ -1,0 +1,45 @@
+name: "Reporte de Bug"
+description: "Reporta un problema en el portafolio."
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Gracias por tomarte el tiempo de reportar este problema. Intenta ser lo mas descriptivo posible.
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: "Descripcion del Bug"
+      description: "Que esta pasando?"
+      placeholder: "Ej: El logo se corta en iPhone 13..."
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction-steps
+    attributes:
+      label: "Pasos para Reproducir"
+      description: "Como llegaste al error."
+      placeholder: |
+        1. Ir a '...'
+        2. Clickear en '...'
+        3. Ver el error '....'
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: "Comportamiento Esperado"
+      description: "Que deberia pasar?"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: "Entorno"
+      description: "Navegador, SO, version."
+      placeholder: "Chrome en Android 14, Safari en macOS..."
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: "Contexto Adicional"
+      description: "Capturas de pantalla, logs de consola, o cualquier otra cosa util."
