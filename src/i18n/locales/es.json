@@ -1,0 +1,231 @@
+{
+  "common": {
+    "back": "Volver"
+  },
+  "nav": {
+    "home": "Inicio",
+    "about": "Sobre mí",
+    "projects": "Proyectos",
+    "stats": "Estadísticas",
+    "contact": "Contacto",
+    "downloadCV": "Descargar CV"
+  },
+  "hero": {
+    "greeting": "Hola, soy Juan Albarracín",
+    "role": "Full-Stack Engineer (Backend Focus) | Microservices & Distributed Architecture | AI & MCP Integration",
+    "subtitle": "Diseño orquestadores basados en MCP, microservicios con NestJS/gRPC y pipelines de automatización que eliminan carga operativa real — no optimizo procesos, los transformo.",
+    "viewProjects": "Ver proyectos",
+    "contactMe": "Contactarme",
+    "yearsExperience": "Años de experiencia",
+    "projectsCompleted": "Proyectos completados",
+    "technologies": "Tecnologías"
+  },
+  "about": {
+    "title": "Sobre mí",
+    "bio": "Full-Stack Engineer con foco en backend, especializado en reemplazar procesos manuales por sistemas inteligentes usando arquitectura distribuida e IA. Diseña orquestadores basados en MCP, microservicios con NestJS/gRPC y pipelines de automatización que eliminan carga operativa real. Aplica DDD, CQRS y Clean Architecture en entornos productivos, con capacidad full-stack y mentalidad de producto.",
+    "technicalSkills": "Habilidades Técnicas",
+    "professionalExperience": "Experiencia Profesional",
+    "personalProjects": "Proyectos Personales",
+    "education": "Educación",
+    "softSkillsTitle": "Habilidades Blandas",
+    "softSkillsList": [
+      "Mentoría y transferencia de conocimiento",
+      "Comunicación técnica con equipos y stakeholders",
+      "Trabajo colaborativo en Scrum",
+      "Autonomía y autogestión",
+      "Pensamiento crítico orientado a soluciones",
+      "Adaptabilidad ante cambios de requerimientos",
+      "Documentación clara y precisa"
+    ],
+    "technicalSkillGroups": [
+      {
+        "title": "Backend & Lenguajes",
+        "items": ["Node.js", "NestJS", "Python", "TypeScript", "C#", "Java", "REST APIs", "gRPC", "WebSockets"]
+      },
+      {
+        "title": "Arquitectura",
+        "items": ["Microservices", "DDD", "CQRS", "Clean Architecture", "Webhooks", "Cron Jobs", "Prisma", "Entity Framework"]
+      },
+      {
+        "title": "IA & MCP",
+        "items": ["MCP (Model Context Protocol)", "Tool Calling dinámico", "Agentes", "Orquestadores", "OpenAI API", "Anthropic API"]
+      },
+      {
+        "title": "Data · Infra · QA",
+        "items": ["PostgreSQL", "MySQL", "Redis", "Docker", "GitHub Actions", "CI/CD", "Prometheus", "Grafana", "Jest", "Cypress", "Swagger", "Linux (Arch, Ubuntu Server)"]
+      },
+      {
+        "title": "Frontend (secundario)",
+        "items": ["React", "React Native", "Next.js", "Astro", "Tailwind CSS"]
+      }
+    ],
+    "professionalExperienceItems": [
+      {
+        "type": "work",
+        "title": "Desarrollador Backend & Arquitectura (Prácticas Profesionales)",
+        "company": "Universitaria de Colombia – Área de Innovación",
+        "period": "Ene 2025 – 2026",
+        "location": "Bogotá, Colombia",
+        "highlights": [
+          "Diseñé sistemas de microservicios con NestJS, gRPC y PostgreSQL aplicando DDD, CQRS y Clean Architecture en entornos productivos.",
+          "Desacoplé servicios mediante eventos, WebSockets y Webhooks; implementé cron jobs para automatización de procesos backend.",
+          "Implementé pipelines CI/CD, testing integral (unit, integration, regression, smoke) y documentación Swagger/OpenAPI.",
+          "Mentoricé a 2 practicantes con revisión técnica de PRs y GitFlow; participé en ciclos Scrum completos.",
+          "Diseñé e implementé un orquestador basado en MCP con tool calling dinámico conectado a datos reales e integración con WhatsApp.",
+          "Reemplacé una evaluación docente estática por un sistema con IA contextual, feedback estructurado y resúmenes automáticos.",
+          "Diseñé una integración CRM + Telnyx para automatizar campañas y flujos de contacto.",
+          "Implementé un sistema de asignación Round Robin para equilibrar carga operativa."
+        ]
+      }
+    ],
+    "personalProjectItems": [
+      {
+        "title": "Track Vault",
+        "company": "React Native · NestJS · WebSockets · JWT · Open Source",
+        "highlights": [
+          "App móvil open source de streaming y descarga local de música con backend en tiempo real vía WebSockets.",
+          "Incluye autenticación JWT, descarga a almacenamiento local, sesiones tipo jam colaborativas y conexión a servidor privado."
+        ]
+      },
+      {
+        "title": "Servidor Self-Hosted",
+        "company": "Ubuntu Server · Linux · Nextcloud · Administración",
+        "highlights": [
+          "Configuración y administración de Ubuntu Server con despliegue de servicios productivos como Nextcloud, gestión de seguridad y entorno Linux."
+        ]
+      }
+    ],
+    "educationItems": [
+      {
+        "title": "Ingeniería de Software",
+        "institution": "Universitaria de Colombia",
+        "location": "Bogotá, Colombia",
+        "description": "Prácticas profesionales completadas y certificadas en la misma institución."
+      }
+    ]
+  },
+  "projects": {
+    "title": "Mis Proyectos",
+    "subtitle": "Proyectos que demuestran mis habilidades en desarrollo backend y arquitectura distribuida.",
+    "allProjects": "Todos los proyectos",
+    "technologies": "Tecnologías utilizadas",
+    "viewMore": "Ver más",
+    "noProjects": "No hay proyectos que coincidan con el filtro seleccionado.",
+    "totalProjects": "15+",
+    "modal": {
+      "problem": "Problema",
+      "challenge": "Reto",
+      "solution": "Solución",
+      "viewGithub": "Ver en GitHub",
+      "viewLive": "Ver proyecto"
+    },
+    "filters": {
+      "searchLabel": "Buscar",
+      "searchPlaceholder": "Buscar proyectos, tecnologías...",
+      "category": "Categoría",
+      "technology": "Tecnología",
+      "sortBy": "Ordenar",
+      "showing": "Mostrando {count} de {total} proyectos",
+      "viewGrid": "Vista cuadrícula",
+      "viewList": "Vista lista",
+      "clearFilters": "Limpiar filtros",
+      "viewDetails": "Ver detalles",
+      "projectsFound": "Proyectos encontrados"
+    },
+    "sortOptions": {
+      "dateDesc": "Más reciente primero",
+      "dateAsc": "Más antiguo primero",
+      "starsDesc": "Más estrellas",
+      "starsAsc": "Menos estrellas",
+      "viewsDesc": "Más visitas",
+      "nameAsc": "Nombre A-Z",
+      "nameDesc": "Nombre Z-A"
+    },
+    "categories": {
+      "all": "Todos los proyectos",
+      "fullstack": "Full Stack",
+      "web": "Web App",
+      "devops": "DevOps",
+      "ml": "Machine Learning",
+      "blockchain": "Blockchain",
+      "data": "Data Engineering"
+    },
+    "allTech": "Todas las tecnologías"
+  },
+  "contact": {
+    "title": "Contacto",
+    "subtitle": "¿Interesado en trabajar conmigo o colaborar en un proyecto?",
+    "form": {
+      "title": "Envíame un mensaje",
+      "name": "Nombre",
+      "email": "Email",
+      "message": "Mensaje",
+      "send": "Enviar mensaje",
+      "sending": "Enviando...",
+      "thankYou": "¡Gracias por tu mensaje!",
+      "responseTime": "Te responderé dentro de las próximas 24 horas.",
+      "successMessage": "Mensaje enviado correctamente",
+      "errorMessage": "No se pudo enviar el mensaje",
+      "modal": {
+        "successTitle": "Mensaje enviado",
+        "successDescription": "Tu mensaje fue enviado correctamente. Te responderé lo antes posible.",
+        "errorTitle": "No se pudo enviar",
+        "errorDescription": "Hubo un problema al enviar tu mensaje. Intentá de nuevo en unos minutos.",
+        "confirm": "Entendido"
+      }
+    },
+    "info": {
+      "title": "Información de Contacto",
+      "email": "Email",
+      "phone": "Teléfono",
+      "location": "Ubicación"
+    },
+    "social": { "title": "Sígueme" }
+  },
+  "floating": {
+    "quickActions": "Acciones rápidas",
+    "actions": {
+      "email": "Email",
+      "github": "GitHub",
+      "chatbot": "Chat bot",
+      "linkedin": "LinkedIn"
+    },
+    "chatbot": {
+      "title": "Asistente del portafolio",
+      "description": "Elegí una opción y te respondo rápido desde acá.",
+      "intro": "Hola, soy el chat bot del portafolio. Puedo orientarte sobre stack, proyectos o cómo contactar a Juan.",
+      "prompts": {
+        "stack": "¿En qué stack trabaja?",
+        "projects": "Quiero ver proyectos",
+        "contact": "¿Cómo lo contacto?"
+      },
+      "replies": {
+        "stack": "Trabajo principalmente con backend, microservicios, automatización e IA aplicada. Si querés, podés revisar mi GitHub o escribirme directo por correo.",
+        "projects": "Podés abrir la sección de proyectos desde la navegación principal. Si preferís, también puedo llevarte al formulario de contacto para que me cuentes qué necesitás.",
+        "contact": "Mi correo directo es albarrajuan5@gmail.com. Si querés una respuesta más completa, mandame contexto desde el formulario de contacto."
+      },
+      "actions": {
+        "contact": "Ir a contacto",
+        "email": "Escribir por correo"
+      }
+    }
+  },
+  "stats": {
+    "title": "Estadísticas Técnicas",
+    "subtitle": "Indicadores reales de experiencia técnica",
+    "totalProjects": "Proyectos Totales",
+    "projectsDescription": "Proyectos completados exitosamente",
+    "githubCommits": "Commits en GitHub",
+    "commitsDescription": "Contribuciones en el último año",
+    "openSource": "Proyectos Open Source",
+    "openSourceDescription": "Contribuciones a la comunidad",
+    "collaborations": "Colaboraciones",
+    "collaborationsDescription": "Proyectos en equipo",
+    "languagesUsed": "Lenguajes Más Utilizados",
+    "projectsTimeline": "Proyectos por Mes",
+    "githubActivity": "Actividad en GitHub (Última Semana)",
+    "codeQuality": "Calidad del Código",
+    "avgResponseTime": "Tiempo de Respuesta Promedio",
+    "projectSuccess": "Éxito de Proyectos"
+  }
+}

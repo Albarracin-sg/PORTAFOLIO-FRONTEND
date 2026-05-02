@@ -1,0 +1,342 @@
+import { Button } from "./ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { FileText, Menu } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { AdminLoginModal } from "@/features/admin/AdminLoginModal";
+import { useAdminAuth } from "@/features/admin/AdminAuthProvider";
+import ThemeToggle from "./ThemeToggle";
+import { useTranslation } from "react-i18next";
+import logoImg from "@/assets/logo.png";
+import cvPdf from "@/assets/cv/JUAN_ALBARRACIN_CV.pdf";
+
+interface NavbarProps {
+  currentPage: string;
+  onPageChange: (page: string) => void;
+  language: string;
+  onLanguageChange: (lang: string) => void;
+  isDark: boolean;
+  onThemeToggle: () => void;
+}
+
+export default function Navbar({ currentPage, onPageChange, language, onLanguageChange, isDark, onThemeToggle }: NavbarProps) {
+  const { t } = useTranslation();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
+  const lockedScrollY = useRef(0);
+  const { token } = useAdminAuth();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY < 24) {
+        setIsVisible(true);
+      } else if (currentScrollY < lastScrollY.current) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY.current) {
+        setIsVisible(false);
+      }
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) {
+      const previousScrollY = lockedScrollY.current;
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      if (previousScrollY) {
+        window.scrollTo(0, previousScrollY);
+      }
+      return;
+    }
+
+    lockedScrollY.current = window.scrollY;
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${lockedScrollY.current}px`;
+    document.body.style.left = '0';
+    document.body.style.right = '0';
+    document.body.style.width = '100%';
+    return () => {
+      const previousScrollY = lockedScrollY.current;
+      document.documentElement.style.overflow = '';
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
+      if (previousScrollY) {
+        window.scrollTo(0, previousScrollY);
+      }
+    };
+  }, [isMobileMenuOpen]);
+
+  const navItems = [
+    { key: 'home', label: t('nav.home') },
+    { key: 'about', label: t('nav.about') },
+    { key: 'projects', label: t('nav.projects') },
+    { key: 'stats', label: t('nav.stats') },
+    { key: 'contact', label: t('nav.contact') },
+  ];
+  const languageOptions = [
+    { value: 'es', label: 'Español', flag: '🇨🇴', shortLabel: 'ES' },
+    { value: 'en', label: 'English', flag: '🇺🇸', shortLabel: 'EN' },
+  ] as const;
+  const currentLanguage = languageOptions.find((option) => option.value === language) ?? languageOptions[0];
+  const activeLogo = isDark ? '/logoNigth.png' : logoImg;
+  const mobileSurfaceClass = isDark
+    ? 'bg-[#0b1a2b] text-white border-white/10'
+    : 'bg-white text-slate-900 border-slate-200';
+  const mobileCardClass = isDark
+    ? 'border-white/10 bg-[#13253a] text-white'
+    : 'border-slate-200 bg-slate-50 text-slate-900';
+  const mobileMutedClass = isDark ? 'text-white/70' : 'text-slate-500';
+
+  const scrollToSection = (sectionId: string) => {
+    if (sectionId === 'stats') {
+      onPageChange('stats');
+      return;
+    }
+    
+    // If we're currently on separate pages, first go back to main page
+    if (currentPage === 'stats' || currentPage === 'all-projects') {
+      onPageChange(sectionId);
+      // Wait for the page to render, then scroll to the section
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
+      return;
+    }
+    
+    // Normal scroll behavior for sections on main page
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      onPageChange(sectionId);
+    }
+  };
+
+  return (
+    <>
+      <nav className={`fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between h-18 min-h-[4.5rem]">
+          {/* Logo/Brand */}
+          <div className="flex-shrink-0">
+            <Link to="/">
+              <img src={activeLogo} alt="Juan Albarracín" className="h-12 w-auto" />
+            </Link>
+          </div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:block">
+            <div className="ml-10 flex items-baseline space-x-8">
+              {navItems.map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => scrollToSection(item.key)}
+                  className={`px-3 py-2 text-sm transition-colors hover:text-primary ${
+                    currentPage === item.key
+                      ? 'text-primary border-b-2 border-primary'
+                      : 'text-muted-foreground'
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Right side items */}
+          <div className="hidden md:flex items-center space-x-4">
+            {/* Theme Toggle */}
+            <ThemeToggle isDark={isDark} onToggle={onThemeToggle} />
+            
+             {/* Language Selector */}
+             <Select value={language} onValueChange={onLanguageChange}>
+               <SelectTrigger className="w-24">
+                  <SelectValue>
+                    <span className="flex items-center gap-2 whitespace-nowrap">
+                      <span>{currentLanguage.flag}</span>
+                      <span>{currentLanguage.shortLabel}</span>
+                    </span>
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {languageOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      <span className="flex items-center gap-2 whitespace-nowrap">
+                        <span>{option.flag}</span>
+                        <span>{option.shortLabel}</span>
+                      </span>
+                   </SelectItem>
+                 ))}
+               </SelectContent>
+             </Select>
+
+             {/* Admin + CV */}
+             {token ? (
+               <Button variant="outline" className="gap-2" asChild>
+                 <Link to="/admin">Admin</Link>
+               </Button>
+             ) : (
+               <AdminLoginModal />
+             )}
+                <Button variant="outline" className="gap-2" asChild>
+                  <a href={cvPdf} target="_blank" rel="noreferrer">
+                    <FileText className="h-4 w-4" />
+                    {t('nav.downloadCV')}
+                  </a>
+                </Button>
+          </div>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsMobileMenuOpen(true)}
+                className={`rounded-xl border p-2.5 shadow-sm transition-all duration-300 ${
+                  isDark
+                    ? 'border-white/20 bg-white/10 text-white hover:bg-white/20'
+                    : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                }`}
+              >
+                <Menu className="h-6 w-6" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      {/* Mobile Slide-over */}
+      <div
+        className={`fixed inset-0 z-[70] md:hidden transition-opacity ${
+          isMobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        }`}
+        style={{ backgroundColor: isDark ? '#0b1a2b' : '#ffffff' }}
+      >
+        <aside
+          className={`absolute inset-0 flex h-full w-full max-w-none flex-col border-l shadow-2xl opacity-100 transition-transform duration-300 ${mobileSurfaceClass} ${
+            isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
+          style={{ overscrollBehavior: 'contain' }}
+        >
+          <div className={`flex items-center justify-between border-b px-5 py-5 ${mobileSurfaceClass}`}>
+            <img src={activeLogo} alt="Juan Albarracín" className="h-10 w-auto" />
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`text-sm font-medium transition-colors ${mobileMutedClass}`}
+            >
+              Cerrar
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto px-5 py-5" style={{ backgroundColor: isDark ? '#0b1a2b' : '#ffffff', overscrollBehavior: 'contain' }}>
+            <div className="space-y-2">
+            {navItems.map((item, index) => (
+              <button
+                key={item.key}
+                onClick={() => {
+                  scrollToSection(item.key);
+                  setIsMobileMenuOpen(false);
+                }}
+                className={`w-full rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 ${
+                  currentPage === item.key
+                    ? isDark
+                      ? 'bg-violet-500/15 text-violet-300 shadow-[0_0_0_1px_rgba(139,92,246,0.22)]'
+                      : 'bg-violet-50 text-violet-700 shadow-[0_0_0_1px_rgba(139,92,246,0.12)]'
+                    : isDark
+                      ? 'bg-white/[0.04] text-white/80 hover:bg-white/[0.08]'
+                      : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
+                }`}
+                style={{
+                  transform: isMobileMenuOpen ? 'translateY(0)' : 'translateY(10px)',
+                  opacity: isMobileMenuOpen ? 1 : 0,
+                  transitionDelay: isMobileMenuOpen ? `${index * 40}ms` : '0ms',
+                }}
+              >
+                {item.label}
+              </button>
+            ))}
+            </div>
+
+            <div className={`mt-6 rounded-2xl border p-4 ${mobileCardClass}`}>
+              <div className="flex items-center justify-between">
+                <span className={`text-sm font-medium ${mobileMutedClass}`}>Theme</span>
+                <ThemeToggle isDark={isDark} onToggle={onThemeToggle} />
+              </div>
+            </div>
+
+            <div className={`mt-3 rounded-2xl border p-4 ${mobileCardClass}`}>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className={`text-sm font-medium ${mobileMutedClass}`}>Idioma</span>
+                  <span className={`text-sm ${mobileMutedClass}`}>{currentLanguage.flag} {currentLanguage.label}</span>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  {languageOptions.map((option) => {
+                    const isActive = language === option.value;
+
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        onClick={() => onLanguageChange(option.value)}
+                        className={`rounded-xl border px-4 py-3 text-sm font-medium transition-all ${
+                          isActive
+                            ? isDark
+                              ? 'border-violet-400/40 bg-violet-500/15 text-violet-200'
+                              : 'border-violet-200 bg-violet-50 text-violet-700'
+                            : isDark
+                              ? 'border-white/10 bg-[#17304a] text-white/80 hover:bg-[#1b3a59]'
+                              : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
+                        }`}
+                        aria-pressed={isActive}
+                      >
+                        <span className="flex items-center justify-center gap-2">
+                          <span>{option.flag}</span>
+                          <span>{option.label}</span>
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className={`border-t px-5 py-5 ${mobileSurfaceClass}`}>
+            <div className="space-y-3">
+              {token ? (
+                <Button variant="outline" className={`w-full gap-2 ${isDark ? 'border-white/10 bg-[#13253a] text-white hover:bg-[#17304a]' : 'border-slate-200 bg-slate-50 text-slate-900 hover:bg-slate-100'}`} asChild>
+                  <Link to="/admin">Admin</Link>
+                </Button>
+              ) : (
+                <AdminLoginModal triggerLabel="Admin" triggerClassName="w-full" />
+              )}
+              <Button variant="outline" className={`w-full gap-2 ${isDark ? 'border-white/10 bg-[#13253a] text-white hover:bg-[#17304a]' : 'border-slate-200 bg-slate-50 text-slate-900 hover:bg-slate-100'}`} asChild>
+                <a href={cvPdf} target="_blank" rel="noreferrer">
+                  <FileText className="h-4 w-4" />
+                  {t('nav.downloadCV')}
+                </a>
+              </Button>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </>
+  );
+}
