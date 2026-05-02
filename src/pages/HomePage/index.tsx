@@ -66,11 +66,11 @@ export function HomePage() {
 
   return (
     <>
-      {isLoading && <LoadingScreen />}
       <section id="home">
         {isLoading ? (
-          <div className="flex h-[80vh] items-center justify-center">
-            <div className="space-y-4 text-center">
+          <div className="flex h-[80vh] items-center justify-center relative">
+            <LoadingScreen variant="inline" className="absolute z-10 bg-transparent border-none" />
+            <div className="space-y-4 text-center opacity-20">
               <Skeleton className="mx-auto h-12 w-64" />
               <Skeleton className="mx-auto h-24 w-[80%]" />
             </div>
@@ -91,8 +91,9 @@ export function HomePage() {
       </section>
       <section id="projects">
         {isLoading ? (
-          <div className="mx-auto max-w-7xl px-4 py-24">
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mx-auto max-w-7xl px-4 py-24 relative">
+            <LoadingScreen variant="inline" className="absolute inset-x-4 top-1/2 -translate-y-1/2 z-10 bg-background/60" />
+            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 opacity-30">
               <Skeleton className="aspect-video w-full rounded-xl" />
               <Skeleton className="aspect-video w-full rounded-xl" />
               <Skeleton className="aspect-video w-full rounded-xl" />

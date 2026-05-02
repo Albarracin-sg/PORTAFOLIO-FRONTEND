@@ -45,17 +45,19 @@ export function StatsPage() {
 
   return (
     <div className="min-h-screen">
-      {isLoading && <LoadingScreen />}
       {isLoading ? (
-        <div className="mx-auto max-w-7xl px-4 py-24 space-y-8">
-          <Skeleton className="h-12 w-64" />
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <Skeleton className="h-32 w-full rounded-xl" />
-            <Skeleton className="h-32 w-full rounded-xl" />
-            <Skeleton className="h-32 w-full rounded-xl" />
-            <Skeleton className="h-32 w-full rounded-xl" />
+        <div className="mx-auto max-w-7xl px-4 py-24 space-y-8 relative">
+          <LoadingScreen variant="inline" className="absolute inset-0 z-10 bg-background/20" />
+          <div className="opacity-30 space-y-8">
+            <Skeleton className="h-12 w-64" />
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              <Skeleton className="h-32 w-full rounded-xl" />
+              <Skeleton className="h-32 w-full rounded-xl" />
+              <Skeleton className="h-32 w-full rounded-xl" />
+              <Skeleton className="h-32 w-full rounded-xl" />
+            </div>
+            <Skeleton className="h-[400px] w-full rounded-xl" />
           </div>
-          <Skeleton className="h-[400px] w-full rounded-xl" />
         </div>
       ) : (
         <Statistics section={section} githubStats={githubStats} />

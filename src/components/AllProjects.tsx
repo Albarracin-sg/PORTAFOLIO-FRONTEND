@@ -201,7 +201,6 @@ export default function AllProjects() {
 
   return (
     <section className="min-h-screen px-4 py-24 sm:px-6 lg:px-8">
-      {isLoading && <LoadingScreen />}
       <div className="mx-auto max-w-7xl">
         <div className="mb-12">
           <Button
@@ -322,27 +321,34 @@ export default function AllProjects() {
           </CardContent>
         </Card>
 
-        {isLoading ? (
-          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <Card key={i} className="overflow-hidden border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
-                <Skeleton className="aspect-video w-full" />
-                <div className="p-6 space-y-4">
-                  <Skeleton className="h-6 w-3/4" />
-                  <Skeleton className="h-16 w-full" />
-                  <div className="flex gap-2">
-                    <Skeleton className="h-5 w-16 rounded-full" />
-                    <Skeleton className="h-5 w-16 rounded-full" />
-                    <Skeleton className="h-5 w-16 rounded-full" />
+        <div className="relative min-h-[400px]">
+          {isLoading && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/40 backdrop-blur-[2px]">
+              <LoadingScreen variant="inline" className="max-w-md border-none bg-transparent" />
+            </div>
+          )}
+
+          {isLoading ? (
+            <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3 opacity-30">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Card key={i} className="overflow-hidden border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
+                  <Skeleton className="aspect-video w-full" />
+                  <div className="p-6 space-y-4">
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-16 w-full" />
+                    <div className="flex gap-2">
+                      <Skeleton className="h-5 w-16 rounded-full" />
+                      <Skeleton className="h-5 w-16 rounded-full" />
+                      <Skeleton className="h-5 w-16 rounded-full" />
+                    </div>
+                    <div className="pt-4">
+                      <Skeleton className="h-10 w-full rounded-md" />
+                    </div>
                   </div>
-                  <div className="pt-4">
-                    <Skeleton className="h-10 w-full rounded-md" />
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        ) : filteredAndSortedProjects.length === 0 ? (
+                </Card>
+              ))}
+            </div>
+          ) : filteredAndSortedProjects.length === 0 ? (
           <Card className="border-slate-200 bg-white/85 text-center dark:border-white/[0.07] dark:bg-white/[0.025]">
             <CardContent className="py-12">
               <p className="mb-4 text-slate-600 dark:text-slate-400">{t("projects.noProjects")}</p>
