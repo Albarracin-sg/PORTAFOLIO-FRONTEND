@@ -23,13 +23,15 @@ export function HomePage() {
     let isActive = true;
 
     const load = async () => {
-      try {
-        const [page, projects] = await Promise.all([
-          fetchPublicPage('home'),
-          fetchPublicProjects(),
-        ]);
-        if (!isActive) return;
-        const sectionMap = page.sections.reduce<Record<string, { id: string; type: string; content: Record<string, unknown> }>>(
+      const [pageResult, projectsResult] = await Promise.allSettled([
+        fetchPublicPage('home'),
+        fetchPublicProjects(),
+      ]);
+
+      if (!isActive) return;
+
+      if (pageResult.status === 'fulfilled') {
+        const sectionMap = pageResult.value.sections.reduce<Record<string, { id: string; type: string; content: Record<string, unknown> }>>(
           (acc, section) => {
             acc[section.type] = { id: section.id, type: section.type, content: section.content };
             return acc;
@@ -37,17 +39,19 @@ export function HomePage() {
           {},
         );
         setSections(sectionMap);
+
         if (import.meta.env.DEV) {
           console.debug('[HomePage] sections', sectionMap);
         }
+      }
 
-        const orderedProjects = [...projects].sort((a, b) => Number(b.featured) - Number(a.featured));
+      if (projectsResult.status === 'fulfilled') {
+        const orderedProjects = [...projectsResult.value].sort((a, b) => Number(b.featured) - Number(a.featured));
         setCarouselProjects(orderedProjects.map(mapPublicProjectToFeatured));
+
         if (import.meta.env.DEV) {
           console.debug('[HomePage] carouselProjects', orderedProjects);
         }
-      } catch {
-        if (!isActive) return;
       }
     };
 

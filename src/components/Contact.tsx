@@ -105,8 +105,32 @@ export default function Contact({ section }: ContactProps) {
     }
   };
 
-  const fallbackContactInfo: Array<Record<string, string>> = [];
-  const fallbackSocialLinks: Array<Record<string, string>> = [];
+  const fallbackContactInfo: Array<Record<string, string>> = [
+    {
+      label: "Email",
+      value: "albarrajuan5@gmail.com",
+      link: "mailto:albarrajuan5@gmail.com",
+      icon: "Mail",
+    },
+    {
+      label: "Location",
+      value: "Bogotá, Colombia",
+      link: "",
+      icon: "MapPin",
+    },
+  ];
+  const fallbackSocialLinks: Array<Record<string, string>> = [
+    {
+      label: "GitHub",
+      link: "https://github.com/Albarracin-sg",
+      icon: "Github",
+    },
+    {
+      label: "LinkedIn",
+      link: "https://www.linkedin.com/in/juan-camilo-albarrac%C3%ADn-urrego-077504296/",
+      icon: "Linkedin",
+    },
+  ];
 
   const contactContent = (section?.content ?? {}) as ContactContent;
   const { draft, updateField } = useSectionEditor(section as any);
