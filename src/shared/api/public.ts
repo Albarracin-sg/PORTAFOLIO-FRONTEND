@@ -61,6 +61,7 @@ export async function sendContactMessage(payload: {
   name: string;
   email: string;
   message: string;
+  subject?: string;
 }) {
   return apiRequest('/public/contact', { method: 'POST', body: payload });
 }
