@@ -18,19 +18,13 @@ const detectSystemTheme = (): boolean => {
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [isDark, setIsDark] = useState(detectSystemTheme);
 
+  // Sincronizar con el sistema si no hay preferencia guardada
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved !== null) {
-      setIsDark(saved === 'dark');
-      return;
-    }
-
     const media = window.matchMedia('(prefers-color-scheme: dark)');
-    setIsDark(media.matches);
-
+    
     const handleChange = (event: MediaQueryListEvent) => {
-      const override = localStorage.getItem(STORAGE_KEY);
-      if (override === null) {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved === null) {
         setIsDark(event.matches);
       }
     };
@@ -39,8 +33,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return () => media.removeEventListener('change', handleChange);
   }, []);
 
+  // Aplicar el tema al documento
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, isDark ? 'dark' : 'light');
     if (isDark) {
       document.documentElement.classList.add('dark');
     } else {
@@ -49,7 +43,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, [isDark]);
 
   const toggleTheme = useCallback(() => {
-    setIsDark((prev) => !prev);
+    setIsDark((prev) => {
+      const next = !prev;
+      localStorage.setItem(STORAGE_KEY, next ? 'dark' : 'light');
+      return next;
+    });
   }, []);
 
   return (

@@ -40,9 +40,15 @@ export function AdminLoginModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className={`gap-2 ${triggerClassName ?? ''}`.trim()}>
-          {triggerLabel}
-        </Button>
+        {triggerClassName ? (
+          <button type="button" className={triggerClassName}>
+            {triggerLabel}
+          </button>
+        ) : (
+          <Button variant="outline" className="gap-2">
+            {triggerLabel}
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent
         overlayClassName="bg-slate-900/20 dark:bg-slate-950/35 backdrop-blur-md"

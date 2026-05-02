@@ -4,10 +4,20 @@ import es from './locales/es.json';
 import en from './locales/en.json';
 
 function detectBrowserLanguage(): string {
-  const saved = localStorage.getItem('language');
-  if (saved && ['es', 'en'].includes(saved)) return saved;
-  const browser = navigator.language.split('-')[0];
-  return ['es', 'en'].includes(browser) ? browser : 'es';
+  try {
+    const saved = localStorage.getItem('language');
+    if (saved && ['es', 'en'].includes(saved)) return saved;
+
+    // Detectar idiomas del navegador en orden de preferencia
+    const languages = navigator.languages || [navigator.language];
+    for (const lang of languages) {
+      const shortLang = lang.split('-')[0].toLowerCase();
+      if (['es', 'en'].includes(shortLang)) return shortLang;
+    }
+  } catch (e) {
+    console.error('Error detecting language:', e);
+  }
+  return 'es';
 }
 
 i18n.use(initReactI18next).init({

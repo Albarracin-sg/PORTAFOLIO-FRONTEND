@@ -389,40 +389,45 @@ export default function Navbar({
                 );
               })}
             </div>
-          </div>
 
-          <div className={`border-t px-5 py-5 ${mobileSurfaceClass}`}>
-            <div className="space-y-3">
-              {token ? (
-                <Button
-                  variant="outline"
-                  className={`w-full gap-2 ${
-                    isDark
-                      ? "border-white/10 bg-[#13253a] text-white hover:bg-[#17304a]"
-                      : "border-slate-200 bg-slate-50 text-slate-900 hover:bg-slate-100"
-                  }`}
-                  asChild
+            <div className="mt-8 space-y-4">
+              <div className="flex items-center gap-3 px-2">
+                <div className={`h-px flex-1 ${isDark ? "bg-white/10" : "bg-slate-200"}`} />
+                <span className={`text-[10px] font-bold uppercase tracking-wider ${mobileMutedClass}`}>
+                  {language === "es" ? "Acciones" : "Actions"}
+                </span>
+                <div className={`h-px flex-1 ${isDark ? "bg-white/10" : "bg-slate-200"}`} />
+              </div>
+
+              <div className="space-y-2">
+                {token ? (
+                  <Link
+                    to="/admin"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 ${mobileActiveButtonClass}`}
+                  >
+                    <span className="flex h-5 w-5 items-center justify-center">
+                      <span className="h-2 w-2 rounded-full bg-violet-500" />
+                    </span>
+                    Admin
+                  </Link>
+                ) : (
+                  <AdminLoginModal
+                    triggerLabel="Admin"
+                    triggerClassName={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 ${mobileActiveButtonClass}`}
+                  />
+                )}
+
+                <a
+                  href={cvPdf}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 ${mobileActiveButtonClass}`}
                 >
-                  <Link to="/admin">Admin</Link>
-                </Button>
-              ) : (
-                <AdminLoginModal triggerLabel="Admin" triggerClassName="w-full" />
-              )}
-
-              <Button
-                variant="outline"
-                className={`w-full gap-2 ${
-                  isDark
-                    ? "border-white/10 bg-[#13253a] text-white hover:bg-[#17304a]"
-                    : "border-slate-200 bg-slate-50 text-slate-900 hover:bg-slate-100"
-                }`}
-                asChild
-              >
-                <a href={cvPdf} target="_blank" rel="noreferrer">
-                  <FileText className="h-4 w-4" />
+                  <FileText className="h-5 w-5" />
                   {t("nav.downloadCV")}
                 </a>
-              </Button>
+              </div>
             </div>
           </div>
         </aside>
