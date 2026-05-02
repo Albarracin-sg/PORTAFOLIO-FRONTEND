@@ -222,17 +222,21 @@ export default function Projects({ projects, section }: ProjectsProps) {
               })}
             </CarouselContent>
 
-            <div className="mt-8 flex items-center justify-center gap-4">
-              <CarouselPrevious className="static z-10 h-10 w-10 translate-y-0 border-slate-200 bg-white/95 text-slate-700 shadow-sm hover:bg-violet-600 hover:text-white dark:border-white/10 dark:bg-slate-950/90 dark:text-white" />
+            <div className="mt-8 flex items-center justify-center gap-4 px-4">
+              <CarouselPrevious 
+                className="static z-10 h-10 w-10 shrink-0 translate-y-0 border-slate-200 bg-white/95 text-slate-700 shadow-sm hover:bg-violet-600 hover:text-white dark:border-white/10 dark:bg-slate-950/90 dark:text-white" 
+              />
               
-              <div className="relative h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+              <div className="relative h-1.5 flex-1 max-w-xs overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
                 <div 
                   className="absolute left-0 top-0 h-full bg-violet-500 transition-all duration-50 ease-linear"
                   style={{ width: `${progress}%` }}
                 />
               </div>
 
-              <CarouselNext className="static z-10 h-10 w-10 translate-y-0 border-slate-200 bg-white/95 text-slate-700 shadow-sm hover:bg-violet-600 hover:text-white dark:border-white/10 dark:bg-slate-950/90 dark:text-white" />
+              <CarouselNext 
+                className="static z-10 h-10 w-10 shrink-0 translate-y-0 border-slate-200 bg-white/95 text-slate-700 shadow-sm hover:bg-violet-600 hover:text-white dark:border-white/10 dark:bg-slate-950/90 dark:text-white" 
+              />
             </div>
           </Carousel>
         </div>
