@@ -212,7 +212,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
             </CarouselContent>
 
             <div className="mt-8 flex items-center justify-center gap-4">
-              <CarouselPrevious className="static h-10 w-10 translate-y-0 border-slate-200 bg-white/95 text-slate-700 shadow-sm hover:bg-violet-600 hover:text-white dark:border-white/10 dark:bg-slate-950/90 dark:text-white" />
+              <CarouselPrevious className="static z-10 h-10 w-10 translate-y-0 border-slate-200 bg-white/95 text-slate-700 shadow-sm hover:bg-violet-600 hover:text-white dark:border-white/10 dark:bg-slate-950/90 dark:text-white" />
               
               <div className="relative h-1.5 w-full max-w-xs overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
                 <div 
@@ -221,7 +221,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
                 />
               </div>
 
-              <CarouselNext className="static h-10 w-10 translate-y-0 border-slate-200 bg-white/95 text-slate-700 shadow-sm hover:bg-violet-600 hover:text-white dark:border-white/10 dark:bg-slate-950/90 dark:text-white" />
+              <CarouselNext className="static z-10 h-10 w-10 translate-y-0 border-slate-200 bg-white/95 text-slate-700 shadow-sm hover:bg-violet-600 hover:text-white dark:border-white/10 dark:bg-slate-950/90 dark:text-white" />
             </div>
           </Carousel>
         </div>
