@@ -49,6 +49,17 @@ export type GithubStats = {
   githubActivity: Array<{ day: string; commits: number }>;
 };
 
+export type SpotifyTrack = {
+  type: 'now_playing' | 'recently_played' | 'none';
+  name: string;
+  artists: string;
+  url: string;
+  album: string;
+  albumImageUrl: string;
+  durationMs: number;
+  progressMs: number;
+};
+
 export async function fetchPublicPage(slug: string) {
   return apiRequest<PublicPage>(`/public/pages/${slug}`, { cache: 'no-store' });
 }
@@ -68,4 +79,8 @@ export async function sendContactMessage(payload: {
 
 export async function fetchGithubStats() {
   return apiRequest<GithubStats>('/public/github/stats', { cache: 'no-store' });
+}
+
+export async function fetchNowPlaying() {
+  return apiRequest<SpotifyTrack>('/public/spotify/now-playing', { cache: 'no-store' });
 }

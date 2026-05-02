@@ -10,6 +10,7 @@ import { useTheme } from "@/features/theme";
 import { useTranslation } from "react-i18next";
 import logoImg from "@/assets/logo.png";
 import cvPdf from "@/assets/cv/JUAN_ALBARRACIN_CV.pdf";
+import { SpotifyNowPlayingCard } from "./SpotifyNowPlayingCard";
 
 interface HeroProps {
   scrollY?: number;
@@ -137,7 +138,7 @@ export default function Hero({ section }: HeroProps) {
 
           {/* Profile Image — centered on mobile, right-aligned on desktop */}
           <div className="flex justify-center lg:justify-end mt-12 lg:mt-0">
-            <div className="relative w-full max-w-[320px] sm:max-w-xs lg:max-w-none px-4 lg:p-0">
+            <div className="relative w-full max-w-sm sm:max-w-xs lg:max-w-none px-2 sm:px-4 lg:p-0">
               {canEditImages && (
                 <div className="absolute top-0 right-3 z-20 flex gap-2">
                   <label className="rounded-md bg-black/60 px-2.5 py-1 text-xs text-white cursor-pointer">
@@ -192,6 +193,8 @@ export default function Hero({ section }: HeroProps) {
                   />
                 </div>
               </div>
+
+              <SpotifyNowPlayingCard />
 
               {/* Floating elements — hidden on mobile */}
               <div
