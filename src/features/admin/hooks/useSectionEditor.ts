@@ -5,46 +5,51 @@ import { useEditMode } from '../EditModeProvider';
 
 function setValueByPath(obj: Record<string, unknown>, path: string, value: unknown) {
   const keys = path.split('.');
-  const next = { ...obj } as Record<string, unknown>;
+  const next = { ...obj };
   let cursor: Record<string, unknown> | unknown[] = next;
 
   keys.forEach((key, index) => {
     const keyIndex = Number.isNaN(Number(key)) ? null : Number(key);
-    if (index === keys.length - 1) {
-      if (Array.isArray(cursor) && keyIndex !== null) {
-        const updated = [...cursor];
-        updated[keyIndex] = value;
-        if (cursor === next) {
-          return;
-        }
-        (cursor as unknown[])[keyIndex] = value;
-      } else if (!Array.isArray(cursor)) {
-        cursor[key] = value;
-      }
-      return;
-    }
+    const isLastKey = index === keys.length - 1;
 
     if (Array.isArray(cursor) && keyIndex !== null) {
+      if (isLastKey) {
+        cursor[keyIndex] = value;
+        return;
+      }
+
       const existing = cursor[keyIndex];
+
       const nextValue =
         Array.isArray(existing)
           ? [...existing]
           : typeof existing === 'object' && existing !== null
             ? { ...(existing as Record<string, unknown>) }
             : {};
+
       cursor[keyIndex] = nextValue;
       cursor = nextValue as Record<string, unknown> | unknown[];
       return;
     }
 
-    const existing = (cursor as Record<string, unknown>)[key];
-    (cursor as Record<string, unknown>)[key] =
-      Array.isArray(existing)
-        ? [...existing]
-        : typeof existing === 'object' && existing !== null
-          ? { ...(existing as Record<string, unknown>) }
-          : {};
-    cursor = (cursor as Record<string, unknown>)[key] as Record<string, unknown> | unknown[];
+    if (!Array.isArray(cursor)) {
+      if (isLastKey) {
+        cursor[key] = value;
+        return;
+      }
+
+      const existing = cursor[key];
+
+      const nextValue =
+        Array.isArray(existing)
+          ? [...existing]
+          : typeof existing === 'object' && existing !== null
+            ? { ...(existing as Record<string, unknown>) }
+            : {};
+
+      cursor[key] = nextValue;
+      cursor = nextValue as Record<string, unknown> | unknown[];
+    }
   });
 
   return next;
@@ -63,13 +68,11 @@ export function useSectionEditor(section?: Section) {
 
   useEffect(() => {
     setDraft(section?.content ?? {});
-  }, [contentSignature]);
+  }, [contentSignature, section?.content]);
 
-  const updateField = useCallback(
-    (path: string, value: unknown) => {
-      setDraft((prev) => setValueByPath(prev, path, value));
-    },
-  );
+  const updateField = useCallback((path: string, value: unknown) => {
+    setDraft((prev) => setValueByPath(prev, path, value));
+  }, []);
 
   useEffect(() => {
     if (!isEditMode || !token || !section) return;
@@ -77,6 +80,7 @@ export function useSectionEditor(section?: Section) {
 
     const timeout = window.setTimeout(async () => {
       setSaving(true);
+
       try {
         await updateSection(token, section.id, { content: draft });
         window.dispatchEvent(new CustomEvent('admin-save-complete'));
@@ -92,7 +96,7 @@ export function useSectionEditor(section?: Section) {
     }, 900);
 
     return () => window.clearTimeout(timeout);
-  }, [draft, isEditMode, token, section?.id]);
+  }, [draft, isEditMode, token, section]);
 
   useEffect(() => {
     if (!token || !section) return;
@@ -100,6 +104,7 @@ export function useSectionEditor(section?: Section) {
 
     const handler = async () => {
       setSaving(true);
+
       try {
         await updateSection(token, section.id, { content: draft });
         window.dispatchEvent(new CustomEvent('admin-save-complete'));
@@ -115,8 +120,9 @@ export function useSectionEditor(section?: Section) {
     };
 
     window.addEventListener('admin-save', handler);
+
     return () => window.removeEventListener('admin-save', handler);
-  }, [token, section?.id, draft]);
+  }, [token, section, draft]);
 
   return {
     draft,
