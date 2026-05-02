@@ -83,7 +83,7 @@ export function SpotifyNowPlayingCard() {
               No estoy escuchando nada ahora.
             </p>
             <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-              Widget listo. Falta actividad o credenciales válidas.
+              Vuelve pronto para ver mi actividad musical.
             </p>
           </div>
         </CardContent>
