@@ -275,5 +275,13 @@
     "codeQuality": "Calidad del Código",
     "avgResponseTime": "Tiempo de Respuesta Promedio",
     "projectSuccess": "Éxito de Proyectos"
+  },
+  "footer": {
+    "rights": "Todos los derechos reservados.",
+    "builtWith": "Construido con",
+    "by": "por",
+    "navigation": "Navegación",
+    "social": "Redes Sociales",
+    "description": "Ingeniero Full-Stack especializado en backend, microservicios e IA aplicada."
   }
 }

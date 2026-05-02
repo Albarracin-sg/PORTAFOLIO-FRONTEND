@@ -275,5 +275,13 @@
     "codeQuality": "Code Quality",
     "avgResponseTime": "Average Response Time",
     "projectSuccess": "Project Success"
+  },
+  "footer": {
+    "rights": "All rights reserved.",
+    "builtWith": "Built with",
+    "by": "by",
+    "navigation": "Navigation",
+    "social": "Social Media",
+    "description": "Full-Stack Engineer specialized in backend, microservices, and applied AI."
   }
 }

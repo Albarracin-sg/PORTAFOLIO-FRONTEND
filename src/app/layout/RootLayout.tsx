@@ -1,5 +1,6 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
 import DynamicBackground from '@/components/DynamicBackground';
 import FloatingContactButton from '@/components/FloatingContactButton';
 import { Toaster } from '@/components/ui/sonner';
@@ -37,7 +38,7 @@ export function RootLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-background dark:bg-gray-950 relative text-foreground">
+    <div className="min-h-screen bg-background dark:bg-gray-950 relative text-foreground flex flex-col">
       <DynamicBackground />
       <Navbar
         currentPage={currentPage}
@@ -47,9 +48,14 @@ export function RootLayout() {
         isDark={isDark}
         onThemeToggle={toggleTheme}
       />
-      <main>
+      <main className="flex-grow">
         <Outlet />
       </main>
+      <Footer
+        isDark={isDark}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+      />
       <FloatingContactButton />
       <Toaster />
     </div>

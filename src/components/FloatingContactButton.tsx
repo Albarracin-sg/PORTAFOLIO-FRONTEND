@@ -219,17 +219,6 @@ export default function FloatingContactButton() {
           >
             {shouldShowActions ? <ChevronUp className="h-6 w-6" /> : <Sparkles className="h-6 w-6" />}
           </Button>
-
-          {/* Hover hint */}
-          <div
-            className={`
-              pointer-events-none absolute bottom-4 right-16 rounded-md border border-gray-200 bg-white px-3 py-1 text-sm text-gray-600 shadow-lg backdrop-blur-sm transition-all duration-300 whitespace-nowrap dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400
-              ${shouldShowActions ? 'opacity-0 translate-x-2' : 'opacity-100 translate-x-0'}
-            `}
-          >
-            <span className="block">{t('floating.quickActions')}</span>
-            <div className="absolute left-full top-1/2 h-0 w-0 -translate-y-1/2 border-b-4 border-l-4 border-t-4 border-b-transparent border-l-gray-200 border-t-transparent dark:border-l-gray-600"></div>
-          </div>
         </div>
       </div>
 
