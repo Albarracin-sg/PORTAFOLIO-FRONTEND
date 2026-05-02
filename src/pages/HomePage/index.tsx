@@ -68,11 +68,14 @@ export function HomePage() {
     <>
       <section id="home">
         {isLoading ? (
-          <div className="flex h-[80vh] items-center justify-center relative">
-            <LoadingScreen variant="inline" className="absolute z-10 bg-transparent border-none" />
-            <div className="space-y-4 text-center opacity-20">
-              <Skeleton className="mx-auto h-12 w-64" />
-              <Skeleton className="mx-auto h-24 w-[80%]" />
+          <div className="flex h-[80vh] items-center justify-center">
+            <div className="space-y-6 text-center w-full max-w-3xl px-4">
+              <Skeleton className="mx-auto h-16 w-3/4 rounded-2xl" />
+              <Skeleton className="mx-auto h-24 w-full rounded-2xl" />
+              <div className="flex justify-center gap-4 mt-8">
+                <Skeleton className="h-12 w-40 rounded-xl" />
+                <Skeleton className="h-12 w-40 rounded-xl" />
+              </div>
             </div>
           </div>
         ) : (
@@ -81,9 +84,15 @@ export function HomePage() {
       </section>
       <section id="about">
         {isLoading ? (
-          <div className="mx-auto max-w-7xl px-4 py-24 space-y-8">
-            <Skeleton className="h-10 w-48" />
-            <Skeleton className="h-40 w-full" />
+          <div className="mx-auto max-w-7xl px-4 py-24 space-y-10">
+            <div className="space-y-4">
+              <Skeleton className="h-10 w-48 rounded-lg" />
+              <Skeleton className="h-32 w-full rounded-2xl" />
+            </div>
+            <div className="grid gap-6 md:grid-cols-2">
+              <Skeleton className="h-64 w-full rounded-2xl" />
+              <Skeleton className="h-64 w-full rounded-2xl" />
+            </div>
           </div>
         ) : (
           <About />
@@ -92,11 +101,21 @@ export function HomePage() {
       <section id="projects">
         {isLoading ? (
           <div className="mx-auto max-w-7xl px-4 py-24 relative">
-            <LoadingScreen variant="inline" className="absolute inset-x-4 top-1/2 -translate-y-1/2 z-10 bg-background/60" />
-            <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 opacity-30">
-              <Skeleton className="aspect-video w-full rounded-xl" />
-              <Skeleton className="aspect-video w-full rounded-xl" />
-              <Skeleton className="aspect-video w-full rounded-xl" />
+            <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+              <div className="space-y-3 flex-1">
+                <Skeleton className="h-12 w-64 rounded-lg" />
+                <Skeleton className="h-6 w-full max-w-2xl rounded-lg" />
+              </div>
+              <Skeleton className="h-12 w-40 rounded-xl" />
+            </div>
+            
+            <div className="relative">
+              <LoadingScreen variant="inline" className="absolute inset-0 z-10 bg-background/20 backdrop-blur-[1px] border-none" />
+              <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 opacity-20">
+                <Skeleton className="aspect-video w-full rounded-3xl" />
+                <Skeleton className="aspect-video w-full rounded-3xl" />
+                <Skeleton className="aspect-video w-full rounded-3xl" />
+              </div>
             </div>
           </div>
         ) : (

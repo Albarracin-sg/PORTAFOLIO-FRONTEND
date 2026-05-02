@@ -45,23 +45,26 @@ export function StatsPage() {
 
   return (
     <div className="min-h-screen">
-      {isLoading ? (
-        <div className="mx-auto max-w-7xl px-4 py-24 space-y-8 relative">
-          <LoadingScreen variant="inline" className="absolute inset-0 z-10 bg-background/20" />
-          <div className="opacity-30 space-y-8">
-            <Skeleton className="h-12 w-64" />
+      <div className="mx-auto max-w-7xl px-4 py-24 space-y-8 relative">
+        {isLoading ? (
+          <>
+            <Skeleton className="h-12 w-64 rounded-lg" />
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-              <Skeleton className="h-32 w-full rounded-xl" />
-              <Skeleton className="h-32 w-full rounded-xl" />
-              <Skeleton className="h-32 w-full rounded-xl" />
-              <Skeleton className="h-32 w-full rounded-xl" />
+              <Skeleton className="h-32 w-full rounded-2xl" />
+              <Skeleton className="h-32 w-full rounded-2xl" />
+              <Skeleton className="h-32 w-full rounded-2xl" />
+              <Skeleton className="h-32 w-full rounded-2xl" />
             </div>
-            <Skeleton className="h-[400px] w-full rounded-xl" />
-          </div>
-        </div>
-      ) : (
-        <Statistics section={section} githubStats={githubStats} />
-      )}
+            
+            <div className="relative min-h-[400px]">
+              <LoadingScreen variant="inline" className="absolute inset-0 z-10 bg-background/5 border-none" />
+              <Skeleton className="h-[400px] w-full rounded-3xl opacity-20" />
+            </div>
+          </>
+        ) : (
+          <Statistics section={section} githubStats={githubStats} />
+        )}
+      </div>
     </div>
   );
 }

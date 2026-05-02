@@ -323,26 +323,22 @@ export default function AllProjects() {
 
         <div className="relative min-h-[400px]">
           {isLoading && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/40 backdrop-blur-[2px]">
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-background/5 backdrop-blur-[1px]">
               <LoadingScreen variant="inline" className="max-w-md border-none bg-transparent" />
             </div>
           )}
 
           {isLoading ? (
-            <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3 opacity-30">
+            <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3 opacity-10">
               {Array.from({ length: 6 }).map((_, i) => (
                 <Card key={i} className="overflow-hidden border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
-                  <Skeleton className="aspect-video w-full" />
+                  <Skeleton className="aspect-video w-full rounded-none" />
                   <div className="p-6 space-y-4">
-                    <Skeleton className="h-6 w-3/4" />
-                    <Skeleton className="h-16 w-full" />
+                    <Skeleton className="h-6 w-3/4 rounded-md" />
+                    <Skeleton className="h-16 w-full rounded-md" />
                     <div className="flex gap-2">
                       <Skeleton className="h-5 w-16 rounded-full" />
                       <Skeleton className="h-5 w-16 rounded-full" />
-                      <Skeleton className="h-5 w-16 rounded-full" />
-                    </div>
-                    <div className="pt-4">
-                      <Skeleton className="h-10 w-full rounded-md" />
                     </div>
                   </div>
                 </Card>
