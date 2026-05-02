@@ -46,8 +46,13 @@ export function AdminProjectsPage() {
   useEffect(() => {
     if (!selectedProject) return;
     const technologies = selectedProject.technologies
-      ?.map((item) => item.technology.name)
-      .join(', ');
+      ? Array.isArray(selectedProject.technologies)
+        ? selectedProject.technologies
+            .map((item: any) => item.technology?.name || item.name || '')
+            .filter(Boolean)
+            .join(', ')
+        : String(selectedProject.technologies)
+      : '';
 
     setForm({
       title: selectedProject.title ?? '',
@@ -57,7 +62,7 @@ export function AdminProjectsPage() {
       featured: selectedProject.featured ?? false,
       githubUrl: selectedProject.githubUrl ?? '',
       liveUrl: selectedProject.liveUrl ?? '',
-      technologies: technologies ?? '',
+      technologies: technologies,
     });
   }, [selectedProject]);
 

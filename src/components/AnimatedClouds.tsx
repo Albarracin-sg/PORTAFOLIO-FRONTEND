@@ -95,7 +95,7 @@ export default function AnimatedClouds({ scrollY }: AnimatedCloudsProps) {
         </div>
       ))}
       
-      <style jsx>{`
+      <style>{`
         @keyframes float-0 {
           0%, 100% { transform: translate(0, 0) rotate(0deg); }
           33% { transform: translate(10px, -5px) rotate(1deg); }

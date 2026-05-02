@@ -19,8 +19,7 @@ type PageSlug = (typeof PAGES)[number];
 type SectionMap = Record<string, { id: string; type: string; content: Record<string, unknown> }>;
 
 export function AdminLiveEditorPage() {
-  const { t } = useTranslation();
-  const { isEditMode, setEditMode } = useEditMode();
+  const { setEditMode } = useEditMode();
   const { token } = useAdminAuth();
   const [activePage, setActivePage] = useState<PageSlug>('home');
   const [sections, setSections] = useState<SectionMap>({});
@@ -92,7 +91,7 @@ export function AdminLiveEditorPage() {
     load(true);
   };
 
-  const activeSection = useMemo(() => {
+  const _activeSection = useMemo(() => {
     if (activePage === 'stats') return sections.STATS;
     return sections;
   }, [activePage, sections]);

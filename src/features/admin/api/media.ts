@@ -1,5 +1,3 @@
-import { apiRequest } from '@/shared/api/http';
-
 export async function uploadMedia(token: string, file: File) {
   const formData = new FormData();
   formData.append('file', file);
