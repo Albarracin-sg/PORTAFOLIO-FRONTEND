@@ -1,6 +1,14 @@
 {
   "common": {
-    "back": "Volver"
+    "back": "Volver",
+    "in": "en"
+  },
+  "spotify": {
+    "notListening": "No estoy escuchando nada ahora.",
+    "comeBackLater": "Vuelve pronto para ver mi actividad musical.",
+    "nowPlaying": "Escuchando ahora",
+    "lastPlayed": "Última canción",
+    "openInSpotify": "Abrir en Spotify"
   },
   "nav": {
     "home": "Inicio",

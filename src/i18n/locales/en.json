@@ -1,6 +1,14 @@
 {
   "common": {
-    "back": "Back"
+    "back": "Back",
+    "in": "in"
+  },
+  "spotify": {
+    "notListening": "I'm not listening to anything right now.",
+    "comeBackLater": "Come back later to see my musical activity.",
+    "nowPlaying": "Now playing",
+    "lastPlayed": "Last played",
+    "openInSpotify": "Open in Spotify"
   },
   "nav": {
     "home": "Home",

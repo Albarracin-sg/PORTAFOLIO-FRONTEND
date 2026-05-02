@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ExternalLink, Music2, PauseCircle, Radio, Waves } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from './ui/card';
 import { fetchNowPlaying, type SpotifyTrack } from '@/shared/api/public';
 
@@ -17,6 +18,7 @@ function getProgressPercentage(track: SpotifyTrack) {
 }
 
 export function SpotifyNowPlayingCard() {
+  const { t } = useTranslation();
   const [track, setTrack] = useState<SpotifyTrack | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -80,10 +82,10 @@ export function SpotifyNowPlayingCard() {
               Spotify
             </p>
             <p className="mt-1 text-sm font-medium text-slate-900 dark:text-slate-100">
-              No estoy escuchando nada ahora.
+              {t('spotify.notListening')}
             </p>
             <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
-              Vuelve pronto para ver mi actividad musical.
+              {t('spotify.comeBackLater')}
             </p>
           </div>
         </CardContent>
@@ -91,7 +93,7 @@ export function SpotifyNowPlayingCard() {
     );
   }
 
-  const statusLabel = track.type === 'now_playing' ? 'Escuchando ahora' : 'Última canción';
+  const statusLabel = track.type === 'now_playing' ? t('spotify.nowPlaying') : t('spotify.lastPlayed');
   const statusIcon = track.type === 'now_playing' ? Radio : PauseCircle;
   const StatusIcon = statusIcon;
   const imageUrl = track.albumImageUrl || 'https://placehold.co/96x96/7c3aed/ffffff?text=%E2%99%AA';
@@ -102,7 +104,7 @@ export function SpotifyNowPlayingCard() {
       target="_blank"
       rel="noreferrer"
       className="mt-6 block"
-      aria-label={`Abrir ${track.name} en Spotify`}
+      aria-label={`${t('common.open')} ${track.name} ${t('common.in')} Spotify`}
     >
       <Card className="group overflow-hidden border-violet-500/20 bg-white/85 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/40 hover:shadow-xl hover:shadow-violet-500/10 dark:bg-slate-950/75">
         <CardContent className="p-3.5 sm:p-4">
@@ -152,7 +154,7 @@ export function SpotifyNowPlayingCard() {
               <span>{formatTime(track.progressMs)}</span>
               <span className="inline-flex items-center gap-1 text-violet-600 dark:text-violet-400">
                 <Waves className="h-3.5 w-3.5" />
-                open in Spotify
+                {t('spotify.openInSpotify')}
               </span>
               <span>{track.durationMs > 0 ? formatTime(track.durationMs) : '--:--'}</span>
             </div>
