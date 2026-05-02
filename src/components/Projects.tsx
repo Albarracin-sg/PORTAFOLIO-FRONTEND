@@ -23,13 +23,14 @@ export default function Projects({ projects, section }: ProjectsProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [api, setApi] = useState<CarouselApi>();
   const [progress, setProgress] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
   const carouselProjects = Array.isArray(projects) ? projects : [];
   const { draft, updateField } = useSectionEditor(section as any);
 
   // Efecto para el Autoplay y la barra de progreso
   useEffect(() => {
-    if (!api || isModalOpen) return;
+    if (!api || isModalOpen || isPaused) return;
 
     const step = 100 / (AUTOPLAY_INTERVAL / 50);
     const interval = setInterval(() => {
@@ -43,9 +44,9 @@ export default function Projects({ projects, section }: ProjectsProps) {
     }, 50);
 
     return () => clearInterval(interval);
-  }, [api, isModalOpen]);
+  }, [api, isModalOpen, isPaused]);
 
-  // Manejar el reinicio de la barra cuando cambia el slide
+  // Manejar el reinicio de la barra y la pausa por interacción
   useEffect(() => {
     if (!api) return;
     
@@ -53,12 +54,19 @@ export default function Projects({ projects, section }: ProjectsProps) {
       setProgress(0);
     };
 
+    const onPointerDown = () => setIsPaused(true);
+    const onPointerUp = () => setIsPaused(false);
+
     api.on("select", onSelect);
-    api.on("reInit", onSelect); // También al reinicializar
+    api.on("reInit", onSelect);
+    api.on("pointerDown", onPointerDown);
+    api.on("pointerUp", onPointerUp);
     
     return () => {
       api.off("select", onSelect);
       api.off("reInit", onSelect);
+      api.off("pointerDown", onPointerDown);
+      api.off("pointerUp", onPointerUp);
     };
   }, [api]);
 
@@ -105,7 +113,10 @@ export default function Projects({ projects, section }: ProjectsProps) {
           </Button>
         </div>
 
-        <div>
+        <div
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
           <Carousel
             setApi={setApi}
             opts={{ 
