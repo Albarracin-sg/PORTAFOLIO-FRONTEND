@@ -151,6 +151,14 @@ export default function FloatingContactButton() {
 
   return (
     <>
+      {/* Overlay for closing on mobile click outside */}
+      {isExpanded && isTouchDevice && (
+        <div 
+          className="fixed inset-0 z-40 bg-transparent" 
+          onClick={() => setIsExpanded(false)}
+        />
+      )}
+
       {/* Outer wrapper: fixed anchor at bottom-right, overflow visible so arc doesn't clip */}
       <div
         className={`fixed bottom-10 right-4 z-50 transition-all duration-500 ease-out sm:bottom-12 sm:right-6 ${

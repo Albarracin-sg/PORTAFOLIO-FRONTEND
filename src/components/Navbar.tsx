@@ -157,6 +157,12 @@ export default function Navbar({
       return;
     }
 
+    if (sectionId === "home") {
+      onPageChange("home");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+
     if (currentPage === "stats" || currentPage === "all-projects") {
       onPageChange(sectionId);
 
@@ -189,7 +195,11 @@ export default function Navbar({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-18 min-h-[4.5rem]">
             <div className="flex-shrink-0">
-              <Link to="/">
+              <Link
+                to="/"
+                onClick={() => scrollToSection("home")}
+                className="cursor-pointer bg-transparent border-none p-0 block"
+              >
                 <img src={activeLogo} alt="Juan Albarracín" className="h-12 w-auto" />
               </Link>
             </div>
@@ -285,7 +295,15 @@ export default function Navbar({
           style={{ overscrollBehavior: "contain" }}
         >
           <div className={`flex items-center justify-between border-b px-5 py-5 ${mobileSurfaceClass}`}>
-            <img src={activeLogo} alt="Juan Albarracín" className="h-10 w-auto" />
+            <Link
+              to="/"
+              onClick={() => {
+                scrollToSection("home");
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              <img src={activeLogo} alt="Juan Albarracín" className="h-10 w-auto" />
+            </Link>
 
             <button
               onClick={() => setIsMobileMenuOpen(false)}

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
@@ -17,6 +18,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "./ui/alert-dialog";
+
+type ContactFormData = {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+};
 
 type ContactDraft = Record<string, unknown> & {
   title?: string;
@@ -57,8 +65,13 @@ function resolveIcon(iconStr: string | undefined): IconComponent {
 
 export default function Contact({ section }: ContactProps) {
   const { t } = useTranslation();
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ContactFormData>();
+
   const [submitFeedback, setSubmitFeedback] = useState<SubmitFeedback>({
     open: false,
     type: "success",
@@ -66,17 +79,10 @@ export default function Contact({ section }: ContactProps) {
     description: "",
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  const onSubmit = async (data: ContactFormData) => {
     try {
-      await sendContactMessage(formData);
-      setFormData({ name: "", email: "", message: "" });
+      await sendContactMessage(data);
+      reset();
       setSubmitFeedback({
         open: true,
         type: "success",
@@ -93,8 +99,6 @@ export default function Contact({ section }: ContactProps) {
             ? error.message
             : t("contact.form.modal.errorDescription"),
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -162,7 +166,7 @@ export default function Contact({ section }: ContactProps) {
               {t("contact.form.title")}
             </p>
 
-            <form onSubmit={handleSubmit} className="flex flex-col flex-1 gap-5">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col flex-1 gap-5">
               <div>
                 <Label htmlFor="name" className="text-sm text-gray-600 dark:text-gray-400 mb-1.5 block">
                   <EditableText
@@ -173,14 +177,19 @@ export default function Contact({ section }: ContactProps) {
                 </Label>
                 <Input
                   id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
+                  {...register("name", {
+                    required: t("contact.form.errors.required") || "Required",
+                    minLength: { value: 2, message: t("contact.form.errors.minLength") || "Too short" },
+                  })}
                   placeholder={String(t("contact.form.namePlaceholder"))}
-                  required
                   disabled={isSubmitting}
-                  className="bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700 focus-visible:ring-violet-500"
+                  className={`bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700 focus-visible:ring-violet-500 ${
+                    errors.name ? "border-red-500 focus-visible:ring-red-500" : ""
+                  }`}
                 />
+                {errors.name && (
+                  <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
+                )}
               </div>
 
               <div>
@@ -193,15 +202,48 @@ export default function Contact({ section }: ContactProps) {
                 </Label>
                 <Input
                   id="email"
-                  name="email"
                   type="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
+                  {...register("email", {
+                    required: t("contact.form.errors.required") || "Required",
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                      message: t("contact.form.errors.invalidEmail") || "Invalid email",
+                    },
+                  })}
                   placeholder={String(t("contact.form.emailPlaceholder"))}
-                  required
                   disabled={isSubmitting}
-                  className="bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700 focus-visible:ring-violet-500"
+                  className={`bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700 focus-visible:ring-violet-500 ${
+                    errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
+                  }`}
                 />
+                {errors.email && (
+                  <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
+                )}
+              </div>
+
+              <div>
+                <Label htmlFor="subject" className="text-sm text-gray-600 dark:text-gray-400 mb-1.5 block">
+                  <EditableText
+                    value={String(t("contact.form.subject") || "Subject")}
+                    displayValue={String(t("contact.form.subject") || "Subject")}
+                    onSave={(value) => updateField("form.subject", value)}
+                  />
+                </Label>
+                <Input
+                  id="subject"
+                  {...register("subject", {
+                    required: t("contact.form.errors.required") || "Required",
+                    minLength: { value: 3, message: t("contact.form.errors.minLength") || "Too short" },
+                  })}
+                  placeholder={String(t("contact.form.subjectPlaceholder") || "How can I help you?")}
+                  disabled={isSubmitting}
+                  className={`bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700 focus-visible:ring-violet-500 ${
+                    errors.subject ? "border-red-500 focus-visible:ring-red-500" : ""
+                  }`}
+                />
+                {errors.subject && (
+                  <p className="text-xs text-red-500 mt-1">{errors.subject.message}</p>
+                )}
               </div>
 
               <div className="flex flex-col flex-1">
@@ -214,14 +256,19 @@ export default function Contact({ section }: ContactProps) {
                 </Label>
                 <Textarea
                   id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
+                  {...register("message", {
+                    required: t("contact.form.errors.required") || "Required",
+                    minLength: { value: 5, message: t("contact.form.errors.minLength") || "Too short" },
+                  })}
                   placeholder={String(t("contact.form.messagePlaceholder"))}
-                  required
                   disabled={isSubmitting}
-                  className="flex-1 min-h-[140px] bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700 focus-visible:ring-violet-500 resize-none"
+                  className={`flex-1 min-h-[140px] bg-gray-50 dark:bg-gray-800/60 border-gray-200 dark:border-gray-700 focus-visible:ring-violet-500 resize-none ${
+                    errors.message ? "border-red-500 focus-visible:ring-red-500" : ""
+                  }`}
                 />
+                {errors.message && (
+                  <p className="text-xs text-red-500 mt-1">{errors.message.message}</p>
+                )}
               </div>
 
               <Button

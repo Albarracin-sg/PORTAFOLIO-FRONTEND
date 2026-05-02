@@ -1,5 +1,5 @@
 import { Button } from "./ui/button";
-import { ArrowRight, Mail } from "lucide-react";
+import { ArrowRight, Mail, Download } from "lucide-react";
 import { useState } from "react";
 import { EditableImage } from "@/features/admin/InlineEdit";
 import { useSectionEditor } from "@/features/admin/hooks/useSectionEditor";
@@ -9,6 +9,7 @@ import { uploadMedia } from "@/features/admin/api/media";
 import { useTheme } from "@/features/theme";
 import { useTranslation } from "react-i18next";
 import logoImg from "@/assets/logo.png";
+import cvPdf from "@/assets/cv/JUAN_ALBARRACIN_CV.pdf";
 
 interface HeroProps {
   scrollY?: number;
@@ -40,12 +41,12 @@ export default function Hero({ section }: HeroProps) {
   };
 
   return (
-    <section className="min-h-[calc(100vh-4rem)] flex items-center px-4 pb-16 pt-24 sm:px-6 sm:pt-28 lg:px-8 lg:pt-32 relative overflow-hidden">
+    <section className="min-h-[calc(100vh-4rem)] flex items-center px-4 pb-8 pt-28 sm:px-6 sm:pt-28 lg:px-8 lg:pt-32 lg:pb-16 relative">
       <div className="max-w-7xl mx-auto w-full relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
-          <div className="space-y-8">
-            <div className="max-w-3xl space-y-5">
+          <div className="space-y-8 text-center lg:text-left pt-16 lg:pt-0">
+            <div className="max-w-3xl mx-auto lg:mx-0 space-y-5">
               <h1 className="text-4xl font-semibold leading-tight tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl lg:text-6xl">
                 {t('hero.greeting')}
               </h1>
@@ -58,7 +59,7 @@ export default function Hero({ section }: HeroProps) {
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button
                 size="lg"
                 className="gap-2"
@@ -92,6 +93,17 @@ export default function Hero({ section }: HeroProps) {
                 <Mail className="h-5 w-5" />
                 {t('hero.contactMe')}
               </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                className="gap-2 sm:hidden border-violet-500/50 text-violet-700 dark:text-violet-400"
+                asChild
+              >
+                <a href={cvPdf} download="JUAN_ALBARRACIN_CV.pdf">
+                  <Download className="h-5 w-5" />
+                  {t('nav.downloadCV')}
+                </a>
+              </Button>
             </div>
 
             {/* Quick Stats */}
@@ -123,11 +135,11 @@ export default function Hero({ section }: HeroProps) {
             </div>
           </div>
 
-          {/* Profile Image */}
-          <div className="flex justify-center lg:justify-end">
-            <div className="relative">
+          {/* Profile Image — centered on mobile, right-aligned on desktop */}
+          <div className="flex justify-center lg:justify-end mt-12 lg:mt-0">
+            <div className="relative w-full max-w-[320px] sm:max-w-xs lg:max-w-none px-4 lg:p-0">
               {canEditImages && (
-                <div className="absolute top-3 right-3 z-20 flex gap-2">
+                <div className="absolute top-0 right-3 z-20 flex gap-2">
                   <label className="rounded-md bg-black/60 px-2.5 py-1 text-xs text-white cursor-pointer">
                     {uploading === 'primary' ? 'Subiendo...' : 'Base'}
                     <input type="file" accept="image/*" className="hidden" onChange={handleImageChange('primary')} />
@@ -139,27 +151,28 @@ export default function Hero({ section }: HeroProps) {
                 </div>
               )}
               <div
-                className="group relative h-80 w-80 cursor-pointer overflow-visible lg:h-[28rem] lg:w-[28rem]"
+                className="group relative w-full h-auto lg:h-[32rem] lg:w-[32rem] cursor-pointer overflow-visible flex items-center justify-center"
                 onMouseEnter={() => setIsImageHovered(true)}
                 onMouseLeave={() => setIsImageHovered(false)}
               >
                 {/* Subtle hover hint */}
-                <div className="absolute left-3 top-3 z-10 rounded-md bg-black/50 px-2 py-1 text-xs text-white opacity-70 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-0">
+                <div className="absolute left-1/2 -top-6 -translate-x-1/2 z-10 rounded-md bg-black/50 px-2 py-1 text-xs text-white opacity-70 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-0 whitespace-nowrap">
                   Hover me ✨
                 </div>
+                
                 {/* Illustration Image */}
                 <div
-                  className={`absolute inset-0 transition-all duration-700 transform ${
+                  className={`transition-all duration-700 transform ${
                     isImageHovered
                       ? "opacity-0 scale-[1.08]"
                       : "opacity-100 scale-100"
-                  }`}
+                  } ${isImageHovered ? 'pointer-events-none' : 'relative lg:absolute lg:inset-0'}`}
                 >
                   <EditableImage
                     src={primaryImage}
                     alt="Developer Illustration"
                     onSave={(value) => updateField('primaryImage', value)}
-                    className="h-full w-full object-contain"
+                    className="w-full h-auto max-h-[45vh] lg:max-h-full object-contain"
                   />
                 </div>
 
@@ -169,7 +182,7 @@ export default function Hero({ section }: HeroProps) {
                     isImageHovered
                       ? "opacity-100 scale-[1.08]"
                       : "opacity-0 scale-95"
-                  }`}
+                  } ${!isImageHovered ? 'pointer-events-none' : ''}`}
                 >
                   <EditableImage
                     src={secondaryImage}
@@ -180,9 +193,9 @@ export default function Hero({ section }: HeroProps) {
                 </div>
               </div>
 
-              {/* Floating elements */}
+              {/* Floating elements — hidden on mobile */}
               <div
-                className={`absolute -right-4 -top-4 rounded-xl bg-violet-600 p-3 text-white shadow-lg transition-all duration-500 transform ${
+                className={`hidden lg:block absolute -right-4 -top-4 rounded-xl bg-violet-600 p-3 text-white shadow-lg transition-all duration-500 transform ${
                   isImageHovered
                     ? "translate-x-2 -translate-y-2 scale-110"
                     : "translate-x-0 translate-y-0 scale-100"
@@ -191,7 +204,7 @@ export default function Hero({ section }: HeroProps) {
                 <div className="text-sm">React</div>
               </div>
               <div
-                className={`absolute -bottom-4 -left-4 rounded-xl border border-gray-200 bg-white p-3 text-gray-900 shadow-lg transition-all duration-500 transform dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 ${
+                className={`hidden lg:block absolute -bottom-4 -left-4 rounded-xl border border-gray-200 bg-white p-3 text-gray-900 shadow-lg transition-all duration-500 transform dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 ${
                   isImageHovered
                     ? "-translate-x-2 translate-y-2 scale-110"
                     : "translate-x-0 translate-y-0 scale-100"
@@ -202,7 +215,7 @@ export default function Hero({ section }: HeroProps) {
 
               {/* Additional floating elements that appear on hover */}
               <div
-                className={`absolute -left-8 top-1/2 rounded-lg bg-violet-600 p-2 text-white shadow-lg transition-all duration-700 transform ${
+                className={`hidden lg:block absolute -left-8 top-1/2 rounded-lg bg-violet-600 p-2 text-white shadow-lg transition-all duration-700 transform ${
                   isImageHovered
                     ? "opacity-100 scale-100 translate-x-0"
                     : "opacity-0 scale-0 -translate-x-4"
@@ -212,7 +225,7 @@ export default function Hero({ section }: HeroProps) {
               </div>
 
               <div
-                className={`absolute right-8 top-8 rounded-lg bg-violet-600/95 p-2 text-white shadow-lg transition-all duration-500 delay-200 transform ${
+                className={`hidden lg:block absolute right-8 top-8 rounded-lg bg-violet-600/95 p-2 text-white shadow-lg transition-all duration-500 delay-200 transform ${
                   isImageHovered
                     ? "opacity-100 scale-100 translate-y-0"
                     : "opacity-0 scale-0 -translate-y-4"
@@ -222,7 +235,7 @@ export default function Hero({ section }: HeroProps) {
               </div>
 
               <div
-                className={`absolute bottom-8 right-4 rounded-lg bg-violet-600/90 p-2 text-white shadow-lg transition-all duration-700 delay-300 transform ${
+                className={`hidden lg:block absolute bottom-8 right-4 rounded-lg bg-violet-600/90 p-2 text-white shadow-lg transition-all duration-700 delay-300 transform ${
                   isImageHovered
                     ? "opacity-100 scale-100 rotate-0"
                     : "opacity-0 scale-0 rotate-12"
