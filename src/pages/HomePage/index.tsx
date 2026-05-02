@@ -14,7 +14,8 @@ export function HomePage() {
   const [scrollY, setScrollY] = useState(0);
   const [sections, setSections] = useState<Record<string, { id: string; type: string; content: Record<string, unknown> }>>({});
   const [carouselProjects, setCarouselProjects] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isPageLoaded, setIsPageLoaded] = useState(false);
+  const [isProjectsLoaded, setIsProjectsLoaded] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -25,39 +26,47 @@ export function HomePage() {
   useEffect(() => {
     let isActive = true;
 
-    const load = async () => {
-      try {
-        setIsLoading(true);
-        const [pageResult, projectsResult] = await Promise.allSettled([
-          fetchPublicPage('home'),
-          fetchPublicProjects(),
-        ]);
+    setIsPageLoaded(false);
+    setIsProjectsLoaded(false);
 
+    fetchPublicPage('home')
+      .then((result) => {
         if (!isActive) return;
 
-        if (pageResult.status === 'fulfilled') {
-          const sectionMap = pageResult.value.sections.reduce<Record<string, { id: string; type: string; content: Record<string, unknown> }>>(
-            (acc, section) => {
-              acc[section.type] = { id: section.id, type: section.type, content: section.content };
-              return acc;
-            },
-            {},
-          );
-          setSections(sectionMap);
-        }
+        const sectionMap = result.sections.reduce<Record<string, { id: string; type: string; content: Record<string, unknown> }>>(
+          (acc, section) => {
+            acc[section.type] = { id: section.id, type: section.type, content: section.content };
+            return acc;
+          },
+          {},
+        );
 
-        if (projectsResult.status === 'fulfilled') {
-          const orderedProjects = [...projectsResult.value].sort((a, b) => Number(b.featured) - Number(a.featured));
-          setCarouselProjects(orderedProjects.map(mapPublicProjectToFeatured));
-        }
-      } catch (error) {
+        setSections(sectionMap);
+      })
+      .catch((error) => {
         console.error('Error loading home page:', error);
-      } finally {
-        if (isActive) setIsLoading(false);
-      }
-    };
+      })
+      .finally(() => {
+        if (isActive) {
+          setIsPageLoaded(true);
+        }
+      });
 
-    load();
+    fetchPublicProjects()
+      .then((result) => {
+        if (!isActive) return;
+
+        const orderedProjects = [...result].sort((a, b) => Number(b.featured) - Number(a.featured));
+        setCarouselProjects(orderedProjects.map(mapPublicProjectToFeatured));
+      })
+      .catch((error) => {
+        console.error('Error loading projects:', error);
+      })
+      .finally(() => {
+        if (isActive) {
+          setIsProjectsLoaded(true);
+        }
+      });
 
     return () => {
       isActive = false;
@@ -67,7 +76,7 @@ export function HomePage() {
   return (
     <>
       <section id="home">
-        {isLoading ? (
+        {!isPageLoaded ? (
           <div className="flex h-[80vh] items-center justify-center">
             <div className="space-y-6 text-center w-full max-w-3xl px-4">
               <Skeleton className="mx-auto h-16 w-3/4 rounded-2xl" />
@@ -83,7 +92,7 @@ export function HomePage() {
         )}
       </section>
       <section id="about">
-        {isLoading ? (
+        {!isPageLoaded ? (
           <div className="mx-auto max-w-7xl px-4 py-24 space-y-10">
             <div className="space-y-4">
               <Skeleton className="h-10 w-48 rounded-lg" />
@@ -99,7 +108,7 @@ export function HomePage() {
         )}
       </section>
       <section id="projects">
-        {isLoading ? (
+        {!isProjectsLoaded ? (
           <div className="mx-auto max-w-7xl px-4 py-24 relative">
             <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
               <div className="space-y-3 flex-1">
@@ -128,5 +137,4 @@ export function HomePage() {
     </>
   );
 }
-
 
