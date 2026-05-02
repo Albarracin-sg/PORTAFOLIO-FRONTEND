@@ -4,7 +4,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
-import { Mail, Github, Send, Linkedin, MapPin } from "lucide-react";
+import { Mail, Github, Send, Linkedin, MapPin, CheckCircle2, XCircle } from "lucide-react";
 import { sendContactMessage } from "@/shared/api/public";
 import { EditableText } from "@/features/admin/InlineEdit";
 import { useSectionEditor } from "@/features/admin/hooks/useSectionEditor";
@@ -415,14 +415,39 @@ export default function Contact({ section }: ContactProps) {
           setSubmitFeedback((current) => ({ ...current, open }))
         }
       >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>{submitFeedback.title}</AlertDialogTitle>
-            <AlertDialogDescription>{submitFeedback.description}</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogAction>{t("contact.form.modal.confirm")}</AlertDialogAction>
-          </AlertDialogFooter>
+        <AlertDialogContent className="max-w-[400px] rounded-3xl border-none bg-white dark:bg-gray-900 p-8">
+          <div className="flex flex-col items-center text-center">
+            <div className={`mb-6 flex h-20 w-20 items-center justify-center rounded-full ring-8 ${
+              submitFeedback.type === "success" 
+                ? "bg-emerald-100 text-emerald-600 ring-emerald-50 dark:bg-emerald-500/10 dark:text-emerald-400 dark:ring-emerald-500/5"
+                : "bg-red-100 text-red-600 ring-red-50 dark:bg-red-500/10 dark:text-red-400 dark:ring-red-500/5"
+            }`}>
+              {submitFeedback.type === "success" ? (
+                <CheckCircle2 className="h-10 w-10" />
+              ) : (
+                <XCircle className="h-10 w-10" />
+              )}
+            </div>
+            
+            <AlertDialogHeader className="space-y-2">
+              <AlertDialogTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+                {submitFeedback.title}
+              </AlertDialogTitle>
+              <AlertDialogDescription className="text-sm leading-relaxed text-gray-500 dark:text-gray-400">
+                {submitFeedback.description}
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            
+            <AlertDialogFooter className="mt-8 w-full sm:justify-center">
+              <AlertDialogAction className={`w-full rounded-xl py-6 font-semibold text-white transition-all duration-200 active:scale-95 ${
+                submitFeedback.type === "success"
+                  ? "bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 dark:hover:bg-emerald-600"
+                  : "bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600"
+              }`}>
+                {t("contact.form.modal.confirm")}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </div>
         </AlertDialogContent>
       </AlertDialog>
     </section>
