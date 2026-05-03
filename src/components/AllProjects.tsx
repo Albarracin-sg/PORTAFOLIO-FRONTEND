@@ -544,7 +544,7 @@ function ProjectCard({
             </div>
 
             <div className="flex h-20 sm:h-16 flex-wrap content-start gap-1.5 overflow-hidden">
-              {project.technologies.map((tech) => (
+              {project.technologies.slice(0, 5).map((tech) => (
                 <SkillBubble
                   key={tech}
                   name={tech}
@@ -552,6 +552,11 @@ function ProjectCard({
                   size="sm"
                 />
               ))}
+              {project.technologies.length > 5 && (
+                <div className="flex items-center justify-center rounded-full border border-slate-200 bg-slate-50/50 px-2 py-1 text-[10px] font-bold text-slate-500 dark:border-white/10 dark:bg-white/5 dark:text-slate-400">
+                  +{project.technologies.length - 5}
+                </div>
+              )}
             </div>
 
             <div className="h-24 sm:h-20 overflow-hidden">
