@@ -2,6 +2,21 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Global focus outline for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Focus visible for dark mode */
+.dark :focus-visible {
+  outline-color: #a78bfa;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
 /* Componentes UI (Input, Select, Dialog, Popover…) */
 @theme {
   --color-background: #fafafa;

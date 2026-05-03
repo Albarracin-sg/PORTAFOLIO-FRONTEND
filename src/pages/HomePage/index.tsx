@@ -1,15 +1,13 @@
-import { useEffect, useState, lazy, Suspense } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
+import Projects from '@/components/Projects';
+import Contact from '@/components/Contact';
 import { fetchPublicPage, fetchPublicProjects } from '@/shared/api/public';
 import { mapPublicProjectToFeatured } from '@/shared/api/mappers';
 import { LoadingScreen } from '@/components/ui/LoadingScreen';
 import { Skeleton } from '@/components/ui/skeleton';
-
-// Lazy load heavy components
-const Projects = lazy(() => import('@/components/Projects').then((m) => ({ default: m.default || m.Projects })));
-const Contact = lazy(() => import('@/components/Contact').then((m) => ({ default: m.default || m.Contact })));
 
 export function HomePage() {
   const location = useLocation();
@@ -130,15 +128,11 @@ export function HomePage() {
             </div>
           </div>
         ) : (
-          <Suspense fallback={<div className="py-24 text-center">Cargando...</div>}>
-            <Projects projects={carouselProjects} section={sections.PROJECTS} />
-          </Suspense>
+          <Projects projects={carouselProjects} section={sections.PROJECTS} />
         )}
       </section>
       <section id="contact">
-        <Suspense fallback={<div className="py-12 text-center">Cargando...</div>}>
-          <Contact section={sections.CONTACT} />
-        </Suspense>
+        <Contact section={sections.CONTACT} />
       </section>
     </>
   );
