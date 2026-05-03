@@ -12,6 +12,7 @@ import { AdminContentPage } from '@/pages/Admin/ContentPage';
 import { AdminProjectsPage } from '@/pages/Admin/ProjectsPage';
 import { AdminMessagesPage } from '@/pages/Admin/MessagesPage';
 import { AdminLiveEditorPage } from '@/pages/Admin/LiveEditorPage';
+import ScrollToTop from './components/ui/ScrollToTop';
 
 const StatsPage = lazy(() => import('@/pages/StatsPage').then((m) => ({ default: m.StatsPage })));
 const AllProjectsPage = lazy(() => import('@/pages/AllProjectsPage').then((m) => ({ default: m.AllProjectsPage })));
@@ -27,7 +28,9 @@ function PageFallback() {
 
 export default function App() {
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
       <Route path="admin/login" element={<AdminLoginPage />} />
       <Route
         path="admin"
@@ -63,5 +66,6 @@ export default function App() {
         <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
+    </>
   );
 }
