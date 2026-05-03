@@ -1,6 +1,7 @@
 import { memo, useMemo } from "react";
 import { Briefcase, GraduationCap, MapPin, Sparkles, ArrowRight, Code2, Brain } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { SkillBubble } from "./SkillBubble";
 
 interface AboutProps {
   section?: { id: string; type: string; content: Record<string, unknown> };
@@ -52,14 +53,15 @@ const SkillMarqueeRow = memo(function SkillMarqueeRow({ items, reverse }: { item
     <div className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-background to-transparent" />
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-background to-transparent" />
-      <div className="flex gap-2.5 py-1" style={animationStyle}>
+      <div className="flex gap-4 py-3" style={animationStyle}>
         {tripled.map((skill, i) => (
-          <span
+          <SkillBubble
             key={`${skill}-${i}`}
-            className="inline-flex cursor-default items-center whitespace-nowrap rounded-full border border-slate-200 bg-white/85 px-4 py-2 text-sm text-slate-700 transition-colors duration-200 hover:border-violet-400/40 hover:bg-violet-500/10 hover:text-violet-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300 dark:hover:text-violet-200"
-          >
-            {skill}
-          </span>
+            name={skill}
+            showName={true}
+            size="md"
+            className="cursor-default whitespace-nowrap"
+          />
         ))}
       </div>
     </div>
@@ -136,12 +138,13 @@ export default function About(_props: AboutProps) {
             </div>
           </div>
 
-          {/* SKILLS MARQUEE — 2 rows, monochrome */}
+{/* SKILLS MARQUEE — 2 rows, monochrome */}
           <div className="mb-16 fu2">
               <SectionLabel icon={<Code2 className="h-3.5 w-3.5" />} label={about.technicalSkills} />
               <div className="mt-6">
                 <SkillMarquee groups={technicalSkillGroups} />
               </div>
+            </div>
             </div>
 
           {/* SOFT SKILLS */}

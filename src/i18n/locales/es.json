@@ -40,12 +40,13 @@
     "softSkillsTitle": "Habilidades Blandas",
     "softSkillsList": [
       "Mentoría y transferencia de conocimiento",
-      "Comunicación técnica con equipos y stakeholders",
+      "Comunicación técnica con equipos",
       "Trabajo colaborativo en Scrum",
       "Autonomía y autogestión",
       "Pensamiento crítico orientado a soluciones",
-      "Adaptabilidad ante cambios de requerimientos",
-      "Documentación clara y precisa"
+      "Adaptabilidad ante cambios",
+      "Documentación clara y precisa",
+      "Gestión de equipos técnicos"
     ],
     "technicalSkillGroups": [
       {
