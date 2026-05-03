@@ -161,16 +161,16 @@ export default function FloatingContactButton() {
 
       {/* Outer wrapper: fixed anchor at bottom-right, overflow visible so arc doesn't clip */}
       <div
-        className={`fixed bottom-10 right-4 z-50 transition-all duration-500 ease-out sm:bottom-12 sm:right-6 ${
+        className={`fixed bottom-10 right-4 z-50 transition-all duration-500 ease-out sm:bottom-12 sm:right-6 pointer-events-none ${
           isVisible
             ? 'translate-y-0 opacity-100'
-            : 'pointer-events-none translate-y-6 opacity-0'
+            : 'translate-y-6 opacity-0'
         }`}
         style={{ overflow: 'visible' }}
       >
         {/* Relative container sized to the main button; icons overflow via absolute positioning */}
         <div
-          className="relative h-[240px] w-[190px]"
+          className="relative h-[240px] w-[190px] pointer-events-none"
           style={{ overflow: 'visible' }}
           onMouseEnter={() => {
             if (!isTouchDevice) setIsExpanded(true);
@@ -188,9 +188,9 @@ export default function FloatingContactButton() {
                 key={social.label}
                 onClick={() => handleSocialClick(social.href)}
                 className={`
-                  absolute flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:shadow-xl dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400
+                  absolute flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border border-gray-200 bg-white text-gray-600 shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:shadow-xl dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 pointer-events-auto
                   ${social.color}
-                  ${shouldShowActions ? 'opacity-100 scale-100 pointer-events-auto' : 'opacity-0 scale-75 pointer-events-none'}
+                  ${shouldShowActions ? 'opacity-100 scale-100' : 'opacity-0 scale-75 pointer-events-none'}
                 `}
                 style={{
                   right: pos.right,
@@ -211,7 +211,7 @@ export default function FloatingContactButton() {
             onClick={handleMainButtonClick}
             size="icon"
             className={`
-              absolute bottom-0 right-0 h-14 w-14 rounded-full border border-violet-400/30 bg-violet-600 shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-violet-700 hover:shadow-xl dark:bg-violet-500 dark:hover:bg-violet-600
+              absolute bottom-0 right-0 h-14 w-14 rounded-full border border-violet-400/30 bg-violet-600 shadow-lg backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:bg-violet-700 hover:shadow-xl dark:bg-violet-500 dark:hover:bg-violet-600 pointer-events-auto
               ${shouldShowActions ? 'scale-105' : ''}
             `}
             type="button"

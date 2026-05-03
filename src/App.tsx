@@ -15,6 +15,7 @@ import { AdminLiveEditorPage } from '@/pages/Admin/LiveEditorPage';
 
 const StatsPage = lazy(() => import('@/pages/StatsPage').then((m) => ({ default: m.StatsPage })));
 const AllProjectsPage = lazy(() => import('@/pages/AllProjectsPage').then((m) => ({ default: m.AllProjectsPage })));
+const ProjectDetailPage = lazy(() => import('@/pages/ProjectDetailPage').then((m) => ({ default: m.ProjectDetailPage })));
 
 function PageFallback() {
   return (
@@ -46,6 +47,11 @@ export default function App() {
         <Route path="projects" element={
           <Suspense fallback={<PageFallback />}>
             <AllProjectsPage />
+          </Suspense>
+        } />
+        <Route path="projects/:id" element={
+          <Suspense fallback={<PageFallback />}>
+            <ProjectDetailPage />
           </Suspense>
         } />
         <Route path="stats" element={

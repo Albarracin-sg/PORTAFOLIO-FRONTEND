@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "./ui/carousel";
 import { ArrowRight, ExternalLink, GitFork, Star } from "lucide-react";
-import ProjectModal from "./ProjectModal";
 import { EditableText } from "@/features/admin/InlineEdit";
 import { useSectionEditor } from "@/features/admin/hooks/useSectionEditor";
 import { useTranslation } from "react-i18next";
@@ -20,8 +19,7 @@ const AUTOPLAY_INTERVAL = 5000; // 5 segundos por slide
 
 export default function Projects({ projects, section }: ProjectsProps) {
   const { t } = useTranslation();
-  const [selectedProject, setSelectedProject] = useState<any>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
   const [api, setApi] = useState<CarouselApi>();
   const [progress, setProgress] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -31,7 +29,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
 
   // Efecto para el Autoplay y la barra de progreso
   useEffect(() => {
-    if (!api || isModalOpen || isPaused) return;
+    if (!api || isPaused) return;
 
     const step = 100 / (AUTOPLAY_INTERVAL / 50);
     const interval = setInterval(() => {
@@ -45,7 +43,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
     }, 50);
 
     return () => clearInterval(interval);
-  }, [api, isModalOpen, isPaused]);
+  }, [api, isPaused]);
 
   // Manejar el reinicio de la barra y la pausa por interacción
   useEffect(() => {
@@ -72,8 +70,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
   }, [api]);
 
   const handleViewMore = (project: any) => {
-    setSelectedProject(project);
-    setIsModalOpen(true);
+    navigate(`/projects/${project.id}`);
   };
 
   return (
@@ -237,15 +234,10 @@ export default function Projects({ projects, section }: ProjectsProps) {
               <CarouselNext 
                 className="static h-12 w-12 shrink-0 translate-y-0 border-slate-200 bg-white/95 text-slate-700 shadow-md hover:bg-violet-600 hover:text-white dark:border-white/10 dark:bg-slate-950/90 dark:text-white" 
               />
-            </div>          </Carousel>
+            </div>
+          </Carousel>
         </div>
       </div>
-
-      <ProjectModal
-        project={selectedProject}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
     </section>
   );
 }

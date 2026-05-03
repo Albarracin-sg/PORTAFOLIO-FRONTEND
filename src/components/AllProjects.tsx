@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
   Calendar,
@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-import ProjectModal from "./ProjectModal";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
@@ -37,7 +36,7 @@ type ProjectItem = ReturnType<typeof mapPublicProjectToList>;
 
 export default function AllProjects() {
   const { t, i18n } = useTranslation();
-  const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedTech, setSelectedTech] = useState("all");
@@ -199,6 +198,10 @@ export default function AllProjects() {
   const projectCountLabel = (t("projects.filters.showing") as string)
     .replace("{count}", String(filteredAndSortedProjects.length))
     .replace("{total}", String(allProjects.length));
+
+  const handleSelectProject = (project: ProjectItem) => {
+    navigate(`/projects/${project.id}`);
+  };
 
   return (
     <section className="min-h-screen px-4 py-24 sm:px-6 lg:px-8">
@@ -363,7 +366,7 @@ export default function AllProjects() {
                 formatDate={formatDate}
                 getStatusColor={getStatusColor}
                 getStatusLabel={getStatusLabel}
-                onSelect={setSelectedProject}
+                onSelect={handleSelectProject}
                 t={t}
               />
             ))}
@@ -378,7 +381,7 @@ export default function AllProjects() {
                 formatDate={formatDate}
                 getStatusColor={getStatusColor}
                 getStatusLabel={getStatusLabel}
-                onSelect={setSelectedProject}
+                onSelect={handleSelectProject}
                 t={t}
               />
             ))}
@@ -426,25 +429,6 @@ export default function AllProjects() {
               </Button>
             </div>
           </div>
-        )}
-
-        {selectedProject && (
-          <ProjectModal
-            project={{
-              id: selectedProject.id,
-              name: selectedProject.title ?? selectedProject.name,
-              description: selectedProject.description,
-              technologies: selectedProject.technologies,
-              image: selectedProject.image,
-              problem: selectedProject.problem ?? "",
-              challenge: selectedProject.challenge ?? "",
-              solution: selectedProject.solution ?? "",
-              githubUrl: selectedProject.github ?? selectedProject.githubUrl ?? "",
-              liveUrl: selectedProject.liveDemo ?? selectedProject.liveUrl,
-            }}
-            isOpen={!!selectedProject}
-            onClose={() => setSelectedProject(null)}
-          />
         )}
       </div>
     </section>

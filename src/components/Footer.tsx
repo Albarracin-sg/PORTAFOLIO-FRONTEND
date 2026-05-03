@@ -75,8 +75,8 @@ export default function Footer({ isDark, onPageChange, currentPage }: FooterProp
         
        <div className="block lg:hidden text-center mb-20 space-y-8">
            <div className="space-y-6">
-             <Link to="/" onClick={() => scrollToSection("home")} className="inline-block transition-transform hover:scale-110 duration-300 filter brightness-110 hover:brightness-125">
-               <img src={activeLogo} alt="Juan Albarracín" className="h-20 w-auto mx-auto" />
+             <Link to="/" onClick={() => scrollToSection("home")} className="inline-block transition-transform hover:scale-110 duration-300">
+               <img src={activeLogo} alt="Juan Albarracín" className="h-20 w-auto mx-auto dark:brightness-110" />
              </Link>
              <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">
                {t("footer.description")}
@@ -118,8 +118,8 @@ export default function Footer({ isDark, onPageChange, currentPage }: FooterProp
            
            {/* Col 1: Identity */}
            <div className="space-y-8">
-             <Link to="/" onClick={() => scrollToSection("home")} className="inline-block transition-transform hover:scale-110 duration-300 filter brightness-110 hover:brightness-125">
-               <img src={activeLogo} alt="Juan Albarracín" className="h-24 w-auto" />
+             <Link to="/" onClick={() => scrollToSection("home")} className="inline-block transition-transform hover:scale-110 duration-300">
+               <img src={activeLogo} alt="Juan Albarracín" className="h-24 w-auto dark:brightness-110" />
              </Link>
              <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
                {t("footer.description")}
