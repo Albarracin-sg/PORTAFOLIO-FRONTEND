@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import logoImg from "@/assets/logo.png";
 import cvPdf from "@/assets/cv/JUAN_ALBARRACIN_CV.pdf";
 import { SpotifyNowPlayingCard } from "./SpotifyNowPlayingCard";
+import { SkillBubble } from "./SkillBubble";
 
 interface HeroProps {
   scrollY?: number;
@@ -155,12 +156,8 @@ export default function Hero({ section }: HeroProps) {
                 className="group relative w-full h-auto lg:h-[32rem] lg:w-[32rem] cursor-pointer overflow-visible flex items-center justify-center"
                 onMouseEnter={() => setIsImageHovered(true)}
                 onMouseLeave={() => setIsImageHovered(false)}
+                onClick={() => setIsImageHovered(!isImageHovered)}
               >
-                {/* Subtle hover hint */}
-                <div className="absolute left-1/2 -top-6 -translate-x-1/2 z-10 rounded-md bg-black/50 px-2 py-1 text-xs text-white opacity-70 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-0 whitespace-nowrap">
-                  Hover me ✨
-                </div>
-                
                 {/* Illustration Image */}
                 <div
                   className={`transition-all duration-700 transform ${
@@ -192,59 +189,56 @@ export default function Hero({ section }: HeroProps) {
                     className="h-full w-full object-contain"
                   />
                 </div>
-              </div>
 
-              <SpotifyNowPlayingCard />
-
-              {/* Floating elements — hidden on mobile */}
-              <div
-                className={`hidden lg:block absolute -right-4 -top-4 rounded-xl bg-violet-600 p-3 text-white shadow-lg transition-all duration-500 transform ${
-                  isImageHovered
-                    ? "translate-x-2 -translate-y-2 scale-110"
-                    : "translate-x-0 translate-y-0 scale-100"
-                }`}
-              >
-                <div className="text-sm">React</div>
+                {/* Skill Bubbles INSIDE the image container */}
+                <SkillBubble
+                  name="React"
+                  size="md"
+                  className={`absolute right-4 top-10 z-10 pointer-events-none transition-all duration-500 transform ${
+                    isImageHovered
+                      ? "translate-x-0 translate-y-0 scale-110 opacity-100"
+                      : "translate-x-4 -translate-y-4 scale-50 opacity-0"
+                  }`}
+                />
+                <SkillBubble
+                  name="Node.js"
+                  size="md"
+                  className={`absolute left-4 top-20 z-10 pointer-events-none transition-all duration-500 transform ${
+                    isImageHovered
+                      ? "translate-x-0 translate-y-0 scale-110 opacity-100"
+                      : "-translate-x-4 -translate-y-4 scale-50 opacity-0"
+                  }`}
+                />
+                <SkillBubble
+                  name="TypeScript"
+                  size="md"
+                  className={`absolute left-8 bottom-32 z-10 pointer-events-none transition-all duration-700 transform ${
+                    isImageHovered
+                      ? "opacity-100 scale-110 translate-x-0"
+                      : "opacity-0 scale-50 -translate-x-8"
+                  }`}
+                />
+                <SkillBubble
+                  name="Nest.js"
+                  size="md"
+                  className={`absolute right-12 top-1/2 z-10 pointer-events-none transition-all duration-500 delay-100 transform ${
+                    isImageHovered
+                      ? "opacity-100 scale-110 translate-y-0"
+                      : "opacity-0 scale-50 translate-y-8"
+                  }`}
+                />
+                <SkillBubble
+                  name="PostgreSQL"
+                  size="md"
+                  className={`absolute right-8 bottom-20 z-10 pointer-events-none transition-all duration-700 delay-200 transform ${
+                    isImageHovered
+                      ? "opacity-100 scale-110 rotate-0"
+                      : "opacity-0 scale-50 rotate-12 translate-y-8"
+                  }`}
+                />
               </div>
-              <div
-                className={`hidden lg:block absolute -bottom-4 -left-4 rounded-xl border border-gray-200 bg-white p-3 text-gray-900 shadow-lg transition-all duration-500 transform dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 ${
-                  isImageHovered
-                    ? "-translate-x-2 translate-y-2 scale-110"
-                    : "translate-x-0 translate-y-0 scale-100"
-                }`}
-              >
-                <div className="text-sm">Node.js</div>
-              </div>
-
-              {/* Additional floating elements that appear on hover */}
-              <div
-                className={`hidden lg:block absolute -left-8 top-1/2 rounded-lg bg-violet-600 p-2 text-white shadow-lg transition-all duration-700 transform ${
-                  isImageHovered
-                    ? "opacity-100 scale-100 translate-x-0"
-                    : "opacity-0 scale-0 -translate-x-4"
-                }`}
-              >
-                <div className="text-xs">TypeScript</div>
-              </div>
-
-              <div
-                className={`hidden lg:block absolute right-8 top-8 rounded-lg bg-violet-600/95 p-2 text-white shadow-lg transition-all duration-500 delay-200 transform ${
-                  isImageHovered
-                    ? "opacity-100 scale-100 translate-y-0"
-                    : "opacity-0 scale-0 -translate-y-4"
-                }`}
-              >
-                <div className="text-xs">Nest.js</div>
-              </div>
-
-              <div
-                className={`hidden lg:block absolute bottom-8 right-4 rounded-lg bg-violet-600/90 p-2 text-white shadow-lg transition-all duration-700 delay-300 transform ${
-                  isImageHovered
-                    ? "opacity-100 scale-100 rotate-0"
-                    : "opacity-0 scale-0 rotate-12"
-                }`}
-              >
-                <div className="text-xs">PostgreSQL</div>
+              <div className="relative z-20">
+                <SpotifyNowPlayingCard />
               </div>
             </div>
           </div>

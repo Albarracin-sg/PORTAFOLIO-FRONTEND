@@ -9,6 +9,7 @@ import ProjectModal from "./ProjectModal";
 import { EditableText } from "@/features/admin/InlineEdit";
 import { useSectionEditor } from "@/features/admin/hooks/useSectionEditor";
 import { useTranslation } from "react-i18next";
+import { SkillBubble } from "./SkillBubble";
 
 interface ProjectsProps {
   projects?: any[];
@@ -183,13 +184,12 @@ export default function Projects({ projects, section }: ProjectsProps) {
                       <CardContent className="flex flex-1 flex-col gap-4 bg-white pt-0 text-slate-700 dark:bg-slate-950/95 dark:text-slate-200">
                         <div className="flex flex-wrap gap-2">
                           {technologies.slice(0, 4).map((tech) => (
-                            <Badge
+                            <SkillBubble
                               key={tech}
-                              variant="secondary"
-                              className="rounded-full border border-slate-200 bg-slate-100 text-slate-700 dark:border-white/10 dark:bg-white/5 dark:text-slate-100"
-                            >
-                              {tech}
-                            </Badge>
+                              name={tech}
+                              showName={true}
+                              size="sm"
+                            />
                           ))}
                         </div>
                       </CardContent>
@@ -224,7 +224,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
 
             <div className="mt-8 flex items-center justify-center gap-4 px-4">
               <CarouselPrevious 
-                className="static z-10 h-10 w-10 shrink-0 translate-y-0 border-slate-200 bg-white/95 text-slate-700 shadow-sm hover:bg-violet-600 hover:text-white dark:border-white/10 dark:bg-slate-950/90 dark:text-white" 
+                className="static z-10 h-10 w-10 shrink-0 translate-y-0 border-slate-200 bg-white/95 text-slate-700 shadow-sm hover:bg-violet-600 hover:text-white dark:border-white/10 dark:bg-slate-950/90 dark:text-white"
               />
               
               <div className="relative h-1.5 flex-1 max-w-xs overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
@@ -235,7 +235,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
               </div>
 
               <CarouselNext 
-                className="static z-10 h-10 w-10 shrink-0 translate-y-0 border-slate-200 bg-white/95 text-slate-700 shadow-sm hover:bg-violet-600 hover:text-white dark:border-white/10 dark:bg-slate-950/90 dark:text-white" 
+                className="static z-10 h-10 w-10 shrink-0 translate-y-0 border-slate-200 bg-white/95 text-slate-700 shadow-sm hover:bg-violet-600 hover:text-white dark:border-white/10 dark:bg-slate-950/90 dark:text-white"
               />
             </div>
           </Carousel>

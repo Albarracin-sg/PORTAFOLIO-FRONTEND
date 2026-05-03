@@ -31,6 +31,7 @@ import { mapPublicProjectToList } from "@/shared/api/mappers";
 import { fetchPublicProjects } from "@/shared/api/public";
 import { LoadingScreen } from "./ui/LoadingScreen";
 import { Skeleton } from "./ui/skeleton";
+import { SkillBubble } from "./SkillBubble";
 
 type ProjectItem = ReturnType<typeof mapPublicProjectToList>;
 
@@ -546,18 +547,17 @@ function ProjectCard({
           <CardContent className="space-y-4 p-0">
             <div className="flex flex-wrap gap-2">
               {project.technologies.slice(0, isListView ? 8 : 4).map((tech) => (
-                <Badge
+                <SkillBubble
                   key={tech}
-                  variant="secondary"
-                  className="border-slate-200 bg-slate-50 text-xs text-slate-700 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300"
-                >
-                  {tech}
-                </Badge>
+                  name={tech}
+                  showName={true}
+                  size="sm"
+                />
               ))}
               {project.technologies.length > (isListView ? 8 : 4) && (
-                <Badge variant="outline" className="text-xs">
+                <div className="flex items-center justify-center rounded-full border border-slate-200 bg-white/85 px-2 py-1 text-[10px] font-medium text-slate-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-400">
                   +{project.technologies.length - (isListView ? 8 : 4)}
-                </Badge>
+                </div>
               )}
             </div>
           </CardContent>
