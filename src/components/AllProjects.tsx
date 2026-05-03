@@ -206,11 +206,11 @@ export default function AllProjects() {
   return (
     <section className="min-h-screen px-4 py-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-12">
+        <div className="mb-8 sm:mb-12">
           <Button
             variant="ghost"
             asChild
-            className="group mb-6 rounded-full border border-slate-200 bg-white/80 px-4 text-slate-600 transition-all hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-300 dark:hover:border-violet-400/30 dark:hover:bg-violet-500/10 dark:hover:text-violet-200"
+            className="group mb-2 sm:mb-6 rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-slate-600 transition-all hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-300 dark:hover:border-violet-400/30 dark:hover:bg-violet-500/10 dark:hover:text-violet-200"
           >
             <Link to="/">
               <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />

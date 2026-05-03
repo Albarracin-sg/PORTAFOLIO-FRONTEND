@@ -105,64 +105,57 @@ export default function Statistics({ section, githubStats }: StatisticsProps) {
       ];
 
   const languageChartConfig = {
-    value: {
-      label: isSpanish ? "Uso" : "Usage",
-      color: "#8b5cf6",
-    },
+    value: { label: isSpanish ? "Uso" : "Usage", color: "#8b5cf6" },
     ...Object.fromEntries(
       languageData.map((item) => [
         String(item.name),
-        {
-          label: String(item.name),
-          color: String(item.color ?? "#8b5cf6"),
-        },
+        { label: String(item.name), color: String(item.color ?? "#8b5cf6") },
       ]),
     ),
   } satisfies ChartConfig;
 
   const projectChartConfig = {
-    projects: {
-      label: t("stats.projectsTimeline"),
-      color: "#8b5cf6",
-    },
+    projects: { label: t("stats.projectsTimeline"), color: "#8b5cf6" },
   } satisfies ChartConfig;
 
   const activityChartConfig = {
-    commits: {
-      label: t("stats.githubActivity"),
-      color: "#8b5cf6",
-    },
+    commits: { label: t("stats.githubActivity"), color: "#8b5cf6" },
   } satisfies ChartConfig;
 
   return (
-    <section className="px-4 pb-12 pt-28 sm:pb-24 sm:pt-32 sm:px-6 lg:px-8">
+    <section className="min-h-screen px-4 py-24 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-10 sm:mb-12">
+
+        {/* Header — idéntico a AllProjects */}
+        <div className="mb-8 sm:mb-12">
           <Button
             variant="ghost"
             asChild
-            className="group rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-slate-600 transition-all hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-300 dark:hover:border-violet-400/30 dark:hover:bg-violet-500/10 dark:hover:text-violet-200"
+            className="group mb-2 sm:mb-6 rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-slate-600 transition-all hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-300 dark:hover:border-violet-400/30 dark:hover:bg-violet-500/10 dark:hover:text-violet-200"
           >
-            <Link to="/" className="flex items-center gap-2">
+            <Link to="/">
               <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
-              <span>{t("common.back")}</span>
+              {t("common.back")}
             </Link>
           </Button>
+
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-violet-600 dark:text-violet-400">
+              {t("stats.title")}
+            </p>
+            <h1 className="mt-3 text-5xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-6xl">
+              {t("stats.title")}
+            </h1>
+            <p className="mx-auto mt-5 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-400 sm:text-base">
+              {t("stats.subtitle")}
+            </p>
+          </div>
         </div>
 
-        <div className="mx-auto mb-10 sm:mb-14 max-w-4xl text-center">
-          <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
-            {t("stats.title")}
-          </h1>
-          <p className="mx-auto mt-4 sm:mt-5 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-400 sm:text-base">
-            {t("stats.subtitle")}
-          </p>
-        </div>
-
+        {/* Stats cards */}
         <div className="mb-8 sm:mb-12 grid grid-cols-2 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {cards.map((stat) => {
             const Icon = stat.icon;
-
             return (
               <Card
                 key={stat.title}
@@ -189,6 +182,7 @@ export default function Statistics({ section, githubStats }: StatisticsProps) {
           })}
         </div>
 
+        {/* Charts */}
         <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
           <Card className="border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
             <CardHeader>
@@ -199,40 +193,18 @@ export default function Statistics({ section, githubStats }: StatisticsProps) {
             <CardContent>
               <ChartContainer config={languageChartConfig} className="aspect-square h-64 sm:aspect-video sm:h-80 w-full">
                 <PieChart>
-                  <ChartTooltip 
-                    cursor={false}
-                    content={<ChartTooltipContent hideLabel />} 
-                    trigger="hover" // Recharts mapea hover a touch en mobile
-                  />
-                  <Pie
-                    data={languageData}
-                    dataKey="value"
-                    nameKey="name"
-                    innerRadius="60%"
-                    outerRadius="90%"
-                    paddingAngle={4}
-                    isAnimationActive={false} // Desactivar para respuesta inmediata al toque
-                  >
+                  <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} trigger="hover" />
+                  <Pie data={languageData} dataKey="value" nameKey="name" innerRadius="60%" outerRadius="90%" paddingAngle={4} isAnimationActive={false}>
                     {languageData.map((entry, index) => (
-                      <Cell 
-                        key={`language-${index}`} 
-                        fill={String(entry.color ?? "#8b5cf6")}
-                        className="cursor-pointer outline-none" 
-                      />
+                      <Cell key={`language-${index}`} fill={String(entry.color ?? "#8b5cf6")} className="cursor-pointer outline-none" />
                     ))}
                   </Pie>
                 </PieChart>
               </ChartContainer>
               <div className="mt-4 sm:mt-5 flex flex-wrap gap-2 sm:gap-3">
                 {languageData.map((entry, index) => (
-                  <div
-                    key={`language-legend-${index}`}
-                    className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-0.5 sm:px-3 sm:py-1 text-[10px] sm:text-xs text-slate-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300"
-                  >
-                    <span
-                      className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full"
-                      style={{ backgroundColor: String(entry.color ?? "#8b5cf6") }}
-                    />
+                  <div key={`language-legend-${index}`} className="inline-flex items-center gap-1.5 sm:gap-2 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-0.5 sm:px-3 sm:py-1 text-[10px] sm:text-xs text-slate-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300">
+                    <span className="h-2 w-2 sm:h-2.5 sm:w-2.5 rounded-full" style={{ backgroundColor: String(entry.color ?? "#8b5cf6") }} />
                     <span>{String(entry.name)}</span>
                     <span className="text-slate-400 dark:text-slate-500">{String(entry.value)}%</span>
                   </div>
@@ -241,6 +213,7 @@ export default function Statistics({ section, githubStats }: StatisticsProps) {
             </CardContent>
           </Card>
 
+          {/* Bar — proyectos por mes: paddingLeft 5px solo en sm+ */}
           <Card className="border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
             <CardHeader>
               <CardTitle className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
@@ -249,21 +222,12 @@ export default function Statistics({ section, githubStats }: StatisticsProps) {
             </CardHeader>
             <CardContent>
               <ChartContainer config={projectChartConfig} className="aspect-square h-64 sm:aspect-video sm:h-80 w-full">
-                <BarChart data={projectsData}>
+                <BarChart data={projectsData} margin={{ left: -20, right: 10, top: 0, bottom: 0 }}>
                   <CartesianGrid vertical={false} />
                   <XAxis dataKey="month" tickLine={false} axisLine={false} tick={{ fontSize: 12 }} />
-                  <YAxis tickLine={false} axisLine={false} allowDecimals={false} tick={{ fontSize: 12 }} />
-                  <ChartTooltip 
-                    cursor={{ fill: "rgba(139, 92, 246, 0.1)" }}
-                    content={<ChartTooltipContent />} 
-                  />
-                  <Bar 
-                    dataKey="projects" 
-                    fill="var(--color-projects)" 
-                    radius={[10, 10, 0, 0]}
-                    isAnimationActive={false}
-                    className="cursor-pointer"
-                  />
+                  <YAxis tickLine={false} axisLine={false} allowDecimals={false} tick={{ fontSize: 12 }} width={30} />
+                  <ChartTooltip cursor={{ fill: "rgba(139, 92, 246, 0.1)" }} content={<ChartTooltipContent />} />
+                  <Bar dataKey="projects" fill="var(--color-projects)" radius={[10, 10, 0, 0]} isAnimationActive={false} className="cursor-pointer" />
                 </BarChart>
               </ChartContainer>
             </CardContent>
@@ -277,28 +241,19 @@ export default function Statistics({ section, githubStats }: StatisticsProps) {
             </CardHeader>
             <CardContent>
               <ChartContainer config={activityChartConfig} className="aspect-square h-64 sm:aspect-video sm:h-80 w-full">
-                <LineChart data={githubActivity}>
+                <LineChart data={githubActivity} margin={{ left: -20, right: 10 }}>
                   <CartesianGrid vertical={false} />
                   <XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fontSize: 12 }} />
-                  <YAxis tickLine={false} axisLine={false} allowDecimals={false} tick={{ fontSize: 12 }} />
-                  <ChartTooltip 
-                    content={<ChartTooltipContent indicator="line" />} 
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="commits"
-                    stroke="var(--color-commits)"
-                    strokeWidth={2.5}
-                    dot={{ fill: "var(--color-commits)", r: 4 }}
-                    activeDot={{ r: 6, className: "cursor-pointer" }}
-                    isAnimationActive={false}
-                  />
+                  <YAxis tickLine={false} axisLine={false} allowDecimals={false} tick={{ fontSize: 12 }} width={30} />
+                  <ChartTooltip content={<ChartTooltipContent indicator="line" />} />
+                  <Line type="monotone" dataKey="commits" stroke="var(--color-commits)" strokeWidth={2.5} dot={{ fill: "var(--color-commits)", r: 4 }} activeDot={{ r: 6, className: "cursor-pointer" }} isAnimationActive={false} />
                 </LineChart>
               </ChartContainer>
             </CardContent>
           </Card>
         </div>
 
+        {/* Metric cards */}
         <div className="mt-8 sm:mt-12 grid gap-4 sm:gap-6 grid-cols-2 md:grid-cols-3">
           {factualMetrics.map((metric) => (
             <MetricCard key={metric.label} label={metric.label} value={metric.value} />
@@ -313,9 +268,7 @@ function MetricCard({ label, value }: { label: string; value: string }) {
   return (
     <Card className="border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
       <CardContent className="pt-4 sm:pt-6">
-        <div className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
-          {value}
-        </div>
+        <div className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">{value}</div>
         <p className="mt-1 sm:mt-2 text-xs sm:text-sm leading-5 sm:leading-6 text-slate-600 dark:text-slate-400">{label}</p>
       </CardContent>
     </Card>

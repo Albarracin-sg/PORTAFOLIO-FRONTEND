@@ -32,7 +32,6 @@ export function HomePage() {
     fetchPublicPage('home')
       .then((result) => {
         if (!isActive) return;
-
         const sectionMap = result.sections.reduce<Record<string, { id: string; type: string; content: Record<string, unknown> }>>(
           (acc, section) => {
             acc[section.type] = { id: section.id, type: section.type, content: section.content };
@@ -40,41 +39,26 @@ export function HomePage() {
           },
           {},
         );
-
         setSections(sectionMap);
       })
-      .catch((error) => {
-        console.error('Error loading home page:', error);
-      })
-      .finally(() => {
-        if (isActive) {
-          setIsPageLoaded(true);
-        }
-      });
+      .catch((error) => { console.error('Error loading home page:', error); })
+      .finally(() => { if (isActive) setIsPageLoaded(true); });
 
     fetchPublicProjects()
       .then((result) => {
         if (!isActive) return;
-
         const orderedProjects = [...result].sort((a, b) => Number(b.featured) - Number(a.featured));
         setCarouselProjects(orderedProjects.map(mapPublicProjectToFeatured));
       })
-      .catch((error) => {
-        console.error('Error loading projects:', error);
-      })
-      .finally(() => {
-        if (isActive) {
-          setIsProjectsLoaded(true);
-        }
-      });
+      .catch((error) => { console.error('Error loading projects:', error); })
+      .finally(() => { if (isActive) setIsProjectsLoaded(true); });
 
-    return () => {
-      isActive = false;
-    };
+    return () => { isActive = false; };
   }, []);
 
   return (
     <>
+      {/* ── Hero ── */}
       <section id="home">
         {!isPageLoaded ? (
           <div className="flex h-[80vh] items-center justify-center">
@@ -91,6 +75,11 @@ export function HomePage() {
           <Hero scrollY={scrollY} section={sections.HERO} />
         )}
       </section>
+
+      {/* ── Separador Hero → About ── */}
+      <div className="py-8 sm:py-16" />
+
+      {/* ── About ── */}
       <section id="about">
         {!isPageLoaded ? (
           <div className="mx-auto max-w-7xl px-4 py-24 space-y-10">
@@ -107,6 +96,11 @@ export function HomePage() {
           <About />
         )}
       </section>
+
+      {/* ── Separador About → Projects ── */}
+      <div className="py-8 sm:py-16" />
+
+      {/* ── Projects ── */}
       <section id="projects">
         {!isProjectsLoaded ? (
           <div className="mx-auto max-w-7xl px-4 py-24 relative">
@@ -117,7 +111,6 @@ export function HomePage() {
               </div>
               <Skeleton className="h-12 w-40 rounded-xl" />
             </div>
-            
             <div className="relative">
               <LoadingScreen variant="inline" className="absolute inset-0 z-10 bg-background/20 backdrop-blur-[1px] border-none" />
               <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3 opacity-20">
@@ -131,10 +124,17 @@ export function HomePage() {
           <Projects projects={carouselProjects} section={sections.PROJECTS} />
         )}
       </section>
+
+      {/* ── Separador Projects → Contact (igual) ── */}
+      <div className="py-8 sm:py-16" />
+
+      {/* ── Contact ── */}
       <section id="contact">
         <Contact section={sections.CONTACT} />
       </section>
+
+      {/* ── Espacio antes del footer ── */}
+      <div className="py-4 sm:py-8" />
     </>
   );
 }
-

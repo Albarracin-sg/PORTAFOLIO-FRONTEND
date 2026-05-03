@@ -383,7 +383,7 @@ export default function Contact({ section }: ContactProps) {
               <p className="text-xs font-medium uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-3">
                 {String(socialTitle)}
               </p>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                 {socialItems.map((social, index) => {
                   const Icon = resolveIcon(social.icon) as IconComponent;
                   return (

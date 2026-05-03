@@ -68,16 +68,11 @@ const SkillMarqueeRow = memo(function SkillMarqueeRow({ items, reverse }: { item
   );
 });
 
-// Two-row marquee: all skills split into top/bottom tracks
 const SkillMarquee = memo(function SkillMarquee({ groups }: { groups: SkillGroup[] }) {
   const { top, bot } = useMemo(() => {
     const all = groups.flatMap((g) => g.items);
     const mid = Math.ceil(all.length / 2);
-
-    return {
-      top: all.slice(0, mid),
-      bot: all.slice(mid),
-    };
+    return { top: all.slice(0, mid), bot: all.slice(mid) };
   }, [groups]);
 
   return (
@@ -105,7 +100,8 @@ export default function About(_props: AboutProps) {
         .fu4 { animation: fadeUp .6s .35s ease both }
       `}</style>
 
-      <section className="relative overflow-hidden px-4 pb-24 pt-14 sm:px-6 lg:px-8">
+      {/* pb-16 en vez de pb-32 — el separador en HomePage pone el resto del espacio */}
+      <section className="relative overflow-hidden px-4 pb-24 pt-0 sm:px-6 lg:px-8">
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute left-1/2 top-0 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-violet-600/8 blur-[140px]" />
         </div>
@@ -113,7 +109,7 @@ export default function About(_props: AboutProps) {
         <div className="mx-auto max-w-5xl">
 
           {/* HEADER */}
-          <div className="mx-auto mb-14 max-w-4xl text-center fu1">
+          <div className="mx-auto mb-36 max-w-4xl text-center fu1">
             <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-400/25 bg-violet-500/8 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-violet-400">
               <Sparkles className="h-3 w-3" />
               Backend-first engineer
@@ -138,18 +134,18 @@ export default function About(_props: AboutProps) {
             </div>
           </div>
 
-{/* SKILLS MARQUEE — 2 rows, monochrome */}
-          <div className="mb-16 fu2">
+          {/* SKILLS MARQUEE */}
+          <div className="mb-36 fu2">
             <SectionLabel icon={<Code2 className="h-3.5 w-3.5" />} label={about.technicalSkills} />
-            <div className="mt-6">
+            <div className="mt-8">
               <SkillMarquee groups={technicalSkillGroups} />
             </div>
           </div>
 
           {/* SOFT SKILLS */}
-          <div className="mb-16 fu3">
+          <div className="mb-36 fu3">
             <SectionLabel icon={<Brain className="h-3.5 w-3.5" />} label={about.softSkillsTitle} />
-            <div className="mt-6 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="mt-8 grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
               {about.softSkillsList.map((skill, i) => (
                 <div
                   key={skill}
@@ -165,12 +161,12 @@ export default function About(_props: AboutProps) {
           </div>
 
           {/* EXPERIENCE + PROJECTS + EDUCATION */}
-          <div className="fu4 space-y-16">
+          <div className="fu4 space-y-36">
 
             {/* Experience */}
             <section>
               <SectionLabel icon={<Briefcase className="h-3.5 w-3.5" />} label={about.professionalExperience} />
-              <div className="relative mt-6 space-y-5 pl-5 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-gradient-to-b before:from-violet-500/50 before:to-transparent">
+              <div className="relative mt-8 space-y-5 pl-5 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-gradient-to-b before:from-violet-500/50 before:to-transparent">
                 {about.professionalExperienceItems.map((item, i) => (
                   <article
                     key={`${item.title}-${i}`}
@@ -214,7 +210,7 @@ export default function About(_props: AboutProps) {
             {/* Projects */}
             <section>
               <SectionLabel icon={<Code2 className="h-3.5 w-3.5" />} label={about.personalProjects} />
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
                 {about.personalProjectItems.map((item, i) => (
                   <article
                     key={`${item.title}-${i}`}
@@ -248,7 +244,7 @@ export default function About(_props: AboutProps) {
             {/* Education */}
             <section>
               <SectionLabel icon={<GraduationCap className="h-3.5 w-3.5" />} label={about.education} />
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+              <div className="mt-8 grid gap-4 sm:grid-cols-2">
                 {about.educationItems.map((item, i) => (
                   <article
                     key={`${item.title}-${i}`}
@@ -275,7 +271,6 @@ export default function About(_props: AboutProps) {
   );
 }
 
-// Shared section label
 function SectionLabel({ icon, label }: { icon: React.ReactNode; label: string }) {
   return (
     <div className="flex items-center gap-4">
