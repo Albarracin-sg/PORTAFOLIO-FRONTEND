@@ -521,16 +521,30 @@ function ProjectCard({
 
       <div className={`${isListView ? "flex flex-1 flex-col p-6 lg:flex-row lg:gap-6" : "p-6"}`}>
         <div className={`${isListView ? "min-w-0 flex-1" : ""}`}>
-          <CardHeader className="mb-4 p-0">
-            <CardTitle className="mb-2 text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
-              {project.title}
-            </CardTitle>
-            <p className="text-sm leading-7 text-slate-600 dark:text-slate-400">{project.description}</p>
-          </CardHeader>
+          <CardHeader className="mb-4 p-0 space-y-3">
+            <div className="space-y-1">
+              <CardTitle className="line-clamp-1 text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                {project.title}
+              </CardTitle>
+              
+              <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
+                <div className="flex items-center space-x-1">
+                  <Star className="h-3.5 w-3.5" />
+                  <span>{project.stars}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <GitFork className="h-3.5 w-3.5" />
+                  <span>{project.forks}</span>
+                </div>
+                <div className="flex items-center space-x-1">
+                  <Eye className="h-3.5 w-3.5" />
+                  <span>{project.views}</span>
+                </div>
+              </div>
+            </div>
 
-          <CardContent className="space-y-4 p-0">
-            <div className="flex flex-wrap gap-2">
-              {project.technologies.slice(0, isListView ? 8 : 4).map((tech) => (
+            <div className="flex h-20 sm:h-16 flex-wrap content-start gap-1.5 overflow-hidden">
+              {project.technologies.map((tech) => (
                 <SkillBubble
                   key={tech}
                   name={tech}
@@ -538,64 +552,66 @@ function ProjectCard({
                   size="sm"
                 />
               ))}
-              {project.technologies.length > (isListView ? 8 : 4) && (
-                <div className="flex items-center justify-center rounded-full border border-slate-200 bg-white/85 px-2 py-1 text-[10px] font-medium text-slate-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-400">
-                  +{project.technologies.length - (isListView ? 8 : 4)}
-                </div>
-              )}
             </div>
-          </CardContent>
+
+            <div className="h-24 sm:h-20 overflow-hidden">
+              <p className="line-clamp-4 sm:line-clamp-3 text-sm leading-6 text-slate-600 dark:text-slate-400">
+                {project.description}
+              </p>
+            </div>
+          </CardHeader>
         </div>
 
         <div className={`${isListView ? "mt-6 lg:mt-0 lg:w-64 lg:border-l lg:border-slate-200 lg:pl-6 dark:lg:border-white/[0.07]" : "mt-4"}`}>
           <CardContent className="space-y-4 p-0">
-            <div className={`text-sm text-slate-600 dark:text-slate-400 ${isListView ? "space-y-3" : "flex items-center justify-between"}`}>
-              <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-1">
-                  <Star className="h-4 w-4" />
-                  <span>{project.stars}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <GitFork className="h-4 w-4" />
-                  <span>{project.forks}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Eye className="h-4 w-4" />
-                  <span>{project.views}</span>
-                </div>
-              </div>
-              <div className="flex items-center space-x-1">
-                <Calendar className="h-4 w-4" />
+            {!isListView && (
+              <div className="flex items-center space-x-1 text-xs text-slate-500 dark:text-slate-400">
+                <Calendar className="h-3.5 w-3.5" />
                 <span>
                   {t("projects.updatedOn")}: {formatDate(project.date)}
                 </span>
               </div>
-            </div>
+            )}
+            
+            {isListView && (
+               <div className="flex items-center space-x-1 text-xs text-slate-500 dark:text-slate-400 mb-4">
+                <Calendar className="h-3.5 w-3.5" />
+                <span>
+                  {t("projects.updatedOn")}: {formatDate(project.date)}
+                </span>
+              </div>
+            )}
 
-            <div className={`flex ${isListView ? "flex-col gap-2" : "space-x-2 pt-2"}`}>
-              <Button size="sm" onClick={() => onSelect(project)} className={isListView ? "w-full" : "flex-1"}>
+            <div className={`flex items-center gap-2 ${isListView ? "flex-col lg:flex-row" : "pt-2"}`}>
+              <Button 
+                size="sm" 
+                onClick={() => onSelect(project)} 
+                className={`bg-violet-600 font-medium text-white hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700 ${isListView ? "w-full lg:flex-1" : "flex-1"}`}
+              >
                 <Code className="mr-2 h-4 w-4" />
                 {t("projects.filters.viewDetails")}
               </Button>
-              <div className={`flex gap-2 ${isListView ? "w-full" : ""}`}>
+              
+              <div className={`flex items-center gap-2 ${isListView ? "w-full lg:w-auto" : ""}`}>
                 <Button
                   size="sm"
                   variant="outline"
+                  className="h-9 w-9 p-0 border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:border-white/10 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"
                   onClick={() => window.open(project.github, "_blank")}
-                  aria-label={t("projects.actions.github")}
-                  className={isListView ? "flex-1" : ""}
+                  title={t("projects.actions.github")}
                 >
-                  <Github className="h-4 w-4" />
+                  <Github className="h-4.5 w-4.5" />
                 </Button>
+                
                 {project.liveDemo && (
                   <Button
                     size="sm"
                     variant="outline"
+                    className="h-9 w-9 p-0 border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:border-white/10 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"
                     onClick={() => window.open(project.liveDemo, "_blank")}
-                    aria-label={t("projects.actions.live")}
-                    className={isListView ? "flex-1" : ""}
+                    title={t("projects.actions.live")}
                   >
-                    <ExternalLink className="h-4 w-4" />
+                    <ExternalLink className="h-4.5 w-4.5" />
                   </Button>
                 )}
               </div>

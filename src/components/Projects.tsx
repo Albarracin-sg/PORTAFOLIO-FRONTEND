@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "./ui/card";
 import { Button } from "./ui/button";
-import { Badge } from "./ui/badge";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "./ui/carousel";
 import { ArrowRight, ExternalLink, GitFork, Star } from "lucide-react";
 import { EditableText } from "@/features/admin/InlineEdit";
@@ -142,45 +141,33 @@ export default function Projects({ projects, section }: ProjectsProps) {
                           alt={project.name}
                           className="h-full w-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-slate-900/5 to-transparent dark:from-slate-950/70 dark:via-slate-950/10 dark:to-transparent" />
-                        {project.featured ? (
-                          <div className="absolute left-4 top-4">
-                            <Badge className="rounded-full border-0 bg-violet-600 px-3 py-1 text-xs font-semibold text-white">
-                              <Star className="mr-1 h-3 w-3 fill-current" />
-                              Featured
-                            </Badge>
-                          </div>
-                        ) : null}
+                        {/* Separador elegante más visible */}
+                        <div className="absolute -bottom-px left-0 h-[1.5px] w-full bg-linear-to-r from-transparent via-slate-300 to-transparent dark:via-violet-500/30" />
                       </div>
 
-                      <CardHeader className="space-y-4 bg-white text-slate-900 dark:bg-slate-950/95 dark:text-white">
-                        <div className="space-y-3">
-                          <CardTitle className="font-display text-3xl leading-tight text-slate-900 dark:text-white">
+                      <CardHeader className="space-y-4 bg-white pb-2 text-slate-900 dark:bg-slate-950/95 dark:text-white">
+                        <div className="space-y-1">
+                          <CardTitle className="font-display line-clamp-1 text-2xl font-bold leading-tight text-slate-900 dark:text-white">
                             {project.name}
                           </CardTitle>
-                          <p className="line-clamp-3 text-sm leading-7 text-slate-600 dark:text-slate-300">
-                            {project.description}
-                          </p>
-                        </div>
-
-                        <div className="flex items-center gap-5 text-sm text-slate-500 dark:text-slate-400">
-                          <div className="flex items-center gap-1.5">
-                            <Star className="h-4 w-4" />
-                            <span>{project.stats?.stars ?? 0}</span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <GitFork className="h-4 w-4" />
-                            <span>{project.stats?.forks ?? 0}</span>
-                          </div>
-                          <div className="ml-auto text-xs font-semibold uppercase tracking-[0.22em] text-violet-400">
-                            GitHub
+                          
+                          <div className="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400">
+                            <div className="flex items-center gap-1">
+                              <Star className="h-3.5 w-3.5" />
+                              <span>{project.stats?.stars ?? 0}</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <GitFork className="h-3.5 w-3.5" />
+                              <span>{project.stats?.forks ?? 0}</span>
+                            </div>
+                            <div className="ml-auto font-semibold uppercase tracking-wider text-violet-500/80">
+                              {project.category || 'Full Stack'}
+                            </div>
                           </div>
                         </div>
-                      </CardHeader>
 
-                      <CardContent className="flex flex-1 flex-col gap-4 bg-white pt-0 text-slate-700 dark:bg-slate-950/95 dark:text-slate-200">
-                        <div className="flex flex-wrap gap-2">
-                          {technologies.slice(0, 4).map((tech) => (
+                        <div className="flex h-20 sm:h-16 flex-wrap content-start gap-1.5 overflow-hidden">
+                          {technologies.map((tech) => (
                             <SkillBubble
                               key={tech}
                               name={tech}
@@ -189,29 +176,49 @@ export default function Projects({ projects, section }: ProjectsProps) {
                             />
                           ))}
                         </div>
+                      </CardHeader>
+
+                      <CardContent className="flex flex-1 flex-col bg-white pt-0 text-slate-700 dark:bg-slate-950/95 dark:text-slate-200">
+                        <div className="h-24 sm:h-20 overflow-hidden">
+                          <p className="line-clamp-4 sm:line-clamp-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
+                            {project.description}
+                          </p>
+                        </div>
                       </CardContent>
 
-                      <CardFooter className="mt-auto flex-col gap-3 border-t border-slate-200 bg-white pt-5 dark:border-white/10 dark:bg-slate-950/95">
+                      <CardFooter className="mt-auto flex items-center gap-2 border-t border-slate-200 bg-white p-4 pt-4 dark:border-white/10 dark:bg-slate-950/95">
                         <Button
-                          variant="outline"
-                          className="h-11 w-full border-slate-300 bg-transparent text-slate-900 hover:bg-slate-50 dark:border-white/15 dark:text-white dark:hover:bg-white/5"
+                          className="h-10 flex-1 bg-violet-600 font-medium text-white hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700"
                           onClick={() => handleViewMore(project)}
                         >
                           {t('projects.filters.viewDetails')}
                         </Button>
-                        {project.liveUrl ? (
+                        
+                        {project.githubUrl && (
                           <Button
-                            size="sm"
-                            variant="ghost"
-                            className="w-full justify-center text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-white/5 dark:hover:text-white"
+                            variant="outline"
+                            size="icon"
+                            className="h-10 w-10 shrink-0 border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:border-white/10 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"
                             asChild
                           >
-                            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                              {t('projects.modal.viewLive')}
-                              <ExternalLink className="ml-2 h-4 w-4" />
+                            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" title={t('projects.actions.github')}>
+                              <GitFork className="h-4.5 w-4.5" />
                             </a>
                           </Button>
-                        ) : null}
+                        )}
+
+                        {project.liveUrl && (
+                          <Button
+                            variant="outline"
+                            size="icon"
+                            className="h-10 w-10 shrink-0 border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:border-white/10 dark:text-slate-400 dark:hover:bg-white/5 dark:hover:text-white"
+                            asChild
+                          >
+                            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" title={t('projects.modal.viewLive')}>
+                              <ExternalLink className="h-4.5 w-4.5" />
+                            </a>
+                          </Button>
+                        )}
                       </CardFooter>
                     </Card>
                   </CarouselItem>

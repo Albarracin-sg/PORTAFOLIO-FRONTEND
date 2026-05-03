@@ -28,11 +28,18 @@ type DetailSectionProps = {
   title: string;
   children: ReactNode;
   withIndent?: boolean;
+  className?: string;
 };
 
-function DetailSection({ icon, title, children, withIndent = false }: DetailSectionProps) {
+function DetailSection({ 
+  icon, 
+  title, 
+  children, 
+  withIndent = false,
+  className = "" 
+}: DetailSectionProps) {
   return (
-    <section className="p-7 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03]">
+    <section className={["p-7 rounded-2xl border border-slate-200 dark:border-white/10 bg-slate-50 dark:bg-white/[0.03] flex flex-col", className].join(' ')}>
       <div className="flex items-center gap-2.5 mb-4">
         <div className="p-2 rounded-xl bg-slate-200/60 dark:bg-white/5">{icon}</div>
         <h2 className="text-base font-semibold text-slate-900 dark:text-gray-100">
@@ -40,14 +47,14 @@ function DetailSection({ icon, title, children, withIndent = false }: DetailSect
         </h2>
       </div>
 
-      <p
+      <div
         className={[
-          'text-sm leading-7 text-slate-600 dark:text-slate-400',
+          'text-sm leading-7 text-slate-600 dark:text-slate-400 flex-1',
           withIndent ? 'pl-[2.375rem]' : '',
         ].join(' ')}
       >
         {children}
-      </p>
+      </div>
     </section>
   );
 }
@@ -141,12 +148,7 @@ export function ProjectDetailPage() {
   const safeProjectYear = Number.isNaN(projectYear) ? '' : projectYear;
 
   return (
-    <div className="min-h-screen bg-background text-foreground pt-28 pb-24 selection:bg-violet-500/30">
-      <div className="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-        <div className="absolute -top-32 -right-32 w-[480px] h-[480px] bg-violet-600/10 dark:bg-violet-600/6 blur-[140px] rounded-full" />
-        <div className="absolute -bottom-32 -left-32 w-[480px] h-[480px] bg-blue-600/8 dark:bg-blue-600/5 blur-[140px] rounded-full" />
-      </div>
-
+    <div className="min-h-screen pt-28 pb-24 selection:bg-violet-500/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-12">
           <Button
@@ -227,58 +229,44 @@ export function ProjectDetailPage() {
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12">
-          <div className="lg:col-span-8 space-y-6">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
+          <div className="lg:col-span-8 space-y-10">
             <div className="group relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-violet-600 to-blue-600 rounded-[24px] blur-xl opacity-10 dark:opacity-15 group-hover:opacity-20 transition duration-700" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-violet-600 to-blue-600 rounded-[32px] blur-2xl opacity-10 dark:opacity-15 group-hover:opacity-20 transition duration-700" />
 
-              <div className="relative aspect-video rounded-[24px] overflow-hidden border border-slate-200 dark:border-white/10 shadow-xl shadow-slate-200/50 dark:shadow-black/30 bg-slate-100 dark:bg-slate-900">
+              <div className="relative aspect-video rounded-[32px] overflow-hidden border border-slate-200 dark:border-white/10 shadow-2xl shadow-slate-200/50 dark:shadow-black/40 bg-slate-100 dark:bg-slate-900">
                 <img
                   src={project.imageUrl}
                   alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
                 />
               </div>
             </div>
 
-            <DetailSection
-              icon={<Globe className="w-4 h-4 text-violet-600 dark:text-violet-400" />}
-              title={t('projects.detail.whatIs', '¿Qué es?')}
-            >
-              {project.description}
-            </DetailSection>
-
-            <DetailSection
-              icon={<Target className="w-4 h-4 text-slate-600 dark:text-slate-300" />}
-              title={t('projects.detail.problem', 'El Problema')}
-              withIndent
-            >
-              {project.problem ||
-                t(
-                  'projects.detail.problemFallback',
-                  'Este proyecto nació de la necesidad de optimizar flujos complejos y modernizar la interacción del usuario en entornos críticos.',
-                )}
-            </DetailSection>
-
-            <div className="grid sm:grid-cols-2 gap-5">
+            <div className="space-y-8">
               <DetailSection
-                icon={<Zap className="w-4 h-4 text-slate-600 dark:text-slate-300" />}
-                title={t('projects.detail.challenge', 'El Reto')}
-                withIndent
+                icon={<Globe className="w-5 h-5 text-violet-600 dark:text-violet-400" />}
+                title={t('projects.detail.whatIs', '¿Qué es?')}
               >
-                {project.challenge ||
+                {project.description}
+              </DetailSection>
+
+              <DetailSection
+                icon={<Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />}
+                title={t('projects.detail.problem', 'El Problema')}
+              >
+                {project.problem ||
                   t(
-                    'projects.detail.challengeFallback',
-                    'Superar las barreras de escalabilidad y garantizar performance excepcional bajo alta demanda.',
+                    'projects.detail.problemFallback',
+                    'Este proyecto nació de la necesidad de optimizar flujos complejos y modernizar la interacción del usuario en entornos críticos.',
                   )}
               </DetailSection>
 
               <DetailSection
                 icon={
-                  <CheckCircle2 className="w-4 h-4 text-slate-600 dark:text-slate-300" />
+                  <CheckCircle2 className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
                 }
                 title={t('projects.detail.solution', 'Solución')}
-                withIndent
               >
                 {project.solution ||
                   t(
@@ -290,8 +278,8 @@ export function ProjectDetailPage() {
           </div>
 
           <aside className="lg:col-span-4">
-            <div className="sticky top-24">
-              <div className="rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
+            <div className="sticky top-28 space-y-6 flex flex-col">
+              <div className="rounded-2xl bg-slate-50 dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden shrink-0">
                 <div className="p-6 border-b border-slate-100 dark:border-white/5">
                   <div className="flex items-center gap-2 mb-4">
                     <Code2 className="w-4 h-4 text-violet-600 dark:text-violet-400 shrink-0" />
@@ -440,6 +428,18 @@ export function ProjectDetailPage() {
                   )}
                 </div>
               </div>
+
+              <DetailSection
+                icon={<Zap className="w-5 h-5 text-amber-500 dark:text-amber-400" />}
+                title={t('projects.detail.challenge', 'El Reto')}
+                className="flex-1"
+              >
+                {project.challenge ||
+                  t(
+                    'projects.detail.challengeFallback',
+                    'Superar las barreras de escalabilidad y garantizar performance excepcional bajo alta demanda.',
+                  )}
+              </DetailSection>
             </div>
           </aside>
         </div>
