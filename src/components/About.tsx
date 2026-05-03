@@ -1,4 +1,4 @@
-import { memo, useMemo } from "react";
+import { memo, useMemo, useEffect, useRef, useState } from "react";
 import { Briefcase, GraduationCap, MapPin, Sparkles, ArrowRight, Code2, Brain } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { SkillBubble } from "./SkillBubble";
@@ -87,6 +87,42 @@ export default function About(_props: AboutProps) {
   const { t } = useTranslation();
   const about = useMemo(() => t("about", { returnObjects: true }) as AboutDictionary, [t]);
   const technicalSkillGroups = useMemo(() => about.technicalSkillGroups ?? [], [about]);
+  
+  // Refs para la animación de la bolita seguidora
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const [dotPosition, setDotPosition] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!timelineRef.current) return;
+
+      const rect = timelineRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      
+      // Calculamos el inicio y fin de la sección relativa al viewport
+      // Queremos que el punto empiece a moverse cuando la parte superior de la línea de tiempo llega a la mitad de la pantalla
+      const offset = windowHeight / 2;
+      const start = rect.top - offset;
+      const height = rect.height;
+      
+      if (start <= 0) {
+        // Calculamos el progreso (0 a 1) basándonos en cuánto scrolleamos dentro de la línea
+        const progress = Math.min(Math.max(-start / height, 0), 1);
+        setDotPosition(progress * height);
+      } else {
+        setDotPosition(0);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    // Pequeño delay para asegurar que el layout esté listo
+    const timer = setTimeout(handleScroll, 100);
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <>
@@ -100,7 +136,6 @@ export default function About(_props: AboutProps) {
         .fu4 { animation: fadeUp .6s .35s ease both }
       `}</style>
 
-      {/* pb-16 en vez de pb-32 — el separador en HomePage pone el resto del espacio */}
       <section className="relative overflow-hidden px-4 pb-24 pt-0 sm:px-6 lg:px-8">
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute left-1/2 top-0 h-[400px] w-[700px] -translate-x-1/2 rounded-full bg-violet-600/8 blur-[140px]" />
@@ -166,15 +201,30 @@ export default function About(_props: AboutProps) {
             {/* Experience */}
             <section>
               <SectionLabel icon={<Briefcase className="h-3.5 w-3.5" />} label={about.professionalExperience} />
-              <div className="relative mt-8 space-y-5 pl-5 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-gradient-to-b before:from-violet-500/50 before:to-transparent">
+              
+              <div 
+                ref={timelineRef}
+                className="relative mt-8 space-y-5 pl-5 before:absolute before:inset-y-0 before:left-0 before:w-px before:bg-slate-200 dark:before:bg-white/10"
+              >
+                {/* Línea activa que acompaña el scroll */}
+                <div 
+                  className="absolute left-0 top-0 w-px bg-gradient-to-b from-violet-600 via-violet-500 to-violet-400 transition-all duration-150 ease-out"
+                  style={{ height: `${dotPosition}px` }}
+                />
+
+                {/* La bolita "voladora" que te acompaña */}
+                <div 
+                  className="pointer-events-none absolute -left-[7.5px] z-20 flex h-4 w-4 items-center justify-center rounded-full border-2 border-violet-500 bg-white shadow-[0_0_15px_rgba(139,92,246,0.5)] transition-transform duration-150 ease-out dark:bg-slate-950"
+                  style={{ transform: `translateY(${dotPosition}px)` }}
+                >
+                  <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-500" />
+                </div>
+
                 {about.professionalExperienceItems.map((item, i) => (
                   <article
                     key={`${item.title}-${i}`}
                     className="relative rounded-2xl border border-slate-200 bg-white/85 p-6 transition-colors hover:border-violet-400/20 hover:bg-white dark:border-white/[0.07] dark:bg-white/[0.025] dark:hover:bg-white/[0.04]"
                   >
-                    <span className="absolute -left-[21px] top-7 flex h-3.5 w-3.5 items-center justify-center rounded-full border border-violet-400/50 bg-white dark:bg-slate-950">
-                      <span className="h-1 w-1 rounded-full bg-violet-400" />
-                    </span>
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div>
                         <h4 className="text-base font-semibold text-slate-900 dark:text-white">{item.title}</h4>
