@@ -141,8 +141,8 @@ export default function Projects({ projects, section }: ProjectsProps) {
                           alt={project.name}
                           className="h-full w-full object-cover"
                         />
-                        {/* Separador elegante más visible */}
-                        <div className="absolute -bottom-px left-0 h-[1.5px] w-full bg-linear-to-r from-transparent via-slate-300 to-transparent dark:via-violet-500/30" />
+                        {/* Separador elegante más visible y asertivo */}
+                        <div className="absolute bottom-0 left-0 h-[2px] w-full bg-linear-to-r from-transparent via-slate-400/80 to-transparent dark:via-violet-500/40 z-10" />
                       </div>
 
                       <CardHeader className="space-y-4 bg-white pb-2 text-slate-900 dark:bg-slate-950/95 dark:text-white">

@@ -27,7 +27,6 @@ export default function Hero({ section }: HeroProps) {
   const [uploading, setUploading] = useState<'primary' | 'secondary' | null>(null);
   const activeLogo = isDark ? '/logoNigth.png' : logoImg;
   const primaryImage = activeLogo;
-  const secondaryImage = activeLogo;
   const canEditImages = isEditMode && !!token && window.location.pathname.startsWith('/admin/live');
 
   const handleImageChange = (kind: 'primary' | 'secondary') => async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -153,13 +152,11 @@ export default function Hero({ section }: HeroProps) {
                 onMouseLeave={() => setIsImageHovered(false)}
                 onClick={() => setIsImageHovered(!isImageHovered)}
               >
-                {/* Illustration Image */}
+                {/* Logo Image with smooth scale on hover */}
                 <div
                   className={`transition-all duration-700 transform ${
-                    isImageHovered
-                      ? "opacity-0 scale-[1.08]"
-                      : "opacity-100 scale-100"
-                  } ${isImageHovered ? 'pointer-events-none' : 'relative lg:absolute lg:inset-0'}`}
+                    isImageHovered ? "scale-[1.05]" : "scale-100"
+                  } relative lg:absolute lg:inset-0`}
                 >
                   <EditableImage
                     src={primaryImage}
@@ -169,23 +166,7 @@ export default function Hero({ section }: HeroProps) {
                   />
                 </div>
 
-                {/* Real Photo */}
-                <div
-                  className={`absolute inset-0 transition-all duration-700 transform ${
-                    isImageHovered
-                      ? "opacity-100 scale-[1.08]"
-                      : "opacity-0 scale-95"
-                  } ${!isImageHovered ? 'pointer-events-none' : ''}`}
-                >
-                  <EditableImage
-                    src={secondaryImage}
-                    alt="Professional Portrait"
-                    onSave={(value) => updateField('secondaryImage', value)}
-                    className="h-full w-full object-contain"
-                  />
-                </div>
-
-                {/* Skill Bubbles INSIDE the image container */}
+                {/* Skill Bubbles */}
                 <SkillBubble
                   name="React"
                   size="md"
