@@ -169,17 +169,17 @@ export default function Navbar({
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-8">
                 {navItems.map((item) => (
-                  <button
+                  <Link
                     key={item.key}
-                    onClick={() => scrollToSection(item.key)}
+                    to={item.key === "stats" ? "/stats" : `/#${item.key}`}
                     className={`relative cursor-pointer px-3 py-2 text-sm transition-colors after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-[calc(100%-1.5rem)] after:-translate-x-1/2 after:rounded-full after:bg-violet-500 after:transition-transform after:duration-300 ${
-                      currentPage === item.key
+                      currentPage === item.key || (currentPage === 'home' && item.key === 'home')
                         ? "text-primary after:scale-x-100"
                         : "text-muted-foreground after:scale-x-0 hover:text-primary hover:after:scale-x-100"
                     }`}
                   >
                     {item.label}
-                  </button>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -277,11 +277,12 @@ export default function Navbar({
           >
             <div className="space-y-2">
               {navItems.map((item, index) => (
-                <button
+                <Link
                   key={item.key}
-                  onClick={() => { scrollToSection(item.key); setIsMobileMenuOpen(false); }}
-                  className={`w-full rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 cursor-pointer ${
-                    currentPage === item.key
+                  to={item.key === "stats" ? "/stats" : `/#${item.key}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`block w-full rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 cursor-pointer ${
+                    currentPage === item.key || (currentPage === 'home' && item.key === 'home')
                       ? isDark
                         ? "bg-violet-500/15 text-violet-300 shadow-[0_0_0_1px_rgba(139,92,246,0.22)]"
                         : "bg-violet-50 text-violet-700 shadow-[0_0_0_1px_rgba(139,92,246,0.12)]"
@@ -296,7 +297,7 @@ export default function Navbar({
                   }}
                 >
                   {item.label}
-                </button>
+                </Link>
               ))}
             </div>
 
