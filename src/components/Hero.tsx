@@ -60,11 +60,9 @@ export default function Hero({ section }: HeroProps) {
               </p>
             </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <Button
-                size="lg"
-                className="gap-2"
+            {/* CTA Buttons - Navbar Mobile Menu Aesthetic */}
+            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+              <button
                 onClick={() => {
                   const element = document.getElementById("projects");
                   if (element) {
@@ -74,14 +72,13 @@ export default function Hero({ section }: HeroProps) {
                     });
                   }
                 }}
+                className="group flex items-center justify-center gap-3 rounded-2xl px-6 py-3 text-sm font-medium transition-all duration-300 bg-violet-600 text-white shadow-lg shadow-violet-500/20 hover:bg-violet-700 hover:scale-[1.02] active:scale-95 dark:bg-violet-500 dark:hover:bg-violet-600"
               >
                 {t('hero.viewProjects')}
-                <ArrowRight className="h-5 w-5" />
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="gap-2"
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </button>
+
+              <button
                 onClick={() => {
                   const element = document.getElementById("contact");
                   if (element) {
@@ -91,21 +88,20 @@ export default function Hero({ section }: HeroProps) {
                     });
                   }
                 }}
+                className="flex items-center justify-center gap-3 rounded-2xl px-6 py-3 text-sm font-medium transition-all duration-300 border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-50 hover:border-slate-300 hover:scale-[1.02] active:scale-95 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/80 dark:hover:bg-white/[0.08]"
               >
-                <Mail className="h-5 w-5" />
+                <Mail className="h-4 w-4" />
                 {t('hero.contactMe')}
-              </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="gap-2 sm:hidden border-violet-500/50 text-violet-700 dark:text-violet-400"
-                asChild
+              </button>
+
+              <a
+                href={cvPdf}
+                download="JUAN_ALBARRACIN_CV.pdf"
+                className="flex sm:hidden items-center justify-center gap-3 rounded-2xl px-6 py-3 text-sm font-medium transition-all duration-300 border border-violet-200 bg-violet-50 text-violet-700 shadow-sm hover:bg-violet-100 hover:scale-[1.02] active:scale-95 dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-300 dark:hover:bg-violet-500/20"
               >
-                <a href={cvPdf} download="JUAN_ALBARRACIN_CV.pdf">
-                  <Download className="h-5 w-5" />
-                  {t('nav.downloadCV')}
-                </a>
-              </Button>
+                <Download className="h-4 w-4" />
+                {t('nav.downloadCV')}
+              </a>
             </div>
 
             {/* Quick Stats */}
