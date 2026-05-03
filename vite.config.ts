@@ -66,6 +66,7 @@
       },
       build: {
         target: 'esnext',
+        chunkSizeWarningLimit: 500,
         outDir: 'build',
         rollupOptions: {
           output: {
