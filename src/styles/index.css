@@ -64,4 +64,40 @@ body,
 #root {
   width: 100%;
   overflow-x: hidden;
+  cursor: default;
+}
+
+/* Solo forzar default en elementos puramente de texto para evitar I-beam */
+h1, h2, h3, h4, h5, h6, p, li, section, article {
+  cursor: default;
+}
+
+/* 
+   Asegurar que los elementos interactivos Y TODO LO QUE TENGAN ADENTRO 
+   tengan el cursor pointer. El '*' es clave para que spans/divs internos 
+   no rompan la experiencia.
+*/
+a, 
+a *,
+button, 
+button *,
+[role="button"],
+[role="button"] *,
+input[type="submit"],
+input[type="button"],
+.cursor-pointer,
+.cursor-pointer * {
+  cursor: pointer !important;
+}
+
+/* Los inputs de texto y textareas sí deben mantener el cursor de texto */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="tel"],
+input[type="url"],
+input[type="search"],
+textarea {
+  cursor: text !important;
 }

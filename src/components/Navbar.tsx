@@ -40,7 +40,6 @@ export default function Navbar({
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-
       if (currentScrollY < 24) {
         setIsVisible(true);
       } else if (currentScrollY < lastScrollY.current) {
@@ -48,19 +47,15 @@ export default function Navbar({
       } else if (currentScrollY > lastScrollY.current) {
         setIsVisible(false);
       }
-
       lastScrollY.current = currentScrollY;
     };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
     if (!isMobileMenuOpen) {
       const previousScrollY = lockedScrollY.current;
-
       document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
       document.body.style.position = "";
@@ -68,16 +63,10 @@ export default function Navbar({
       document.body.style.left = "";
       document.body.style.right = "";
       document.body.style.width = "";
-
-      if (previousScrollY) {
-        window.scrollTo(0, previousScrollY);
-      }
-
+      if (previousScrollY) window.scrollTo(0, previousScrollY);
       return;
     }
-
     lockedScrollY.current = window.scrollY;
-
     document.documentElement.style.overflow = "hidden";
     document.body.style.overflow = "hidden";
     document.body.style.position = "fixed";
@@ -85,10 +74,8 @@ export default function Navbar({
     document.body.style.left = "0";
     document.body.style.right = "0";
     document.body.style.width = "100%";
-
     return () => {
       const previousScrollY = lockedScrollY.current;
-
       document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
       document.body.style.position = "";
@@ -96,10 +83,7 @@ export default function Navbar({
       document.body.style.left = "";
       document.body.style.right = "";
       document.body.style.width = "";
-
-      if (previousScrollY) {
-        window.scrollTo(0, previousScrollY);
-      }
+      if (previousScrollY) window.scrollTo(0, previousScrollY);
     };
   }, [isMobileMenuOpen]);
 
@@ -120,67 +104,42 @@ export default function Navbar({
     languageOptions.find((option) => option.value === language) ?? languageOptions[0];
 
   const themeLabel = language === "es" ? "Tema" : "Theme";
-
   const themeModeLabel = isDark
-    ? language === "es"
-      ? "Claro"
-      : "Light"
-    : language === "es"
-      ? "Oscuro"
-      : "Dark";
-
+    ? language === "es" ? "Claro" : "Light"
+    : language === "es" ? "Oscuro" : "Dark";
   const themeAriaLabel = isDark
-    ? language === "es"
-      ? "Cambiar a modo claro"
-      : "Switch to light mode"
-    : language === "es"
-      ? "Cambiar a modo oscuro"
-      : "Switch to dark mode";
+    ? language === "es" ? "Cambiar a modo claro" : "Switch to light mode"
+    : language === "es" ? "Cambiar a modo oscuro" : "Switch to dark mode";
 
   const activeLogo = isDark ? "/logoNigth.png" : logoImg;
 
   const mobileSurfaceClass = isDark
     ? "bg-background text-white border-white/10"
     : "bg-background text-slate-900 border-slate-200";
-
   const mobileMutedClass = isDark ? "text-white/70" : "text-slate-500";
-
   const mobileActionButtonClass = isDark
     ? "bg-white/[0.04] text-white/80 hover:bg-white/[0.08]"
     : "bg-slate-50 text-slate-700 hover:bg-slate-100";
-
   const mobileActiveButtonClass = isDark
     ? "bg-violet-500/15 text-violet-300 shadow-[0_0_0_1px_rgba(139,92,246,0.22)]"
     : "bg-violet-50 text-violet-700 shadow-[0_0_0_1px_rgba(139,92,246,0.12)]";
 
   const scrollToSection = (sectionId: string) => {
-    if (sectionId === "stats") {
-      onPageChange("stats");
-      return;
-    }
-
+    if (sectionId === "stats") { onPageChange("stats"); return; }
     if (sectionId === "home") {
       onPageChange("home");
       window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
-
     if (currentPage === "stats" || currentPage === "all-projects") {
       onPageChange(sectionId);
-
       setTimeout(() => {
         const element = document.getElementById(sectionId);
-
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
+        if (element) element.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
-
       return;
     }
-
     const element = document.getElementById(sectionId);
-
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
       onPageChange(sectionId);
@@ -189,8 +148,9 @@ export default function Navbar({
 
   return (
     <>
+      {/* ── Nav: transparente en dark, opaco en light ── */}
       <nav
-        className={`fixed inset-x-0 top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80 transition-transform duration-300 ${
+        className={`fixed inset-x-0 top-0 z-50 bg-background/95 dark:bg-transparent backdrop-blur supports-[backdrop-filter]:bg-background/80 dark:supports-[backdrop-filter]:bg-transparent transition-transform duration-300 ${
           isVisible ? "translate-y-0" : "-translate-y-full"
         }`}
       >
@@ -212,7 +172,7 @@ export default function Navbar({
                   <button
                     key={item.key}
                     onClick={() => scrollToSection(item.key)}
-                    className={`relative px-3 py-2 text-sm transition-colors after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-[calc(100%-1.5rem)] after:-translate-x-1/2 after:rounded-full after:bg-violet-500 after:transition-transform after:duration-300 ${
+                    className={`relative cursor-pointer px-3 py-2 text-sm transition-colors after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-[calc(100%-1.5rem)] after:-translate-x-1/2 after:rounded-full after:bg-violet-500 after:transition-transform after:duration-300 ${
                       currentPage === item.key
                         ? "text-primary after:scale-x-100"
                         : "text-muted-foreground after:scale-x-0 hover:text-primary hover:after:scale-x-100"
@@ -240,14 +200,9 @@ export default function Navbar({
                     )}
                   </SelectValue>
                 </SelectTrigger>
-
                 <SelectContent>
                   {languageOptions.map((option) => (
-                    <SelectItem
-                      key={option.value}
-                      value={option.value}
-                      className="cursor-pointer"
-                    >
+                    <SelectItem key={option.value} value={option.value} className="cursor-pointer">
                       <span className="flex items-center gap-2 whitespace-nowrap">
                         <span>{option.flag}</span>
                         <span>{option.shortLabel}</span>
@@ -258,14 +213,14 @@ export default function Navbar({
               </Select>
 
               {token ? (
-                <Button variant="outline" className="gap-2" asChild>
+                <Button variant="outline" className="gap-2 cursor-pointer" asChild>
                   <Link to="/admin">Admin</Link>
                 </Button>
               ) : (
                 <AdminLoginModal />
               )}
 
-              <Button variant="outline" className="gap-2" asChild>
+              <Button variant="outline" className="gap-2 cursor-pointer" asChild>
                 <a href={cvPdf} target="_blank" rel="noreferrer">
                   <FileText className="h-4 w-4" />
                   {t("nav.downloadCV")}
@@ -276,7 +231,7 @@ export default function Navbar({
             <div className="md:hidden">
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
-                className={`rounded-xl border p-2.5 shadow-sm transition-all duration-300 ${
+                className={`rounded-xl border p-2.5 shadow-sm transition-all duration-300 cursor-pointer ${
                   isDark
                     ? "border-white/20 bg-white/10 text-white hover:bg-white/20"
                     : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
@@ -303,17 +258,14 @@ export default function Navbar({
           <div className={`flex items-center justify-between border-b px-5 py-5 ${mobileSurfaceClass}`}>
             <Link
               to="/"
-              onClick={() => {
-                scrollToSection("home");
-                setIsMobileMenuOpen(false);
-              }}
+              className="cursor-pointer"
+              onClick={() => { scrollToSection("home"); setIsMobileMenuOpen(false); }}
             >
               <img src={activeLogo} alt="Juan Albarracín" className="h-10 w-auto" />
             </Link>
-
             <button
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`text-sm font-medium transition-colors ${mobileMutedClass}`}
+              className={`text-sm font-medium transition-colors cursor-pointer ${mobileMutedClass}`}
             >
               Cerrar
             </button>
@@ -327,11 +279,8 @@ export default function Navbar({
               {navItems.map((item, index) => (
                 <button
                   key={item.key}
-                  onClick={() => {
-                    scrollToSection(item.key);
-                    setIsMobileMenuOpen(false);
-                  }}
-                  className={`w-full rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 ${
+                  onClick={() => { scrollToSection(item.key); setIsMobileMenuOpen(false); }}
+                  className={`w-full rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 cursor-pointer ${
                     currentPage === item.key
                       ? isDark
                         ? "bg-violet-500/15 text-violet-300 shadow-[0_0_0_1px_rgba(139,92,246,0.22)]"
@@ -355,26 +304,24 @@ export default function Navbar({
               <button
                 type="button"
                 onClick={onThemeToggle}
-                className={`flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 ${mobileActionButtonClass}`}
+                className={`flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 cursor-pointer ${mobileActionButtonClass}`}
                 aria-label={themeAriaLabel}
               >
                 <span className="flex items-center gap-3">
                   {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
                   <span>{themeLabel}</span>
                 </span>
-
                 <span className={`text-sm ${mobileMutedClass}`}>{themeModeLabel}</span>
               </button>
 
               {languageOptions.map((option) => {
                 const isActive = language === option.value;
- 
                 return (
                   <button
                     key={option.value}
                     type="button"
                     onClick={() => onLanguageChange(option.value)}
-                    className={`flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 ${
+                    className={`flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 cursor-pointer ${
                       isActive ? mobileActiveButtonClass : mobileActionButtonClass
                     }`}
                     aria-pressed={isActive}
@@ -388,15 +335,12 @@ export default function Navbar({
                       )}
                       <span>{option.label}</span>
                     </span>
- 
                     {isChangingLang && isActive ? (
                       <span className={`text-sm ${mobileMutedClass}`}>Loading...</span>
                     ) : isActive ? (
                       <Check className="h-4 w-4" />
                     ) : (
-                      <span className={`text-sm ${mobileMutedClass}`}>
-                        {option.shortLabel}
-                      </span>
+                      <span className={`text-sm ${mobileMutedClass}`}>{option.shortLabel}</span>
                     )}
                   </button>
                 );
@@ -417,7 +361,7 @@ export default function Navbar({
                   <Link
                     to="/admin"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 ${mobileActiveButtonClass}`}
+                    className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 cursor-pointer ${mobileActiveButtonClass}`}
                   >
                     <span className="flex h-5 w-5 items-center justify-center">
                       <span className="h-2 w-2 rounded-full bg-violet-500" />
@@ -427,7 +371,7 @@ export default function Navbar({
                 ) : (
                   <AdminLoginModal
                     triggerLabel="Admin"
-                    triggerClassName={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 ${mobileActiveButtonClass}`}
+                    triggerClassName={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 cursor-pointer ${mobileActiveButtonClass}`}
                   />
                 )}
 
@@ -435,7 +379,7 @@ export default function Navbar({
                   href={cvPdf}
                   target="_blank"
                   rel="noreferrer"
-                  className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 ${mobileActiveButtonClass}`}
+                  className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 cursor-pointer ${mobileActiveButtonClass}`}
                 >
                   <FileText className="h-5 w-5" />
                   {t("nav.downloadCV")}

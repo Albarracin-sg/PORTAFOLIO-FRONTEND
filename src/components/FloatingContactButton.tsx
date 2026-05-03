@@ -178,7 +178,7 @@ export default function FloatingContactButton() {
                   border border-gray-200 bg-white text-gray-600 shadow-lg backdrop-blur-sm
                   transition-all duration-300 hover:scale-110 hover:shadow-xl
                   dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400
-                  pointer-events-auto ${social.color}
+                  pointer-events-auto cursor-pointer ${social.color}
                   ${isExpanded ? 'opacity-100' : 'opacity-0 pointer-events-none'}
                 `}
                 style={{
@@ -208,7 +208,7 @@ export default function FloatingContactButton() {
               absolute bottom-0 right-0 rounded-full
               border border-violet-400/30 bg-violet-600 shadow-lg backdrop-blur-sm
               transition-all duration-300 hover:scale-110 hover:bg-violet-700 hover:shadow-xl
-              dark:bg-violet-500 dark:hover:bg-violet-600 pointer-events-auto
+              dark:bg-violet-500 dark:hover:bg-violet-600 pointer-events-auto cursor-pointer
               ${isExpanded ? 'scale-105' : ''}
             `}
             style={{ width: `${BUTTON_SIZE}px`, height: `${BUTTON_SIZE}px`, zIndex: 3 }}

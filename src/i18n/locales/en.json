@@ -22,7 +22,7 @@
   },
   "hero": {
     "greeting": "Hello, I'm Juan Albarracín",
-    "role": "Full-Stack Engineer (Backend Focus) | Microservices & Distributed Architecture | AI & MCP Integration",
+    "role": "Full-Stack Engineer (Backend Focus) Microservices & Distributed Architecture | AI & MCP Integration",
     "subtitle": "I design MCP-based orchestrators, NestJS/gRPC microservices and automation pipelines that eliminate real operational load — I don't optimize processes, I transform them.",
     "viewProjects": "View projects",
     "contactMe": "Contact me",
@@ -223,7 +223,8 @@
       "title": "Contact Information",
       "email": "Email",
       "phone": "Phone",
-      "location": "Location"
+      "location": "Location",
+      "directEmail": "Direct Email"
     },
     "social": { "title": "Follow me" }
   },
@@ -308,6 +309,14 @@
     "by": "by",
     "navigation": "Navigation",
     "social": "Social Media",
-    "description": "Full-Stack Engineer specialized in backend, microservices, and applied AI."
+    "description": "Full-Stack Engineer specialized in backend, microservices, and applied AI.",
+    "presence": "Presence",
+    "location": "Bogotá, Colombia",
+    "localTime": "GMT-5 (Local Time)",
+    "worldwide": "Worldwide",
+    "remoteExpert": "Remote expert",
+    "softwareEngineer": "Software Engineer",
+    "craftedWith": "Crafted with",
+    "in": "in"
   }
 }
