@@ -67,6 +67,22 @@
       build: {
         target: 'esnext',
         outDir: 'build',
+        rollupOptions: {
+          output: {
+            manualChunks(id) {
+              if (id.includes('node_modules')) {
+                if (id.includes('framer-motion')) return 'framer-motion';
+                if (id.includes('embla-carousel')) return 'embla';
+                if (id.includes('stripe')) return 'stripe';
+                if (id.includes('firebase')) return 'firebase';
+                if (id.includes('@floating-ui')) return 'floating-ui';
+                if (id.includes('react-router')) return 'router';
+                if (id.includes('i18next')) return 'i18n';
+                return 'vendors';
+              }
+            },
+          },
+        },
       },
       server: {
         port: 5173,
