@@ -140,12 +140,11 @@ export default function About(_props: AboutProps) {
 
 {/* SKILLS MARQUEE — 2 rows, monochrome */}
           <div className="mb-16 fu2">
-              <SectionLabel icon={<Code2 className="h-3.5 w-3.5" />} label={about.technicalSkills} />
-              <div className="mt-6">
-                <SkillMarquee groups={technicalSkillGroups} />
-              </div>
+            <SectionLabel icon={<Code2 className="h-3.5 w-3.5" />} label={about.technicalSkills} />
+            <div className="mt-6">
+              <SkillMarquee groups={technicalSkillGroups} />
             </div>
-            </div>
+          </div>
 
           {/* SOFT SKILLS */}
           <div className="mb-16 fu3">
