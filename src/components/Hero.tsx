@@ -1,4 +1,3 @@
-import { Button } from "./ui/button";
 import { ArrowRight, Mail, Download } from "lucide-react";
 import { useState } from "react";
 import { EditableImage } from "@/features/admin/InlineEdit";
