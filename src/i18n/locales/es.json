@@ -299,7 +299,9 @@
     "apiTrafficByEndpoint": "Tráfico por Endpoint",
     "mostActiveEndpoint": "Endpoint más activo",
     "viewApiDocs": "Ver documentación de la API",
-    "docsCredentials": "Credenciales:"
+    "docsCredentials": "Credenciales:",
+    "docsUsername": "user",
+    "docsPassword": "passwordPortafolio"
   },
   "loading": {
     "didYouKnow": "¿Sabías que?",
