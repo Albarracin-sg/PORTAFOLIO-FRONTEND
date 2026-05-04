@@ -289,7 +289,14 @@
     "githubActivity": "Commits de GitHub (Últimos 7 días)",
     "codeQuality": "Calidad del Código",
     "avgResponseTime": "Tiempo de Respuesta Promedio",
-    "projectSuccess": "Éxito de Proyectos"
+    "projectSuccess": "Éxito de Proyectos",
+    "apiTotalRequests": "Solicitudes Totales",
+    "apiRequestsPerMin": "Solicitudes / min",
+    "apiAvgResponse": "Respuesta Promedio",
+    "apiUptime": "Tiempo Activo",
+    "apiPerformance": "Rendimiento de la API",
+    "apiPerformanceSubtitle": "Estado en tiempo real del servidor y rendimiento por endpoint",
+    "apiTrafficByEndpoint": "Tráfico por Endpoint"
   },
   "loading": {
     "didYouKnow": "¿Sabías que?",

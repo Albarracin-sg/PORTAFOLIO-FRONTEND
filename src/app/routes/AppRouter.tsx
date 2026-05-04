@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import { HomePage } from '@/pages/HomePage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 
-const StatsPage = lazy(() => import('@/pages/StatsPage').then((m) => ({ default: m.StatsPage })));
+const StatsPage = lazy(() => import('@/pages/StatsPage/index').then((m) => ({ default: m.StatsPage })));
 const AllProjectsPage = lazy(() => import('@/pages/AllProjectsPage').then((m) => ({ default: m.AllProjectsPage })));
 
 function PageFallback() {

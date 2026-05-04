@@ -208,7 +208,7 @@ export function AdminLiveEditorPage() {
           </section>
         </div>
       ) : (
-        <Statistics section={sections.STATS} />
+        <Statistics />
       )}
     </div>
   );

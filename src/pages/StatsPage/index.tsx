@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react';
 import Statistics from '@/components/Statistics';
-import { fetchGithubStats, fetchPublicPage } from '@/shared/api/public';
+import { fetchGithubStats, fetchApiStats, type ApiStats } from '@/shared/api/public';
 import { LoadingScreen } from '@/components/ui/LoadingScreen';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export function StatsPage() {
-  const [section, setSection] = useState<
-    { id: string; type: string; content: Record<string, unknown> } | undefined
-  >(undefined);
   const [githubStats, setGithubStats] = useState<any | null>(null);
+  const [apiStats, setApiStats] = useState<ApiStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -17,18 +15,17 @@ export function StatsPage() {
     const load = async () => {
       try {
         setIsLoading(true);
-        const [pageResult, statsResult] = await Promise.allSettled([
-          fetchPublicPage('stats'),
+        const [statsResult, apiResult] = await Promise.allSettled([
           fetchGithubStats(),
+          fetchApiStats(),
         ]);
         if (!isActive) return;
 
-        if (pageResult.status === 'fulfilled') {
-          const s = pageResult.value.sections.find((item) => item.type === 'STATS');
-          setSection(s ? { id: s.id, type: s.type, content: s.content } : undefined);
-        }
         if (statsResult.status === 'fulfilled') {
           setGithubStats(statsResult.value);
+        }
+        if (apiResult.status === 'fulfilled') {
+          setApiStats(apiResult.value);
         }
       } catch {
         if (!isActive) return;
@@ -43,7 +40,6 @@ export function StatsPage() {
 
   if (isLoading) {
     return (
-      // Mismo padding/max-width que Statistics para que los skeletons ocupen el mismo espacio
       <div className="min-h-screen px-4 py-24 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl space-y-8">
           <Skeleton className="h-12 w-64 rounded-lg" />
@@ -62,6 +58,5 @@ export function StatsPage() {
     );
   }
 
-  // Sin wrapper extra — Statistics ya tiene su propio py-24 px-4 max-w-7xl
-  return <Statistics section={section} githubStats={githubStats} />;
+  return <Statistics githubStats={githubStats} apiStats={apiStats} />;
 }

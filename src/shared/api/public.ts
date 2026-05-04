@@ -81,8 +81,26 @@ export async function fetchGithubStats() {
   return apiRequest<GithubStats>('/public/github/stats', { cache: 'no-store' });
 }
 
+export type ApiStats = {
+  totalRequests: number;
+  requestsPerMinute: number;
+  avgResponseTimeMs: number;
+  uptime: string;
+  endpoints: Array<{
+    path: string;
+    method: string;
+    totalRequests: number;
+    avgResponseTime: number;
+  }>;
+  generatedAt: string;
+};
+
 export async function fetchNowPlaying() {
   // El backend devuelve { track, cached, stale, ... } - extraer solo track
   const response = await apiRequest<{ track: SpotifyTrack; cached: boolean; stale: boolean }>('/public/spotify/now-playing', { cache: 'no-store' });
   return response.track;
+}
+
+export async function fetchApiStats() {
+  return apiRequest<ApiStats>('/public/stats', { cache: 'no-store' });
 }

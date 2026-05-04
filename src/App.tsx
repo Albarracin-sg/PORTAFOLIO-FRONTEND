@@ -14,9 +14,9 @@ import { AdminMessagesPage } from '@/pages/Admin/MessagesPage';
 import { AdminLiveEditorPage } from '@/pages/Admin/LiveEditorPage';
 import ScrollToTop from './components/ui/ScrollToTop';
 
-const StatsPage = lazy(() => import('@/pages/StatsPage').then((m) => ({ default: m.StatsPage })));
-const AllProjectsPage = lazy(() => import('@/pages/AllProjectsPage').then((m) => ({ default: m.AllProjectsPage })));
-const ProjectDetailPage = lazy(() => import('@/pages/ProjectDetailPage').then((m) => ({ default: m.ProjectDetailPage })));
+const StatsPage = lazy(() => import('@/pages/StatsPage/index').then(m => ({ default: m.StatsPage })));
+const AllProjectsPage = lazy(() => import('@/pages/AllProjectsPage').then(m => ({ default: m.AllProjectsPage })));
+const ProjectDetailPage = lazy(() => import('@/pages/ProjectDetailPage').then(m => ({ default: m.ProjectDetailPage })));
 
 function PageFallback() {
   return (

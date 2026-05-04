@@ -11,50 +11,44 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { ArrowLeft, FolderGit2, GitBranch, Star, Users } from "lucide-react";
+import { ArrowLeft, FolderGit2, GitBranch, Star, Users, Server, Activity, Clock, Zap } from "lucide-react";
 import { useTranslation } from "react-i18next";
-
-import { Button } from "./ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
   type ChartConfig,
-} from "./ui/chart";
-import type { GithubStats } from "@/shared/api/public";
+} from "@/components/ui/chart";
+import type { GithubStats, ApiStats } from "@/shared/api/public";
 
-interface StatisticsProps {
-  section?: { id: string; type: string; content: Record<string, unknown> };
-  githubStats?: GithubStats | null;
-}
-
-type StatsCard = {
+interface StatsCard {
   title: string;
   value: string;
   description: string;
   icon: React.ComponentType<{ className?: string }>;
-};
+}
 
-export default function Statistics({ section, githubStats }: StatisticsProps) {
+interface StatisticsProps {
+  githubStats?: GithubStats | null;
+  apiStats?: ApiStats | null;
+}
+
+export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
   const { t, i18n } = useTranslation();
   const isSpanish = i18n.language.startsWith("es");
-  const statsContent = section?.content ?? {};
-  const chartData = (statsContent.charts as Record<string, unknown>) ?? {};
 
   const languageData =
     (githubStats?.languageData as Array<Record<string, unknown>>) ??
-    (chartData.languageData as Array<Record<string, unknown>>) ??
     [];
 
   const projectsData =
     (githubStats?.projectsData as Array<Record<string, unknown>>) ??
-    (chartData.projectsData as Array<Record<string, unknown>>) ??
     [];
 
   const githubActivity =
     (githubStats?.githubActivity as Array<Record<string, unknown>>) ??
-    (chartData.githubActivity as Array<Record<string, unknown>>) ??
     [];
 
   const cards: StatsCard[] = githubStats
@@ -103,6 +97,67 @@ export default function Statistics({ section, githubStats }: StatisticsProps) {
         { label: t("stats.projectsTimeline"), value: String(projectsData.length) },
         { label: t("stats.githubCommits"), value: String(githubActivity.length) },
       ];
+
+  // ——— API Stats derived data ———
+  const formatUptime = (raw: string) => {
+    if (!raw) return "—";
+
+    // Parsear el string del backend (ej: "22 min 3 s", "1d 5h", "3m 20s")
+    const totalMinutes = raw.match(/(\d+)\s*(?:min|m)\b/);
+
+    // Si ya tiene días, solo traducir
+    if (/\d+\s*d\b/.test(raw)) {
+      if (!isSpanish) return raw;
+      return raw
+        .replace(/(\d+)d\b/g, "$1 d")
+        .replace(/(\d+)h\b/g, "$1 h")
+        .replace(/(\d+)m\b/g, "$1 min")
+        .replace(/(\d+)s\b/g, "$1 s");
+    }
+
+    // Si son minutos grandes (>60), convertir a horas/días
+    if (totalMinutes && parseInt(totalMinutes[1]) > 60) {
+      const mins = parseInt(totalMinutes[1]);
+      const totalMins = mins;
+      if (totalMins >= 1440) {
+        const d = Math.floor(totalMins / 1440);
+        const h = Math.floor((totalMins % 1440) / 60);
+        return isSpanish ? `${d}d ${h}h` : `${d}d ${h}h`;
+      }
+      if (totalMins >= 60) {
+        const h = Math.floor(totalMins / 60);
+        const m = Math.floor(totalMins % 60);
+        return isSpanish ? `${h}h ${m}min` : `${h}h ${m}m`;
+      }
+    }
+
+    if (!isSpanish) return raw;
+    return raw
+      .replace(/(\d+)d\b/g, "$1 d")
+      .replace(/(\d+)h\b/g, "$1 h")
+      .replace(/(\d+)m\b/g, "$1 min")
+      .replace(/(\d+)s\b/g, "$1 s");
+  };
+
+  const formatBigNumber = (n: number) => {
+    if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+    if (n >= 10_000) return `${(n / 1_000).toFixed(1)}K`;
+    return n.toLocaleString();
+  };
+
+  const endpointChartData = apiStats?.endpoints.map(e => ({
+    path: e.path.replace("/api/v1/", ""),
+    requests: e.totalRequests,
+    avgTime: Math.round(e.avgResponseTime),
+    method: e.method,
+  })) ?? [];
+
+  const apiMetricCards = apiStats ? [
+    { label: t("stats.apiTotalRequests"), value: formatBigNumber(apiStats.totalRequests), icon: Activity },
+    { label: t("stats.apiRequestsPerMin"), value: formatBigNumber(apiStats.requestsPerMinute), icon: Zap },
+    { label: t("stats.apiAvgResponse"), value: `${Math.round(apiStats.avgResponseTimeMs)}ms`, icon: Clock },
+    { label: t("stats.apiUptime"), value: formatUptime(apiStats.uptime), icon: Server },
+  ] : [];
 
   const languageChartConfig = {
     value: { label: isSpanish ? "Uso" : "Usage", color: "#8b5cf6" },
@@ -259,6 +314,130 @@ export default function Statistics({ section, githubStats }: StatisticsProps) {
             <MetricCard key={metric.label} label={metric.label} value={metric.value} />
           ))}
         </div>
+
+        {/* Divider — estilo footer con gradiente violeta */}
+        <div className="relative mt-24 sm:mt-32 pb-16 sm:pb-20">
+          <div className="w-full h-px bg-gradient-to-r from-transparent via-violet-500/40 to-transparent" />
+        </div>
+
+        {/* API Stats section */}
+        {apiStats && (
+          <div>
+            <div className="mb-6 sm:mb-8 text-center">
+              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-violet-600 dark:text-violet-400">
+                {t("stats.apiPerformance")}
+              </p>
+              <h2 className="mt-2 text-3xl sm:text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+                {t("stats.apiPerformance")}
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600 dark:text-slate-400">
+                {t("stats.apiPerformanceSubtitle")}
+              </p>
+            </div>
+
+            {/* API metric cards with icons */}
+            <div className="grid grid-cols-2 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
+              {apiMetricCards.map((card) => {
+                const Icon = card.icon;
+                return (
+                  <Card
+                    key={card.label}
+                    className="border-slate-200 bg-white/85 transition-colors hover:border-violet-400/30 hover:bg-white dark:border-white/[0.07] dark:bg-white/[0.025] dark:hover:bg-white/[0.04]"
+                  >
+                    <CardHeader className="pb-2 sm:pb-3">
+                      <div className="mb-2 sm:mb-3 flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-xl border border-slate-200 bg-violet-50 text-violet-700 dark:border-violet-400/20 dark:bg-violet-500/10 dark:text-violet-300">
+                        <Icon className="h-5 w-5" />
+                      </div>
+                      <CardTitle className="text-sm sm:text-base font-semibold tracking-tight text-slate-900 dark:text-white">
+                        {card.label}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl sm:text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
+                        {card.value}
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+
+            {/* Endpoint traffic chart */}
+            {endpointChartData.length > 0 && (
+              <Card className="mt-6 sm:mt-8 border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
+                <CardHeader>
+                  <CardTitle className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
+                    {t("stats.apiTrafficByEndpoint")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ChartContainer
+                    config={{
+                      requests: { label: "Requests", color: "#8b5cf6" },
+                      avgTime: { label: "Avg (ms)", color: "#06b6d4" },
+                    }}
+                    className="aspect-square h-64 sm:aspect-video sm:h-80 w-full"
+                  >
+                    <BarChart data={endpointChartData} margin={{ left: -20, right: 10, top: 0, bottom: 0 }}>
+                      <CartesianGrid vertical={false} />
+                      <XAxis
+                        dataKey="path"
+                        tickLine={false}
+                        axisLine={false}
+                        tick={{ fontSize: 12 }}
+                      />
+                      <YAxis
+                        tickLine={false}
+                        axisLine={false}
+                        allowDecimals={false}
+                        tick={{ fontSize: 12 }}
+                        width={40}
+                      />
+                      <ChartTooltip
+                        cursor={{ fill: "rgba(139, 92, 246, 0.1)" }}
+                        content={<ChartTooltipContent />}
+                      />
+                      <Bar
+                        dataKey="requests"
+                        fill="var(--color-requests)"
+                        radius={[8, 8, 0, 0]}
+                        isAnimationActive={false}
+                        className="cursor-pointer"
+                      />
+                    </BarChart>
+                  </ChartContainer>
+
+                  {/* Endpoint detail list */}
+                  <div className="mt-4 sm:mt-6 grid gap-2 sm:gap-3">
+                    {endpointChartData.map((endpoint, index) => (
+                      <div
+                        key={`endpoint-${index}`}
+                        className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm dark:border-white/10 dark:bg-white/[0.04]"
+                      >
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <span className="inline-flex items-center justify-center rounded-md bg-violet-100 px-1.5 py-0.5 text-[10px] sm:text-xs font-mono font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300">
+                            {endpoint.method}
+                          </span>
+                          <span className="font-mono text-slate-700 dark:text-slate-300 truncate max-w-[150px] sm:max-w-none">
+                            {endpoint.path}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-3 sm:gap-4 text-slate-600 dark:text-slate-400">
+                          <span className="font-semibold text-slate-900 dark:text-white">
+                            {endpoint.requests.toLocaleString()} req
+                          </span>
+                          <span className="text-xs sm:text-sm">
+                            {endpoint.avgTime}ms
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        )}
       </div>
     </section>
   );
