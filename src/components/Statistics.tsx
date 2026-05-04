@@ -358,12 +358,9 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0 0L11 19" />
                 </svg>
               </a>
-              <div className="mt-3 inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-mono text-slate-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-400">
-                <span className="font-semibold">{t("stats.docsCredentials")}</span>
-                <span className="text-violet-600 dark:text-violet-400">user</span>
-                <span className="text-slate-400">/</span>
-                <span className="text-violet-600 dark:text-violet-400">passwordPortafolio</span>
-              </div>
+              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                {t("stats.docsCredentials")} <code className="font-mono text-violet-600 dark:text-violet-400">user / passwordPortafolio</code>
+              </p>
             </div>
 
             {/* API metric cards with icons */}
