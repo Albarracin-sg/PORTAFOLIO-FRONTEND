@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { ExternalLink, Github } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Markdown } from "./ui/markdown";
 
 interface Project {
   id: string;
@@ -96,9 +97,9 @@ export default function ProjectModal({
                 <h4 className="mb-1 text-sm font-medium text-violet-600 dark:text-violet-400">
                   {t('projects.modal.problem')}
                 </h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                <Markdown className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                   {project.problem}
-                </p>
+                </Markdown>
               </div>
             )}
 
@@ -108,9 +109,9 @@ export default function ProjectModal({
                 <h4 className="mb-1 text-sm font-medium text-violet-600 dark:text-violet-400">
                   {t('projects.modal.challenge')}
                 </h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                <Markdown className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                   {project.challenge}
-                </p>
+                </Markdown>
               </div>
             )}
 
@@ -120,9 +121,9 @@ export default function ProjectModal({
                 <h4 className="mb-1 text-sm font-medium text-violet-600 dark:text-violet-400">
                   {t('projects.modal.solution')}
                 </h4>
-                <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                <Markdown className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
                   {project.solution}
-                </p>
+                </Markdown>
               </div>
             )}
 

@@ -245,37 +245,39 @@ export default function Navbar({
       </nav>
 
       <div
-        className={`fixed inset-0 z-[70] bg-background transition-opacity md:hidden ${
+        className={`fixed inset-0 z-[70] bg-background/80 backdrop-blur-sm transition-opacity md:hidden ${
           isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
+        onClick={() => setIsMobileMenuOpen(false)}
       >
         <aside
-          className={`absolute inset-0 flex h-full w-full max-w-none flex-col border-l shadow-2xl opacity-100 transition-transform duration-300 ${mobileSurfaceClass} ${
+          className={`absolute inset-0 flex h-[100dvh] w-full flex-col border-l shadow-2xl transition-transform duration-300 ${mobileSurfaceClass} ${
             isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
           }`}
+          onClick={(e) => e.stopPropagation()}
           style={{ overscrollBehavior: "contain" }}
         >
-          <div className={`flex items-center justify-between border-b px-5 py-5 ${mobileSurfaceClass}`}>
+          <div className={`flex items-center justify-between border-b px-5 py-4 ${mobileSurfaceClass}`}>
             <Link
               to="/"
               className="cursor-pointer"
               onClick={() => { scrollToSection("home"); setIsMobileMenuOpen(false); }}
             >
-              <img src={activeLogo} alt="Juan Albarracín" className="h-10 w-auto" />
+              <img src={activeLogo} alt="Juan Albarracín" className="h-9 w-auto" />
             </Link>
             <button
               onClick={() => setIsMobileMenuOpen(false)}
-              className={`text-sm font-medium transition-colors cursor-pointer ${mobileMutedClass}`}
+              className={`text-sm font-semibold transition-colors cursor-pointer px-3 py-1 rounded-lg bg-slate-100 dark:bg-white/5 ${mobileMutedClass}`}
             >
-              Cerrar
+              {language === "es" ? "Cerrar" : "Close"}
             </button>
           </div>
 
           <div
-            className="flex-1 overflow-y-auto bg-background px-5 py-5"
+            className="flex-1 overflow-y-auto px-5 py-6 custom-scrollbar"
             style={{ overscrollBehavior: "contain" }}
           >
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               {navItems.map((item, index) => (
                 <Link
                   key={item.key}

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Bot, Send, Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
+import { Markdown } from '@/components/ui/markdown';
 import { sendBotMessage } from '@/shared/api/bot';
 import { RateLimitError } from '@/shared/api/http';
 
@@ -24,16 +25,16 @@ export function BotChatPage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const messageCount = useRef(0);
 
-  // Scroll to bottom only when new messages are added (not on every render)
+  // Scroll to bottom when new messages are added (internal container only)
   useEffect(() => {
-    if (messages.length > messageCount.current) {
-      messageCount.current = messages.length;
-      const container = messagesContainerRef.current;
-      if (container) {
-        container.scrollTop = container.scrollHeight;
-      }
+    const container = messagesContainerRef.current;
+    if (container) {
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth'
+      });
     }
-  }, [messages]);
+  }, [messages, isLoading]);
 
   // Show initial message when page mounts
   useEffect(() => {
@@ -85,12 +86,12 @@ export function BotChatPage() {
   };
 
   return (
-    <div className="fixed inset-0 top-14 z-40 bg-background">
+    <div className="h-[calc(100vh-4.5rem)] mt-[4.5rem] bg-background relative overflow-hidden flex flex-col">
       {/* Decorative side gradients — desktop only */}
       <div className="fixed top-20 -left-48 w-[500px] h-[500px] bg-gradient-to-br from-violet-600/10 to-fuchsia-600/10 rounded-full blur-3xl animate-pulse pointer-events-none -z-10 hidden lg:block" />
       <div className="fixed bottom-20 -right-48 w-[500px] h-[500px] bg-gradient-to-tl from-indigo-600/10 to-violet-600/10 rounded-full blur-3xl animate-pulse pointer-events-none -z-10 hidden lg:block" style={{ animationDelay: '1.5s' }} />
 
-      <div className="flex flex-col h-full w-full max-w-2xl mx-auto px-4 pt-3 pb-4">
+      <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto px-4 pt-3 pb-4 overflow-hidden">
         {/* Header */}
         <div className="flex items-center gap-3 py-3 flex-shrink-0 scroll-mt-16 md:scroll-mt-20">
           <Button
@@ -113,17 +114,26 @@ export function BotChatPage() {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto space-y-4 mb-6 pb-4 custom-scrollbar">
+        <div 
+          ref={messagesContainerRef}
+          className="flex-1 overflow-y-auto space-y-4 mb-6 pb-4 custom-scrollbar"
+        >
           {messages.map((msg, index) => (
             <div
               key={index}
-              className={`rounded-2xl px-4 py-3 text-sm transition-all duration-300 ${
+              className={`rounded-2xl px-4 py-3 transition-all duration-300 w-fit max-w-[85%] ${
                 msg.role === 'user'
-                  ? 'ml-auto border border-violet-200 bg-violet-50 text-gray-900 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-gray-100'
-                  : 'mr-auto border border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200'
-              } max-w-[85%] ${msg.role === 'user' ? 'text-right' : 'text-left'}`}
+                  ? 'ml-auto text-sm border border-violet-200 bg-violet-50 text-gray-900 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-gray-100'
+                  : 'mr-auto text-base border border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200'
+              }`}
             >
-              {msg.content}
+              {msg.role === 'assistant' ? (
+                <Markdown className="text-inherit">
+                  {msg.content}
+                </Markdown>
+              ) : (
+                msg.content
+              )}
             </div>
           ))}
 
@@ -140,8 +150,6 @@ export function BotChatPage() {
               <span>{error}</span>
             </div>
           )}
-
-          <div ref={messagesEndRef} />
         </div>
 
         {/* Input */}
