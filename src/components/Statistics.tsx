@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Bar,
@@ -11,7 +12,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { ArrowLeft, FolderGit2, GitBranch, Star, Users, Server, Activity, Clock, Zap, Music, BarChart3, Bot, FolderOpen, Shield, Mail, Send, FileText, ExternalLink } from "lucide-react";
+import { ArrowLeft, FolderGit2, GitBranch, Star, Users, Server, Activity, Clock, Zap, Music, BarChart3, Bot, FolderOpen, Shield, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,13 +39,6 @@ interface StatisticsProps {
 export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
   const { t, i18n } = useTranslation();
   const isSpanish = i18n.language.startsWith("es");
-  const [endpointPage, setEndpointPage] = useState(0);
-  const ENDPOINTS_PER_PAGE = 5;
-  const totalPages = Math.ceil(publicEndpoints.length / ENDPOINTS_PER_PAGE);
-  const pagedEndpoints = publicEndpoints.slice(
-    endpointPage * ENDPOINTS_PER_PAGE,
-    (endpointPage + 1) * ENDPOINTS_PER_PAGE,
-  );
 
   const languageData =
     (githubStats?.languageData as Array<Record<string, unknown>>) ??
@@ -108,11 +102,7 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
   // ——— API Stats derived data ———
   const formatUptime = (raw: string) => {
     if (!raw) return "—";
-
-    // Parsear el string del backend (ej: "22 min 3 s", "1d 5h", "3m 20s")
     const totalMinutes = raw.match(/(\d+)\s*(?:min|m)\b/);
-
-    // Si ya tiene días, solo traducir
     if (/\d+\s*d\b/.test(raw)) {
       if (!isSpanish) return raw;
       return raw
@@ -121,23 +111,19 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
         .replace(/(\d+)m\b/g, "$1 min")
         .replace(/(\d+)s\b/g, "$1 s");
     }
-
-    // Si son minutos grandes (>60), convertir a horas/días
     if (totalMinutes && parseInt(totalMinutes[1]) > 60) {
       const mins = parseInt(totalMinutes[1]);
-      const totalMins = mins;
-      if (totalMins >= 1440) {
-        const d = Math.floor(totalMins / 1440);
-        const h = Math.floor((totalMins % 1440) / 60);
-        return isSpanish ? `${d}d ${h}h` : `${d}d ${h}h`;
+      if (mins >= 1440) {
+        const d = Math.floor(mins / 1440);
+        const h = Math.floor((mins % 1440) / 60);
+        return `${d}d ${h}h`;
       }
-      if (totalMins >= 60) {
-        const h = Math.floor(totalMins / 60);
-        const m = Math.floor(totalMins % 60);
-        return isSpanish ? `${h}h ${m}min` : `${h}h ${m}m`;
+      if (mins >= 60) {
+        const h = Math.floor(mins / 60);
+        const m = Math.floor(mins % 60);
+        return `${h}h ${m}min`;
       }
     }
-
     if (!isSpanish) return raw;
     return raw
       .replace(/(\d+)d\b/g, "$1 d")
@@ -159,7 +145,6 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
     method: e.method,
   })) ?? [];
 
-  // Spotify domina la gráfica — separarlo para que los demás se vean
   const otherEndpoints = endpointChartData.filter(e => !e.path.includes("spotify"));
 
   const apiMetricCards = apiStats ? [
@@ -169,19 +154,24 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
     { label: t("stats.apiUptime"), value: formatUptime(apiStats.uptime), icon: Server },
   ] : [];
 
-  // Full catalog of public endpoints (admin excluded)
-  const publicEndpoints = [
-    { method: "GET", path: "/public/spotify/now-playing", icon: Music, tag: "public-spotify", description: "Current playing track" },
-    { method: "GET", path: "/public/github/stats", icon: FolderGit2, tag: "public-github", description: "GitHub profile stats" },
-    { method: "GET", path: "/public/github/activity", icon: GitBranch, tag: "public-github", description: "GitHub recent activity" },
-    { method: "GET", path: "/public/projects", icon: FolderOpen, tag: "public-projects", description: "All projects" },
-    { method: "GET", path: "/public/projects/:id", icon: FileText, tag: "public-projects", description: "Project details" },
-    { method: "GET", path: "/public/stats", icon: BarChart3, tag: "public-stats", description: "Public API statistics" },
-    { method: "POST", path: "/public/contact", icon: Mail, tag: "public-contact", description: "Send contact message" },
-    { method: "POST", path: "/bot/chat", icon: Bot, tag: "bot", description: "Chat with AI assistant" },
-    { method: "POST", path: "/auth/login", icon: Send, tag: "auth", description: "Authenticate & get JWT token" },
-    { method: "GET", path: "/admin/stats", icon: Shield, tag: "admin-stats", description: "Admin statistics (JWT required)" },
-  ];
+  const getEndpointIcon = (path: string) => {
+    if (path.includes("spotify")) return Music;
+    if (path.includes("github")) return FolderGit2;
+    if (path.includes("stats")) return BarChart3;
+    if (path.includes("projects")) return FolderOpen;
+    if (path.includes("bot")) return Bot;
+    if (path.includes("admin")) return Shield;
+    return Globe;
+  };
+
+  // Pagination for endpoint list
+  const [endpointPage, setEndpointPage] = useState(0);
+  const ENDPOINTS_PER_PAGE = 5;
+  const totalPages = Math.ceil(endpointChartData.length / ENDPOINTS_PER_PAGE);
+  const pagedEndpoints = endpointChartData.slice(
+    endpointPage * ENDPOINTS_PER_PAGE,
+    (endpointPage + 1) * ENDPOINTS_PER_PAGE,
+  );
 
   const languageChartConfig = {
     value: { label: isSpanish ? "Uso" : "Usage", color: "#8b5cf6" },
@@ -445,24 +435,18 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
                     </BarChart>
                   </ChartContainer>
 
-                  {/* Full public endpoint catalog — each links to Swagger */}
+                  {/* Paginated endpoint list — shows traffic + latency */}
                   <div className="mt-4 sm:mt-6 grid gap-2 sm:gap-3">
-                    {pagedEndpoints.map((ep) => {
-                      const EndpointIcon = ep.icon;
-                      const traffic = endpointChartData.find(e => e.path === ep.path && e.method === ep.method);
-                      const swaggerAnchor = ep.path.replace(/^\//, "").replace(/\//g, "-");
-                      const swaggerUrl = `https://backend-portafolio-f6gx.onrender.com/api/v1/docs#/${ep.tag}/${swaggerAnchor}`;
+                    {pagedEndpoints.map((ep, index) => {
+                      const EndpointIcon = getEndpointIcon(ep.path);
                       const isSpotify = ep.path.includes("spotify");
                       return (
-                      <a
-                        key={`${ep.method}-${ep.path}`}
-                        href={swaggerUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`group flex items-center justify-between rounded-lg border px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm transition-colors ${
+                      <div
+                        key={`endpoint-${endpointPage}-${index}`}
+                        className={`flex items-center justify-between rounded-lg border px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm ${
                           isSpotify
-                            ? "border-emerald-200 bg-emerald-50 hover:border-emerald-300 hover:bg-emerald-50/70 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:hover:border-emerald-400/30 dark:hover:bg-emerald-500/15"
-                            : "border-slate-200 bg-slate-50 hover:border-violet-300 hover:bg-violet-50/50 dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-violet-400/30 dark:hover:bg-violet-500/5"
+                            ? "border-emerald-200 bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/10"
+                            : "border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-white/[0.04]"
                         }`}
                       >
                         <div className="flex items-center gap-2 sm:gap-3">
@@ -478,20 +462,15 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
                             {ep.path}
                           </span>
                         </div>
-                        <div className="flex items-center gap-2 sm:gap-3">
-                          {traffic && (
-                            <>
-                              <span className="font-semibold text-slate-900 dark:text-white">
-                                {formatBigNumber(traffic.requests)} req
-                              </span>
-                              <span className="text-xs sm:text-sm">
-                                {traffic.avgTime}ms
-                              </span>
-                            </>
-                          )}
-                          <ExternalLink className="h-3.5 w-3.5 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100 dark:text-slate-500" />
+                        <div className="flex items-center gap-2 sm:gap-4 text-slate-600 dark:text-slate-400">
+                          <span className="font-semibold text-slate-900 dark:text-white">
+                            {formatBigNumber(ep.requests)} req
+                          </span>
+                          <span className="text-xs sm:text-sm">
+                            {ep.avgTime}ms
+                          </span>
                         </div>
-                      </a>
+                      </div>
                     );
                     })}
                   </div>
