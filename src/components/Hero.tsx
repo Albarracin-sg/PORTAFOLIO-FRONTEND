@@ -41,19 +41,19 @@ export default function Hero({ section }: HeroProps) {
   };
 
   return (
-    <section className="min-h-[calc(100vh-4rem)] flex items-center px-4 pb-8 pt-28 sm:px-6 sm:pt-28 lg:px-8 lg:pt-32 lg:pb-16 relative">
+    <section className="min-h-[calc(100vh-4rem)] flex items-center px-4 pb-12 pt-28 sm:px-6 sm:pt-28 lg:px-8 lg:pt-32 lg:pb-16 relative">
       <div className="max-w-7xl mx-auto w-full relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
           <div className="space-y-8 text-center lg:text-left pt-8 lg:pt-0">
             <div className="max-w-3xl mx-auto lg:mx-0 space-y-5">
-              <h1 className="text-4xl font-semibold leading-tight tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl lg:text-6xl break-words">
+              <h1 className="text-3xl font-semibold leading-tight tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl lg:text-6xl break-words">
                 {t('hero.greeting')}
               </h1>
-              <div className="max-w-full text-2xl font-semibold leading-tight tracking-tight text-violet-600 dark:text-violet-400 sm:text-3xl lg:text-4xl break-words">
+              <div className="max-w-full text-xl font-semibold leading-tight tracking-tight text-violet-600 dark:text-violet-400 sm:text-3xl lg:text-4xl break-words">
                 {t('hero.role')}
               </div>
-              <p className="max-w-3xl text-sm leading-7 text-gray-600 dark:text-gray-400 sm:text-base break-words">
+              <p className="max-w-3xl text-sm leading-relaxed text-gray-600 dark:text-gray-400 sm:text-base break-words">
                 {t('hero.subtitle')}
               </p>
             </div>
@@ -70,7 +70,7 @@ export default function Hero({ section }: HeroProps) {
                     });
                   }
                 }}
-                className="group flex items-center justify-center gap-3 rounded-2xl px-6 py-3 text-sm font-medium transition-all duration-300 bg-violet-600 text-white shadow-lg shadow-violet-500/20 hover:bg-violet-700 hover:scale-105 active:scale-95 dark:bg-violet-500 dark:hover:bg-violet-600"
+                className="group flex items-center justify-center gap-3 rounded-2xl px-6 py-3.5 text-sm font-medium transition-all duration-300 bg-violet-600 text-white shadow-lg shadow-violet-500/20 hover:bg-violet-700 hover:scale-105 active:scale-95 dark:bg-violet-500 dark:hover:bg-violet-600"
               >
                 {t('hero.viewProjects')}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -86,7 +86,7 @@ export default function Hero({ section }: HeroProps) {
                     });
                   }
                 }}
-                className="flex items-center justify-center gap-3 rounded-2xl px-6 py-3 text-sm font-medium transition-all duration-300 border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-white hover:border-violet-300 hover:text-violet-600 hover:scale-105 active:scale-95 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/80 dark:hover:bg-white/[0.08] dark:hover:border-violet-500/30 dark:hover:text-violet-400"
+                className="flex items-center justify-center gap-3 rounded-2xl px-6 py-3.5 text-sm font-medium transition-all duration-300 border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-white hover:border-violet-300 hover:text-violet-600 hover:scale-105 active:scale-95 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/80 dark:hover:bg-white/[0.08] dark:hover:border-violet-500/30 dark:hover:text-violet-400"
               >
                 <Mail className="h-4 w-4" />
                 {t('hero.contactMe')}
@@ -95,7 +95,7 @@ export default function Hero({ section }: HeroProps) {
               <a
                 href={cvPdf}
                 download="JUAN_ALBARRACIN_CV.pdf"
-                className="flex sm:hidden items-center justify-center gap-3 rounded-2xl px-6 py-3 text-sm font-medium transition-all duration-300 border border-violet-200 bg-violet-50 text-violet-700 shadow-sm hover:bg-violet-100 hover:border-violet-300 hover:scale-105 active:scale-95 dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-300 dark:hover:bg-violet-500/20"
+                className="flex sm:hidden items-center justify-center gap-3 rounded-2xl px-6 py-3.5 text-sm font-medium transition-all duration-300 border border-violet-200 bg-violet-50 text-violet-700 shadow-sm hover:bg-violet-100 hover:border-violet-300 hover:scale-105 active:scale-95 dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-300 dark:hover:bg-violet-500/20"
               >
                 <Download className="h-4 w-4" />
                 {t('nav.downloadCV')}
@@ -103,28 +103,28 @@ export default function Hero({ section }: HeroProps) {
             </div>
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-3 gap-8 pt-8 border-t border-border dark:border-gray-700">
+            <div className="grid grid-cols-3 gap-2 sm:gap-8 pt-8 border-t border-border dark:border-gray-700">
               <div className="text-center">
-                <div className="font-display text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
+                <div className="font-display text-xl sm:text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
                   1+
                 </div>
-                <div className="text-sm text-muted-foreground dark:text-gray-400">
+                <div className="text-[10px] sm:text-sm text-muted-foreground dark:text-gray-400 leading-tight">
                   {t('hero.yearsExperience')}
                 </div>
               </div>
               <div className="text-center">
-                <div className="font-display text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
+                <div className="font-display text-xl sm:text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
                   10+
                 </div>
-                <div className="text-sm text-muted-foreground dark:text-gray-400">
+                <div className="text-[10px] sm:text-sm text-muted-foreground dark:text-gray-400 leading-tight">
                   {t('hero.projectsCompleted')}
                 </div>
               </div>
               <div className="text-center">
-                <div className="font-display text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
+                <div className="font-display text-xl sm:text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
                   30+
                 </div>
-                <div className="text-sm text-muted-foreground dark:text-gray-400">
+                <div className="text-[10px] sm:text-sm text-muted-foreground dark:text-gray-400 leading-tight">
                   {t('hero.technologies')}
                 </div>
               </div>
@@ -132,8 +132,8 @@ export default function Hero({ section }: HeroProps) {
           </div>
 
           {/* Profile Image — centered on mobile, right-aligned on desktop */}
-          <div className="flex justify-center lg:justify-end mt-12 lg:mt-0">
-            <div className="relative w-full max-w-sm sm:max-w-xs lg:max-w-none px-2 sm:px-4 lg:p-0">
+          <div className="flex justify-center lg:justify-end mt-8 lg:mt-0">
+            <div className="relative w-full max-w-[280px] sm:max-w-xs lg:max-w-none px-2 sm:px-4 lg:p-0">
               {canEditImages && (
                 <div className="absolute top-0 right-3 z-20 flex gap-2">
                   <label className="rounded-md bg-black/60 px-2.5 py-1 text-xs text-white cursor-pointer">
