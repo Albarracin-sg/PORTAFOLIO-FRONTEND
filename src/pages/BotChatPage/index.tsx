@@ -90,9 +90,9 @@ export function BotChatPage() {
       <div className="fixed top-20 -left-48 w-[500px] h-[500px] bg-gradient-to-br from-violet-600/10 to-fuchsia-600/10 rounded-full blur-3xl animate-pulse pointer-events-none -z-10 hidden lg:block" />
       <div className="fixed bottom-20 -right-48 w-[500px] h-[500px] bg-gradient-to-tl from-indigo-600/10 to-violet-600/10 rounded-full blur-3xl animate-pulse pointer-events-none -z-10 hidden lg:block" style={{ animationDelay: '1.5s' }} />
 
-      <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-20 pb-3">
         {/* Header */}
-        <div className="flex items-center gap-3 py-3 flex-shrink-0">
+        <div className="flex items-center gap-3 py-3 flex-shrink-0 scroll-mt-16 md:scroll-mt-20">
           <Button
             variant="ghost"
             size="icon"
