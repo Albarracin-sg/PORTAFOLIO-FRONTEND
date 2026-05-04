@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Bar,
@@ -39,6 +39,14 @@ interface StatisticsProps {
 export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
   const { t, i18n } = useTranslation();
   const isSpanish = i18n.language.startsWith("es");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const languageData =
     (githubStats?.languageData as Array<Record<string, unknown>>) ??
@@ -425,9 +433,9 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
                         dataKey="path"
                         tickLine={false}
                         axisLine={false}
-                        tick={{ fontSize: 10, fill: "currentColor", opacity: 0.7 }}
-                        interval={0}
-                        height={40}
+                        tick={isMobile ? false : { fontSize: 10, fill: "currentColor", opacity: 0.7 }}
+                        interval={isMobile ? "preserveStartEnd" : 0}
+                        height={isMobile ? 10 : 40}
                       />
                       <YAxis
                         tickLine={false}
