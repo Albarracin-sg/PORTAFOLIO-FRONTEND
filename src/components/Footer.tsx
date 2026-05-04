@@ -23,12 +23,12 @@ export default function Footer({ isDark, onPageChange, currentPage }: FooterProp
   const socialLinks = [
     {
       icon: <Github className="h-5 w-5" />,
-      href: "https://github.com/albarrajuan",
+      href: "https://github.com/Albarracin-sg",
       label: "GitHub",
     },
     {
       icon: <Linkedin className="h-5 w-5" />,
-      href: "https://linkedin.com/in/juan-albarracin",
+      href: "https://www.linkedin.com/in/Albarracin-sg",
       label: "LinkedIn",
     },
   ];

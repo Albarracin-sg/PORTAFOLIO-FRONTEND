@@ -239,7 +239,7 @@
     "chatbot": {
       "title": "Asistente del portafolio",
       "description": "Elegí una opción y te respondo rápido desde acá.",
-      "intro": "Hola, soy el chat bot del portafolio. Puedo orientarte sobre stack, proyectos o cómo contactar a Juan.",
+      "intro": "Hola bro, ¿qué tal todo? Cuéntame, ¿en qué te ayudo?",
       "prompts": {
         "stack": "¿En qué stack trabaja?",
         "projects": "Quiero ver proyectos",
