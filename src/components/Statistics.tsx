@@ -358,8 +358,8 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0 0L11 19" />
                 </svg>
               </a>
-              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
-                {t("stats.docsCredentials")} <code className="font-mono text-violet-600 dark:text-violet-400">user / passwordPortafolio</code>
+              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+                {t("stats.docsCredentials")} <span className="font-medium text-violet-600 dark:text-violet-400">user / passwordPortafolio</span>
               </p>
             </div>
 
