@@ -38,6 +38,13 @@ interface StatisticsProps {
 export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
   const { t, i18n } = useTranslation();
   const isSpanish = i18n.language.startsWith("es");
+  const [endpointPage, setEndpointPage] = useState(0);
+  const ENDPOINTS_PER_PAGE = 5;
+  const totalPages = Math.ceil(publicEndpoints.length / ENDPOINTS_PER_PAGE);
+  const pagedEndpoints = publicEndpoints.slice(
+    endpointPage * ENDPOINTS_PER_PAGE,
+    (endpointPage + 1) * ENDPOINTS_PER_PAGE,
+  );
 
   const languageData =
     (githubStats?.languageData as Array<Record<string, unknown>>) ??
@@ -440,22 +447,31 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
 
                   {/* Full public endpoint catalog — each links to Swagger */}
                   <div className="mt-4 sm:mt-6 grid gap-2 sm:gap-3">
-                    {publicEndpoints.map((ep) => {
+                    {pagedEndpoints.map((ep) => {
                       const EndpointIcon = ep.icon;
                       const traffic = endpointChartData.find(e => e.path === ep.path && e.method === ep.method);
                       const swaggerAnchor = ep.path.replace(/^\//, "").replace(/\//g, "-");
                       const swaggerUrl = `https://backend-portafolio-f6gx.onrender.com/api/v1/docs#/${ep.tag}/${swaggerAnchor}`;
+                      const isSpotify = ep.path.includes("spotify");
                       return (
                       <a
                         key={`${ep.method}-${ep.path}`}
                         href={swaggerUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm transition-colors hover:border-violet-300 hover:bg-violet-50/50 dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-violet-400/30 dark:hover:bg-violet-500/5"
+                        className={`group flex items-center justify-between rounded-lg border px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm transition-colors ${
+                          isSpotify
+                            ? "border-emerald-200 bg-emerald-50 hover:border-emerald-300 hover:bg-emerald-50/70 dark:border-emerald-500/20 dark:bg-emerald-500/10 dark:hover:border-emerald-400/30 dark:hover:bg-emerald-500/15"
+                            : "border-slate-200 bg-slate-50 hover:border-violet-300 hover:bg-violet-50/50 dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-violet-400/30 dark:hover:bg-violet-500/5"
+                        }`}
                       >
                         <div className="flex items-center gap-2 sm:gap-3">
-                          <EndpointIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-slate-400 dark:text-slate-500" />
-                          <span className="inline-flex items-center justify-center rounded-md bg-violet-100 px-1.5 py-0.5 text-[10px] sm:text-xs font-mono font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300">
+                          <EndpointIcon className={`h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 ${isSpotify ? "text-emerald-600 dark:text-emerald-400" : "text-slate-400 dark:text-slate-500"}`} />
+                          <span className={`inline-flex items-center justify-center rounded-md px-1.5 py-0.5 text-[10px] sm:text-xs font-mono font-semibold ${
+                            isSpotify
+                              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"
+                              : "bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"
+                          }`}>
                             {ep.method}
                           </span>
                           <span className="font-mono text-slate-700 dark:text-slate-300 truncate max-w-[150px] sm:max-w-none">
@@ -479,6 +495,33 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
                     );
                     })}
                   </div>
+
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <div className="mt-4 flex items-center justify-between">
+                      <p className="text-xs text-slate-500 dark:text-slate-400">
+                        {t("stats.endpointsPage")} {endpointPage + 1} {t("stats.of")} {totalPages}
+                      </p>
+                      <div className="flex gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => setEndpointPage(p => Math.max(0, p - 1))}
+                          disabled={endpointPage === 0}
+                          className="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300 dark:hover:bg-white/[0.08]"
+                        >
+                          {t("stats.prev")}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setEndpointPage(p => Math.min(totalPages - 1, p + 1))}
+                          disabled={endpointPage === totalPages - 1}
+                          className="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition-colors hover:bg-slate-50 disabled:opacity-30 disabled:cursor-not-allowed dark:border-white/10 dark:bg-white/[0.04] dark:text-slate-300 dark:hover:bg-white/[0.08]"
+                        >
+                          {t("stats.next")}
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             )}

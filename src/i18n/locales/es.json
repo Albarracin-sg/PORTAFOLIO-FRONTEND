@@ -301,7 +301,11 @@
     "viewApiDocs": "Ver documentación de la API",
     "docsCredentials": "Credenciales:",
     "docsUsername": "user",
-    "docsPassword": "passwordPortafolio"
+    "docsPassword": "passwordPortafolio",
+    "endpointsPage": "Página",
+    "of": "de",
+    "prev": "Anterior",
+    "next": "Siguiente"
   },
   "loading": {
     "didYouKnow": "¿Sabías que?",
