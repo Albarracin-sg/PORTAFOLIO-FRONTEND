@@ -359,7 +359,7 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
                 </svg>
               </a>
               <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                {t("stats.docsCredentials")} <span className="font-medium text-violet-600 dark:text-violet-400">user / passwordPortafolio</span>
+                {t("stats.docsCredentials")} <span className="font-medium text-violet-600 dark:text-violet-400">{import.meta.env.VITE_DOCS_USERNAME || "user"} / {import.meta.env.VITE_DOCS_PASSWORD || "passwordPortafolio"}</span>
               </p>
             </div>
 
