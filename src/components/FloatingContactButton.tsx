@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { Bot, ChevronUp, Github, Mail, Sparkles, Linkedin } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ChevronUp, Github, Mail, Sparkles, Linkedin, Bot } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from './ui/button';
-import FloatingChatbotDialog from './FloatingChatbotDialog';
 
 const BUTTON_SIZE = 56;
 const ICON_SIZE   = 48;
@@ -38,10 +37,10 @@ function getArcPositions(count: number) {
 
 export default function FloatingContactButton() {
   const { t } = useTranslation();
-  const [isExpanded, setIsExpanded]         = useState(false);
-  const [isVisible, setIsVisible]           = useState(false);
-  const [isChatOpen, setIsChatOpen]         = useState(false);
-  const [isTouchDevice, setIsTouchDevice]   = useState(false);
+  const navigate = useNavigate();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   const socialLinks = [
     {
@@ -60,7 +59,7 @@ export default function FloatingContactButton() {
       icon: Bot,
       href: 'chatbot',
       label: t('floating.actions.chatbot'),
-      color: 'hover:bg-green-500/20 hover:text-green-400',
+      color: 'hover:bg-violet-500/20 hover:text-violet-400',
     },
     {
       icon: Linkedin,
@@ -92,8 +91,7 @@ export default function FloatingContactButton() {
 
   const handleSocialClick = (href: string) => {
     if (href === 'chatbot') {
-      setIsChatOpen(true);
-      setIsExpanded(false);
+      navigate('/chatbot');
       return;
     }
     if (href.startsWith('#')) {
@@ -104,14 +102,6 @@ export default function FloatingContactButton() {
     } else {
       window.open(href, '_blank', 'noopener,noreferrer');
     }
-  };
-
-  const scrollToContact = () => {
-    if (location.pathname === '/') {
-      const el = document.getElementById('contact');
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsChatOpen(false);
   };
 
   const handleMainButtonClick = () => {
@@ -215,13 +205,6 @@ export default function FloatingContactButton() {
           </Button>
         </div>
       </div>
-
-      <FloatingChatbotDialog
-        open={isChatOpen}
-        onOpenChange={setIsChatOpen}
-        onScrollToContact={scrollToContact}
-        onEmailClick={() => window.open('mailto:albarrajuan5@gmail.com', '_blank', 'noopener,noreferrer')}
-      />
     </>
   );
 }

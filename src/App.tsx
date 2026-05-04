@@ -17,6 +17,7 @@ import ScrollToTop from './components/ui/ScrollToTop';
 const StatsPage = lazy(() => import('@/pages/StatsPage/index').then(m => ({ default: m.StatsPage })));
 const AllProjectsPage = lazy(() => import('@/pages/AllProjectsPage').then(m => ({ default: m.AllProjectsPage })));
 const ProjectDetailPage = lazy(() => import('@/pages/ProjectDetailPage').then(m => ({ default: m.ProjectDetailPage })));
+const BotChatPage = lazy(() => import('@/pages/BotChatPage').then(m => ({ default: m.BotChatPage })));
 
 function PageFallback() {
   return (
@@ -60,6 +61,11 @@ export default function App() {
         <Route path="stats" element={
           <Suspense fallback={<PageFallback />}>
             <StatsPage />
+          </Suspense>
+        } />
+        <Route path="chatbot" element={
+          <Suspense fallback={<PageFallback />}>
+            <BotChatPage />
           </Suspense>
         } />
         <Route index element={<HomePage />} />
