@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from './ui/dialog';
 import { sendBotMessage } from '../shared/api/bot';
+import { RateLimitError } from '../shared/api/http';
 
 type PromptKey = 'stack' | 'projects' | 'contact' | null;
 
@@ -87,14 +88,15 @@ export default function FloatingChatbotDialog({
         { role: 'assistant', content: data.reply },
       ]);
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Error de conexión';
+      const isRateLimit = err instanceof RateLimitError;
+      const errorMessage = isRateLimit 
+        ? t('contact.form.errors.rateLimit') 
+        : t('contact.form.errors.serverError');
+      
       setError(errorMessage);
       setMessages((prev) => [
         ...prev,
-        {
-          role: 'assistant',
-          content: 'Lo siento, tuve un problema al procesar tu mensaje. ¿Podrías intentar de nuevo?',
-        },
+        { role: 'assistant', content: errorMessage },
       ]);
     } finally {
       setIsLoading(false);

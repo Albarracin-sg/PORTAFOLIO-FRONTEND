@@ -45,7 +45,26 @@ export function SpotifyNowPlayingCard() {
     }
 
     loadTrack();
-    const intervalId = window.setInterval(loadTrack, 5_000);
+    // Polling cada 60s - antes era 5000ms (5s) para evitar excesso de requests
+    const intervalId = window.setInterval(() => {
+      // Solo consultar si la pestaña está visible
+      if (!document.hidden) {
+        loadTrack();
+      }
+    }, 60_000);
+
+    // Pausar cuando la pestaña no está visible
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        window.clearInterval(intervalId);
+      } else {
+        loadTrack();
+        window.setInterval(() => {
+          if (!document.hidden) loadTrack();
+        }, 60_000);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       cancelled = true;

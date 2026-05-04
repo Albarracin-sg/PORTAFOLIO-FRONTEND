@@ -209,7 +209,10 @@
       "errors": {
         "required": "Este campo es obligatorio",
         "minLength": "Es demasiado corto",
-        "invalidEmail": "Email inválido"
+        "invalidEmail": "Email inválido",
+        "rateLimit": "Demasiadas solicitudes. Intentá de nuevo en un momento.",
+        "networkError": "Error de conexión. Verificá tu internet.",
+        "serverError": "Error del servidor. Intentalo más tarde."
       },
       "modal": {
         "successTitle": "Mensaje enviado",

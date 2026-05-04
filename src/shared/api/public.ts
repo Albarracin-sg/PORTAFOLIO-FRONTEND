@@ -82,5 +82,7 @@ export async function fetchGithubStats() {
 }
 
 export async function fetchNowPlaying() {
-  return apiRequest<SpotifyTrack>('/public/spotify/now-playing', { cache: 'no-store' });
+  // El backend devuelve { track, cached, stale, ... } - extraer solo track
+  const response = await apiRequest<{ track: SpotifyTrack; cached: boolean; stale: boolean }>('/public/spotify/now-playing', { cache: 'no-store' });
+  return response.track;
 }
