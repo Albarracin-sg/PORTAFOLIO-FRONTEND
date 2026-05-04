@@ -85,12 +85,10 @@ export function BotChatPage() {
   };
 
   return (
-    <div className="min-h-[100dvh] flex flex-col bg-background relative">
+    <div className="flex flex-col flex-1 min-h-0 w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-3 relative">
       {/* Decorative side gradients — desktop only */}
       <div className="fixed top-20 -left-48 w-[500px] h-[500px] bg-gradient-to-br from-violet-600/10 to-fuchsia-600/10 rounded-full blur-3xl animate-pulse pointer-events-none -z-10 hidden lg:block" />
       <div className="fixed bottom-20 -right-48 w-[500px] h-[500px] bg-gradient-to-tl from-indigo-600/10 to-violet-600/10 rounded-full blur-3xl animate-pulse pointer-events-none -z-10 hidden lg:block" style={{ animationDelay: '1.5s' }} />
-
-      <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         {/* Header */}
         <div className="flex items-center gap-3 py-3 flex-shrink-0">
           <Button
