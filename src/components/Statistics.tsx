@@ -11,7 +11,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { ArrowLeft, FolderGit2, GitBranch, Star, Users, Server, Activity, Clock, Zap, Music, Globe, BarChart3, Bot, FolderOpen, Shield } from "lucide-react";
+import { ArrowLeft, FolderGit2, GitBranch, Star, Users, Server, Activity, Clock, Zap, Music, BarChart3, Bot, FolderOpen, Shield, Mail, Send, FileText, ExternalLink } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -162,16 +162,19 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
     { label: t("stats.apiUptime"), value: formatUptime(apiStats.uptime), icon: Server },
   ] : [];
 
-  // Icon mapping for endpoints
-  const getEndpointIcon = (path: string) => {
-    if (path.includes("spotify")) return Music;
-    if (path.includes("github")) return FolderGit2;
-    if (path.includes("stats")) return BarChart3;
-    if (path.includes("projects")) return FolderOpen;
-    if (path.includes("bot")) return Bot;
-    if (path.includes("admin")) return Shield;
-    return Globe;
-  };
+  // Full catalog of public endpoints (admin excluded)
+  const publicEndpoints = [
+    { method: "GET", path: "/public/spotify/now-playing", icon: Music, tag: "public-spotify", description: "Current playing track" },
+    { method: "GET", path: "/public/github/stats", icon: FolderGit2, tag: "public-github", description: "GitHub profile stats" },
+    { method: "GET", path: "/public/github/activity", icon: GitBranch, tag: "public-github", description: "GitHub recent activity" },
+    { method: "GET", path: "/public/projects", icon: FolderOpen, tag: "public-projects", description: "All projects" },
+    { method: "GET", path: "/public/projects/:id", icon: FileText, tag: "public-projects", description: "Project details" },
+    { method: "GET", path: "/public/stats", icon: BarChart3, tag: "public-stats", description: "Public API statistics" },
+    { method: "POST", path: "/public/contact", icon: Mail, tag: "public-contact", description: "Send contact message" },
+    { method: "POST", path: "/bot/chat", icon: Bot, tag: "bot", description: "Chat with AI assistant" },
+    { method: "POST", path: "/auth/login", icon: Send, tag: "auth", description: "Authenticate & get JWT token" },
+    { method: "GET", path: "/admin/stats", icon: Shield, tag: "admin-stats", description: "Admin statistics (JWT required)" },
+  ];
 
   const languageChartConfig = {
     value: { label: isSpanish ? "Uso" : "Usage", color: "#8b5cf6" },
@@ -435,41 +438,44 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
                     </BarChart>
                   </ChartContainer>
 
-                  {/* Endpoint detail list */}
+                  {/* Full public endpoint catalog — each links to Swagger */}
                   <div className="mt-4 sm:mt-6 grid gap-2 sm:gap-3">
-                    {endpointChartData.map((endpoint, index) => {
-                      const EndpointIcon = getEndpointIcon(endpoint.path);
+                    {publicEndpoints.map((ep) => {
+                      const EndpointIcon = ep.icon;
+                      const traffic = endpointChartData.find(e => e.path === ep.path && e.method === ep.method);
+                      const swaggerAnchor = ep.path.replace(/^\//, "").replace(/\//g, "-");
+                      const swaggerUrl = `https://backend-portafolio-f6gx.onrender.com/api/v1/docs#/${ep.tag}/${swaggerAnchor}`;
                       return (
-                      <div
-                        key={`endpoint-${index}`}
-                        className={`flex items-center justify-between rounded-lg border px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm ${
-                          endpoint.path.includes("spotify")
-                            ? "border-emerald-200 bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/10"
-                            : "border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-white/[0.04]"
-                        }`}
+                      <a
+                        key={`${ep.method}-${ep.path}`}
+                        href={swaggerUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm transition-colors hover:border-violet-300 hover:bg-violet-50/50 dark:border-white/10 dark:bg-white/[0.04] dark:hover:border-violet-400/30 dark:hover:bg-violet-500/5"
                       >
                         <div className="flex items-center gap-2 sm:gap-3">
                           <EndpointIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-slate-400 dark:text-slate-500" />
-                          <span className={`inline-flex items-center justify-center rounded-md px-1.5 py-0.5 text-[10px] sm:text-xs font-mono font-semibold ${
-                            endpoint.path.includes("spotify")
-                              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"
-                              : "bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"
-                          }`}>
-                            {endpoint.method}
+                          <span className="inline-flex items-center justify-center rounded-md bg-violet-100 px-1.5 py-0.5 text-[10px] sm:text-xs font-mono font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300">
+                            {ep.method}
                           </span>
                           <span className="font-mono text-slate-700 dark:text-slate-300 truncate max-w-[150px] sm:max-w-none">
-                            {endpoint.path}
+                            {ep.path}
                           </span>
                         </div>
-                        <div className="flex items-center gap-3 sm:gap-4 text-slate-600 dark:text-slate-400">
-                          <span className="font-semibold text-slate-900 dark:text-white">
-                            {endpoint.requests.toLocaleString()} req
-                          </span>
-                          <span className="text-xs sm:text-sm">
-                            {endpoint.avgTime}ms
-                          </span>
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          {traffic && (
+                            <>
+                              <span className="font-semibold text-slate-900 dark:text-white">
+                                {formatBigNumber(traffic.requests)} req
+                              </span>
+                              <span className="text-xs sm:text-sm">
+                                {traffic.avgTime}ms
+                              </span>
+                            </>
+                          )}
+                          <ExternalLink className="h-3.5 w-3.5 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100 dark:text-slate-500" />
                         </div>
-                      </div>
+                      </a>
                     );
                     })}
                   </div>
