@@ -147,6 +147,19 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
     }))
     .filter(e => !e.path.includes("admin") && !e.path.includes("docs") && !e.path.includes("swagger"));
 
+  // Spotify bar chart — only include if it's not 5x+ the next highest
+  const spotifyInChart = (() => {
+    const nonSpotify = endpointChartData.filter(e => !e.path.includes("spotify"));
+    const spotify = endpointChartData.find(e => e.path.includes("spotify"));
+    if (!spotify) return false;
+    const maxOthers = Math.max(...nonSpotify.map(e => e.requests), 0);
+    return spotify.requests < maxOthers * 5;
+  })();
+
+  const barChartData = spotifyInChart
+    ? endpointChartData
+    : endpointChartData.filter(e => !e.path.includes("spotify"));
+
   const apiMetricCards = apiStats ? [
     { label: t("stats.apiTotalRequests"), value: formatBigNumber(apiStats.totalRequests), icon: Activity },
     { label: t("stats.apiRequestsPerMin"), value: formatBigNumber(apiStats.requestsPerMinute), icon: Zap },
@@ -391,7 +404,7 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
             </div>
 
             {/* Endpoint traffic chart */}
-            {endpointChartData.length > 0 && (
+            {barChartData.length > 0 && (
               <Card className="mt-6 sm:mt-8 border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
                 <CardHeader>
                   <CardTitle className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
@@ -406,7 +419,7 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
                     }}
                     className="aspect-square h-64 sm:aspect-video sm:h-80 w-full"
                   >
-                    <BarChart data={endpointChartData} margin={{ left: 0, right: 10, top: 0, bottom: 25 }}>
+                    <BarChart data={barChartData} margin={{ left: 0, right: 10, top: 0, bottom: 25 }}>
                       <CartesianGrid vertical={false} />
                       <XAxis
                         dataKey="path"
@@ -434,7 +447,7 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
                         isAnimationActive={false}
                         className="cursor-pointer"
                       >
-                        {endpointChartData.map((entry, index) => (
+                        {barChartData.map((entry, index) => (
                           <Cell
                             key={`cell-${index}`}
                             fill={entry.path.includes("spotify") ? "#10b981" : "var(--color-requests)"}
