@@ -70,7 +70,7 @@ export default function Hero({ section }: HeroProps) {
                     });
                   }
                 }}
-                className="group flex items-center justify-center gap-3 rounded-2xl px-6 py-3 text-sm font-medium transition-all duration-300 bg-violet-600 text-white shadow-lg shadow-violet-500/20 hover:bg-violet-700 hover:scale-[1.02] active:scale-95 dark:bg-violet-500 dark:hover:bg-violet-600"
+                className="group flex items-center justify-center gap-3 rounded-2xl px-6 py-3 text-sm font-medium transition-all duration-300 bg-violet-600 text-white shadow-lg shadow-violet-500/20 hover:bg-violet-700 hover:scale-105 active:scale-95 dark:bg-violet-500 dark:hover:bg-violet-600"
               >
                 {t('hero.viewProjects')}
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -86,7 +86,7 @@ export default function Hero({ section }: HeroProps) {
                     });
                   }
                 }}
-                className="flex items-center justify-center gap-3 rounded-2xl px-6 py-3 text-sm font-medium transition-all duration-300 border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-slate-50 hover:border-slate-300 hover:scale-[1.02] active:scale-95 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/80 dark:hover:bg-white/[0.08]"
+                className="flex items-center justify-center gap-3 rounded-2xl px-6 py-3 text-sm font-medium transition-all duration-300 border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-white hover:border-violet-300 hover:text-violet-600 hover:scale-105 active:scale-95 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/80 dark:hover:bg-white/[0.08] dark:hover:border-violet-500/30 dark:hover:text-violet-400"
               >
                 <Mail className="h-4 w-4" />
                 {t('hero.contactMe')}
@@ -95,7 +95,7 @@ export default function Hero({ section }: HeroProps) {
               <a
                 href={cvPdf}
                 download="JUAN_ALBARRACIN_CV.pdf"
-                className="flex sm:hidden items-center justify-center gap-3 rounded-2xl px-6 py-3 text-sm font-medium transition-all duration-300 border border-violet-200 bg-violet-50 text-violet-700 shadow-sm hover:bg-violet-100 hover:scale-[1.02] active:scale-95 dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-300 dark:hover:bg-violet-500/20"
+                className="flex sm:hidden items-center justify-center gap-3 rounded-2xl px-6 py-3 text-sm font-medium transition-all duration-300 border border-violet-200 bg-violet-50 text-violet-700 shadow-sm hover:bg-violet-100 hover:border-violet-300 hover:scale-105 active:scale-95 dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-300 dark:hover:bg-violet-500/20"
               >
                 <Download className="h-4 w-4" />
                 {t('nav.downloadCV')}

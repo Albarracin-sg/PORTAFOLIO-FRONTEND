@@ -12,7 +12,7 @@ export default function ThemeToggle({ isDark, onToggle }: ThemeToggleProps) {
       variant="ghost"
       size="icon"
       onClick={onToggle}
-      className="relative overflow-hidden transition-all duration-300 hover:bg-accent/20"
+      className="relative overflow-hidden transition-all duration-300 hover:scale-110 hover:bg-violet-500/10 hover:text-violet-600 dark:hover:text-violet-400 rounded-xl"
       title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
     >
       {/* Sun Icon */}

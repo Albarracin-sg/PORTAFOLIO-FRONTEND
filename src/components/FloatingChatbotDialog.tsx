@@ -12,8 +12,6 @@ import {
 import { sendBotMessage } from '../shared/api/bot';
 import { RateLimitError } from '../shared/api/http';
 
-type PromptKey = 'stack' | 'projects' | 'contact' | null;
-
 interface Message {
   role: 'user' | 'assistant';
   content: string;
@@ -22,23 +20,13 @@ interface Message {
 interface FloatingChatbotDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  selectedPrompt: PromptKey;
-  onPromptSelect: (prompt: Exclude<PromptKey, null>) => void;
   onScrollToContact: () => void;
   onEmailClick: () => void;
 }
 
-const DEFAULT_PROMPTS = {
-  stack: '¿Qué tecnologías usas en tu stack?',
-  projects: '¿Qué proyectos has hecho?',
-  contact: '¿Cómo puedo contactarte?',
-};
-
 export default function FloatingChatbotDialog({
   open,
   onOpenChange,
-  selectedPrompt: _selectedPrompt,
-  onPromptSelect,
   onScrollToContact,
   onEmailClick,
 }: FloatingChatbotDialogProps) {
@@ -108,11 +96,6 @@ export default function FloatingChatbotDialog({
     sendMessage(input);
   };
 
-  const handlePromptClick = (promptKey: Exclude<PromptKey, null>) => {
-    onPromptSelect(promptKey);
-    sendMessage(DEFAULT_PROMPTS[promptKey]);
-  };
-
   const handleClose = () => {
     setMessages([]);
     setInput('');
@@ -123,7 +106,7 @@ export default function FloatingChatbotDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="border-violet-100 bg-white/95 sm:max-w-md dark:border-violet-500/20 dark:bg-gray-950 max-h-[80vh] flex flex-col">
+      <DialogContent className="border-violet-100 bg-white/95 sm:max-w-md dark:border-violet-500/20 dark:bg-gray-950 flex flex-col p-4 sm:p-6 overflow-hidden fixed max-h-[75dvh] sm:h-[600px] h-[70dvh]">
         <DialogHeader className="flex-shrink-0">
           <DialogTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
             <Bot className="h-5 w-5 text-violet-500" />
@@ -134,12 +117,12 @@ export default function FloatingChatbotDialog({
           </DialogDescription>
         </DialogHeader>
 
-        {/* Messages Container */}
-        <div className="flex-1 overflow-y-auto space-y-4 min-h-[200px] max-h-[300px] p-1">
+        {/* Messages Container - Fixed height flex area */}
+        <div className="flex-1 overflow-y-auto space-y-4 my-4 p-1 custom-scrollbar">
           {messages.map((msg, index) => (
             <div
               key={index}
-              className={`rounded-2xl px-4 py-3 text-sm ${
+              className={`rounded-2xl px-4 py-3 text-sm transition-all duration-300 ${
                 msg.role === 'user'
                   ? 'ml-auto border border-violet-200 bg-violet-50 text-gray-900 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-gray-100'
                   : 'mr-auto border border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200'
@@ -150,9 +133,9 @@ export default function FloatingChatbotDialog({
           ))}
 
           {isLoading && (
-            <div className="flex items-center gap-2 text-gray-500 text-sm">
+            <div className="flex items-center gap-2 text-gray-500 text-sm animate-pulse">
               <Loader2 className="h-4 w-4 animate-spin" />
-              <span>Escribiendo...</span>
+              <span>{t('common.loading')}...</span>
             </div>
           )}
 
@@ -166,65 +149,49 @@ export default function FloatingChatbotDialog({
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Prompts - only shown when API fails (no credits, etc.) */}
-        {error && (error.includes('créditos') || error.includes('credits') || error.includes('limit') || error.includes('quota') || error.includes('API')) && !isLoading && (
-          <div className="grid gap-3 flex-shrink-0">
-            <button
-              type="button"
-              onClick={() => handlePromptClick('stack')}
-              className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-left text-sm font-medium text-gray-700 transition hover:border-violet-200 hover:bg-violet-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:border-violet-500/30 dark:hover:bg-gray-800"
-            >
-              {t('floating.chatbot.prompts.stack')}
-            </button>
-            <button
-              type="button"
-              onClick={() => handlePromptClick('projects')}
-              className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-left text-sm font-medium text-gray-700 transition hover:border-violet-200 hover:bg-violet-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:border-violet-500/30 dark:hover:bg-gray-800"
-            >
-              {t('floating.chatbot.prompts.projects')}
-            </button>
-            <button
-              type="button"
-              onClick={() => handlePromptClick('contact')}
-              className="rounded-xl border border-gray-200 bg-white px-4 py-3 text-left text-sm font-medium text-gray-700 transition hover:border-violet-200 hover:bg-violet-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 dark:hover:border-violet-500/30 dark:hover:bg-gray-800"
-            >
-              {t('floating.chatbot.prompts.contact')}
-            </button>
-          </div>
-        )}
-
         {/* Input Form */}
-        <form onSubmit={handleSubmit} className="flex gap-2 flex-shrink-0">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Escribe tu mensaje..."
-            className="flex-1 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
-            disabled={isLoading}
-          />
-          <Button
-            type="submit"
-            size="icon"
-            disabled={isLoading || !input.trim()}
-            className="flex-shrink-0"
-          >
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Send className="h-4 w-4" />
-            )}
-          </Button>
-        </form>
+        <div className="mt-auto space-y-4 flex-shrink-0">
+          <form onSubmit={handleSubmit} className="flex gap-2">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder={t('floating.chatbot.placeholder') || 'Escribe tu mensaje...'}
+              className="flex-1 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
+              disabled={isLoading}
+            />
+            <Button
+              type="submit"
+              size="icon"
+              disabled={isLoading || !input.trim()}
+              className="flex-shrink-0 rounded-2xl bg-violet-600 hover:bg-violet-700 transition-all duration-300 hover:scale-105 active:scale-95"
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Send className="h-4 w-4" />
+              )}
+            </Button>
+          </form>
 
-        {/* Footer Actions */}
-        <div className="flex justify-between flex-shrink-0">
-          <Button type="button" variant="outline" onClick={onScrollToContact}>
-            {t('floating.chatbot.actions.contact')}
-          </Button>
-          <Button type="button" onClick={onEmailClick}>
-            {t('floating.chatbot.actions.email')}
-          </Button>
+          {/* Footer Actions */}
+          <div className="flex flex-col sm:flex-row gap-2">
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={onScrollToContact}
+              className="flex-1 rounded-2xl transition-all duration-300 hover:scale-105 hover:border-violet-400 hover:text-violet-600 dark:hover:border-violet-500 dark:hover:text-violet-400"
+            >
+              {t('floating.chatbot.actions.contact')}
+            </Button>
+            <Button 
+              type="button" 
+              onClick={onEmailClick}
+              className="flex-1 rounded-2xl bg-violet-600 hover:bg-violet-700 text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-lg shadow-violet-500/20"
+            >
+              {t('floating.chatbot.actions.email')}
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

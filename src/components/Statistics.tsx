@@ -138,14 +138,14 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
     return n.toLocaleString();
   };
 
-  const endpointChartData = apiStats?.endpoints.map(e => ({
-    path: e.path.replace("/api/v1/", ""),
-    requests: e.totalRequests,
-    avgTime: Math.round(e.avgResponseTime),
-    method: e.method,
-  })) ?? [];
-
-  const otherEndpoints = endpointChartData.filter(e => !e.path.includes("spotify"));
+  const endpointChartData = (apiStats?.endpoints ?? [])
+    .map(e => ({
+      path: e.path.replace("/api/v1/", ""),
+      requests: e.totalRequests,
+      avgTime: Math.round(e.avgResponseTime),
+      method: e.method,
+    }))
+    .filter(e => !e.path.includes("admin") && !e.path.includes("docs") && !e.path.includes("swagger"));
 
   const apiMetricCards = apiStats ? [
     { label: t("stats.apiTotalRequests"), value: formatBigNumber(apiStats.totalRequests), icon: Activity },
@@ -282,7 +282,7 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
             </CardContent>
           </Card>
 
-          {/* Bar — proyectos por mes: paddingLeft 5px solo en sm+ */}
+          {/* Bar — proyectos por mes: margin 0 para no cortar eje Y */}
           <Card className="border-slate-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
             <CardHeader>
               <CardTitle className="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">
@@ -291,7 +291,7 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
             </CardHeader>
             <CardContent>
               <ChartContainer config={projectChartConfig} className="aspect-square h-64 sm:aspect-video sm:h-80 w-full">
-                <BarChart data={projectsData} margin={{ left: -20, right: 10, top: 0, bottom: 0 }}>
+                <BarChart data={projectsData} margin={{ left: 0, right: 10, top: 0, bottom: 0 }}>
                   <CartesianGrid vertical={false} />
                   <XAxis dataKey="month" tickLine={false} axisLine={false} tick={{ fontSize: 12 }} />
                   <YAxis tickLine={false} axisLine={false} allowDecimals={false} tick={{ fontSize: 12 }} width={30} />
@@ -310,7 +310,7 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
             </CardHeader>
             <CardContent>
               <ChartContainer config={activityChartConfig} className="aspect-square h-64 sm:aspect-video sm:h-80 w-full">
-                <LineChart data={githubActivity} margin={{ left: -20, right: 10 }}>
+                <LineChart data={githubActivity} margin={{ left: 0, right: 10 }}>
                   <CartesianGrid vertical={false} />
                   <XAxis dataKey="day" tickLine={false} axisLine={false} tick={{ fontSize: 12 }} />
                   <YAxis tickLine={false} axisLine={false} allowDecimals={false} tick={{ fontSize: 12 }} width={30} />
@@ -406,13 +406,15 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
                     }}
                     className="aspect-square h-64 sm:aspect-video sm:h-80 w-full"
                   >
-                    <BarChart data={otherEndpoints.length > 0 ? otherEndpoints : endpointChartData} margin={{ left: -20, right: 10, top: 0, bottom: 0 }}>
+                    <BarChart data={endpointChartData} margin={{ left: 0, right: 10, top: 0, bottom: 25 }}>
                       <CartesianGrid vertical={false} />
                       <XAxis
                         dataKey="path"
                         tickLine={false}
                         axisLine={false}
-                        tick={{ fontSize: 12 }}
+                        tick={{ fontSize: 10, fill: "currentColor", opacity: 0.7 }}
+                        interval={0}
+                        height={40}
                       />
                       <YAxis
                         tickLine={false}
@@ -431,7 +433,14 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
                         radius={[8, 8, 0, 0]}
                         isAnimationActive={false}
                         className="cursor-pointer"
-                      />
+                      >
+                        {endpointChartData.map((entry, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={entry.path.includes("spotify") ? "#10b981" : "var(--color-requests)"}
+                          />
+                        ))}
+                      </Bar>
                     </BarChart>
                   </ChartContainer>
 

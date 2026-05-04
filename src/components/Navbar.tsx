@@ -188,7 +188,7 @@ export default function Navbar({
               <ThemeToggle isDark={isDark} onToggle={onThemeToggle} />
 
               <Select value={language} onValueChange={onLanguageChange}>
-                <SelectTrigger className="w-24 cursor-pointer">
+                <SelectTrigger className="w-24 cursor-pointer rounded-2xl transition-all duration-300 hover:scale-105 border-slate-200 dark:border-white/10">
                   <SelectValue>
                     {isChangingLang ? (
                       <Loader2 className="h-4 w-4 animate-spin" />
@@ -213,14 +213,14 @@ export default function Navbar({
               </Select>
 
               {token ? (
-                <Button variant="outline" className="gap-2 cursor-pointer" asChild>
+                <Button variant="outline" className="gap-2 cursor-pointer rounded-2xl transition-all duration-300 hover:scale-105 hover:border-violet-400 hover:text-violet-600 dark:hover:border-violet-500 dark:hover:text-violet-400" asChild>
                   <Link to="/admin">Admin</Link>
                 </Button>
               ) : (
-                <AdminLoginModal />
+                <AdminLoginModal triggerClassName="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium border border-slate-200 bg-white text-slate-700 rounded-2xl transition-all duration-300 hover:scale-105 hover:border-violet-400 hover:text-violet-600 dark:border-white/10 dark:bg-transparent dark:text-slate-300 dark:hover:border-violet-500 dark:hover:text-violet-400" />
               )}
 
-              <Button variant="outline" className="gap-2 cursor-pointer" asChild>
+              <Button variant="outline" className="gap-2 cursor-pointer rounded-2xl transition-all duration-300 hover:scale-105 hover:border-violet-400 hover:text-violet-600 dark:hover:border-violet-500 dark:hover:text-violet-400" asChild>
                 <a href={cvPdf} target="_blank" rel="noreferrer">
                   <FileText className="h-4 w-4" />
                   {t("nav.downloadCV")}

@@ -5,8 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { Button } from './ui/button';
 import FloatingChatbotDialog from './FloatingChatbotDialog';
 
-type PromptKey = 'stack' | 'projects' | 'contact' | null;
-
 const BUTTON_SIZE = 56;
 const ICON_SIZE   = 48;
 const RADIUS      = 110;
@@ -43,7 +41,6 @@ export default function FloatingContactButton() {
   const [isExpanded, setIsExpanded]         = useState(false);
   const [isVisible, setIsVisible]           = useState(false);
   const [isChatOpen, setIsChatOpen]         = useState(false);
-  const [selectedPrompt, setSelectedPrompt] = useState<PromptKey>(null);
   const [isTouchDevice, setIsTouchDevice]   = useState(false);
 
   const socialLinks = [
@@ -108,8 +105,6 @@ export default function FloatingContactButton() {
       window.open(href, '_blank', 'noopener,noreferrer');
     }
   };
-
-  const handlePromptSelect = (prompt: Exclude<PromptKey, null>) => setSelectedPrompt(prompt);
 
   const scrollToContact = () => {
     if (location.pathname === '/') {
@@ -224,8 +219,6 @@ export default function FloatingContactButton() {
       <FloatingChatbotDialog
         open={isChatOpen}
         onOpenChange={setIsChatOpen}
-        selectedPrompt={selectedPrompt}
-        onPromptSelect={handlePromptSelect}
         onScrollToContact={scrollToContact}
         onEmailClick={() => window.open('mailto:albarrajuan5@gmail.com', '_blank', 'noopener,noreferrer')}
       />
