@@ -296,7 +296,8 @@
     "apiUptime": "Uptime",
     "apiPerformance": "API Performance",
     "apiPerformanceSubtitle": "Real-time server status and endpoint performance",
-    "apiTrafficByEndpoint": "Traffic by Endpoint"
+    "apiTrafficByEndpoint": "Traffic by Endpoint",
+    "mostActiveEndpoint": "Most active endpoint"
   },
   "loading": {
     "didYouKnow": "Did you know?",

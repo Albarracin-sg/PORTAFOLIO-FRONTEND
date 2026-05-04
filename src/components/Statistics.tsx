@@ -11,7 +11,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { ArrowLeft, FolderGit2, GitBranch, Star, Users, Server, Activity, Clock, Zap } from "lucide-react";
+import { ArrowLeft, FolderGit2, GitBranch, Star, Users, Server, Activity, Clock, Zap, Music, Globe, BarChart3, Bot, FolderOpen, Shield } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -152,12 +152,26 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
     method: e.method,
   })) ?? [];
 
+  // Spotify domina la gráfica — separarlo para que los demás se vean
+  const otherEndpoints = endpointChartData.filter(e => !e.path.includes("spotify"));
+
   const apiMetricCards = apiStats ? [
     { label: t("stats.apiTotalRequests"), value: formatBigNumber(apiStats.totalRequests), icon: Activity },
     { label: t("stats.apiRequestsPerMin"), value: formatBigNumber(apiStats.requestsPerMinute), icon: Zap },
     { label: t("stats.apiAvgResponse"), value: `${Math.round(apiStats.avgResponseTimeMs)}ms`, icon: Clock },
     { label: t("stats.apiUptime"), value: formatUptime(apiStats.uptime), icon: Server },
   ] : [];
+
+  // Icon mapping for endpoints
+  const getEndpointIcon = (path: string) => {
+    if (path.includes("spotify")) return Music;
+    if (path.includes("github")) return FolderGit2;
+    if (path.includes("stats")) return BarChart3;
+    if (path.includes("projects")) return FolderOpen;
+    if (path.includes("bot")) return Bot;
+    if (path.includes("admin")) return Shield;
+    return Globe;
+  };
 
   const languageChartConfig = {
     value: { label: isSpanish ? "Uso" : "Usage", color: "#8b5cf6" },
@@ -378,7 +392,7 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
                     }}
                     className="aspect-square h-64 sm:aspect-video sm:h-80 w-full"
                   >
-                    <BarChart data={endpointChartData} margin={{ left: -20, right: 10, top: 0, bottom: 0 }}>
+                    <BarChart data={otherEndpoints.length > 0 ? otherEndpoints : endpointChartData} margin={{ left: -20, right: 10, top: 0, bottom: 0 }}>
                       <CartesianGrid vertical={false} />
                       <XAxis
                         dataKey="path"
@@ -409,13 +423,24 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
 
                   {/* Endpoint detail list */}
                   <div className="mt-4 sm:mt-6 grid gap-2 sm:gap-3">
-                    {endpointChartData.map((endpoint, index) => (
+                    {endpointChartData.map((endpoint, index) => {
+                      const EndpointIcon = getEndpointIcon(endpoint.path);
+                      return (
                       <div
                         key={`endpoint-${index}`}
-                        className="flex items-center justify-between rounded-lg border border-slate-200 bg-slate-50 px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm dark:border-white/10 dark:bg-white/[0.04]"
+                        className={`flex items-center justify-between rounded-lg border px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm ${
+                          endpoint.path.includes("spotify")
+                            ? "border-emerald-200 bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/10"
+                            : "border-slate-200 bg-slate-50 dark:border-white/10 dark:bg-white/[0.04]"
+                        }`}
                       >
                         <div className="flex items-center gap-2 sm:gap-3">
-                          <span className="inline-flex items-center justify-center rounded-md bg-violet-100 px-1.5 py-0.5 text-[10px] sm:text-xs font-mono font-semibold text-violet-700 dark:bg-violet-500/15 dark:text-violet-300">
+                          <EndpointIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 shrink-0 text-slate-400 dark:text-slate-500" />
+                          <span className={`inline-flex items-center justify-center rounded-md px-1.5 py-0.5 text-[10px] sm:text-xs font-mono font-semibold ${
+                            endpoint.path.includes("spotify")
+                              ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300"
+                              : "bg-violet-100 text-violet-700 dark:bg-violet-500/15 dark:text-violet-300"
+                          }`}>
                             {endpoint.method}
                           </span>
                           <span className="font-mono text-slate-700 dark:text-slate-300 truncate max-w-[150px] sm:max-w-none">
@@ -431,7 +456,8 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
                           </span>
                         </div>
                       </div>
-                    ))}
+                    );
+                    })}
                   </div>
                 </CardContent>
               </Card>
