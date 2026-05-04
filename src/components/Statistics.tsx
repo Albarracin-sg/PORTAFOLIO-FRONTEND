@@ -347,6 +347,17 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
               <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-slate-600 dark:text-slate-400">
                 {t("stats.apiPerformanceSubtitle")}
               </p>
+              <a
+                href="https://backend-portafolio-f6gx.onrender.com/api/v1/docs"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-violet-600 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300 transition-colors"
+              >
+                {t("stats.viewApiDocs")}
+                <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0 0L11 19" />
+                </svg>
+              </a>
             </div>
 
             {/* API metric cards with icons */}

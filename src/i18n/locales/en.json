@@ -297,7 +297,8 @@
     "apiPerformance": "API Performance",
     "apiPerformanceSubtitle": "Real-time server status and endpoint performance",
     "apiTrafficByEndpoint": "Traffic by Endpoint",
-    "mostActiveEndpoint": "Most active endpoint"
+    "mostActiveEndpoint": "Most active endpoint",
+    "viewApiDocs": "View API Documentation"
   },
   "loading": {
     "didYouKnow": "Did you know?",

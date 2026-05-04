@@ -297,7 +297,8 @@
     "apiPerformance": "Rendimiento de la API",
     "apiPerformanceSubtitle": "Estado en tiempo real del servidor y rendimiento por endpoint",
     "apiTrafficByEndpoint": "Tráfico por Endpoint",
-    "mostActiveEndpoint": "Endpoint más activo"
+    "mostActiveEndpoint": "Endpoint más activo",
+    "viewApiDocs": "Ver documentación de la API"
   },
   "loading": {
     "didYouKnow": "¿Sabías que?",
