@@ -243,6 +243,7 @@
       "title": "Portfolio assistant",
       "description": "Choose an option and I’ll answer quickly from here.",
       "intro": "Hi, I’m the portfolio chat bot. I can guide you about stack, projects, or how to contact Juan.",
+      "placeholder": "Type your message...",
       "prompts": {
         "stack": "What stack does he work with?",
         "projects": "I want to see projects",
