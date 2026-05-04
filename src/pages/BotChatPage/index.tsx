@@ -190,7 +190,6 @@ export function BotChatPage() {
           >
             {t('floating.chatbot.actions.email')}
           </Button>
-        </div>
       </div>
     </div>
   );
