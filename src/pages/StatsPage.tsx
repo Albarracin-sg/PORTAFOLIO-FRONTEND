@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
 import { BarChart3, Clock, Zap, Activity, Server, Globe } from 'lucide-react';
-import { fetchPublicStats, type PublicStats } from '../shared/api/stats';
-import { useLanguage } from '../hooks/useLanguage';
+import { fetchPublicStats, type PublicStats } from '@/shared/api/stats';
 
 export default function StatsPage() {
-  const { t } = useLanguage();
   const [stats, setStats] = useState<PublicStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
