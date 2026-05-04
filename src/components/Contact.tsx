@@ -179,7 +179,7 @@ export default function Contact({ section }: ContactProps) {
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}
-        <div className="mb-12">
+        <div className="mb-12 text-center lg:text-left">
           <h1 className="mb-4 text-5xl font-semibold leading-none tracking-tight text-gray-900 dark:text-gray-100 sm:text-6xl">
             <EditableText
               value={String(typedDraft.title ?? t("contact.title"))}
@@ -188,7 +188,7 @@ export default function Contact({ section }: ContactProps) {
             />
             <span className="text-violet-500"> .</span>
           </h1>
-          <p className="max-w-3xl text-sm leading-7 text-gray-600 dark:text-gray-400 sm:text-base">
+          <p className="max-w-3xl mx-auto lg:mx-0 text-sm leading-7 text-gray-600 dark:text-gray-400 sm:text-base">
             <EditableText
               value={String(typedDraft.subtitle ?? t("contact.subtitle"))}
               displayValue={String(t("contact.subtitle"))}

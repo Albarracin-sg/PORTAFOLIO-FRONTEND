@@ -41,12 +41,12 @@ export default function Hero({ section }: HeroProps) {
   };
 
   return (
-    <section className="min-h-[calc(100vh-4rem)] flex items-center px-4 pb-12 pt-28 sm:px-6 sm:pt-28 lg:px-8 lg:pt-32 lg:pb-16 relative">
+    <section className="min-h-screen flex items-center justify-center px-4 pt-48 pb-20 sm:px-6 sm:pt-28 lg:px-8 lg:pt-32 lg:pb-16 relative">
       <div className="max-w-7xl mx-auto w-full relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
-          <div className="space-y-8 text-center lg:text-left pt-8 lg:pt-0">
-            <div className="max-w-3xl mx-auto lg:mx-0 space-y-5">
+          <div className="space-y-6 sm:space-y-8 text-center lg:text-left">
+            <div className="max-w-3xl mx-auto lg:mx-0 space-y-4 sm:space-y-5">
               <h1 className="text-3xl font-semibold leading-tight tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl lg:text-6xl break-words">
                 {t('hero.greeting')}
               </h1>
@@ -132,7 +132,7 @@ export default function Hero({ section }: HeroProps) {
           </div>
 
           {/* Profile Image — centered on mobile, right-aligned on desktop */}
-          <div className="flex justify-center lg:justify-end mt-8 lg:mt-0">
+          <div className="flex flex-col items-center lg:items-end mt-8 lg:mt-0">
             <div className="relative w-full max-w-[280px] sm:max-w-xs lg:max-w-none px-2 sm:px-4 lg:p-0">
               {canEditImages && (
                 <div className="absolute top-0 right-3 z-20 flex gap-2">
@@ -170,52 +170,52 @@ export default function Hero({ section }: HeroProps) {
                 <SkillBubble
                   name="React"
                   size="md"
-                  className={`absolute right-4 top-10 z-10 pointer-events-none transition-all duration-500 transform ${
+                  className={`absolute -right-2 top-2 sm:right-4 sm:top-10 z-10 pointer-events-none transition-all duration-500 transform scale-75 lg:scale-100 ${
                     isImageHovered
-                      ? "translate-x-0 translate-y-0 scale-110 opacity-100"
+                      ? "translate-x-0 translate-y-0 scale-90 lg:scale-110 opacity-100"
                       : "translate-x-4 -translate-y-4 scale-50 opacity-0"
                   }`}
                 />
                 <SkillBubble
                   name="Node.js"
                   size="md"
-                  className={`absolute left-4 top-20 z-10 pointer-events-none transition-all duration-500 transform ${
+                  className={`absolute -left-2 top-8 sm:left-4 sm:top-20 z-10 pointer-events-none transition-all duration-500 transform scale-75 lg:scale-100 ${
                     isImageHovered
-                      ? "translate-x-0 translate-y-0 scale-110 opacity-100"
+                      ? "translate-x-0 translate-y-0 scale-90 lg:scale-110 opacity-100"
                       : "-translate-x-4 -translate-y-4 scale-50 opacity-0"
                   }`}
                 />
                 <SkillBubble
                   name="TypeScript"
                   size="md"
-                  className={`absolute left-8 bottom-32 z-10 pointer-events-none transition-all duration-700 transform ${
+                  className={`absolute -left-2 bottom-16 sm:left-8 sm:bottom-32 z-10 pointer-events-none transition-all duration-700 transform scale-75 lg:scale-100 ${
                     isImageHovered
-                      ? "opacity-100 scale-110 translate-x-0"
+                      ? "opacity-100 scale-90 lg:scale-110 translate-x-0"
                       : "opacity-0 scale-50 -translate-x-8"
                   }`}
                 />
                 <SkillBubble
                   name="Nest.js"
                   size="md"
-                  className={`absolute right-12 top-1/2 z-10 pointer-events-none transition-all duration-500 delay-100 transform ${
+                  className={`absolute -right-4 top-1/2 z-10 pointer-events-none transition-all duration-500 delay-100 transform scale-75 lg:scale-100 ${
                     isImageHovered
-                      ? "opacity-100 scale-110 translate-y-0"
+                      ? "opacity-100 scale-90 lg:scale-110 translate-y-0"
                       : "opacity-0 scale-50 translate-y-8"
                   }`}
                 />
                 <SkillBubble
                   name="PostgreSQL"
                   size="md"
-                  className={`absolute right-8 bottom-20 z-10 pointer-events-none transition-all duration-700 delay-200 transform ${
+                  className={`absolute -right-2 bottom-8 sm:right-8 sm:bottom-20 z-10 pointer-events-none transition-all duration-700 delay-200 transform scale-75 lg:scale-100 ${
                     isImageHovered
-                      ? "opacity-100 scale-110 rotate-0"
+                      ? "opacity-100 scale-90 lg:scale-110 rotate-0"
                       : "opacity-0 scale-50 rotate-12 translate-y-8"
                   }`}
                 />
               </div>
-              <div className="relative z-20">
-                <SpotifyNowPlayingCard />
-              </div>
+            </div>
+            <div className="w-full max-w-sm lg:max-w-none relative z-20">
+              <SpotifyNowPlayingCard />
             </div>
           </div>
         </div>
