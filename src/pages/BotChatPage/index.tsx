@@ -84,28 +84,28 @@ export function BotChatPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-4.5rem)] mt-[4.5rem] bg-background relative overflow-hidden flex flex-col">
+    <div className="h-[calc(100dvh-4.5rem)] md:h-[calc(100vh-4.5rem)] mt-[4.5rem] bg-background relative overflow-hidden flex flex-col">
       {/* Decorative side gradients — desktop only */}
       <div className="fixed top-20 -left-48 w-[500px] h-[500px] bg-gradient-to-br from-violet-600/10 to-fuchsia-600/10 rounded-full blur-3xl animate-pulse pointer-events-none -z-10 hidden lg:block" />
       <div className="fixed bottom-20 -right-48 w-[500px] h-[500px] bg-gradient-to-tl from-indigo-600/10 to-violet-600/10 rounded-full blur-3xl animate-pulse pointer-events-none -z-10 hidden lg:block" style={{ animationDelay: '1.5s' }} />
 
-      <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto px-4 pt-3 pb-4 overflow-hidden">
+      <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto px-4 pt-2 pb-4 overflow-hidden relative z-10">
         {/* Header */}
-        <div className="flex items-center gap-3 py-3 flex-shrink-0 scroll-mt-16 md:scroll-mt-20">
+        <div className="flex items-center gap-3 py-2 md:py-3 flex-shrink-0">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => navigate(-1)}
-            className="rounded-xl"
+            className="rounded-xl h-9 w-9"
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <Bot className="h-7 w-7 text-violet-500 flex-shrink-0" />
-          <div>
-            <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+          <Bot className="h-6 w-6 md:h-7 md:h-7 text-violet-500 flex-shrink-0" />
+          <div className="min-w-0">
+            <h1 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 truncate">
               {t('floating.chatbot.title')}
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs md:text-sm text-muted-foreground truncate">
               {t('floating.chatbot.description')}
             </p>
           </div>
@@ -114,12 +114,12 @@ export function BotChatPage() {
         {/* Messages */}
         <div 
           ref={messagesContainerRef}
-          className="flex-1 overflow-y-auto space-y-4 mb-6 pb-4 custom-scrollbar"
+          className="flex-1 overflow-y-auto space-y-4 mb-4 pb-2 custom-scrollbar"
         >
           {messages.map((msg, index) => (
             <div
               key={index}
-              className={`rounded-2xl px-4 py-3 transition-all duration-300 w-fit max-w-[85%] ${
+              className={`rounded-2xl px-4 py-3 transition-all duration-300 w-fit max-w-[90%] md:max-w-[85%] ${
                 msg.role === 'user'
                   ? 'ml-auto text-sm border border-violet-200 bg-violet-50 text-gray-900 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-gray-100'
                   : 'mr-auto text-base border border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200'
@@ -151,21 +151,21 @@ export function BotChatPage() {
         </div>
 
         {/* Input */}
-        <form onSubmit={handleSubmit} className="flex gap-2 mb-6">
+        <form onSubmit={handleSubmit} className="flex gap-2 mb-4 flex-shrink-0">
           <input
             ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={t('floating.chatbot.placeholder')}
-            className="flex-1 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus-visible:!outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500 hover:border-gray-300 dark:hover:border-gray-600"
+            className="flex-1 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus-visible:!outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500 hover:border-gray-300 dark:hover:border-gray-600 min-w-0"
             disabled={isLoading}
           />
           <Button
             type="submit"
             size="icon"
             disabled={isLoading || !input.trim()}
-            className="flex-shrink-0 rounded-2xl bg-violet-600 hover:bg-violet-700 transition-all duration-300 hover:scale-105 active:scale-95 h-12 w-12 shrink-0 focus-visible:!outline-none"
+            className="flex-shrink-0 rounded-2xl bg-violet-600 hover:bg-violet-700 transition-all duration-300 hover:scale-105 active:scale-95 h-11 w-11 md:h-12 md:w-12 shrink-0 focus-visible:!outline-none"
           >
             {isLoading ? (
               <Loader2 className="h-5 w-5 animate-spin" />
@@ -176,7 +176,7 @@ export function BotChatPage() {
         </form>
 
         {/* Quick actions */}
-        <div className="flex flex-col sm:flex-row gap-2">
+        <div className="flex flex-col sm:flex-row gap-2 flex-shrink-0">
           <Button
             variant="outline"
             onClick={() => {

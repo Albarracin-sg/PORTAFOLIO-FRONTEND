@@ -37,6 +37,8 @@ export function RootLayout() {
     navigate('/');
   };
 
+  const isChatbot = pathname === '/chatbot';
+
   return (
     <div className="min-h-screen bg-background dark:bg-gray-950 relative text-foreground flex flex-col">
       {/* Skip link for keyboard users */}
@@ -56,15 +58,19 @@ export function RootLayout() {
         onThemeToggle={toggleTheme}
         isChangingLang={isChangingLang}
       />
-      <main id="main-content" className="flex-grow outline-none" tabIndex={-1}>
+      <main id="main-content" className="flex-grow outline-none flex flex-col" tabIndex={-1}>
         <Outlet />
       </main>
-      <Footer
-        isDark={isDark}
-        currentPage={currentPage}
-        onPageChange={onPageChange}
-      />
-      <FloatingContactButton />
+      {!isChatbot && (
+        <>
+          <Footer
+            isDark={isDark}
+            currentPage={currentPage}
+            onPageChange={onPageChange}
+          />
+          <FloatingContactButton />
+        </>
+      )}
       <Toaster />
     </div>
   );
