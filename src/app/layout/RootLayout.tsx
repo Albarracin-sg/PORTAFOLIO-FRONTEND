@@ -61,16 +61,12 @@ export function RootLayout() {
       <main id="main-content" className="flex-grow outline-none flex flex-col" tabIndex={-1}>
         <Outlet />
       </main>
-      {!isChatbot && (
-        <>
-          <Footer
-            isDark={isDark}
-            currentPage={currentPage}
-            onPageChange={onPageChange}
-          />
-          <FloatingContactButton />
-        </>
-      )}
+      <Footer
+        isDark={isDark}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+      />
+      {!isChatbot && <FloatingContactButton />}
       <Toaster />
     </div>
   );
