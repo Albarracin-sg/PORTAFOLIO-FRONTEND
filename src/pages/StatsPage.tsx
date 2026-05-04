@@ -8,9 +8,16 @@ export default function StatsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log('Fetching stats...');
     fetchPublicStats()
-      .then(setStats)
-      .catch(() => setError('Stats temporarily unavailable'))
+      .then((data) => {
+        console.log('Stats received:', data);
+        setStats(data);
+      })
+      .catch((err) => {
+        console.error('Stats error:', err);
+        setError('Stats temporarily unavailable');
+      })
       .finally(() => setLoading(false));
   }, []);
 
