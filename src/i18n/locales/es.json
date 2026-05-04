@@ -1,7 +1,8 @@
 {
   "common": {
     "back": "Volver",
-    "in": "en"
+    "in": "en",
+    "loading": "Cargando"
   },
   "spotify": {
     "notListening": "No estoy escuchando nada ahora.",

@@ -1,7 +1,8 @@
 {
   "common": {
     "back": "Back",
-    "in": "in"
+    "in": "in",
+    "loading": "Loading"
   },
   "spotify": {
     "notListening": "I'm not listening to anything right now.",

@@ -20,11 +20,19 @@ export function BotChatPage() {
   const [error, setError] = useState<string | null>(null);
   const [conversationId, setConversationId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const messageCount = useRef(0);
 
-  // Scroll to bottom when new messages appear
+  // Scroll to bottom only when new messages are added (not on every render)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messages.length > messageCount.current) {
+      messageCount.current = messages.length;
+      const container = messagesContainerRef.current;
+      if (container) {
+        container.scrollTop = container.scrollHeight;
+      }
+    }
   }, [messages]);
 
   // Show initial message when page mounts
@@ -140,14 +148,14 @@ export function BotChatPage() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={t('floating.chatbot.placeholder')}
-            className="flex-1 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
+            className="flex-1 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus-visible:!outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500 hover:border-gray-300 dark:hover:border-gray-600"
             disabled={isLoading}
           />
           <Button
             type="submit"
             size="icon"
             disabled={isLoading || !input.trim()}
-            className="flex-shrink-0 rounded-2xl bg-violet-600 hover:bg-violet-700 transition-all duration-300 hover:scale-105 active:scale-95 h-12 w-12 shrink-0"
+            className="flex-shrink-0 rounded-2xl bg-violet-600 hover:bg-violet-700 transition-all duration-300 hover:scale-105 active:scale-95 h-12 w-12 shrink-0 focus-visible:!outline-none"
           >
             {isLoading ? (
               <Loader2 className="h-5 w-5 animate-spin" />
