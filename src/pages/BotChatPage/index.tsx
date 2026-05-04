@@ -85,10 +85,10 @@ export function BotChatPage() {
   };
 
   return (
-    <div className="min-h-screen px-4 py-24 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-2xl flex flex-col min-h-[calc(100vh-8rem)]">
+    <div className="fixed inset-0 top-16 px-4 sm:px-6 lg:px-8 flex flex-col overflow-hidden">
+      <div className="flex flex-col h-full w-full max-w-2xl mx-auto">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-3 py-4 flex-shrink-0">
           <Button
             variant="ghost"
             size="icon"
