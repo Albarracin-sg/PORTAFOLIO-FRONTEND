@@ -374,6 +374,7 @@ export default function Navbar({
                 ) : (
                   <AdminLoginModal
                     triggerLabel="Admin"
+                    onTriggerClick={() => setIsMobileMenuOpen(false)}
                     triggerClassName={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 cursor-pointer ${mobileActiveButtonClass}`}
                   />
                 )}

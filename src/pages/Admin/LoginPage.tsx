@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAdminAuth } from '@/features/admin/AdminAuthProvider';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import DynamicBackground from '@/components/DynamicBackground';
-import { ArrowLeft, Lock } from 'lucide-react';
+import { ArrowLeft, Lock, Loader2 } from 'lucide-react';
 
 export function AdminLoginPage() {
   const navigate = useNavigate();
@@ -20,7 +19,6 @@ export function AdminLoginPage() {
     event.preventDefault();
     setLoading(true);
     setError(null);
-
     try {
       await login(email, password);
       navigate('/admin', { replace: true });
@@ -34,46 +32,59 @@ export function AdminLoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden bg-background">
       <DynamicBackground />
-      
-      <div className="absolute top-8 left-8">
-        <Button variant="ghost" asChild className="rounded-2xl hover:bg-slate-100 dark:hover:bg-white/5 transition-all">
+
+      {/* Back link — mismo estilo que nav */}
+      <div className="absolute top-6 left-6 z-10">
+        <Button
+          variant="ghost"
+          asChild
+          className="rounded-2xl gap-2 text-sm text-muted-foreground hover:text-foreground transition-all duration-200"
+        >
           <Link to="/">
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <ArrowLeft className="h-4 w-4" />
             Back to site
           </Link>
         </Button>
       </div>
 
-      <Card className="w-full max-w-md border-slate-200 dark:border-white/10 bg-background/60 backdrop-blur-xl shadow-2xl relative z-10 rounded-3xl overflow-hidden">
-        <CardHeader className="pt-8 pb-4 text-center">
-          <div className="mx-auto w-12 h-12 rounded-2xl bg-violet-600/10 flex items-center justify-center mb-4">
-            <Lock className="h-6 w-6 text-violet-600" />
+      {/* Card */}
+      <div className="relative z-10 w-full max-w-sm">
+        <div className="rounded-3xl border border-slate-200 dark:border-white/[0.07] bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl shadow-2xl shadow-black/5 p-8 space-y-7">
+
+          {/* Icon + title */}
+          <div className="text-center space-y-3">
+            <div className="mx-auto h-12 w-12 rounded-2xl bg-violet-500/10 flex items-center justify-center">
+              <Lock className="h-5 w-5 text-violet-500" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+                Admin Access
+              </h1>
+              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+                Securely manage your portfolio
+              </p>
+            </div>
           </div>
-          <CardTitle className="text-2xl font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-            Admin Access
-          </CardTitle>
-          <p className="text-sm text-muted-foreground mt-1">
-            Securely manage your portfolio content
-          </p>
-        </CardHeader>
-        <CardContent className="pb-8">
+
+          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground ml-1">
-                Email Address
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="text-xs font-medium text-slate-500 dark:text-slate-400 ml-1">
+                Email
               </Label>
               <Input
                 id="email"
                 type="email"
                 placeholder="admin@example.com"
                 value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 required
-                className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 h-12 focus:ring-violet-500 transition-all"
+                className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] h-11 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus-visible:ring-violet-500 transition-all"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-xs font-semibold uppercase tracking-wider text-muted-foreground ml-1">
+
+            <div className="space-y-1.5">
+              <Label htmlFor="password" className="text-xs font-medium text-slate-500 dark:text-slate-400 ml-1">
                 Password
               </Label>
               <Input
@@ -81,31 +92,33 @@ export function AdminLoginPage() {
                 type="password"
                 placeholder="••••••••"
                 value={password}
-                onChange={(event) => setPassword(event.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 required
-                className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 h-12 focus:ring-violet-500 transition-all"
+                className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] h-11 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus-visible:ring-violet-500 transition-all"
               />
             </div>
+
             {error && (
-              <div className="p-3 rounded-2xl bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/20 text-xs text-red-600 dark:text-red-400">
+              <div className="px-4 py-3 rounded-2xl bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-500/20 text-xs text-red-600 dark:text-red-400">
                 {error}
               </div>
             )}
-            <Button 
-              type="submit" 
-              className="w-full h-12 rounded-2xl bg-violet-600 hover:bg-violet-700 text-white font-semibold shadow-lg shadow-violet-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]" 
+
+            <Button
+              type="submit"
               disabled={loading}
+              className="w-full h-11 rounded-2xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium shadow-lg shadow-violet-500/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] mt-2"
             >
               {loading ? (
                 <span className="flex items-center gap-2">
-                  <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                   Authenticating...
                 </span>
               ) : 'Access Dashboard'}
             </Button>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 }

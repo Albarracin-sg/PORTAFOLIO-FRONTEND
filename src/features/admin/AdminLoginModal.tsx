@@ -1,23 +1,27 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAdminAuth } from './AdminAuthProvider';
+import { Lock, Loader2, Eye, EyeOff } from 'lucide-react';
 
 export function AdminLoginModal({
   triggerLabel = 'Admin',
   triggerClassName,
+  onTriggerClick,
 }: {
   triggerLabel?: string;
   triggerClassName?: string;
+  onTriggerClick?: () => void;
 }) {
   const { login } = useAdminAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,7 +29,6 @@ export function AdminLoginModal({
     event.preventDefault();
     setLoading(true);
     setError(null);
-
     try {
       await login(email, password);
       setOpen(false);
@@ -41,61 +44,111 @@ export function AdminLoginModal({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {triggerClassName ? (
-          <button type="button" className={triggerClassName}>
+          <button 
+            type="button" 
+            className={triggerClassName}
+            onClick={() => onTriggerClick?.()}
+          >
             {triggerLabel}
           </button>
         ) : (
-          <Button variant="outline" className="gap-2">
+          <Button 
+            variant="outline" 
+            className="rounded-2xl gap-2"
+            onClick={() => onTriggerClick?.()}
+          >
             {triggerLabel}
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent
-        overlayClassName="bg-slate-900/20 dark:bg-slate-950/35 backdrop-blur-md"
-        className="border border-slate-200/60 bg-white/80 text-slate-900 shadow-[0_30px_80px_rgba(15,23,42,0.25)] dark:border-white/10 dark:bg-slate-950/80 dark:text-white dark:shadow-[0_30px_80px_rgba(0,0,0,0.55)]"
-      >
-        <div className="absolute -top-16 -right-10 h-40 w-40 rounded-full bg-purple-500/20 blur-3xl" />
-        <div className="absolute -bottom-20 -left-10 h-40 w-40 rounded-full bg-indigo-500/20 blur-3xl" />
 
-        <DialogHeader className="relative">
-          <DialogTitle className="text-2xl font-semibold text-slate-900 dark:text-white">
-            Admin Login
-          </DialogTitle>
-          <DialogDescription className="text-slate-600 dark:text-slate-300">
-            Access the portfolio admin panel.
-          </DialogDescription>
+      <DialogContent className="
+        w-[calc(100vw-2rem)] max-w-sm
+        rounded-3xl
+        border border-slate-200 dark:border-white/[0.07]
+        bg-white/95 dark:bg-gray-950/95
+        backdrop-blur-2xl
+        shadow-2xl shadow-black/10
+        p-6 sm:p-8
+        gap-0
+      ">
+        <DialogHeader className="mb-6 space-y-3 text-left">
+          <div className="h-11 w-11 rounded-2xl bg-violet-500/10 flex items-center justify-center">
+            <Lock className="h-5 w-5 text-violet-500" />
+          </div>
+          <div>
+            <DialogTitle className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+              Admin Access
+            </DialogTitle>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+              Access the portfolio admin panel.
+            </p>
+          </div>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <Label htmlFor="admin-email" className="text-slate-700 dark:text-slate-200">Email</Label>
+          {/* Email */}
+          <div className="space-y-1.5">
+            <Label htmlFor="admin-email" className="text-xs font-medium text-slate-500 dark:text-slate-400 ml-1">
+              Email
+            </Label>
             <Input
               id="admin-email"
               type="email"
+              placeholder="admin@example.com"
               value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               required
-              className="mt-1 border-slate-200/70 bg-white/70 text-slate-900 placeholder:text-slate-400 focus-visible:ring-purple-400/60 dark:border-white/10 dark:bg-slate-900/60 dark:text-white dark:placeholder:text-slate-500"
+              className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] h-11 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus-visible:ring-violet-500 transition-all"
             />
           </div>
-          <div>
-            <Label htmlFor="admin-password" className="text-slate-700 dark:text-slate-200">Password</Label>
-            <Input
-              id="admin-password"
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-              className="mt-1 border-slate-200/70 bg-white/70 text-slate-900 placeholder:text-slate-400 focus-visible:ring-purple-400/60 dark:border-white/10 dark:bg-slate-900/60 dark:text-white dark:placeholder:text-slate-500"
-            />
+
+          {/* Password + eye toggle */}
+          <div className="space-y-1.5">
+            <Label htmlFor="admin-password" className="text-xs font-medium text-slate-500 dark:text-slate-400 ml-1">
+              Password
+            </Label>
+            <div className="relative">
+              <Input
+                id="admin-password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] h-11 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus-visible:ring-violet-500 transition-all pr-11"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                tabIndex={-1}
+              >
+                {showPassword
+                  ? <EyeOff className="h-4 w-4" />
+                  : <Eye className="h-4 w-4" />
+                }
+              </button>
+            </div>
           </div>
-          {error && <p className="text-sm text-red-500 dark:text-red-400">{error}</p>}
+
+          {error && (
+            <div className="px-4 py-3 rounded-2xl bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-500/20 text-xs text-red-600 dark:text-red-400">
+              {error}
+            </div>
+          )}
+
           <Button
             type="submit"
-            className="w-full bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 text-white shadow-lg shadow-purple-500/30 hover:from-purple-500 hover:via-violet-500 hover:to-indigo-500"
             disabled={loading}
+            className="w-full h-11 rounded-2xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium shadow-lg shadow-violet-500/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
           >
-            {loading ? 'Signing in...' : 'Sign in'}
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Signing in...
+              </span>
+            ) : 'Sign in'}
           </Button>
         </form>
       </DialogContent>
