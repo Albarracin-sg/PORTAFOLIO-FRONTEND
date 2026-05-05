@@ -9,6 +9,7 @@ import About from '@/components/About';
 import Projects from '@/components/Projects';
 import Contact from '@/components/Contact';
 import Statistics from '@/components/Statistics';
+import { Loader2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -188,9 +189,11 @@ export function AdminLiveEditorPage() {
       </div>
 
       {loading ? (
-        <div className="text-sm text-gray-500">Cargando...</div>
+        <div className="flex items-center justify-center py-20">
+          <Loader2 className="h-8 w-8 animate-spin text-violet-600" />
+        </div>
       ) : activePage === 'home' ? (
-        <div className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950">
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 bg-background/20 backdrop-blur-sm overflow-hidden shadow-2xl">
           <section id="home">
             <Hero section={sections.HERO} />
           </section>
@@ -208,7 +211,9 @@ export function AdminLiveEditorPage() {
           </section>
         </div>
       ) : (
-        <Statistics />
+        <div className="rounded-3xl border border-slate-200 dark:border-white/10 bg-background/20 backdrop-blur-sm overflow-hidden shadow-2xl p-8">
+          <Statistics />
+        </div>
       )}
     </div>
   );

@@ -133,185 +133,228 @@ export function AdminProjectsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl text-gray-900 dark:text-gray-100">Projects</h1>
-          <p className="text-gray-600 dark:text-gray-400">
-            Manage all portfolio projects.
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">Projects</h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
+            Manage all portfolio projects and sync with GitHub.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <Button variant="outline" onClick={handleSync} disabled={syncing}>
-            {syncing ? 'Syncing GitHub...' : 'Sync GitHub'}
+          <Button 
+            variant="outline" 
+            onClick={handleSync} 
+            disabled={syncing}
+            className="rounded-2xl border-slate-200 dark:border-white/10 bg-background/50 backdrop-blur-sm h-11 px-6 hover:bg-violet-50 dark:hover:bg-violet-900/10 hover:text-violet-600 transition-all"
+          >
+            {syncing ? (
+              <span className="flex items-center gap-2">
+                <span className="h-4 w-4 border-2 border-violet-600/30 border-t-violet-600 rounded-full animate-spin" />
+                Syncing...
+              </span>
+            ) : 'Sync GitHub'}
           </Button>
 
-          <Button variant="outline">Add project</Button>
+          <Button className="rounded-2xl bg-violet-600 hover:bg-violet-700 shadow-lg shadow-violet-500/20 h-11 px-6 transition-all active:scale-95">
+            Add project
+          </Button>
         </div>
       </div>
 
-      <Card className="border-gray-200 dark:border-gray-700">
-        <CardHeader>
-          <CardTitle className="text-gray-900 dark:text-gray-100">
-            Projects list
-          </CardTitle>
-        </CardHeader>
+      <div className="grid gap-8 lg:grid-cols-[1fr,2fr]">
+        <Card className="border-slate-200 dark:border-white/10 bg-background/60 backdrop-blur-md rounded-3xl overflow-hidden h-fit sticky top-24">
+          <CardHeader className="border-b border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5">
+            <CardTitle className="text-lg font-bold">Projects List</CardTitle>
+          </CardHeader>
 
-        <CardContent className="space-y-2">
-          {loading ? (
-            <p className="text-gray-500">Loading projects...</p>
-          ) : (
-            projects.map((project) => (
-              <button
-                key={project.id}
-                onClick={() => setSelectedProjectId(project.id)}
-                className={`w-full text-left flex items-center justify-between border-b border-gray-200/60 pb-2 transition-colors ${
-                  selectedProjectId === project.id
-                    ? 'text-violet-600'
-                    : 'text-gray-900 dark:text-gray-100'
-                }`}
-              >
-                <div>
-                  <div className="font-medium">{project.title}</div>
-                  <div className="text-sm text-gray-500">
-                    {project.category} · {project.status}
+          <CardContent className="p-0">
+            {loading ? (
+              <div className="p-8 text-center">
+                <span className="h-6 w-6 border-2 border-violet-600/30 border-t-violet-600 rounded-full animate-spin inline-block" />
+                <p className="text-sm text-muted-foreground mt-2">Loading projects...</p>
+              </div>
+            ) : (
+              <div className="divide-y divide-slate-200 dark:divide-white/10 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                {projects.map((project) => (
+                  <button
+                    key={project.id}
+                    onClick={() => setSelectedProjectId(project.id)}
+                    className={`w-full text-left px-6 py-4 transition-all duration-200 hover:bg-violet-50/50 dark:hover:bg-violet-900/10 flex items-center justify-between group ${
+                      selectedProjectId === project.id
+                        ? 'bg-violet-50 dark:bg-violet-900/20 border-l-4 border-violet-600'
+                        : ''
+                    }`}
+                  >
+                    <div className="min-w-0 pr-4">
+                      <div className={`font-semibold truncate transition-colors ${selectedProjectId === project.id ? 'text-violet-600' : 'text-gray-900 dark:text-gray-100'}`}>
+                        {project.title}
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-0.5 uppercase tracking-wider font-bold">
+                        {project.category} · {project.status}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                      <span className="text-xs font-medium text-muted-foreground bg-slate-100 dark:bg-white/5 px-2 py-0.5 rounded-full">
+                        {project.stars} ⭐
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <div className="space-y-6">
+          {selectedProject ? (
+            <Card className="border-slate-200 dark:border-white/10 bg-background/60 backdrop-blur-md rounded-3xl overflow-hidden shadow-xl animate-in zoom-in-95 duration-300">
+              <CardHeader className="border-b border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/5 flex flex-row items-center justify-between">
+                <CardTitle className="text-lg font-bold">
+                  Edit: {selectedProject.title}
+                </CardTitle>
+                {selectedProject.featured && (
+                  <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-1 bg-amber-500/10 text-amber-600 rounded-lg border border-amber-500/20">
+                    Featured
+                  </span>
+                )}
+              </CardHeader>
+
+              <CardContent className="p-6 md:p-8 space-y-8">
+                <div className="grid gap-6 md:grid-cols-2">
+                  <div className="space-y-2.5">
+                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Title</label>
+                    <Input
+                      value={form.title}
+                      onChange={(event) =>
+                        setForm({ ...form, title: event.target.value })
+                      }
+                      className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 h-11 focus:ring-violet-500"
+                    />
+                  </div>
+
+                  <div className="space-y-2.5">
+                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Category</label>
+                    <Select
+                      value={form.category}
+                      onValueChange={(value) => setForm({ ...form, category: value })}
+                    >
+                      <SelectTrigger className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 h-11">
+                        <SelectValue />
+                      </SelectTrigger>
+
+                      <SelectContent>
+                        <SelectItem value="web">Web</SelectItem>
+                        <SelectItem value="fullstack">Full Stack</SelectItem>
+                        <SelectItem value="devops">DevOps</SelectItem>
+                        <SelectItem value="ml">Machine Learning</SelectItem>
+                        <SelectItem value="data">Data</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Status</label>
+                    <Select
+                      value={form.status}
+                      onValueChange={(value) => setForm({ ...form, status: value })}
+                    >
+                      <SelectTrigger className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 h-11">
+                        <SelectValue />
+                      </SelectTrigger>
+
+                      <SelectContent>
+                        <SelectItem value="production">Production</SelectItem>
+                        <SelectItem value="development">Development</SelectItem>
+                        <SelectItem value="prototype">Prototype</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Visibility</label>
+                    <div className="flex items-center gap-4 h-11 px-4 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20">
+                      <span className="text-sm font-medium">Featured Project</span>
+                      <Switch
+                        checked={form.featured}
+                        onCheckedChange={(checked) =>
+                          setForm({ ...form, featured: checked })
+                        }
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">GitHub URL</label>
+                    <Input
+                      value={form.githubUrl}
+                      onChange={(event) =>
+                        setForm({ ...form, githubUrl: event.target.value })
+                      }
+                      className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 h-11"
+                    />
+                  </div>
+
+                  <div className="space-y-2.5">
+                    <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Live URL</label>
+                    <Input
+                      value={form.liveUrl}
+                      onChange={(event) =>
+                        setForm({ ...form, liveUrl: event.target.value })
+                      }
+                      className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 h-11"
+                    />
                   </div>
                 </div>
 
-                <div className="text-sm text-gray-500">
-                  Stars: {project.stars}
-                </div>
-              </button>
-            ))
-          )}
-        </CardContent>
-      </Card>
-
-      {selectedProject && (
-        <Card className="border-gray-200 dark:border-gray-700">
-          <CardHeader>
-            <CardTitle className="text-gray-900 dark:text-gray-100">
-              Edit project
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <label className="text-sm text-gray-500">Title</label>
-                <Input
-                  value={form.title}
-                  onChange={(event) =>
-                    setForm({ ...form, title: event.target.value })
-                  }
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm text-gray-500">Category</label>
-                <Select
-                  value={form.category}
-                  onValueChange={(value) => setForm({ ...form, category: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-
-                  <SelectContent>
-                    <SelectItem value="web">Web</SelectItem>
-                    <SelectItem value="fullstack">Full Stack</SelectItem>
-                    <SelectItem value="devops">DevOps</SelectItem>
-                    <SelectItem value="ml">Machine Learning</SelectItem>
-                    <SelectItem value="data">Data</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm text-gray-500">Status</label>
-                <Select
-                  value={form.status}
-                  onValueChange={(value) => setForm({ ...form, status: value })}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-
-                  <SelectContent>
-                    <SelectItem value="production">Production</SelectItem>
-                    <SelectItem value="development">Development</SelectItem>
-                    <SelectItem value="prototype">Prototype</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm text-gray-500">Featured</label>
-                <div className="flex items-center gap-3">
-                  <Switch
-                    checked={form.featured}
-                    onCheckedChange={(checked) =>
-                      setForm({ ...form, featured: checked })
+                <div className="space-y-2.5">
+                  <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Description</label>
+                  <Textarea
+                    value={form.description}
+                    onChange={(event) =>
+                      setForm({ ...form, description: event.target.value })
                     }
+                    rows={6}
+                    className="rounded-3xl border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 p-4 focus:ring-violet-500 resize-none"
                   />
-
-                  <span className="text-sm text-gray-500">
-                    {form.featured ? 'Yes' : 'No'}
-                  </span>
                 </div>
+
+                <div className="space-y-2.5">
+                  <label className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">
+                    Tags (comma separated)
+                  </label>
+                  <Input
+                    value={form.technologies}
+                    onChange={(event) =>
+                      setForm({ ...form, technologies: event.target.value })
+                    }
+                    className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/50 dark:bg-black/20 h-11"
+                  />
+                </div>
+
+                <div className="flex justify-end pt-4">
+                  <Button 
+                    onClick={handleSave}
+                    className="rounded-2xl bg-violet-600 hover:bg-violet-700 shadow-lg shadow-violet-500/20 h-12 px-10 font-bold transition-all active:scale-95"
+                  >
+                    Save Changes
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="border-slate-200 dark:border-white/10 bg-background/40 backdrop-blur-md rounded-3xl p-20 border-dashed flex flex-col items-center justify-center text-center">
+              <div className="p-6 rounded-3xl bg-slate-100 dark:bg-white/5 mb-4">
+                <FolderKanban className="h-12 w-12 text-muted-foreground/50" />
               </div>
-
-              <div className="space-y-2">
-                <label className="text-sm text-gray-500">GitHub URL</label>
-                <Input
-                  value={form.githubUrl}
-                  onChange={(event) =>
-                    setForm({ ...form, githubUrl: event.target.value })
-                  }
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm text-gray-500">Live URL</label>
-                <Input
-                  value={form.liveUrl}
-                  onChange={(event) =>
-                    setForm({ ...form, liveUrl: event.target.value })
-                  }
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm text-gray-500">Description</label>
-              <Textarea
-                value={form.description}
-                onChange={(event) =>
-                  setForm({ ...form, description: event.target.value })
-                }
-                rows={4}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="text-sm text-gray-500">
-                Tags (comma separated)
-              </label>
-              <Input
-                value={form.technologies}
-                onChange={(event) =>
-                  setForm({ ...form, technologies: event.target.value })
-                }
-              />
-            </div>
-
-            <div className="flex justify-end">
-              <Button onClick={handleSave}>Save changes</Button>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+              <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">No Project Selected</h3>
+              <p className="text-muted-foreground max-w-xs mt-2">Select a project from the left sidebar to edit its details and visibility.</p>
+            </Card>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
