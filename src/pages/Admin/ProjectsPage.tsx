@@ -28,17 +28,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 
-type ProjectUpdatePayload = {
-  title: string;
-  description: string;
-  category: string;
-  status: string;
-  featured: boolean;
-  githubUrl: string | null;
-  liveUrl: string | null;
-  technologies: string[];
-};
-
 export function AdminProjectsPage() {
   const { token } = useAdminAuth();
   const [projects, setProjects] = useState<Project[]>([]);
