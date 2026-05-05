@@ -44,16 +44,16 @@ export function AdminLoginModal({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         {triggerClassName ? (
-          <button 
-            type="button" 
+          <button
+            type="button"
             className={triggerClassName}
             onClick={() => onTriggerClick?.()}
           >
             {triggerLabel}
           </button>
         ) : (
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className="rounded-2xl gap-2"
             onClick={() => onTriggerClick?.()}
           >
@@ -72,21 +72,26 @@ export function AdminLoginModal({
         p-6 sm:p-8
         gap-0
       ">
-        <DialogHeader className="mb-6 space-y-3 text-left">
-          <div className="h-11 w-11 rounded-2xl bg-violet-500/10 flex items-center justify-center">
-            <Lock className="h-5 w-5 text-violet-500" />
-          </div>
-          <div>
-            <DialogTitle className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-              Admin Access
-            </DialogTitle>
-            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-              Access the portfolio admin panel.
-            </p>
+        <DialogHeader className="mb-6">
+          <div className="flex items-start gap-4 text-left">
+            <div className="h-11 w-11 rounded-2xl bg-violet-500/10 flex items-center justify-center shrink-0 border border-violet-500/20 mt-1">
+              <Lock className="h-5 w-5 text-violet-500 pointer-events-none" />
+            </div>
+            <div className="min-w-0 pt-1">
+              <DialogTitle className="text-xl font-bold tracking-tight text-slate-900 dark:text-white truncate">
+                Admin Access
+              </DialogTitle>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+                Access the admin panel.
+              </p>
+            </div>
           </div>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {/* autoComplete="off" en el form evita que el autofill del browser
+            inyecte nodos en el DOM de React y cause el error
+            "Permission denied to access property correspondingUseElement" */}
+        <form onSubmit={handleSubmit} autoComplete="off" className="space-y-4">
           {/* Email */}
           <div className="space-y-1.5">
             <Label htmlFor="admin-email" className="text-xs font-medium text-slate-500 dark:text-slate-400 ml-1">
@@ -99,6 +104,7 @@ export function AdminLoginModal({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="off"
               className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] h-11 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus-visible:ring-violet-500 transition-all"
             />
           </div>
@@ -116,6 +122,7 @@ export function AdminLoginModal({
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                autoComplete="new-password"
                 className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] h-11 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus-visible:ring-violet-500 transition-all pr-11"
               />
               <button
@@ -125,9 +132,8 @@ export function AdminLoginModal({
                 tabIndex={-1}
               >
                 {showPassword
-                  ? <EyeOff className="h-4 w-4" />
-                  : <Eye className="h-4 w-4" />
-                }
+                  ? <EyeOff className="h-4 w-4 pointer-events-none" />
+                  : <Eye className="h-4 w-4 pointer-events-none" />}
               </button>
             </div>
           </div>
@@ -145,7 +151,7 @@ export function AdminLoginModal({
           >
             {loading ? (
               <span className="flex items-center gap-2">
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin pointer-events-none" />
                 Signing in...
               </span>
             ) : 'Sign in'}

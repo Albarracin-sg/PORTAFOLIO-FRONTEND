@@ -113,7 +113,7 @@ export function AdminLoginPage() {
             >
               {loading ? (
                 <span className="flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin pointer-events-none" />
                   {t('admin.login.authenticating')}
                 </span>
               ) : t('admin.login.submit')}

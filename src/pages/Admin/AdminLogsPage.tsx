@@ -26,6 +26,9 @@ import {
   TrendingUp,
   CheckCircle2,
   Sparkles,
+  User,
+  ExternalLink,
+  Wifi,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -86,6 +89,19 @@ export default function AdminLogsPage() {
     method: e.method,
   }));
 
+  // Spotify filtering logic for the chart to avoid scale issues
+  const spotifyInChart = (() => {
+    const nonSpotify = endpointData.filter(e => !e.path.includes("spotify"));
+    const spotify = endpointData.find(e => e.path.includes("spotify"));
+    if (!spotify) return false;
+    const maxOthers = Math.max(...nonSpotify.map(e => e.requests), 0);
+    return spotify.requests < maxOthers * 5;
+  })();
+
+  const chartData = spotifyInChart
+    ? endpointData
+    : endpointData.filter(e => !e.path.includes("spotify"));
+
   // Derived health indicators
   const avgResponse = stats ? Math.round(stats.avgResponseTimeMs) : 0;
   const healthStatus =
@@ -116,6 +132,15 @@ export default function AdminLogsPage() {
   const pagedEndpoints = endpointData.slice(
     endpointPage * ENDPOINTS_PER_PAGE,
     (endpointPage + 1) * ENDPOINTS_PER_PAGE,
+  );
+
+  // Pagination for recent activity
+  const [recentPage, setRecentPage] = useState(0);
+  const RECENT_PER_PAGE = 10;
+  const recentTotalPages = Math.ceil((stats?.recentRequests?.length ?? 0) / RECENT_PER_PAGE);
+  const pagedRecent = (stats?.recentRequests ?? []).slice(
+    recentPage * RECENT_PER_PAGE,
+    (recentPage + 1) * RECENT_PER_PAGE,
   );
 
   const getEndpointIcon = (path: string) => {
@@ -269,14 +294,14 @@ export default function AdminLogsPage() {
               key={card.label}
               className={`border-slate-200 bg-white/70 dark:border-white/[0.07] dark:bg-white/[0.025] transition-all duration-200 ${c.border}`}
             >
-              <CardContent className="pt-5 pb-4 px-4">
-                <div className={`mb-3 flex h-9 w-9 items-center justify-center rounded-xl border ${c.icon}`}>
-                  <Icon className="h-4 w-4" />
+              <CardContent className="pt-4 sm:pt-5 pb-3 sm:pb-4 px-3 sm:px-4 text-center sm:text-left">
+                <div className={`mb-2 sm:mb-3 mx-auto sm:mx-0 flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl border ${c.icon}`}>
+                  <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                 </div>
-                <div className={`text-2xl font-bold tracking-tight text-slate-900 dark:text-white`}>
+                <div className={`text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white`}>
                   {card.value}
                 </div>
-                <p className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-600">
+                <p className="mt-0.5 sm:mt-1 text-[9px] sm:text-[10px] font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-600 truncate">
                   {card.label}
                 </p>
               </CardContent>
@@ -311,13 +336,13 @@ export default function AdminLogsPage() {
               config={{ requests: { label: t("admin.logs.requests"), color: "#8b5cf6" } }}
               className="aspect-video w-full"
             >
-              <BarChart data={endpointData.slice(0, 15)} margin={{ bottom: 20 }}>
+              <BarChart data={chartData.slice(0, 15)} margin={{ bottom: 20 }}>
                 <CartesianGrid vertical={false} strokeDasharray="3 3" opacity={0.08} />
                 <XAxis
                   dataKey="path"
                   tickLine={false}
                   axisLine={false}
-                  tick={isMobile ? false : { fontSize: 10, fill: "currentColor", opacity: 0.4 }}
+                  tick={false}
                 />
                 <YAxis
                   tickLine={false}
@@ -329,7 +354,7 @@ export default function AdminLogsPage() {
                   content={<ChartTooltipContent />}
                 />
                 <Bar dataKey="requests" radius={[6, 6, 0, 0]}>
-                  {endpointData.map((entry, index) => (
+                  {chartData.slice(0, 15).map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={entry.path.includes("admin") ? "#f43f5e" : "#8b5cf6"}
@@ -406,30 +431,30 @@ export default function AdminLogsPage() {
 
         {/* Busiest */}
         <Card className="border-slate-200 bg-white/70 dark:border-white/[0.07] dark:bg-white/[0.025]">
-          <CardHeader className="pb-3">
+          <CardHeader className="pb-3 px-4 sm:px-6">
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-violet-500" />
-              <CardTitle className="text-lg font-semibold">{t("admin.logs.busiestEndpoints")}</CardTitle>
+              <TrendingUp className="h-4 w-4 text-violet-500 shrink-0" />
+              <CardTitle className="text-base sm:text-lg font-semibold truncate">{t("admin.logs.busiestEndpoints")}</CardTitle>
             </div>
-            <p className="text-xs text-slate-400 dark:text-slate-600">{t("admin.logs.highestVolume")}</p>
+            <p className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-600">{t("admin.logs.highestVolume")}</p>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-5 px-4 sm:px-6">
             {topEndpoints.map((ep, i) => {
               const Icon = getEndpointIcon(ep.path);
               const isAdmin = ep.path.includes("admin");
               const pct = Math.round((ep.requests / (topEndpoints[0]?.requests || 1)) * 100);
               return (
-                <div key={i} className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 min-w-0">
+                <div key={i} className="space-y-1.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
                       <div className={`h-6 w-6 rounded-lg flex items-center justify-center shrink-0 ${isAdmin ? "bg-rose-500/10 text-rose-500" : "bg-violet-500/10 text-violet-500"}`}>
                         <Icon className="h-3 w-3" />
                       </div>
-                      <span className="text-xs font-mono text-slate-600 dark:text-slate-400 truncate">
+                      <span className="text-[11px] sm:text-xs font-mono text-slate-600 dark:text-slate-400 truncate block">
                         /{ep.path}
                       </span>
                     </div>
-                    <span className="text-xs font-bold text-slate-900 dark:text-white shrink-0 ml-2">
+                    <span className="text-[11px] sm:text-xs font-bold text-slate-900 dark:text-white shrink-0 tabular-nums">
                       {formatBigNumber(ep.requests)}
                     </span>
                   </div>
@@ -447,30 +472,30 @@ export default function AdminLogsPage() {
 
         {/* Slowest */}
         <Card className="border-slate-200 bg-white/70 dark:border-white/[0.07] dark:bg-white/[0.025]">
-          <CardHeader className="pb-3">
+          <CardHeader className="pb-3 px-4 sm:px-6">
             <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4 text-amber-500" />
-              <CardTitle className="text-lg font-semibold">{t("admin.logs.slowestEndpoints")}</CardTitle>
+              <Clock className="h-4 w-4 text-amber-500 shrink-0" />
+              <CardTitle className="text-base sm:text-lg font-semibold truncate">{t("admin.logs.slowestEndpoints")}</CardTitle>
             </div>
-            <p className="text-xs text-slate-400 dark:text-slate-600">{t("admin.logs.highestLatency")}</p>
+            <p className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-600">{t("admin.logs.highestLatency")}</p>
           </CardHeader>
-          <CardContent className="space-y-2">
+          <CardContent className="space-y-5 px-4 sm:px-6">
             {slowestEndpoints.map((ep, i) => {
               const Icon = getEndpointIcon(ep.path);
               const pct = Math.round((ep.avgTime / (slowestEndpoints[0]?.avgTime || 1)) * 100);
               const isSlow = ep.avgTime > 500;
               return (
-                <div key={i} className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 min-w-0">
+                <div key={i} className="space-y-1.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 min-w-0 flex-1">
                       <div className={`h-6 w-6 rounded-lg flex items-center justify-center shrink-0 ${isSlow ? "bg-red-500/10 text-red-500" : "bg-amber-500/10 text-amber-500"}`}>
                         <Icon className="h-3 w-3" />
                       </div>
-                      <span className="text-xs font-mono text-slate-600 dark:text-slate-400 truncate">
+                      <span className="text-[11px] sm:text-xs font-mono text-slate-600 dark:text-slate-400 truncate block">
                         /{ep.path}
                       </span>
                     </div>
-                    <span className={`text-xs font-bold shrink-0 ml-2 ${isSlow ? "text-red-500" : "text-amber-600 dark:text-amber-400"}`}>
+                    <span className={`text-[11px] sm:text-xs font-bold shrink-0 tabular-nums ${isSlow ? "text-red-500" : "text-amber-600 dark:text-amber-400"}`}>
                       {ep.avgTime}ms
                     </span>
                   </div>
@@ -487,22 +512,135 @@ export default function AdminLogsPage() {
         </Card>
       </div>
 
-      {/* ── Full Endpoint Table ── */}
+      {/* ── Recent Activity (IPs included) ── */}
       <Card className="border-slate-200 bg-white/70 dark:border-white/[0.07] dark:bg-white/[0.025]">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-xl font-semibold">{t("admin.logs.allEndpoints")}</CardTitle>
-              <p className="text-xs text-slate-400 dark:text-slate-600 mt-0.5">
-                {endpointData.length} {t("admin.logs.routesTracked")}
-              </p>
-            </div>
-            <span className="text-xs font-medium text-slate-400 dark:text-slate-600 tabular-nums">
-              {endpointPage + 1} / {totalPages}
-            </span>
+        <CardHeader className="pb-3 px-4 sm:px-6 flex flex-row items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Wifi className="h-4 w-4 text-violet-500 shrink-0" />
+            <CardTitle className="text-lg font-semibold">Recent Activity</CardTitle>
+          </div>
+          <div className="text-xs text-slate-400 dark:text-slate-600 tabular-nums">
+            {recentPage + 1} / {recentTotalPages}
           </div>
         </CardHeader>
-        <CardContent className="space-y-1.5">
+        <CardContent className="px-4 sm:px-6 pb-6">
+          <div className="overflow-x-auto -mx-4 sm:mx-0">
+            <div className="min-w-[600px] px-4 sm:px-0">
+              {/* Table header */}
+              <div className="grid grid-cols-12 px-3 pb-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-600">
+                <span className="col-span-1">M</span>
+                <span className="col-span-4">Path</span>
+                <span className="col-span-1 text-center">Status</span>
+                <span className="col-span-3 text-center">IP Address</span>
+                <span className="col-span-1 text-right">Time</span>
+                <span className="col-span-2 text-right">Date</span>
+              </div>
+
+              <div className="space-y-1.5">
+                {pagedRecent.map((req, i) => {
+                  const isAdmin = req.path.includes("admin");
+                  const isError = req.status >= 400;
+                  const isSlow = req.responseTime > 500;
+                  return (
+                    <div
+                      key={req.id || i}
+                      className={`grid grid-cols-12 items-center rounded-xl border px-3 py-2 transition-all duration-150 ${
+                        isAdmin
+                          ? "border-rose-100 bg-rose-50/30 dark:border-rose-500/10 dark:bg-rose-500/5"
+                          : "border-slate-100 bg-white/40 dark:border-white/[0.05] dark:bg-white/[0.01]"
+                      }`}
+                    >
+                      <div className="col-span-1">
+                        <span className={`text-[9px] font-black uppercase ${isAdmin ? "text-rose-400" : "text-violet-400"}`}>
+                          {req.method}
+                        </span>
+                      </div>
+                      <div className="col-span-4 min-w-0">
+                        <span className="text-xs font-mono text-slate-700 dark:text-slate-300 truncate block">
+                          {req.path.replace("/api/v1/", "/")}
+                        </span>
+                      </div>
+                      <div className="col-span-1 text-center">
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${isError ? "bg-red-100 text-red-600 dark:bg-red-500/20" : "bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20"}`}>
+                          {req.status}
+                        </span>
+                      </div>
+                      <div className="col-span-3 text-center flex items-center justify-center gap-1.5">
+                        <User className="h-3 w-3 text-slate-400" />
+                        <span className="text-xs font-mono text-slate-500 dark:text-slate-500">
+                          {req.ip || "unknown"}
+                        </span>
+                        {req.ip && req.ip !== "::1" && req.ip !== "127.0.0.1" && (
+                          <a 
+                            href={`https://whois.domaintools.com/${req.ip}`} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-slate-300 hover:text-violet-500 transition-colors"
+                          >
+                            <ExternalLink className="h-2.5 w-2.5" />
+                          </a>
+                        )}
+                      </div>
+                      <div className="col-span-1 text-right">
+                        <span className={`text-[10px] font-semibold ${isSlow ? "text-red-500" : "text-slate-400"}`}>
+                          {req.responseTime}ms
+                        </span>
+                      </div>
+                      <div className="col-span-2 text-right">
+                        <span className="text-[10px] text-slate-400 tabular-nums">
+                          {new Date(req.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Pagination */}
+          {recentTotalPages > 1 && (
+            <div className="flex items-center justify-center gap-4 pt-6">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setRecentPage((p) => Math.max(0, p - 1))}
+                disabled={recentPage === 0}
+                className="h-8 rounded-xl px-4 text-xs hover:bg-violet-500/8 transition-all"
+              >
+                {t("common.pagination.previous")}
+              </Button>
+              <span className="text-xs font-medium text-slate-400 dark:text-slate-600">
+                {recentPage + 1} / {recentTotalPages}
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setRecentPage((p) => Math.min(recentTotalPages - 1, p + 1))}
+                disabled={recentPage === recentTotalPages - 1}
+                className="h-8 rounded-xl px-4 text-xs hover:bg-violet-500/8 transition-all"
+              >
+                {t("common.pagination.next")}
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* ── Full Endpoint Table ── */}
+      <Card className="border-slate-200 bg-white/70 dark:border-white/[0.07] dark:bg-white/[0.025]">
+        <CardHeader className="pb-3 px-4 sm:px-6 flex flex-row items-center justify-between">
+          <div>
+            <CardTitle className="text-xl font-semibold">{t("admin.logs.allEndpoints")}</CardTitle>
+            <p className="text-xs text-slate-400 dark:text-slate-600 mt-0.5">
+              {endpointData.length} {t("admin.logs.routesTracked")}
+            </p>
+          </div>
+          <span className="text-xs font-medium text-slate-400 dark:text-slate-600 tabular-nums">
+            {endpointPage + 1} / {totalPages}
+          </span>
+        </CardHeader>
+        <CardContent className="space-y-1.5 px-4 sm:px-6 pb-6">
           {/* Table header */}
           <div className="grid grid-cols-12 px-3 pb-1 text-[10px] font-bold uppercase tracking-widest text-slate-400 dark:text-slate-600">
             <span className="col-span-1">{t("admin.logs.method").substring(0, 1)}</span>
