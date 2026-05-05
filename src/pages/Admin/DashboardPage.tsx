@@ -7,18 +7,19 @@ import {
   ArrowRight,
   Sparkles,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const dashboardItems = [
   {
-    title: 'Projects',
-    description: 'Update your portfolio projects, descriptions, and tech stacks.',
+    titleKey: 'admin.dashboard.projects',
+    descriptionKey: 'admin.dashboard.projectsDesc',
     href: '/admin/projects',
     icon: FolderKanban,
     accent: 'violet',
   },
   {
-    title: 'Messages',
-    description: 'View and manage contact form submissions from your visitors.',
+    titleKey: 'admin.dashboard.messages',
+    descriptionKey: 'admin.dashboard.messagesDesc',
     href: '/admin/messages',
     icon: MessageSquare,
     accent: 'emerald',
@@ -41,6 +42,8 @@ const accentMap = {
 };
 
 export function AdminDashboardPage() {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
 
@@ -53,19 +56,19 @@ export function AdminDashboardPage() {
         <div className="flex items-center gap-3">
           <LayoutDashboard className="h-7 w-7 text-violet-500 shrink-0" />
           <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
-            Admin Dashboard
+            {t('admin.dashboard.title')}
           </h1>
         </div>
         <p className="text-slate-500 dark:text-slate-400 text-base max-w-xl leading-relaxed">
-          Centralized control for your portfolio content. Manage projects, review messages, and keep everything up to date.
+          {t('admin.dashboard.subtitle')}
         </p>
       </div>
 
       {/* ── Quick stats row ── */}
       <div className="grid grid-cols-3 gap-3 max-w-sm">
         {[
-          { label: 'Projects', value: '10+' },
-          { label: 'Messages', value: '—' },
+          { label: t('admin.dashboard.projects'), value: '10+' },
+          { label: t('admin.dashboard.messages'), value: '—' },
           { label: 'Status', value: '✓' },
         ].map(({ label, value }) => (
           <div
@@ -84,7 +87,7 @@ export function AdminDashboardPage() {
           const Icon = item.icon;
           const a = accentMap[item.accent];
           return (
-            <Link key={item.title} to={item.href} className="group">
+            <Link key={item.titleKey} to={item.href} className="group">
               <div
                 className={`relative h-full rounded-2xl border border-slate-200 dark:border-white/[0.07] bg-white/80 dark:bg-white/[0.025] p-6 transition-all duration-300 ${a.border} hover:bg-white dark:hover:bg-white/[0.045] hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/5`}
               >
@@ -97,10 +100,10 @@ export function AdminDashboardPage() {
                   />
                 </div>
                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-1.5">
-                  {item.title}
+                  {t(item.titleKey)}
                 </h3>
                 <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
-                  {item.description}
+                  {t(item.descriptionKey)}
                 </p>
               </div>
             </Link>
@@ -113,10 +116,10 @@ export function AdminDashboardPage() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
           <div className="space-y-1">
             <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-              Welcome back, Admin
+              {t('admin.dashboard.welcome')}
             </h3>
             <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-              Everything looks great. You may have new messages waiting for review.
+              {t('admin.dashboard.summary')}
             </p>
           </div>
           <Button
@@ -125,7 +128,7 @@ export function AdminDashboardPage() {
           >
             <Link to="/admin/messages">
               <MessageSquare className="h-4 w-4 mr-2" />
-              View Messages
+              {t('admin.dashboard.viewMessages')}
             </Link>
           </Button>
         </div>

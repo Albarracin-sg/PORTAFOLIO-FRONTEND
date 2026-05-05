@@ -6,8 +6,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import DynamicBackground from '@/components/DynamicBackground';
 import { ArrowLeft, Lock, Loader2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export function AdminLoginPage() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { login } = useAdminAuth();
   const [email, setEmail] = useState('');
@@ -42,7 +44,7 @@ export function AdminLoginPage() {
         >
           <Link to="/">
             <ArrowLeft className="h-4 w-4" />
-            Back to site
+            {t('admin.login.backToSite')}
           </Link>
         </Button>
       </div>
@@ -58,10 +60,10 @@ export function AdminLoginPage() {
             </div>
             <div>
               <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
-                Admin Access
+                {t('admin.login.title')}
               </h1>
               <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                Securely manage your portfolio
+                {t('admin.login.subtitle')}
               </p>
             </div>
           </div>
@@ -70,7 +72,7 @@ export function AdminLoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="email" className="text-xs font-medium text-slate-500 dark:text-slate-400 ml-1">
-                Email
+                {t('admin.login.email')}
               </Label>
               <Input
                 id="email"
@@ -85,7 +87,7 @@ export function AdminLoginPage() {
 
             <div className="space-y-1.5">
               <Label htmlFor="password" className="text-xs font-medium text-slate-500 dark:text-slate-400 ml-1">
-                Password
+                {t('admin.login.password')}
               </Label>
               <Input
                 id="password"
@@ -112,9 +114,9 @@ export function AdminLoginPage() {
               {loading ? (
                 <span className="flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Authenticating...
+                  {t('admin.login.authenticating')}
                 </span>
-              ) : 'Access Dashboard'}
+              ) : t('admin.login.submit')}
             </Button>
           </form>
         </div>

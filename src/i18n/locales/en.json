@@ -339,5 +339,88 @@
     "softwareEngineer": "Software Engineer",
     "craftedWith": "Crafted with",
     "in": "in"
+  },
+  "admin": {
+    "login": {
+      "title": "Admin Access",
+      "subtitle": "Securely manage your portfolio content",
+      "email": "Email Address",
+      "password": "Password",
+      "submit": "Access Dashboard",
+      "authenticating": "Authenticating...",
+      "backToSite": "Back to site"
+    },
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "subtitle": "Centralized control for your portfolio content.",
+      "projects": "Projects",
+      "projectsDesc": "Update your portfolio projects and details.",
+      "messages": "Messages",
+      "messagesDesc": "View and manage contact form submissions.",
+      "welcome": "Welcome back, Admin",
+      "summary": "Everything looks great today. You have new messages waiting for review.",
+      "viewMessages": "View Messages"
+    },
+    "projects": {
+      "title": "Projects",
+      "subtitle": "Curate and manage your best work. Sync seamlessly with GitHub.",
+      "management": "Management",
+      "manageMasterpieces": "Manage masterpieces",
+      "searchPlaceholder": "Search work...",
+      "sync": "Sync",
+      "new": "New Project",
+      "noResults": "No projects match your search.",
+      "pagination": {
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "modal": {
+        "title": "Edit Project Details",
+        "fields": {
+          "title": "Title",
+          "category": "Category",
+          "status": "Status",
+          "visibility": "Visibility",
+          "featured": "Featured Project",
+          "github": "GitHub Repository",
+          "live": "Live Demo URL",
+          "description": "Description",
+          "techStack": "Tech Stack (comma separated)"
+        },
+        "categories": {
+          "web": "Web Development",
+          "fullstack": "Full Stack",
+          "devops": "DevOps & Infra",
+          "ml": "Machine Learning",
+          "data": "Data Science"
+        },
+        "status": {
+          "production": "Production Ready",
+          "development": "In Development",
+          "prototype": "Prototype / MVP"
+        },
+        "actions": {
+          "cancel": "Cancel",
+          "save": "Save Changes"
+        }
+      }
+    },
+    "messages": {
+      "title": "Inbox",
+      "subtitle": "Recent submissions from your portfolio's contact form.",
+      "communication": "Communication",
+      "readerResponses": "Reader responses",
+      "filters": {
+        "from": "From",
+        "to": "To",
+        "clear": "Clear"
+      },
+      "noMessages": "No messages found for this period.",
+      "emptyInbox": "Empty inbox.",
+      "pagination": {
+        "prev": "Previous",
+        "next": "Next"
+      }
+    }
   }
 }

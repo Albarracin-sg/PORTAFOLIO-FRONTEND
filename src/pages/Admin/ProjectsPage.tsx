@@ -17,18 +17,17 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import {
-  FolderKanban, ChevronLeft, ChevronRight, Edit, Star,
-  ExternalLink, Github, Search, Loader2, Sparkles,
-} from 'lucide-react';
+import { FolderKanban, ChevronLeft, ChevronRight, Edit, Star, ExternalLink, Github, Search, Plus, Loader2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { useTranslation } from 'react-i18next';
 
 export function AdminProjectsPage() {
+  const { t } = useTranslation();
   const { token } = useAdminAuth();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -51,7 +50,7 @@ export function AdminProjectsPage() {
   });
 
   const selectedProject = useMemo(
-    () => projects.find((p) => p.id === selectedProjectId) ?? null,
+    () => projects.find((project) => project.id === selectedProjectId) ?? null,
     [projects, selectedProjectId],
   );
 
@@ -66,15 +65,22 @@ export function AdminProjectsPage() {
     }
   };
 
-  useEffect(() => { load(); }, [token]);
+  useEffect(() => {
+    load();
+  }, [token]);
 
   useEffect(() => {
     if (!selectedProject) return;
+
     const technologies = selectedProject.technologies
       ? Array.isArray(selectedProject.technologies)
-        ? selectedProject.technologies.map((i: any) => i.technology?.name || i.name || '').filter(Boolean).join(', ')
+        ? selectedProject.technologies
+            .map((item: any) => item.technology?.name || item.name || '')
+            .filter(Boolean)
+            .join(', ')
         : String(selectedProject.technologies)
       : '';
+
     setForm({
       title: selectedProject.title ?? '',
       description: selectedProject.description ?? '',
@@ -90,12 +96,22 @@ export function AdminProjectsPage() {
   const handleSync = async () => {
     if (!token) return;
     setSyncing(true);
-    try { await syncGithubProjects(token); await load(); } finally { setSyncing(false); }
+    try {
+      await syncGithubProjects(token);
+      await load();
+    } finally {
+      setSyncing(false);
+    }
   };
 
   const handleSave = async () => {
     if (!token || !selectedProject) return;
-    const technologies = form.technologies.split(',').map((t) => t.trim()).filter(Boolean);
+
+    const technologies = form.technologies
+      .split(',')
+      .map((tech) => tech.trim())
+      .filter(Boolean);
+
     try {
       await updateProject(token, selectedProject.id, {
         title: form.title,
@@ -109,14 +125,17 @@ export function AdminProjectsPage() {
       });
       setIsEditOpen(false);
       await load();
-    } catch (err) { console.error(err); }
+    } catch (err) {
+      console.error('Error updating project:', err);
+    }
   };
 
-  const filteredProjects = useMemo(() =>
-    projects.filter(p =>
+  const filteredProjects = useMemo(() => {
+    return projects.filter(p => 
       p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       p.category.toLowerCase().includes(searchQuery.toLowerCase())
-    ), [projects, searchQuery]);
+    );
+  }, [projects, searchQuery]);
 
   const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
   const currentItems = useMemo(() => {
@@ -124,7 +143,9 @@ export function AdminProjectsPage() {
     return filteredProjects.slice(start, start + itemsPerPage);
   }, [filteredProjects, currentPage]);
 
-  useEffect(() => { setCurrentPage(1); }, [searchQuery]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
 
   const handleEditClick = (id: string) => {
     setSelectedProjectId(id);
@@ -132,227 +153,145 @@ export function AdminProjectsPage() {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-
-      {/* ── Header ── */}
-      <div className="space-y-4">
-        <p className="inline-flex items-center gap-2 rounded-full border border-violet-400/25 bg-violet-500/8 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-violet-400">
-          <Sparkles className="h-3 w-3" />
-          Portfolio content
-        </p>
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <FolderKanban className="h-7 w-7 text-violet-500 shrink-0" />
-            <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
-              Projects
+    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-700 max-w-6xl mx-auto px-4">
+      {/* Super Compact Header */}
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-xl bg-violet-600/10 flex items-center justify-center text-violet-600">
+            <FolderKanban className="h-5 w-5" />
+          </div>
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-gray-100 leading-none">
+              {t('admin.projects.title')}
             </h1>
+            <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-black mt-1">
+              {t('admin.projects.manageMasterpieces')}
+            </p>
           </div>
+        </div>
 
-          {/* Search + actions */}
-          <div className="flex items-center gap-2">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
-              <Input
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 h-9 w-44 rounded-2xl border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] text-sm focus-visible:ring-violet-500"
-              />
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleSync}
-              disabled={syncing}
-              className="h-9 rounded-2xl border-slate-200 dark:border-white/10 gap-2 text-sm font-medium transition-all duration-300 hover:scale-105 hover:border-violet-400 hover:text-violet-600 dark:hover:border-violet-500/40 dark:hover:text-violet-400"
-            >
-              {syncing ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Github className="h-3.5 w-3.5" />}
-              Sync
-            </Button>
+        <div className="flex items-center gap-2 bg-background/40 backdrop-blur-md p-1 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+            <Input 
+              placeholder={t('admin.projects.searchPlaceholder')} 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-8 h-8 w-40 rounded-lg border-none bg-transparent text-xs focus-visible:ring-0"
+            />
           </div>
+          <div className="h-4 w-px bg-slate-200 dark:bg-white/10 mx-1" />
+          <Button variant="ghost" size="sm" onClick={handleSync} disabled={syncing} className="h-8 rounded-lg text-[10px] font-black uppercase tracking-widest px-2 gap-2">
+            {syncing ? <Loader2 className="h-3 w-3 animate-spin" /> : <Github className="h-3 w-3" />} {t('admin.projects.sync')}
+          </Button>
+          <Button size="sm" className="h-8 rounded-lg text-[10px] font-black uppercase tracking-widest px-3 bg-violet-600 hover:bg-violet-700">
+            <Plus className="h-3 w-3 mr-1" /> {t('admin.projects.new')}
+          </Button>
         </div>
       </div>
 
-      {/* ── Project list ── */}
-      <div>
+      {/* Projects List — Minimalist Rows */}
+      <div className="space-y-1">
         {loading ? (
-          <div className="py-20 flex justify-center">
-            <Loader2 className="h-7 w-7 animate-spin text-violet-500" />
-          </div>
+          <div className="py-12 text-center"><Loader2 className="h-8 w-8 animate-spin text-violet-600 mx-auto" /></div>
         ) : currentItems.length === 0 ? (
-          <div className="py-20 text-center text-sm text-slate-400 dark:text-slate-600 italic">
-            No projects found.
-          </div>
+          <div className="py-12 text-center opacity-50 italic text-sm">{t('admin.projects.noResults')}</div>
         ) : (
-          <div className="space-y-1.5">
-            {currentItems.map((project) => (
-              <div
-                key={project.id}
-                className="group flex items-center justify-between px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-white/[0.07] bg-white/70 dark:bg-white/[0.025] hover:border-violet-400/30 hover:bg-white dark:hover:bg-white/[0.045] transition-all duration-200"
-              >
-                {/* Left */}
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className="h-9 w-9 rounded-xl bg-violet-500/8 border border-violet-500/15 flex items-center justify-center text-violet-500 shrink-0 group-hover:bg-violet-600 group-hover:text-white group-hover:border-violet-600 transition-all duration-200">
-                    <FolderKanban className="h-4 w-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-semibold text-slate-900 dark:text-white truncate">
-                        {project.title}
-                      </span>
-                      {project.featured && (
-                        <Star className="h-3 w-3 fill-amber-400 text-amber-400 shrink-0" />
-                      )}
+          <>
+            <div className="grid gap-1">
+              {currentItems.map((project) => (
+                <div 
+                  key={project.id} 
+                  className="group flex items-center justify-between py-2 px-4 rounded-xl border border-transparent hover:border-violet-500/10 bg-background/10 hover:bg-background/40 backdrop-blur-sm transition-all duration-300"
+                >
+                  <div className="flex items-center gap-4 min-w-0">
+                    <div className="h-8 w-8 rounded-lg bg-violet-600/5 border border-violet-500/10 flex items-center justify-center text-violet-600 flex-shrink-0 group-hover:bg-violet-600 group-hover:text-white transition-colors">
+                      <FolderKanban className="h-4 w-4" />
                     </div>
-                    <div className="flex items-center gap-1.5 mt-0.5">
-                      <span className="text-[11px] font-medium text-violet-500 dark:text-violet-400">
-                        {project.category}
-                      </span>
-                      <span className="text-slate-300 dark:text-white/20 text-[11px]">/</span>
-                      <span className="text-[11px] text-slate-400 dark:text-slate-600">
-                        {project.status}
-                      </span>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-sm text-gray-900 dark:text-gray-100 truncate">{project.title}</span>
+                        {project.featured && <Star className="h-2.5 w-2.5 fill-amber-500 text-amber-500" />}
+                      </div>
+                      <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-wider text-muted-foreground/60">
+                        <span className="text-violet-600/80">{project.category}</span>
+                        <span className="opacity-30">/</span>
+                        <span>{project.status}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-
-                {/* Right: actions */}
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-200 shrink-0">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => handleEditClick(project.id)}
-                    className="h-8 w-8 rounded-xl hover:bg-violet-600 hover:text-white transition-all duration-200"
-                  >
-                    <Edit className="h-3.5 w-3.5" />
-                  </Button>
-                  {project.githubUrl && (
-                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-xl" asChild>
-                      <a href={project.githubUrl} target="_blank" rel="noreferrer">
-                        <Github className="h-3.5 w-3.5" />
-                      </a>
+                  
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <Button variant="ghost" size="icon" onClick={() => handleEditClick(project.id)} className="h-7 w-7 rounded-md hover:bg-violet-600 hover:text-white">
+                      <Edit className="h-3.5 w-3.5" />
                     </Button>
-                  )}
-                  {project.liveUrl && (
-                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-xl" asChild>
-                      <a href={project.liveUrl} target="_blank" rel="noreferrer">
-                        <ExternalLink className="h-3.5 w-3.5" />
-                      </a>
-                    </Button>
-                  )}
+                    {project.githubUrl && (
+                      <Button variant="ghost" size="icon" className="h-7 w-7 rounded-md" asChild>
+                        <a href={project.githubUrl} target="_blank" rel="noreferrer"><Github className="h-3.5 w-3.5" /></a>
+                      </Button>
+                    )}
+                    {project.liveUrl && (
+                      <Button variant="ghost" size="icon" className="h-7 w-7 rounded-md" asChild>
+                        <a href={project.liveUrl} target="_blank" rel="noreferrer"><ExternalLink className="h-3.5 w-3.5" /></a>
+                      </Button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
 
-            {/* Pagination */}
+            {/* Compact Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-4 pt-6">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  className="h-9 rounded-2xl px-4 gap-1.5 text-sm hover:bg-violet-500/8 hover:text-violet-600 dark:hover:text-violet-400 transition-all duration-200"
-                >
-                  <ChevronLeft className="h-4 w-4" /> Prev
+              <div className="flex items-center justify-center gap-4 pt-4">
+                <Button variant="ghost" size="sm" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={currentPage === 1} className="h-8 rounded-lg px-2 text-[9px] font-black uppercase tracking-widest hover:bg-violet-500/10 hover:text-violet-600">
+                  <ChevronLeft className="h-3 w-3 mr-1" /> {t('admin.projects.pagination.prev')}
                 </Button>
-                <span className="text-xs font-medium text-slate-400 dark:text-slate-600 tabular-nums">
-                  {currentPage} / {totalPages}
-                </span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                  className="h-9 rounded-2xl px-4 gap-1.5 text-sm hover:bg-violet-500/8 hover:text-violet-600 dark:hover:text-violet-400 transition-all duration-200"
-                >
-                  Next <ChevronRight className="h-4 w-4" />
+                <div className="text-[9px] font-black tracking-widest uppercase opacity-40">{currentPage} / {totalPages}</div>
+                <Button variant="ghost" size="sm" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="h-8 rounded-lg px-2 text-[9px] font-black uppercase tracking-widest hover:bg-violet-500/10 hover:text-violet-600">
+                  {t('admin.projects.pagination.next')} <ChevronRight className="h-3 w-3 ml-1" />
                 </Button>
               </div>
             )}
-          </div>
+          </>
         )}
       </div>
 
-      {/* ── Edit dialog ── */}
       <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <DialogContent className="max-w-2xl rounded-3xl border-slate-200 dark:border-white/[0.07] bg-white/90 dark:bg-gray-950/90 backdrop-blur-2xl p-0 overflow-hidden shadow-2xl">
-          <DialogHeader className="px-6 pt-6 pb-5 border-b border-slate-200 dark:border-white/[0.07]">
-            <DialogTitle className="text-lg font-semibold flex items-center gap-2.5 text-slate-900 dark:text-white">
-              <div className="h-8 w-8 rounded-xl bg-violet-500/10 flex items-center justify-center text-violet-500">
-                <Edit className="h-4 w-4" />
-              </div>
-              Edit Project
+        <DialogContent className="max-w-2xl rounded-[2rem] border-slate-200 dark:border-white/10 bg-background/80 backdrop-blur-2xl p-0 overflow-hidden shadow-2xl">
+          <DialogHeader className="p-6 border-b border-slate-200 dark:border-white/5 bg-slate-50/30 dark:bg-white/5">
+            <DialogTitle className="text-lg font-bold flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-violet-600/10 text-violet-600"><Edit className="h-4 w-4" /></div>
+              {t('admin.projects.modal.title')}
             </DialogTitle>
           </DialogHeader>
-
-          <div className="px-6 py-5 space-y-4 max-h-[65vh] overflow-y-auto">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Title">
-                <Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-sm bg-white/60 dark:bg-white/[0.04] focus-visible:ring-violet-500" />
-              </Field>
-              <Field label="Category">
-                <Select value={form.category} onValueChange={(v) => setForm({ ...form, category: v })}>
-                  <SelectTrigger className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-sm bg-white/60 dark:bg-white/[0.04]"><SelectValue /></SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    <SelectItem value="web">Web Development</SelectItem>
-                    <SelectItem value="fullstack">Full Stack</SelectItem>
-                    <SelectItem value="devops">DevOps & Infra</SelectItem>
-                    <SelectItem value="ml">Machine Learning</SelectItem>
-                    <SelectItem value="data">Data Science</SelectItem>
-                  </SelectContent>
-                </Select>
-              </Field>
-              <Field label="Status">
-                <Select value={form.status} onValueChange={(v) => setForm({ ...form, status: v })}>
-                  <SelectTrigger className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-sm bg-white/60 dark:bg-white/[0.04]"><SelectValue /></SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    <SelectItem value="production">Production</SelectItem>
-                    <SelectItem value="development">In Development</SelectItem>
-                    <SelectItem value="prototype">Prototype</SelectItem>
-                  </SelectContent>
-                </Select>
-              </Field>
-              <Field label="Featured">
-                <div className="flex items-center justify-between h-10 px-4 rounded-xl border border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04]">
-                  <span className="text-sm text-slate-500 dark:text-slate-400">Show as featured</span>
-                  <Switch checked={form.featured} onCheckedChange={(v) => setForm({ ...form, featured: v })} />
-                </div>
-              </Field>
-              <Field label="GitHub URL">
-                <Input value={form.githubUrl} onChange={(e) => setForm({ ...form, githubUrl: e.target.value })} className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-sm bg-white/60 dark:bg-white/[0.04] focus-visible:ring-violet-500" />
-              </Field>
-              <Field label="Live URL">
-                <Input value={form.liveUrl} onChange={(e) => setForm({ ...form, liveUrl: e.target.value })} className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-sm bg-white/60 dark:bg-white/[0.04] focus-visible:ring-violet-500" />
-              </Field>
+          <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto custom-scrollbar">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-1"><label className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground ml-1">{t('admin.projects.modal.fields.title')}</label><Input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-xs bg-background/50 focus:ring-violet-500" /></div>
+              <div className="space-y-1"><label className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground ml-1">{t('admin.projects.modal.fields.category')}</label><Select value={form.category} onValueChange={(value) => setForm({ ...form, category: value })}><SelectTrigger className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-xs bg-background/50"><SelectValue /></SelectTrigger><SelectContent className="rounded-xl">
+                <SelectItem value="web">{t('admin.projects.modal.categories.web')}</SelectItem>
+                <SelectItem value="fullstack">{t('admin.projects.modal.categories.fullstack')}</SelectItem>
+                <SelectItem value="devops">{t('admin.projects.modal.categories.devops')}</SelectItem>
+                <SelectItem value="ml">{t('admin.projects.modal.categories.ml')}</SelectItem>
+                <SelectItem value="data">{t('admin.projects.modal.categories.data')}</SelectItem>
+              </SelectContent></Select></div>
+              <div className="space-y-1"><label className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground ml-1">{t('admin.projects.modal.fields.status')}</label><Select value={form.status} onValueChange={(value) => setForm({ ...form, status: value })}><SelectTrigger className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-xs bg-background/50"><SelectValue /></SelectTrigger><SelectContent className="rounded-xl">
+                <SelectItem value="production">{t('admin.projects.modal.status.production')}</SelectItem>
+                <SelectItem value="development">{t('admin.projects.modal.status.development')}</SelectItem>
+                <SelectItem value="prototype">{t('admin.projects.modal.status.prototype')}</SelectItem>
+              </SelectContent></Select></div>
+              <div className="space-y-1"><label className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground ml-1">{t('admin.projects.modal.fields.visibility')}</label><div className="flex items-center justify-between h-10 px-4 rounded-xl border border-slate-200 dark:border-white/10 bg-white/40 dark:bg-black/20"><span className="text-[10px] font-bold uppercase tracking-widest opacity-70">{t('admin.projects.modal.fields.featured')}</span><Switch checked={form.featured} onCheckedChange={(checked) => setForm({ ...form, featured: checked })} /></div></div>
+              <div className="space-y-1"><label className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground ml-1">{t('admin.projects.modal.fields.github')}</label><Input value={form.githubUrl} onChange={(e) => setForm({ ...form, githubUrl: e.target.value })} className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-xs bg-background/50" /></div>
+              <div className="space-y-1"><label className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground ml-1">{t('admin.projects.modal.fields.live')}</label><Input value={form.liveUrl} onChange={(e) => setForm({ ...form, liveUrl: e.target.value })} className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-xs bg-background/50" /></div>
             </div>
-            <Field label="Description">
-              <Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={4} className="rounded-2xl border-slate-200 dark:border-white/10 text-sm bg-white/60 dark:bg-white/[0.04] resize-none focus-visible:ring-violet-500" />
-            </Field>
-            <Field label="Tech Stack (comma separated)">
-              <Input value={form.technologies} onChange={(e) => setForm({ ...form, technologies: e.target.value })} className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-sm bg-white/60 dark:bg-white/[0.04] focus-visible:ring-violet-500" />
-            </Field>
+            <div className="space-y-1"><label className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground ml-1">{t('admin.projects.modal.fields.description')}</label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} rows={4} className="rounded-2xl border-slate-200 dark:border-white/10 p-4 resize-none text-xs bg-background/50 focus:ring-violet-500" /></div>
+            <div className="space-y-1"><label className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground ml-1">{t('admin.projects.modal.fields.techStack')}</label><Input value={form.technologies} onChange={(e) => setForm({ ...form, technologies: e.target.value })} className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-xs bg-background/50" /></div>
           </div>
-
-          <div className="px-6 py-4 border-t border-slate-200 dark:border-white/[0.07] flex justify-end gap-2">
-            <Button variant="ghost" onClick={() => setIsEditOpen(false)} className="rounded-2xl px-5 text-sm font-medium">
-              Cancel
-            </Button>
-            <Button onClick={handleSave} className="rounded-2xl bg-violet-600 hover:bg-violet-700 px-6 text-sm font-medium shadow-lg shadow-violet-500/20 transition-all duration-300 hover:scale-105">
-              Save changes
-            </Button>
+          <div className="p-6 border-t border-slate-200 dark:border-white/5 flex justify-end gap-3 bg-slate-50/30 dark:bg-white/5">
+            <Button variant="ghost" onClick={() => setIsEditOpen(false)} className="rounded-xl px-4 font-bold uppercase tracking-widest text-[10px]">{t('admin.projects.modal.actions.cancel')}</Button>
+            <Button onClick={handleSave} className="rounded-xl bg-violet-600 hover:bg-violet-700 px-6 font-bold uppercase tracking-widest text-[10px] shadow-lg shadow-violet-500/20">{t('admin.projects.modal.actions.save')}</Button>
           </div>
         </DialogContent>
       </Dialog>
-    </div>
-  );
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div className="space-y-1.5">
-      <label className="text-xs font-medium text-slate-500 dark:text-slate-400 ml-1">{label}</label>
-      {children}
     </div>
   );
 }

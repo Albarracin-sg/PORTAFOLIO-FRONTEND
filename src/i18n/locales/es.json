@@ -339,5 +339,88 @@
     "softwareEngineer": "Ingeniero de Software",
     "craftedWith": "Hecho con",
     "in": "en"
+  },
+  "admin": {
+    "login": {
+      "title": "Acceso Admin",
+      "subtitle": "Gestioná el contenido de tu portafolio de forma segura",
+      "email": "Correo Electrónico",
+      "password": "Contraseña",
+      "submit": "Acceder al Panel",
+      "authenticating": "Autenticando...",
+      "backToSite": "Volver al sitio"
+    },
+    "dashboard": {
+      "title": "Panel de Control",
+      "subtitle": "Control centralizado para el contenido de tu portafolio.",
+      "projects": "Proyectos",
+      "projectsDesc": "Actualizá los proyectos de tu portafolio y sus detalles.",
+      "messages": "Mensajes",
+      "messagesDesc": "Mirá y gestioná las consultas del formulario de contacto.",
+      "welcome": "Bienvenido de nuevo, Admin",
+      "summary": "Todo se ve bien hoy. Tenés nuevos mensajes esperando revisión.",
+      "viewMessages": "Ver Mensajes"
+    },
+    "projects": {
+      "title": "Proyectos",
+      "subtitle": "Curá y gestioná tus mejores trabajos. Sincronizá con GitHub sin problemas.",
+      "management": "Gestión",
+      "manageMasterpieces": "Gestionar obras maestras",
+      "searchPlaceholder": "Buscar trabajo...",
+      "sync": "Sincronizar",
+      "new": "Nuevo Proyecto",
+      "noResults": "No hay proyectos que coincidan con tu búsqueda.",
+      "pagination": {
+        "prev": "Anterior",
+        "next": "Siguiente"
+      },
+      "modal": {
+        "title": "Editar Detalles del Proyecto",
+        "fields": {
+          "title": "Título",
+          "category": "Categoría",
+          "status": "Estado",
+          "visibility": "Visibilidad",
+          "featured": "Proyecto Destacado",
+          "github": "Repositorio GitHub",
+          "live": "URL de Demo en Vivo",
+          "description": "Descripción",
+          "techStack": "Stack Tecnológico (separado por comas)"
+        },
+        "categories": {
+          "web": "Desarrollo Web",
+          "fullstack": "Full Stack",
+          "devops": "DevOps e Infra",
+          "ml": "Machine Learning",
+          "data": "Ciencia de Datos"
+        },
+        "status": {
+          "production": "Listo para Producción",
+          "development": "En Desarrollo",
+          "prototype": "Prototipo / MVP"
+        },
+        "actions": {
+          "cancel": "Cancelar",
+          "save": "Guardar Cambios"
+        }
+      }
+    },
+    "messages": {
+      "title": "Bandeja de Entrada",
+      "subtitle": "Consultas recientes del formulario de contacto de tu portafolio.",
+      "communication": "Comunicación",
+      "readerResponses": "Respuestas de lectores",
+      "filters": {
+        "from": "Desde",
+        "to": "Hasta",
+        "clear": "Limpiar"
+      },
+      "noMessages": "No se encontraron mensajes para este período.",
+      "emptyInbox": "Bandeja de entrada vacía.",
+      "pagination": {
+        "prev": "Anterior",
+        "next": "Siguiente"
+      }
+    }
   }
 }
