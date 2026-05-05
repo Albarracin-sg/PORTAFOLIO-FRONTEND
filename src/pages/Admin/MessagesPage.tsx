@@ -3,7 +3,7 @@ import { fetchMessages, ContactMessage } from '@/features/admin/api/messages';
 import { useAdminAuth } from '@/features/admin/AdminAuthProvider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MessageSquare, Calendar, ChevronLeft, ChevronRight, User, ChevronDown, Loader2 } from 'lucide-react';
+import { MessageSquare, Calendar, ChevronLeft, ChevronRight, User, ChevronDown, Loader2, Sparkles, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export function AdminMessagesPage() {
@@ -60,122 +60,153 @@ export function AdminMessagesPage() {
   };
 
   return (
-    <div className="space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-700 max-w-5xl mx-auto px-4">
-      {/* Super Compact Header */}
-      <div className="flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-emerald-600/10 flex items-center justify-center text-emerald-600">
-            <MessageSquare className="h-5 w-5" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold tracking-tight text-gray-900 dark:text-gray-100 leading-none">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+
+      {/* ── Header ── */}
+      <div className="space-y-4">
+        <p className="inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-500/8 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-emerald-500 dark:text-emerald-400">
+          <Sparkles className="h-3 w-3" />
+          {t('admin.messages.contactInbox')}
+        </p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <MessageSquare className="h-7 w-7 text-emerald-500 shrink-0" />
+            <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
               {t('admin.messages.title')}
             </h1>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-black mt-1">
-              {t('admin.messages.readerResponses')}
-            </p>
           </div>
-        </div>
-        
-        <div className="flex items-center gap-2 bg-background/40 backdrop-blur-md p-1 rounded-xl border border-slate-200 dark:border-white/10 shadow-sm">
-          <div className="flex items-center gap-2 px-2">
-            <Calendar className="h-3 w-3 text-muted-foreground" />
-            <Input
-              type="date"
-              value={dateFrom}
-              onChange={(e) => setDateFrom(e.target.value)}
-              className="h-7 w-28 border-none bg-transparent text-[9px] font-black uppercase tracking-widest focus-visible:ring-0 p-0"
-              placeholder={t('admin.messages.filters.from')}
-            />
+
+          {/* Date filters */}
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 px-3 h-9 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04]">
+              <Calendar className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
+              <Input
+                type="date"
+                value={dateFrom}
+                onChange={(e) => setDateFrom(e.target.value)}
+                className="h-auto w-28 border-none bg-transparent text-xs p-0 focus-visible:ring-0 text-slate-600 dark:text-slate-400"
+              />
+            </div>
+            <span className="text-slate-300 dark:text-white/20 text-sm select-none">→</span>
+            <div className="flex items-center gap-2 px-3 h-9 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04]">
+              <Input
+                type="date"
+                value={dateTo}
+                onChange={(e) => setDateTo(e.target.value)}
+                className="h-auto w-28 border-none bg-transparent text-xs p-0 focus-visible:ring-0 text-slate-600 dark:text-slate-400"
+              />
+            </div>
+            {(dateFrom || dateTo) && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => { setDateFrom(''); setDateTo(''); }}
+                className="h-9 w-9 rounded-2xl hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/10 dark:hover:text-red-400 transition-all duration-200"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            )}
           </div>
-          <div className="h-3 w-px bg-slate-200 dark:bg-white/10" />
-          <div className="flex items-center gap-2 px-2">
-            <Input
-              type="date"
-              value={dateTo}
-              onChange={(e) => setDateTo(e.target.value)}
-              className="h-7 w-28 border-none bg-transparent text-[9px] font-black uppercase tracking-widest focus-visible:ring-0 p-0 text-right"
-              placeholder={t('admin.messages.filters.to')}
-            />
-          </div>
-          {(dateFrom || dateTo) && (
-            <Button variant="ghost" size="sm" onClick={() => { setDateFrom(''); setDateTo(''); }} className="h-6 w-6 rounded-full p-0 text-xs">
-              ×
-            </Button>
-          )}
         </div>
       </div>
 
-      {/* Messages List — Minimalist Rows */}
-      <div className="space-y-1">
+      {/* ── Messages list ── */}
+      <div>
         {loading ? (
-          <div className="py-12 text-center"><Loader2 className="h-8 w-8 animate-spin text-emerald-600 mx-auto" /></div>
+          <div className="py-20 flex justify-center">
+            <Loader2 className="h-7 w-7 animate-spin text-emerald-500" />
+          </div>
         ) : currentItems.length === 0 ? (
-          <div className="py-12 text-center opacity-50 italic text-sm">
-            {filteredMessages.length === 0 && (dateFrom || dateTo) ? t('admin.messages.noMessages') : t('admin.messages.emptyInbox')}
+          <div className="py-20 text-center text-sm text-slate-400 dark:text-slate-600 italic">
+            {filteredMessages.length === 0 && (dateFrom || dateTo)
+              ? t('admin.messages.noMessages')
+              : t('admin.messages.emptyInbox')}
           </div>
         ) : (
-          <>
-            <div className="grid gap-1">
-              {currentItems.map((message) => (
-                <div 
-                  key={message.id} 
-                  className={`group relative rounded-xl border transition-all duration-300 overflow-hidden ${
-                    expandedMessageId === message.id 
-                      ? 'border-emerald-500/20 bg-background/40 shadow-lg' 
-                      : 'border-transparent bg-background/10 hover:bg-background/30 hover:border-emerald-500/10'
+          <div className="space-y-1.5">
+            {currentItems.map((message) => {
+              const isOpen = expandedMessageId === message.id;
+              return (
+                <div
+                  key={message.id}
+                  className={`rounded-2xl border transition-all duration-200 overflow-hidden ${
+                    isOpen
+                      ? 'border-emerald-400/30 bg-white dark:bg-white/[0.045] shadow-sm'
+                      : 'border-slate-200 dark:border-white/[0.07] bg-white/70 dark:bg-white/[0.025] hover:border-emerald-400/20 hover:bg-white dark:hover:bg-white/[0.04]'
                   }`}
                 >
-                  <button 
+                  {/* Row */}
+                  <button
                     onClick={() => toggleExpand(message.id)}
-                    className="w-full text-left px-4 py-2.5 flex items-center justify-between gap-4"
+                    className="w-full text-left px-5 py-3.5 flex items-center justify-between gap-4"
                   >
-                    <div className="flex items-center gap-4 flex-1 min-w-0">
-                      <div className={`h-8 w-8 rounded-lg flex items-center justify-center transition-all duration-300 ${
-                        expandedMessageId === message.id ? 'bg-emerald-600 text-white shadow-md' : 'bg-emerald-600/5 text-emerald-600'
+                    <div className="flex items-center gap-4 min-w-0">
+                      <div className={`h-9 w-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200 ${
+                        isOpen
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-emerald-500/8 border border-emerald-500/15 text-emerald-500'
                       }`}>
                         <User className="h-4 w-4" />
                       </div>
                       <div className="min-w-0">
-                        <div className="font-bold text-sm text-gray-900 dark:text-gray-100 truncate">{message.name}</div>
-                        <div className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60 truncate">{message.email}</div>
+                        <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">
+                          {message.name}
+                        </p>
+                        <p className="text-xs text-slate-400 dark:text-slate-600 truncate">
+                          {message.email}
+                        </p>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center gap-4 flex-shrink-0">
-                      <div className="hidden sm:flex flex-col items-end gap-0">
-                        <div className="text-[9px] font-black uppercase tracking-widest text-emerald-600/70">
-                          {new Date(message.createdAt).toLocaleDateString(undefined, { day: '2-digit', month: 'short' })}
-                        </div>
-                      </div>
-                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform duration-500 ${expandedMessageId === message.id ? 'rotate-180' : ''}`} />
+
+                    <div className="flex items-center gap-3 shrink-0">
+                      <span className="text-xs font-medium text-emerald-500 dark:text-emerald-400 hidden sm:block">
+                        {new Date(message.createdAt).toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' })}
+                      </span>
+                      <ChevronDown className={`h-4 w-4 text-slate-400 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} />
                     </div>
                   </button>
-                  
-                  {expandedMessageId === message.id && (
-                    <div className="px-12 pb-4 pt-1 animate-in fade-in slide-in-from-top-2 duration-300">
-                      <div className="relative p-3 rounded-xl bg-white/40 dark:bg-black/20 border border-slate-200/50 dark:border-white/5 text-xs leading-relaxed text-gray-700 dark:text-gray-300 whitespace-pre-wrap italic">
-                        "{message.message}"
+
+                  {/* Expanded content */}
+                  {isOpen && (
+                    <div className="px-5 pb-5 pt-0 animate-in fade-in slide-in-from-top-1 duration-200">
+                      <div className="ml-13 pl-[3.25rem]">
+                        <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400 whitespace-pre-wrap border-l-2 border-emerald-500/30 pl-4">
+                          {message.message}
+                        </p>
                       </div>
                     </div>
                   )}
                 </div>
-              ))}
-            </div>
+              );
+            })}
 
-            {/* Compact Pagination */}
+            {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-4 pt-4">
-                <Button variant="ghost" size="sm" onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={currentPage === 1} className="h-8 rounded-lg px-2 text-[9px] font-black uppercase tracking-widest hover:bg-violet-500/10 hover:text-violet-600">
-                  <ChevronLeft className="h-3 w-3 mr-1" /> {t('admin.messages.pagination.prev')}
+              <div className="flex items-center justify-center gap-4 pt-6">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  className="h-9 rounded-2xl px-4 gap-1.5 text-sm hover:bg-emerald-500/8 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all duration-200"
+                >
+                  <ChevronLeft className="h-4 w-4" /> {t('admin.messages.pagination.prev')}
                 </Button>
-                <div className="text-[9px] font-black tracking-widest uppercase opacity-40">{currentPage} / {totalPages}</div>
-                <Button variant="ghost" size="sm" onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage === totalPages} className="h-8 rounded-lg px-2 text-[9px] font-black uppercase tracking-widest hover:bg-violet-500/10 hover:text-violet-600">
-                  {t('admin.messages.pagination.next')} <ChevronRight className="h-3 w-3 ml-1" />
+                <span className="text-xs font-medium text-slate-400 dark:text-slate-600 tabular-nums">
+                  {currentPage} / {totalPages}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  className="h-9 rounded-2xl px-4 gap-1.5 text-sm hover:bg-emerald-500/8 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all duration-200"
+                >
+                  {t('admin.messages.pagination.next')} <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
     </div>
