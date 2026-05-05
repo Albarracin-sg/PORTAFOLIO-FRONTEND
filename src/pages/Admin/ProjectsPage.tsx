@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { FolderKanban } from 'lucide-react';
 
 type ProjectUpdatePayload = {
   title: string;

@@ -6,7 +6,7 @@ import ThemeToggle from '@/components/ThemeToggle';
 import { useLanguage } from '@/features/language';
 import { useTheme } from '@/features/theme';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { LayoutDashboard, Edit, FileText, FolderKanban, MessageSquare, LogOut, Loader2, Globe } from 'lucide-react';
+import { LayoutDashboard, Edit, FileText, FolderKanban, MessageSquare, LogOut, Loader2 } from 'lucide-react';
 
 const navItems = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
