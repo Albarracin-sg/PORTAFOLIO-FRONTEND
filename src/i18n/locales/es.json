@@ -2,7 +2,19 @@
   "common": {
     "back": "Volver",
     "in": "en",
-    "loading": "Cargando"
+    "loading": "Cargando",
+    "lastUpdated": "Última actualización",
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "page": "Página {{current}} de {{total}}"
+    },
+    "status": {
+      "excellent": "Excelente",
+      "good": "Bueno",
+      "degraded": "Degradado",
+      "critical": "Crítico"
+    }
   },
   "spotify": {
     "notListening": "No estoy escuchando nada ahora.",
@@ -361,6 +373,51 @@
       "summary": "Todo se ve bien hoy. Tenés nuevos mensajes esperando revisión.",
       "viewMessages": "Ver Mensajes"
     },
+    "logs": {
+      "title": "Logs del Servidor",
+      "subtitle": "Métricas de rendimiento y análisis de tráfico en tiempo real.",
+      "refresh": "Actualizar Datos",
+      "back": "Volver al Panel",
+      "totalRequests": "Total de Requests",
+      "requestsPerMin": "Requests/Min",
+      "avgResponse": "Respuesta Promedio",
+      "uptime": "Uptime",
+      "restarts": "Reinicios",
+      "trafficChart": "Tráfico por Endpoint",
+      "endpointDetails": "Detalle de Endpoints",
+      "method": "Método",
+      "requests": "Requests",
+      "avg": "Promedio",
+      "liveInfra": "Infraestructura en Vivo",
+      "trafficPerRoute": "Total de solicitudes por ruta",
+      "public": "Público",
+      "admin": "Admin",
+      "trafficSplit": "División de Tráfico",
+      "publicVsAdmin": "Rutas públicas vs admin",
+      "apiHealth": "Salud de la API",
+      "avgResponseText": "Respuesta promedio",
+      "statusText": "estado",
+      "busiestEndpoints": "Endpoints más activos",
+      "highestVolume": "Mayor volumen de solicitudes",
+      "slowestEndpoints": "Endpoints más lentos",
+      "highestLatency": "Mayor tiempo de respuesta promedio",
+      "allEndpoints": "Todos los Endpoints",
+      "routesTracked": "rutas monitoreadas",
+      "endpointsCount": "Endpoints"
+    },
+    "bot": {
+      "title": "Conversaciones del Bot",
+      "subtitle": "Revisá y gestioná las interacciones entre los usuarios y el asistente de IA.",
+      "refresh": "Actualizar",
+      "recentThreads": "Hilos Recientes",
+      "messages": "mensajes",
+      "newConversation": "Nueva conversación",
+      "selectConversation": "Seleccioná una conversación",
+      "selectConversationDesc": "Hacé clic en un hilo de la lista para ver el historial completo y las opciones de gestión.",
+      "visitor": "Visitante",
+      "aiAssistant": "Asistente IA",
+      "deleteConfirm": "¿Estás seguro de que querés borrar esta conversación?"
+    },
     "projects": {
       "title": "Proyectos",
       "subtitle": "Curá y gestioná tus mejores trabajos. Sincronizá con GitHub sin problemas.",
@@ -408,6 +465,7 @@
     "messages": {
       "title": "Bandeja de Entrada",
       "subtitle": "Consultas recientes del formulario de contacto de tu portafolio.",
+      "contactInbox": "Bandeja de entrada",
       "communication": "Comunicación",
       "readerResponses": "Respuestas de lectores",
       "filters": {

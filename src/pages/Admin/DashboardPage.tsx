@@ -6,8 +6,13 @@ import {
   MessageSquare,
   ArrowRight,
   Sparkles,
+  Activity,
+  Bot,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
+import { useAdminAuth } from '@/features/admin/AdminAuthProvider';
+import { fetchAdminStats, type AdminStats } from '@/shared/api/stats';
 
 const dashboardItems = [
   {
@@ -24,6 +29,20 @@ const dashboardItems = [
     icon: MessageSquare,
     accent: 'emerald',
   },
+  {
+    titleKey: 'Bot Messages',
+    descriptionKey: 'View and manage bot conversations',
+    href: '/admin/bot-messages',
+    icon: Bot,
+    accent: 'blue',
+  },
+  {
+    titleKey: 'Server Logs',
+    descriptionKey: 'Real-time server performance and logs',
+    href: '/admin/logs',
+    icon: Activity,
+    accent: 'orange',
+  },
 ] as const;
 
 const accentMap = {
@@ -39,10 +58,34 @@ const accentMap = {
     arrow: 'group-hover:text-emerald-500',
     badge: 'bg-emerald-500/8 border-emerald-400/25 text-emerald-400',
   },
+  blue: {
+    icon: 'bg-blue-500/10 text-blue-500 dark:text-blue-400',
+    border: 'hover:border-blue-400/30',
+    arrow: 'group-hover:text-blue-500',
+    badge: 'bg-blue-500/8 border-blue-400/25 text-blue-400',
+  },
+  orange: {
+    icon: 'bg-orange-500/10 text-orange-500 dark:text-orange-400',
+    border: 'hover:border-orange-400/30',
+    arrow: 'group-hover:text-orange-500',
+    badge: 'bg-orange-500/8 border-orange-400/25 text-orange-400',
+  },
 };
 
 export function AdminDashboardPage() {
   const { t } = useTranslation();
+  const { token } = useAdminAuth();
+  const [stats, setStats] = useState<AdminStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (token) {
+      fetchAdminStats(token)
+        .then(setStats)
+        .catch(console.error)
+        .finally(() => setLoading(false));
+    }
+  }, [token]);
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -67,9 +110,9 @@ export function AdminDashboardPage() {
       {/* ── Quick stats row ── */}
       <div className="grid grid-cols-3 gap-3 max-w-sm">
         {[
-          { label: t('admin.dashboard.projects'), value: '10+' },
-          { label: t('admin.dashboard.messages'), value: '—' },
-          { label: 'Status', value: '✓' },
+          { label: t('admin.dashboard.projects'), value: loading ? '...' : stats?.totalProjects ?? '0' },
+          { label: t('admin.dashboard.messages'), value: loading ? '...' : stats?.totalContactMessages ?? '0' },
+          { label: 'Uptime', value: loading ? '...' : stats?.uptime ?? '—' },
         ].map(({ label, value }) => (
           <div
             key={label}
@@ -100,10 +143,10 @@ export function AdminDashboardPage() {
                   />
                 </div>
                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-1.5">
-                  {t(item.titleKey)}
+                  {item.isKey ? t(item.title) : item.title}
                 </h3>
                 <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
-                  {t(item.descriptionKey)}
+                  {item.isKey ? t(item.description) : item.description}
                 </p>
               </div>
             </Link>
@@ -122,15 +165,27 @@ export function AdminDashboardPage() {
               {t('admin.dashboard.summary')}
             </p>
           </div>
-          <Button
-            asChild
-            className="shrink-0 rounded-2xl bg-violet-600 hover:bg-violet-700 shadow-lg shadow-violet-500/20 px-6 h-10 text-sm font-medium"
-          >
-            <Link to="/admin/messages">
-              <MessageSquare className="h-4 w-4 mr-2" />
-              {t('admin.dashboard.viewMessages')}
-            </Link>
-          </Button>
+          <div className="flex gap-3">
+            <Button
+              asChild
+              variant="outline"
+              className="shrink-0 rounded-2xl px-6 h-10 text-sm font-medium"
+            >
+              <Link to="/admin/logs">
+                <Activity className="h-4 w-4 mr-2" />
+                System Logs
+              </Link>
+            </Button>
+            <Button
+              asChild
+              className="shrink-0 rounded-2xl bg-violet-600 hover:bg-violet-700 shadow-lg shadow-violet-500/20 px-6 h-10 text-sm font-medium"
+            >
+              <Link to="/admin/messages">
+                <MessageSquare className="h-4 w-4 mr-2" />
+                {t('admin.dashboard.viewMessages')}
+              </Link>
+            </Button>
+          </div>
         </div>
       </div>
 

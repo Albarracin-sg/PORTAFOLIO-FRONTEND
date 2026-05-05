@@ -2,7 +2,19 @@
   "common": {
     "back": "Back",
     "in": "in",
-    "loading": "Loading"
+    "loading": "Loading",
+    "lastUpdated": "Last updated",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "page": "Page {{current}} of {{total}}"
+    },
+    "status": {
+      "excellent": "Excellent",
+      "good": "Good",
+      "degraded": "Degradado",
+      "critical": "Critical"
+    }
   },
   "spotify": {
     "notListening": "I'm not listening to anything right now.",
@@ -361,6 +373,51 @@
       "summary": "Everything looks great today. You have new messages waiting for review.",
       "viewMessages": "View Messages"
     },
+    "logs": {
+      "title": "Server Logs",
+      "subtitle": "Detailed performance metrics and real-time traffic analysis.",
+      "refresh": "Refresh Data",
+      "back": "Back to Dashboard",
+      "totalRequests": "Total Requests",
+      "requestsPerMin": "Requests/Min",
+      "avgResponse": "Avg Response",
+      "uptime": "Uptime",
+      "restarts": "Server Restarts",
+      "trafficChart": "Traffic by Endpoint",
+      "endpointDetails": "Endpoint Details",
+      "method": "Method",
+      "requests": "Requests",
+      "avg": "Avg",
+      "liveInfra": "Live Infrastructure",
+      "trafficPerRoute": "Total requests per route",
+      "public": "Public",
+      "admin": "Admin",
+      "trafficSplit": "Traffic Split",
+      "publicVsAdmin": "Public vs admin routes",
+      "apiHealth": "API Health",
+      "avgResponseText": "Avg response",
+      "statusText": "status",
+      "busiestEndpoints": "Busiest Endpoints",
+      "highestVolume": "Highest request volume",
+      "slowestEndpoints": "Slowest Endpoints",
+      "highestLatency": "Highest avg response time",
+      "allEndpoints": "All Endpoints",
+      "routesTracked": "routes tracked",
+      "endpointsCount": "Endpoints"
+    },
+    "bot": {
+      "title": "Bot Conversations",
+      "subtitle": "Review and manage interactions between users and the AI assistant.",
+      "refresh": "Refresh",
+      "recentThreads": "Recent Threads",
+      "messages": "messages",
+      "newConversation": "New conversation",
+      "selectConversation": "Select a conversation",
+      "selectConversationDesc": "Click on a thread from the list to see the full chat history and management options.",
+      "visitor": "Visitor",
+      "aiAssistant": "Juan AI",
+      "deleteConfirm": "Are you sure you want to delete this conversation?"
+    },
     "projects": {
       "title": "Projects",
       "subtitle": "Curate and manage your best work. Sync seamlessly with GitHub.",
@@ -408,6 +465,7 @@
     "messages": {
       "title": "Inbox",
       "subtitle": "Recent submissions from your portfolio's contact form.",
+      "contactInbox": "Contact inbox",
       "communication": "Communication",
       "readerResponses": "Reader responses",
       "filters": {

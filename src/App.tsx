@@ -8,14 +8,16 @@ import { HomePage } from '@/pages/HomePage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { AdminLoginPage } from '@/pages/Admin/LoginPage';
 import { AdminDashboardPage } from '@/pages/Admin/DashboardPage';
-import { AdminProjectsPage } from '@/pages/Admin/ProjectsPage';
-import { AdminMessagesPage } from '@/pages/Admin/MessagesPage';
 import ScrollToTop from './components/ui/ScrollToTop';
 
 const StatsPage = lazy(() => import('@/pages/StatsPage/index').then(m => ({ default: m.StatsPage })));
 const AllProjectsPage = lazy(() => import('@/pages/AllProjectsPage').then(m => ({ default: m.AllProjectsPage })));
 const ProjectDetailPage = lazy(() => import('@/pages/ProjectDetailPage').then(m => ({ default: m.ProjectDetailPage })));
 const BotChatPage = lazy(() => import('@/pages/BotChatPage').then(m => ({ default: m.BotChatPage })));
+const AdminLogsPage = lazy(() => import('@/pages/Admin/AdminLogsPage'));
+const BotMessagesPage = lazy(() => import('@/pages/Admin/BotMessagesPage'));
+const AdminProjectsPage = lazy(() => import('@/pages/Admin/ProjectsPage').then(m => ({ default: m.AdminProjectsPage })));
+const AdminMessagesPage = lazy(() => import('@/pages/Admin/MessagesPage').then(m => ({ default: m.AdminMessagesPage })));
 
 function PageFallback() {
   return (
@@ -40,8 +42,26 @@ export default function App() {
         }
       >
         <Route index element={<AdminDashboardPage />} />
-        <Route path="projects" element={<AdminProjectsPage />} />
-        <Route path="messages" element={<AdminMessagesPage />} />
+        <Route path="projects" element={
+          <Suspense fallback={<PageFallback />}>
+            <AdminProjectsPage />
+          </Suspense>
+        } />
+        <Route path="messages" element={
+          <Suspense fallback={<PageFallback />}>
+            <AdminMessagesPage />
+          </Suspense>
+        } />
+        <Route path="logs" element={
+          <Suspense fallback={<PageFallback />}>
+            <AdminLogsPage />
+          </Suspense>
+        } />
+        <Route path="bot-messages" element={
+          <Suspense fallback={<PageFallback />}>
+            <BotMessagesPage />
+          </Suspense>
+        } />
       </Route>
       <Route path="*" element={<RootLayout />}>
         <Route path="projects" element={

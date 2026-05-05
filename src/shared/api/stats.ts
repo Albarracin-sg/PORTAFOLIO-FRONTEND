@@ -12,7 +12,20 @@ export interface PublicStats {
   generatedAt: string;
 }
 
+export interface AdminStats extends PublicStats {
+  restartCount: number;
+  totalProjects: number;
+  totalContactMessages: number;
+  requestsPer5Minutes: number;
+  requestsPerHour: number;
+}
+
 export async function fetchPublicStats(): Promise<PublicStats> {
   const { apiRequest } = await import('./http');
   return apiRequest<PublicStats>('/public/stats');
+}
+
+export async function fetchAdminStats(token: string): Promise<AdminStats> {
+  const { apiRequest } = await import('./http');
+  return apiRequest<AdminStats>('/admin/stats', { token });
 }
