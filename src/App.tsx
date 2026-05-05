@@ -42,8 +42,6 @@ export default function App() {
         }
       >
         <Route index element={<AdminDashboardPage />} />
-        <Route path="live" element={<AdminLiveEditorPage />} />
-        <Route path="content" element={<AdminContentPage />} />
         <Route path="projects" element={<AdminProjectsPage />} />
         <Route path="messages" element={<AdminMessagesPage />} />
       </Route>

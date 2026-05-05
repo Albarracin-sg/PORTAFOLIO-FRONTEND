@@ -5,14 +5,6 @@ import { LayoutDashboard, FileText, FolderKanban, MessageSquare, ArrowRight } fr
 
 const dashboardItems = [
   { 
-    title: 'Content', 
-    description: 'Manage pages, sections, hero, about and more.', 
-    href: '/admin/content',
-    icon: FileText,
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-500/10'
-  },
-  { 
     title: 'Projects', 
     description: 'Update your portfolio projects and details.', 
     href: '/admin/projects',

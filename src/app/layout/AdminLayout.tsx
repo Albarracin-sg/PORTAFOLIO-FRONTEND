@@ -10,8 +10,6 @@ import { LayoutDashboard, Edit, FileText, FolderKanban, MessageSquare, LogOut, L
 
 const navItems = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { label: 'Live Editor', href: '/admin/live', icon: Edit },
-  { label: 'Content', href: '/admin/content', icon: FileText },
   { label: 'Projects', href: '/admin/projects', icon: FolderKanban },
   { label: 'Messages', href: '/admin/messages', icon: MessageSquare },
 ];
