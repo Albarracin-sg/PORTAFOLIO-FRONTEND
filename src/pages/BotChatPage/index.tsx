@@ -27,8 +27,8 @@ export function BotChatPage() {
   useEffect(() => {
     const container = messagesContainerRef.current;
     if (container) {
-      window.scrollTo({
-        top: document.body.scrollHeight,
+      container.scrollTo({
+        top: container.scrollHeight,
         behavior: 'smooth'
       });
     }
@@ -84,12 +84,12 @@ export function BotChatPage() {
   };
 
   return (
-    <div className="min-h-[calc(100dvh-4.5rem)] md:min-h-[calc(100vh-4.5rem)] mt-[4.5rem] bg-background relative flex flex-col">
+    <div className="h-[calc(100dvh-4.5rem)] md:h-[calc(100vh-4.5rem)] mt-[4.5rem] bg-background relative flex flex-col overflow-hidden">
       {/* Decorative side gradients — desktop only */}
       <div className="fixed top-20 -left-48 w-[500px] h-[500px] bg-gradient-to-br from-violet-600/10 to-fuchsia-600/10 rounded-full blur-3xl animate-pulse pointer-events-none -z-10 hidden lg:block" />
       <div className="fixed bottom-20 -right-48 w-[500px] h-[500px] bg-gradient-to-tl from-indigo-600/10 to-violet-600/10 rounded-full blur-3xl animate-pulse pointer-events-none -z-10 hidden lg:block" style={{ animationDelay: '1.5s' }} />
 
-      <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto px-4 pt-2 pb-8 relative z-10">
+      <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto px-4 pt-2 pb-4 relative z-10 overflow-hidden">
         {/* Header */}
         <div className="flex items-center gap-3 py-2 md:py-3 flex-shrink-0">
           <Button
@@ -114,7 +114,7 @@ export function BotChatPage() {
         {/* Messages */}
         <div 
           ref={messagesContainerRef}
-          className="flex-1 space-y-4 mb-6 pb-2 flex flex-col"
+          className="flex-1 space-y-4 mb-4 pb-2 flex flex-col overflow-y-auto custom-scrollbar"
         >
           {messages.map((msg, index) => (
             <div
