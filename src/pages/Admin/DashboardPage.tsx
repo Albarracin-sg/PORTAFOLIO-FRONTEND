@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { LayoutDashboard, FileText, FolderKanban, MessageSquare, ArrowRight } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, MessageSquare, ArrowRight } from 'lucide-react';
 
 const dashboardItems = [
   { 

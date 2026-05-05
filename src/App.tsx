@@ -8,10 +8,8 @@ import { HomePage } from '@/pages/HomePage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { AdminLoginPage } from '@/pages/Admin/LoginPage';
 import { AdminDashboardPage } from '@/pages/Admin/DashboardPage';
-import { AdminContentPage } from '@/pages/Admin/ContentPage';
 import { AdminProjectsPage } from '@/pages/Admin/ProjectsPage';
 import { AdminMessagesPage } from '@/pages/Admin/MessagesPage';
-import { AdminLiveEditorPage } from '@/pages/Admin/LiveEditorPage';
 import ScrollToTop from './components/ui/ScrollToTop';
 
 const StatsPage = lazy(() => import('@/pages/StatsPage/index').then(m => ({ default: m.StatsPage })));
