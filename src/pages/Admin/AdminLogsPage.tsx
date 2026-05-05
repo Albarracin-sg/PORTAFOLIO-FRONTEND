@@ -457,7 +457,6 @@ export default function AdminLogsPage() {
           <CardContent className="space-y-2">
             {slowestEndpoints.map((ep, i) => {
               const Icon = getEndpointIcon(ep.path);
-              const isAdmin = ep.path.includes("admin");
               const pct = Math.round((ep.avgTime / (slowestEndpoints[0]?.avgTime || 1)) * 100);
               const isSlow = ep.avgTime > 500;
               return (

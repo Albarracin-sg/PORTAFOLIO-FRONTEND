@@ -14,36 +14,49 @@ import { useEffect, useState } from 'react';
 import { useAdminAuth } from '@/features/admin/AdminAuthProvider';
 import { fetchAdminStats, type AdminStats } from '@/shared/api/stats';
 
-const dashboardItems = [
+interface DashboardItem {
+  title: string;
+  description: string;
+  isKey: boolean;
+  href: string;
+  icon: any;
+  accent: 'violet' | 'emerald' | 'blue' | 'orange';
+}
+
+const dashboardItems: DashboardItem[] = [
   {
-    titleKey: 'admin.dashboard.projects',
-    descriptionKey: 'admin.dashboard.projectsDesc',
+    title: 'admin.dashboard.projects',
+    description: 'admin.dashboard.projectsDesc',
+    isKey: true,
     href: '/admin/projects',
     icon: FolderKanban,
     accent: 'violet',
   },
   {
-    titleKey: 'admin.dashboard.messages',
-    descriptionKey: 'admin.dashboard.messagesDesc',
+    title: 'admin.dashboard.messages',
+    description: 'admin.dashboard.messagesDesc',
+    isKey: true,
     href: '/admin/messages',
     icon: MessageSquare,
     accent: 'emerald',
   },
   {
-    titleKey: 'Bot Messages',
-    descriptionKey: 'View and manage bot conversations',
+    title: 'Bot Messages',
+    description: 'View and manage bot conversations',
+    isKey: false,
     href: '/admin/bot-messages',
     icon: Bot,
     accent: 'blue',
   },
   {
-    titleKey: 'Server Logs',
-    descriptionKey: 'Real-time server performance and logs',
+    title: 'Server Logs',
+    description: 'Real-time server performance and logs',
+    isKey: false,
     href: '/admin/logs',
     icon: Activity,
     accent: 'orange',
   },
-] as const;
+];
 
 const accentMap = {
   violet: {
@@ -110,8 +123,8 @@ export function AdminDashboardPage() {
       {/* ── Quick stats row ── */}
       <div className="grid grid-cols-3 gap-3 max-w-sm">
         {[
-          { label: t('admin.dashboard.projects'), value: loading ? '...' : stats?.totalProjects ?? '0' },
-          { label: t('admin.dashboard.messages'), value: loading ? '...' : stats?.totalContactMessages ?? '0' },
+          { label: t('admin.dashboard.projects'), value: loading ? '...' : String(stats?.totalProjects ?? '0') },
+          { label: t('admin.dashboard.messages'), value: loading ? '...' : String(stats?.totalContactMessages ?? '0') },
           { label: 'Uptime', value: loading ? '...' : stats?.uptime ?? '—' },
         ].map(({ label, value }) => (
           <div
@@ -130,7 +143,7 @@ export function AdminDashboardPage() {
           const Icon = item.icon;
           const a = accentMap[item.accent];
           return (
-            <Link key={item.titleKey} to={item.href} className="group">
+            <Link key={item.href} to={item.href} className="group">
               <div
                 className={`relative h-full rounded-2xl border border-slate-200 dark:border-white/[0.07] bg-white/80 dark:bg-white/[0.025] p-6 transition-all duration-300 ${a.border} hover:bg-white dark:hover:bg-white/[0.045] hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/5`}
               >
