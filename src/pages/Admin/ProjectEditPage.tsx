@@ -160,8 +160,6 @@ export function AdminProjectEditPage() {
           return;
         }
 
-        setProject(found);
-        
         const technologies = found.technologies
           ? Array.isArray(found.technologies)
             ? found.technologies
