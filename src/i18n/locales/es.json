@@ -198,7 +198,21 @@
       "blockchain": "Blockchain",
       "data": "Data Engineering"
     },
-    "allTech": "Todas las tecnologías"
+    "allTech": "Todas las tecnologías",
+    "detail": {
+      "whatIs": "¿Qué es?",
+      "problem": "El Problema",
+      "solution": "Solución",
+      "challenge": "El Reto",
+      "techStack": "Stack Técnico",
+      "summary": "Resumen",
+      "category": "Categoría",
+      "status": "Estado",
+      "year": "Año",
+      "links": "Enlaces",
+      "exploreCode": "Explorar Código",
+      "visitProject": "Visitar Proyecto"
+    }
   },
   "contact": {
     "title": "Contacto",
@@ -430,6 +444,40 @@
       "pagination": {
         "prev": "Anterior",
         "next": "Siguiente"
+      },
+      "edit": {
+        "title": "Editar Proyecto",
+        "back": "Volver al listado",
+        "save": "Guardar Proyecto",
+        "saving": "Guardando...",
+        "cancel": "Cancelar",
+        "viewOnSite": "Ver en el sitio",
+        "narrativeContent": "Contenido Narrativo",
+        "technicalDetails": "Detalles Técnicos",
+        "preview": "Vista Previa",
+        "noImage": "Sin imagen",
+        "imageUrl": "URL de la imagen...",
+        "general": "General",
+        "whatIs": "¿Qué es el proyecto?",
+        "problem": "El Problema",
+        "solution": "Solución",
+        "challenge": "El Reto",
+        "placeholders": {
+          "description": "Describe el proyecto...",
+          "problem": "¿Qué problema resuelve?",
+          "solution": "¿Cómo lo solucionaste?",
+          "challenge": "¿Cuál fue el mayor desafío técnico?"
+        },
+        "fields": {
+          "title": "Título",
+          "category": "Categoría",
+          "status": "Estado",
+          "featured": "Proyecto Destacado",
+          "github": "Repositorio GitHub",
+          "live": "Live Demo",
+          "date": "Fecha de Lanzamiento",
+          "techStack": "Stack Tecnológico (separado por comas)"
+        }
       },
       "modal": {
         "title": "Editar Detalles del Proyecto",

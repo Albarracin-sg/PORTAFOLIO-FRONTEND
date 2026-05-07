@@ -144,6 +144,21 @@ export function ProjectDetailPage() {
 
   if (!project) return null;
 
+  const getLocalizedValue = (obj: Record<string, string> | string) => {
+    if (typeof obj === 'string') return obj;
+    if (!obj) return '';
+    
+    // Intentar idioma exacto (ej: 'en-US')
+    if (obj[i18n.language]) return obj[i18n.language];
+    
+    // Intentar base del idioma (ej: 'en' de 'en-US')
+    const baseLang = i18n.language.split('-')[0];
+    if (obj[baseLang]) return obj[baseLang];
+    
+    // Fallback a español o lo primero que haya
+    return obj['es'] || Object.values(obj)[0] || '';
+  };
+
   const projectYear = new Date(project.date).getFullYear();
   const safeProjectYear = Number.isNaN(projectYear) ? '' : projectYear;
 
@@ -246,33 +261,25 @@ export function ProjectDetailPage() {
             <div className="space-y-8">
               <DetailSection
                 icon={<Globe className="w-5 h-5 text-violet-600 dark:text-violet-400" />}
-                title={t('projects.detail.whatIs', '¿Qué es?')}
+                title={t('projects.detail.whatIs')}
               >
-                {project.description}
+                {project.description[i18n.language] || project.description['es']}
               </DetailSection>
 
               <DetailSection
                 icon={<Target className="w-5 h-5 text-blue-600 dark:text-blue-400" />}
-                title={t('projects.detail.problem', 'El Problema')}
+                title={t('projects.detail.problem')}
               >
-                {project.problem ||
-                  t(
-                    'projects.detail.problemFallback',
-                    'Este proyecto nació de la necesidad de optimizar flujos complejos y modernizar la interacción del usuario en entornos críticos.',
-                  )}
+                {getLocalizedValue(project.problem)}
               </DetailSection>
 
               <DetailSection
                 icon={
                   <CheckCircle2 className="w-5 h-5 text-emerald-500 dark:text-emerald-400" />
                 }
-                title={t('projects.detail.solution', 'Solución')}
+                title={t('projects.detail.solution')}
               >
-                {project.solution ||
-                  t(
-                    'projects.detail.solutionFallback',
-                    'Implementación de una arquitectura distribuida y reactiva que prioriza la mantenibilidad y la rapidez.',
-                  )}
+                {project.solution[i18n.language] || project.solution['es']}
               </DetailSection>
             </div>
           </div>
@@ -284,7 +291,7 @@ export function ProjectDetailPage() {
                   <div className="flex items-center gap-2 mb-4">
                     <Code2 className="w-4 h-4 text-violet-600 dark:text-violet-400 shrink-0" />
                     <h3 className="text-xs font-semibold text-slate-900 dark:text-gray-100 uppercase tracking-widest">
-                      {t('projects.detail.techStack', 'Stack Técnico')}
+                      {t('projects.detail.techStack')}
                     </h3>
                   </div>
 
@@ -302,14 +309,14 @@ export function ProjectDetailPage() {
 
                 <div className="p-6 border-b border-slate-100 dark:border-white/5">
                   <h4 className="text-[10px] uppercase tracking-[0.28em] text-slate-400 dark:text-slate-500 font-semibold mb-4">
-                    {t('projects.detail.summary', 'Resumen')}
+                    {t('projects.detail.summary')}
                   </h4>
 
                   <div className="divide-y divide-slate-100 dark:divide-white/5">
                     <div className="flex items-center justify-between py-2.5 gap-4">
                       <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                         <Tag className="w-3.5 h-3.5 shrink-0" />
-                        {t('projects.detail.category', 'Categoría')}
+                        {t('projects.detail.category')}
                       </div>
 
                       <span className="text-sm text-slate-900 dark:text-gray-100 font-medium capitalize text-right">
@@ -320,7 +327,7 @@ export function ProjectDetailPage() {
                     <div className="flex items-center justify-between py-2.5 gap-4">
                       <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                         <Activity className="w-3.5 h-3.5 shrink-0" />
-                        {t('projects.detail.status', 'Estado')}
+                        {t('projects.detail.status')}
                       </div>
 
                       <span className="text-sm text-emerald-600 dark:text-emerald-400 font-medium capitalize text-right">
@@ -331,7 +338,7 @@ export function ProjectDetailPage() {
                     <div className="flex items-center justify-between py-2.5 gap-4">
                       <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                         <Star className="w-3.5 h-3.5 shrink-0" />
-                        Stars
+                        {t('projects.stars', 'Stars')}
                       </div>
 
                       <span className="text-sm text-slate-900 dark:text-gray-100 font-medium">
@@ -342,7 +349,7 @@ export function ProjectDetailPage() {
                     <div className="flex items-center justify-between py-2.5 gap-4">
                       <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                         <GitFork className="w-3.5 h-3.5 shrink-0" />
-                        Forks
+                        {t('projects.forks', 'Forks')}
                       </div>
 
                       <span className="text-sm text-slate-900 dark:text-gray-100 font-medium">
@@ -353,7 +360,7 @@ export function ProjectDetailPage() {
                     <div className="flex items-center justify-between py-2.5 gap-4">
                       <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                         <Calendar className="w-3.5 h-3.5 shrink-0" />
-                        {t('projects.detail.year', 'Año')}
+                        {t('projects.detail.year')}
                       </div>
 
                       <span className="text-sm text-slate-900 dark:text-gray-100 font-medium">
@@ -365,7 +372,7 @@ export function ProjectDetailPage() {
 
                 <div className="p-6 border-b border-slate-100 dark:border-white/5">
                   <h4 className="text-[10px] uppercase tracking-[0.28em] text-slate-400 dark:text-slate-500 font-semibold mb-3">
-                    {t('projects.detail.links', 'Enlaces')}
+                    {t('projects.detail.links')}
                   </h4>
 
                   <div className="space-y-1.5">
@@ -410,7 +417,7 @@ export function ProjectDetailPage() {
                   >
                     <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
                       <Github className="w-4 h-4 mr-2" />
-                      {t('projects.detail.exploreCode', 'Explorar Código')}
+                      {t('projects.detail.exploreCode')}
                     </a>
                   </Button>
 
@@ -422,7 +429,7 @@ export function ProjectDetailPage() {
                     >
                       <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="w-4 h-4 mr-2" />
-                        {t('projects.detail.visitProject', 'Visitar Proyecto')}
+                        {t('projects.detail.visitProject')}
                       </a>
                     </Button>
                   )}
@@ -431,14 +438,10 @@ export function ProjectDetailPage() {
 
               <DetailSection
                 icon={<Zap className="w-5 h-5 text-amber-500 dark:text-amber-400" />}
-                title={t('projects.detail.challenge', 'El Reto')}
+                title={t('projects.detail.challenge')}
                 className="flex-1"
               >
-                {project.challenge ||
-                  t(
-                    'projects.detail.challengeFallback',
-                    'Superar las barreras de escalabilidad y garantizar performance excepcional bajo alta demanda.',
-                  )}
+                {project.challenge[i18n.language] || project.challenge['es']}
               </DetailSection>
             </div>
           </aside>

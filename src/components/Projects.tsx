@@ -17,7 +17,7 @@ interface ProjectsProps {
 const AUTOPLAY_INTERVAL = 5000; // 5 segundos por slide
 
 export default function Projects({ projects, section }: ProjectsProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [api, setApi] = useState<CarouselApi>();
   const [progress, setProgress] = useState(0);
@@ -186,7 +186,9 @@ export default function Projects({ projects, section }: ProjectsProps) {
                       <CardContent className="flex flex-1 flex-col bg-white pt-0 text-slate-700 dark:bg-slate-950/95 dark:text-slate-200">
                         <div className="h-24 sm:h-20 overflow-hidden">
                           <p className="line-clamp-4 sm:line-clamp-3 text-sm leading-6 text-slate-600 dark:text-slate-300">
-                            {project.description}
+                            {typeof project.description === 'object' 
+                              ? (project.description[i18n.language] || project.description['es'])
+                              : project.description}
                           </p>
                         </div>
                       </CardContent>

@@ -3,7 +3,10 @@ import { apiRequest } from '@/shared/api/http';
 export type Project = {
   id: string;
   title: string;
-  description: string;
+  description: Record<string, string>;
+  problem: Record<string, string>;
+  challenge: Record<string, string>;
+  solution: Record<string, string>;
   category: string;
   status: string;
   featured: boolean;
@@ -18,7 +21,10 @@ export type Project = {
 
 export type UpdateProjectPayload = {
   title?: string;
-  description?: string;
+  description?: Record<string, string>;
+  problem?: Record<string, string>;
+  challenge?: Record<string, string>;
+  solution?: Record<string, string>;
   category?: string;
   status?: string;
   featured?: boolean;

@@ -9,6 +9,7 @@ import { NotFoundPage } from '@/pages/NotFoundPage';
 import { AdminLoginPage } from '@/pages/Admin/LoginPage';
 import { AdminDashboardPage } from '@/pages/Admin/DashboardPage';
 import ScrollToTop from './components/ui/ScrollToTop';
+import { Toaster } from '@/components/ui/sonner';
 
 const StatsPage = lazy(() => import('@/pages/StatsPage/index').then(m => ({ default: m.StatsPage })));
 const AllProjectsPage = lazy(() => import('@/pages/AllProjectsPage').then(m => ({ default: m.AllProjectsPage })));
@@ -18,6 +19,7 @@ const AdminLogsPage = lazy(() => import('@/pages/Admin/AdminLogsPage'));
 const BotMessagesPage = lazy(() => import('@/pages/Admin/BotMessagesPage'));
 const AdminProjectsPage = lazy(() => import('@/pages/Admin/ProjectsPage').then(m => ({ default: m.AdminProjectsPage })));
 const AdminMessagesPage = lazy(() => import('@/pages/Admin/MessagesPage').then(m => ({ default: m.AdminMessagesPage })));
+const AdminProjectEditPage = lazy(() => import('@/pages/Admin/ProjectEditPage').then(m => ({ default: m.AdminProjectEditPage })));
 
 function PageFallback() {
   return (
@@ -31,6 +33,7 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
+      <Toaster position="top-center" richColors />
       <Routes>
       <Route path="admin/login" element={<AdminLoginPage />} />
       <Route
@@ -45,6 +48,11 @@ export default function App() {
         <Route path="projects" element={
           <Suspense fallback={<PageFallback />}>
             <AdminProjectsPage />
+          </Suspense>
+        } />
+        <Route path="projects/:id" element={
+          <Suspense fallback={<PageFallback />}>
+            <AdminProjectEditPage />
           </Suspense>
         } />
         <Route path="messages" element={

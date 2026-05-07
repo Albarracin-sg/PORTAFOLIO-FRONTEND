@@ -98,9 +98,13 @@ export default function AllProjects() {
 
   const filteredAndSortedProjects = useMemo(() => {
     const filtered = allProjects.filter((project) => {
+      const description = typeof project.description === 'object' 
+        ? (project.description[i18n.language] || project.description['es'] || '')
+        : (project.description || '');
+
       const matchesSearch =
         project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        project.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         project.technologies.some((tech) => tech.toLowerCase().includes(searchTerm.toLowerCase()));
 
       const matchesCategory = selectedCategory === "all" || project.category === selectedCategory;
@@ -368,6 +372,7 @@ export default function AllProjects() {
                 getStatusLabel={getStatusLabel}
                 onSelect={handleSelectProject}
                 t={t}
+                i18n={i18n}
               />
             ))}
           </div>
@@ -383,6 +388,7 @@ export default function AllProjects() {
                 getStatusLabel={getStatusLabel}
                 onSelect={handleSelectProject}
                 t={t}
+                i18n={i18n}
               />
             ))}
           </div>
@@ -475,6 +481,7 @@ function ProjectCard({
   getStatusLabel,
   onSelect,
   t,
+  i18n,
 }: {
   project: ProjectItem;
   isListView?: boolean;
@@ -483,6 +490,7 @@ function ProjectCard({
   getStatusLabel: (value: string) => string;
   onSelect: (project: ProjectItem) => void;
   t: (key: string) => string;
+  i18n: any;
 }) {
   const effectiveStatus = project.liveDemo ? "production" : project.status;
 
@@ -561,7 +569,9 @@ function ProjectCard({
 
             <div className="h-24 sm:h-20 overflow-hidden">
               <p className="line-clamp-4 sm:line-clamp-3 text-sm leading-6 text-slate-600 dark:text-slate-400">
-                {project.description}
+                {typeof project.description === 'object' 
+                  ? (project.description[i18n.language] || project.description['es'] || '')
+                  : project.description}
               </p>
             </div>
           </CardHeader>

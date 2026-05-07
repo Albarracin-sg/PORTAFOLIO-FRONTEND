@@ -198,7 +198,21 @@
       "blockchain": "Blockchain",
       "data": "Data Engineering"
     },
-    "allTech": "All technologies"
+    "allTech": "All technologies",
+    "detail": {
+      "whatIs": "What is it?",
+      "problem": "The Problem",
+      "solution": "Solution",
+      "challenge": "The Challenge",
+      "techStack": "Technical Stack",
+      "summary": "Summary",
+      "category": "Category",
+      "status": "Status",
+      "year": "Year",
+      "links": "Links",
+      "exploreCode": "Explore Code",
+      "visitProject": "Visit Project"
+    }
   },
   "contact": {
     "title": "Contact",
@@ -420,7 +434,7 @@
     },
     "projects": {
       "title": "Projects",
-      "subtitle": "Curate and manage your best work. Sync seamlessly with GitHub.",
+      "subtitle": "Curate and manage your best work. Sync with GitHub seamlessly.",
       "management": "Management",
       "manageMasterpieces": "Manage masterpieces",
       "searchPlaceholder": "Search work...",
@@ -430,6 +444,40 @@
       "pagination": {
         "prev": "Previous",
         "next": "Next"
+      },
+      "edit": {
+        "title": "Edit Project",
+        "back": "Back to list",
+        "save": "Save Project",
+        "saving": "Saving...",
+        "cancel": "Cancel",
+        "viewOnSite": "View on site",
+        "narrativeContent": "Narrative Content",
+        "technicalDetails": "Technical Details",
+        "preview": "Preview",
+        "noImage": "No image",
+        "imageUrl": "Image URL...",
+        "general": "General",
+        "whatIs": "What is the project?",
+        "problem": "The Problem",
+        "solution": "Solution",
+        "challenge": "The Challenge",
+        "placeholders": {
+          "description": "Describe the project...",
+          "problem": "What problem does it solve?",
+          "solution": "How did you solve it?",
+          "challenge": "What was the biggest technical challenge?"
+        },
+        "fields": {
+          "title": "Title",
+          "category": "Category",
+          "status": "Status",
+          "featured": "Featured Project",
+          "github": "GitHub Repository",
+          "live": "Live Demo",
+          "date": "Release Date",
+          "techStack": "Tech Stack (comma separated)"
+        }
       },
       "modal": {
         "title": "Edit Project Details",

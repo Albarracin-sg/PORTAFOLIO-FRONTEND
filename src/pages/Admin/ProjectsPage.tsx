@@ -1,23 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   fetchProjects,
   Project,
   syncGithubProjects,
-  updateProject,
 } from '@/features/admin/api/projects';
 import { useAdminAuth } from '@/features/admin/AdminAuthProvider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
 import {
   FolderKanban,
   ChevronLeft,
@@ -29,25 +19,18 @@ import {
   Search,
   Plus,
   Loader2,
-  
   ArrowLeft,
 } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
 import { useTranslation } from 'react-i18next';
 
 export function AdminProjectsPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { token } = useAdminAuth();
+  
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
-  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
-  const [isEditOpen, setIsEditOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(window.innerWidth < 640 ? 7 : 10);
@@ -60,28 +43,14 @@ export function AdminProjectsPage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const [form, setForm] = useState({
-    title: '',
-    description: '',
-    category: 'web',
-    status: 'production',
-    featured: false,
-    githubUrl: '',
-    liveUrl: '',
-    technologies: '',
-  });
-
-  const selectedProject = useMemo(
-    () => projects.find((project) => project.id === selectedProjectId) ?? null,
-    [projects, selectedProjectId],
-  );
-
   const load = async () => {
     if (!token) return;
     setLoading(true);
     try {
       const data = await fetchProjects(token);
       setProjects(data);
+    } catch (err) {
+      console.error('Error loading projects:', err);
     } finally {
       setLoading(false);
     }
@@ -91,64 +60,16 @@ export function AdminProjectsPage() {
     load();
   }, [token]);
 
-  useEffect(() => {
-    if (!selectedProject) return;
-
-    const technologies = selectedProject.technologies
-      ? Array.isArray(selectedProject.technologies)
-        ? selectedProject.technologies
-            .map((item: any) => item.technology?.name || item.name || '')
-            .filter(Boolean)
-            .join(', ')
-        : String(selectedProject.technologies)
-      : '';
-
-    setForm({
-      title: selectedProject.title ?? '',
-      description: selectedProject.description ?? '',
-      category: selectedProject.category ?? 'web',
-      status: selectedProject.status ?? 'production',
-      featured: selectedProject.featured ?? false,
-      githubUrl: selectedProject.githubUrl ?? '',
-      liveUrl: selectedProject.liveUrl ?? '',
-      technologies,
-    });
-  }, [selectedProject]);
-
   const handleSync = async () => {
     if (!token) return;
     setSyncing(true);
     try {
       await syncGithubProjects(token);
       await load();
+    } catch (err) {
+      console.error('Error syncing projects:', err);
     } finally {
       setSyncing(false);
-    }
-  };
-
-  const handleSave = async () => {
-    if (!token || !selectedProject) return;
-
-    const technologies = form.technologies
-      .split(',')
-      .map((tech) => tech.trim())
-      .filter(Boolean);
-
-    try {
-      await updateProject(token, selectedProject.id, {
-        title: form.title,
-        description: form.description,
-        category: form.category,
-        status: form.status,
-        featured: form.featured,
-        githubUrl: form.githubUrl || null,
-        liveUrl: form.liveUrl || null,
-        technologies,
-      });
-      setIsEditOpen(false);
-      await load();
-    } catch (err) {
-      console.error('Error updating project:', err);
     }
   };
 
@@ -161,23 +82,22 @@ export function AdminProjectsPage() {
   }, [projects, searchQuery]);
 
   const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
+  
   const currentItems = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return filteredProjects.slice(start, start + itemsPerPage);
-  }, [filteredProjects, currentPage]);
+  }, [filteredProjects, currentPage, itemsPerPage]);
 
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery]);
 
   const handleEditClick = (id: string) => {
-    setSelectedProjectId(id);
-    setIsEditOpen(true);
+    navigate(`/admin/projects/${id}`);
   };
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-
       {/* ── Header ── */}
       <div className="mb-8 sm:mb-12">
         <Button
@@ -340,145 +260,6 @@ export function AdminProjectsPage() {
           </div>
         )}
       </div>
-
-      {/* ── Edit Dialog ── */}
-      <Dialog open={isEditOpen} onOpenChange={setIsEditOpen}>
-        <DialogContent className="max-w-2xl rounded-[2rem] border-slate-200 dark:border-white/10 bg-background/80 backdrop-blur-2xl p-0 overflow-hidden shadow-2xl">
-          <DialogHeader className="p-6 border-b border-slate-200 dark:border-white/5 bg-slate-50/30 dark:bg-white/5">
-            <DialogTitle className="text-lg font-bold flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-violet-600/10 text-violet-600">
-                <Edit className="h-4 w-4" />
-              </div>
-              {t('admin.projects.modal.title')}
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="p-6 space-y-4 max-h-[70vh] overflow-y-auto">
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
-                  {t('admin.projects.modal.fields.title')}
-                </label>
-                <Input
-                  value={form.title}
-                  onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-sm bg-background/50"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
-                  {t('admin.projects.modal.fields.category')}
-                </label>
-                <Select value={form.category} onValueChange={(value) => setForm({ ...form, category: value })}>
-                  <SelectTrigger className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-sm bg-background/50">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    <SelectItem value="web">{t('admin.projects.modal.categories.web')}</SelectItem>
-                    <SelectItem value="fullstack">{t('admin.projects.modal.categories.fullstack')}</SelectItem>
-                    <SelectItem value="devops">{t('admin.projects.modal.categories.devops')}</SelectItem>
-                    <SelectItem value="ml">{t('admin.projects.modal.categories.ml')}</SelectItem>
-                    <SelectItem value="data">{t('admin.projects.modal.categories.data')}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
-                  {t('admin.projects.modal.fields.status')}
-                </label>
-                <Select value={form.status} onValueChange={(value) => setForm({ ...form, status: value })}>
-                  <SelectTrigger className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-sm bg-background/50">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="rounded-xl">
-                    <SelectItem value="production">{t('admin.projects.modal.status.production')}</SelectItem>
-                    <SelectItem value="development">{t('admin.projects.modal.status.development')}</SelectItem>
-                    <SelectItem value="prototype">{t('admin.projects.modal.status.prototype')}</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
-                  {t('admin.projects.modal.fields.visibility')}
-                </label>
-                <div className="flex items-center justify-between h-10 px-4 rounded-xl border border-slate-200 dark:border-white/10 bg-white/40 dark:bg-black/20">
-                  <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-                    {t('admin.projects.modal.fields.featured')}
-                  </span>
-                  <Switch
-                    checked={form.featured}
-                    onCheckedChange={(checked) => setForm({ ...form, featured: checked })}
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
-                  {t('admin.projects.modal.fields.github')}
-                </label>
-                <Input
-                  value={form.githubUrl}
-                  onChange={(e) => setForm({ ...form, githubUrl: e.target.value })}
-                  className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-sm bg-background/50"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
-                  {t('admin.projects.modal.fields.live')}
-                </label>
-                <Input
-                  value={form.liveUrl}
-                  onChange={(e) => setForm({ ...form, liveUrl: e.target.value })}
-                  className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-sm bg-background/50"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
-                {t('admin.projects.modal.fields.description')}
-              </label>
-              <Textarea
-                value={form.description}
-                onChange={(e) => setForm({ ...form, description: e.target.value })}
-                rows={4}
-                className="rounded-2xl border-slate-200 dark:border-white/10 p-4 resize-none text-sm bg-background/50"
-              />
-            </div>
-
-            <div className="space-y-1.5">
-              <label className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground ml-1">
-                {t('admin.projects.modal.fields.techStack')}
-              </label>
-              <Input
-                value={form.technologies}
-                onChange={(e) => setForm({ ...form, technologies: e.target.value })}
-                className="rounded-xl border-slate-200 dark:border-white/10 h-10 text-sm bg-background/50"
-              />
-            </div>
-          </div>
-
-          <div className="p-6 border-t border-slate-200 dark:border-white/5 flex justify-end gap-3 bg-slate-50/30 dark:bg-white/5">
-            <Button
-              variant="outline"
-              onClick={() => setIsEditOpen(false)}
-              className="rounded-2xl px-5 border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/[0.06] transition-all duration-200"
-            >
-              {t('admin.projects.modal.actions.cancel')}
-            </Button>
-            <Button
-              onClick={handleSave}
-              className="rounded-2xl bg-violet-600 hover:bg-violet-700 px-6 shadow-lg shadow-violet-500/20 transition-all duration-200 hover:scale-105"
-            >
-              {t('admin.projects.modal.actions.save')}
-            </Button>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

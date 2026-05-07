@@ -17,10 +17,10 @@ export type PublicPage = {
 export type PublicProject = {
   id: string;
   title: string;
-  description: string;
-  problem: string;
-  challenge: string;
-  solution: string;
+  description: Record<string, string>;
+  problem: Record<string, string>;
+  challenge: Record<string, string>;
+  solution: Record<string, string>;
   imageUrl: string;
   githubUrl: string;
   liveUrl?: string | null;

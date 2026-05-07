@@ -29,15 +29,28 @@ export default function ProjectModal({
   isOpen,
   onClose,
 }: ProjectModalProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   if (!project) return null;
+
+  const currentLang = i18n.language;
+  const getLocalized = (val: any) => {
+    if (typeof val === 'string') return val;
+    if (typeof val === 'object' && val !== null) {
+      return val[currentLang] || val['es'] || '';
+    }
+    return '';
+  };
 
   const dialogOpen = isOpen !== undefined ? isOpen : !!project;
 
   const technologies = project.technologies ?? [];
-  const hasProblem = Boolean(project.problem?.trim());
-  const hasChallenge = Boolean(project.challenge?.trim());
-  const hasSolution = Boolean(project.solution?.trim());
+  const problem = getLocalized(project.problem);
+  const challenge = getLocalized(project.challenge);
+  const solution = getLocalized(project.solution);
+  
+  const hasProblem = Boolean(problem.trim());
+  const hasChallenge = Boolean(challenge.trim());
+  const hasSolution = Boolean(solution.trim());
 
   return (
     <Dialog open={dialogOpen} onOpenChange={onClose}>
@@ -98,7 +111,7 @@ export default function ProjectModal({
                   {t('projects.modal.problem')}
                 </h4>
                 <Markdown className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                  {project.problem}
+                  {problem}
                 </Markdown>
               </div>
             )}
@@ -110,7 +123,7 @@ export default function ProjectModal({
                   {t('projects.modal.challenge')}
                 </h4>
                 <Markdown className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                  {project.challenge}
+                  {challenge}
                 </Markdown>
               </div>
             )}
@@ -122,7 +135,7 @@ export default function ProjectModal({
                   {t('projects.modal.solution')}
                 </h4>
                 <Markdown className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                  {project.solution}
+                  {solution}
                 </Markdown>
               </div>
             )}
