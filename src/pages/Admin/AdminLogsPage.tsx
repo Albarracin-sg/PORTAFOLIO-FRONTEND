@@ -25,7 +25,7 @@ import {
   RefreshCcw,
   TrendingUp,
   CheckCircle2,
-  Sparkles,
+  
   User,
   ExternalLink,
   Wifi,
@@ -46,15 +46,7 @@ export default function AdminLogsPage() {
   const { token } = useAdminAuth();
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 640);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
 
   useEffect(() => {
     if (token) loadStats();
@@ -233,34 +225,33 @@ export default function AdminLogsPage() {
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
 
       {/* ── Header ── */}
-      <div className="space-y-4">
+      <div className="mb-8 sm:mb-12">
         <Button
           variant="ghost"
           asChild
-          className="group -ml-3 rounded-full text-slate-500 hover:text-violet-600 dark:text-slate-400 dark:hover:text-violet-300 transition-all duration-200"
+          className="group mb-2 sm:mb-6 rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-slate-600 transition-all hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-300 dark:hover:border-violet-400/30 dark:hover:bg-violet-500/10 dark:hover:text-violet-200"
         >
           <Link to="/admin">
-            <ArrowLeft className="h-4 w-4 mr-2 transition-transform group-hover:-translate-x-0.5" />
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
             {t("admin.logs.back")}
           </Link>
         </Button>
 
-        <p className="inline-flex items-center gap-2 rounded-full border border-violet-400/25 bg-violet-500/8 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-violet-500 dark:text-violet-400">
-          <Sparkles className="h-3 w-3" />
-          {t("admin.logs.liveInfra")}
-        </p>
-
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div>
-            <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-violet-600 dark:text-violet-400">
+            {t("admin.logs.liveInfra")}
+          </p>
+          <div className="mt-3 flex items-center justify-center gap-4">
+            <Activity className="h-10 w-10 text-violet-500 shrink-0 hidden sm:block" />
+            <h1 className="text-5xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-6xl">
               {t("admin.logs.title")}
             </h1>
-            <p className="mt-1.5 text-slate-500 dark:text-slate-400 text-base">
-              {t("admin.logs.subtitle")}
-            </p>
           </div>
+          <p className="mx-auto mt-5 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-400 sm:text-base">
+            {t("admin.logs.subtitle")}
+          </p>
 
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="mt-8 flex items-center justify-center gap-3">
             {/* Health pill */}
             <div className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold capitalize ${hc.bg} ${hc.text}`}>
               <span className={`h-2 w-2 rounded-full animate-pulse ${hc.dot}`} />
@@ -277,11 +268,11 @@ export default function AdminLogsPage() {
               {t("admin.logs.refresh")}
             </Button>
           </div>
-        </div>
 
-        <p className="text-[10px] font-medium text-slate-400 dark:text-slate-600 uppercase tracking-widest">
-          {t("common.lastUpdated", { defaultValue: "Last updated" })} · {formatTime(lastRefresh)}
-        </p>
+          <p className="mt-4 text-[10px] font-medium text-slate-400 dark:text-slate-600 uppercase tracking-widest">
+            {t("common.lastUpdated", { defaultValue: "Last updated" })} · {formatTime(lastRefresh)}
+          </p>
+        </div>
       </div>
 
       {/* ── Metric Cards ── */}

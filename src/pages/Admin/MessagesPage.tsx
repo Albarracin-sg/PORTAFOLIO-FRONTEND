@@ -1,9 +1,10 @@
 import { useEffect, useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import { fetchMessages, ContactMessage } from '@/features/admin/api/messages';
 import { useAdminAuth } from '@/features/admin/AdminAuthProvider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { MessageSquare, Calendar, ChevronLeft, ChevronRight, User, ChevronDown, Loader2, Sparkles, X } from 'lucide-react';
+import { MessageSquare, Calendar, ChevronLeft, ChevronRight, User, ChevronDown, Loader2,  X, ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export function AdminMessagesPage() {
@@ -15,7 +16,15 @@ export function AdminMessagesPage() {
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
   const [expandedMessageId, setExpandedMessageId] = useState<string | null>(null);
-  const itemsPerPage = 10;
+  const [itemsPerPage, setItemsPerPage] = useState(window.innerWidth < 640 ? 7 : 10);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setItemsPerPage(window.innerWidth < 640 ? 7 : 10);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (!token) return;
@@ -63,21 +72,31 @@ export function AdminMessagesPage() {
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
 
       {/* ── Header ── */}
-      <div className="space-y-4">
-        <p className="inline-flex items-center gap-2 rounded-full border border-emerald-400/25 bg-emerald-500/8 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-emerald-500 dark:text-emerald-400">
-          <Sparkles className="h-3 w-3" />
-          {t('admin.messages.contactInbox')}
-        </p>
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <MessageSquare className="h-7 w-7 text-emerald-500 shrink-0" />
-            <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+      <div className="mb-8 sm:mb-12">
+        <Button
+          variant="ghost"
+          asChild
+          className="group mb-2 sm:mb-6 rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-slate-600 transition-all hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-300 dark:hover:border-violet-400/30 dark:hover:bg-violet-500/10 dark:hover:text-violet-200"
+        >
+          <Link to="/admin">
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+            {t("common.back")}
+          </Link>
+        </Button>
+
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-600 dark:text-emerald-400">
+            {t('admin.messages.contactInbox')}
+          </p>
+          <div className="mt-3 flex items-center justify-center gap-4">
+            <MessageSquare className="h-10 w-10 text-emerald-500 shrink-0 hidden sm:block" />
+            <h1 className="text-5xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-6xl">
               {t('admin.messages.title')}
             </h1>
           </div>
 
           {/* Date filters */}
-          <div className="flex items-center gap-2">
+          <div className="mt-8 flex items-center justify-center gap-2 w-full">
             <div className="flex items-center gap-2 px-3 h-9 rounded-2xl border border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04]">
               <Calendar className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
               <Input
@@ -169,7 +188,7 @@ export function AdminMessagesPage() {
                   {/* Expanded content */}
                   {isOpen && (
                     <div className="px-5 pb-5 pt-0 animate-in fade-in slide-in-from-top-1 duration-200">
-                      <div className="ml-13 pl-[3.25rem]">
+                      <div className="pl-13">
                         <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400 whitespace-pre-wrap border-l-2 border-emerald-500/30 pl-4">
                           {message.message}
                         </p>
@@ -182,17 +201,18 @@ export function AdminMessagesPage() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-4 pt-6">
+              <div className="flex items-center justify-center gap-2 sm:gap-4 pt-4 sm:pt-6">
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="h-9 rounded-2xl px-4 gap-1.5 text-sm hover:bg-emerald-500/8 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all duration-200"
+                  className="h-8 w-8 sm:h-9 sm:w-auto rounded-xl sm:rounded-2xl p-0 sm:px-4 gap-1.5 text-sm hover:bg-emerald-500/8 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all duration-200"
                 >
-                  <ChevronLeft className="h-4 w-4" /> {t('admin.messages.pagination.prev')}
+                  <ChevronLeft className="h-4 w-4" />
+                  <span className="hidden sm:inline">{t('admin.messages.pagination.prev')}</span>
                 </Button>
-                <span className="text-xs font-medium text-slate-400 dark:text-slate-600 tabular-nums">
+                <span className="text-[10px] sm:text-xs font-medium text-slate-400 dark:text-slate-600 tabular-nums bg-slate-100/50 dark:bg-white/5 px-2 py-1 rounded-lg">
                   {currentPage} / {totalPages}
                 </span>
                 <Button
@@ -200,9 +220,10 @@ export function AdminMessagesPage() {
                   size="sm"
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
-                  className="h-9 rounded-2xl px-4 gap-1.5 text-sm hover:bg-emerald-500/8 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all duration-200"
+                  className="h-8 w-8 sm:h-9 sm:w-auto rounded-xl sm:rounded-2xl p-0 sm:px-4 gap-1.5 text-sm hover:bg-emerald-500/8 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all duration-200"
                 >
-                  {t('admin.messages.pagination.next')} <ChevronRight className="h-4 w-4" />
+                  <span className="hidden sm:inline">{t('admin.messages.pagination.next')}</span>
+                  <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
             )}

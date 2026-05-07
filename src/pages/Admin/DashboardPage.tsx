@@ -5,7 +5,7 @@ import {
   FolderKanban,
   MessageSquare,
   ArrowRight,
-  Sparkles,
+  
   Activity,
   Bot,
 } from 'lucide-react';
@@ -104,24 +104,25 @@ export function AdminDashboardPage() {
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
 
       {/* ── Header ── */}
-      <div className="space-y-4">
-        <p className="inline-flex items-center gap-2 rounded-full border border-violet-400/25 bg-violet-500/8 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-violet-400">
-          <Sparkles className="h-3 w-3" />
-          Control panel
-        </p>
-        <div className="flex items-center gap-3">
-          <LayoutDashboard className="h-7 w-7 text-violet-500 shrink-0" />
-          <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
-            {t('admin.dashboard.title')}
-          </h1>
+      <div className="mb-8 sm:mb-12">
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-violet-600 dark:text-violet-400">
+            Control panel
+          </p>
+          <div className="mt-3 flex items-center justify-center gap-4">
+            <LayoutDashboard className="h-10 w-10 text-violet-500 shrink-0 hidden sm:block" />
+            <h1 className="text-5xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-6xl">
+              {t('admin.dashboard.title')}
+            </h1>
+          </div>
+          <p className="mx-auto mt-5 max-w-3xl text-sm leading-7 text-slate-600 dark:text-slate-400 sm:text-base">
+            {t('admin.dashboard.subtitle')}
+          </p>
         </div>
-        <p className="text-slate-500 dark:text-slate-400 text-base max-w-xl leading-relaxed">
-          {t('admin.dashboard.subtitle')}
-        </p>
       </div>
 
       {/* ── Quick stats row ── */}
-      <div className="grid grid-cols-3 gap-3 max-w-sm">
+      <div className="grid grid-cols-3 gap-3 max-w-sm mx-auto">
         {[
           { label: t('admin.dashboard.projects'), value: loading ? '...' : String(stats?.totalProjects ?? '0') },
           { label: t('admin.dashboard.messages'), value: loading ? '...' : String(stats?.totalContactMessages ?? '0') },

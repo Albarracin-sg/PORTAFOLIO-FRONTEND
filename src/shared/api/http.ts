@@ -16,6 +16,13 @@ export class RateLimitError extends Error {
   }
 }
 
+export class UnauthorizedError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'UnauthorizedError';
+  }
+}
+
 export async function apiRequest<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { method = 'GET', body, token, cache } = options;
 
@@ -28,6 +35,11 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
     },
     body: body ? JSON.stringify(body) : undefined,
   });
+
+  if (response.status === 401) {
+    window.dispatchEvent(new CustomEvent('admin-unauthorized'));
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   if (response.status === 429) {
     const errorText = await response.text();

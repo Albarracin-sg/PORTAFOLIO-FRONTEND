@@ -1,6 +1,6 @@
 import { Button } from "./ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Check, FileText, Loader2, Menu, Moon, Sun } from "lucide-react";
+import { Check, FileText, Loader2, LogOut, Menu, Moon, Sun } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { AdminLoginModal } from "@/features/admin/AdminLoginModal";
@@ -35,7 +35,7 @@ export default function Navbar({
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
   const lockedScrollY = useRef(0);
-  const { token } = useAdminAuth();
+  const { token, logout } = useAdminAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -213,9 +213,20 @@ export default function Navbar({
               </Select>
 
               {token ? (
-                <Button variant="outline" className="gap-2 cursor-pointer rounded-2xl transition-all duration-300 hover:scale-105 hover:border-violet-400 hover:text-violet-600 dark:hover:border-violet-500 dark:hover:text-violet-400" asChild>
-                  <Link to="/admin">Admin</Link>
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" className="gap-2 cursor-pointer rounded-2xl transition-all duration-300 hover:scale-105 hover:border-violet-400 hover:text-violet-600 dark:hover:border-violet-500 dark:hover:text-violet-400" asChild>
+                    <Link to="/admin">Admin</Link>
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => logout()}
+                    className="h-10 w-10 rounded-2xl text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all duration-300 hover:scale-105"
+                    title="Logout"
+                  >
+                    <LogOut className="h-4 w-4" />
+                  </Button>
+                </div>
               ) : (
                 <AdminLoginModal triggerClassName="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium border border-slate-200 bg-white text-slate-700 rounded-2xl transition-all duration-300 hover:scale-105 hover:border-violet-400 hover:text-violet-600 dark:border-white/10 dark:bg-transparent dark:text-slate-300 dark:hover:border-violet-500 dark:hover:text-violet-400" />
               )}
@@ -361,16 +372,28 @@ export default function Navbar({
 
               <div className="space-y-2">
                 {token ? (
-                  <Link
-                    to="/admin"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 cursor-pointer ${mobileActiveButtonClass}`}
-                  >
-                    <span className="flex h-5 w-5 items-center justify-center">
-                      <span className="h-2 w-2 rounded-full bg-violet-500" />
-                    </span>
-                    Admin
-                  </Link>
+                  <div className="space-y-2">
+                    <Link
+                      to="/admin"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 cursor-pointer ${mobileActiveButtonClass}`}
+                    >
+                      <span className="flex h-5 w-5 items-center justify-center">
+                        <span className="h-2 w-2 rounded-full bg-violet-500" />
+                      </span>
+                      Admin
+                    </Link>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 cursor-pointer bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/10 dark:text-red-400 dark:hover:bg-red-900/20"
+                    >
+                      <LogOut className="h-5 w-5" />
+                      Logout
+                    </button>
+                  </div>
                 ) : (
                   <AdminLoginModal
                     triggerLabel="Admin"

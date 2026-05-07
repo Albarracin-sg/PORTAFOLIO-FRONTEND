@@ -27,8 +27,11 @@ export function AdminLayout() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
-    logout();
-    navigate('/');
+    navigate('/', { replace: true });
+    // Usamos un pequeño delay para asegurar que la navegación empiece antes de limpiar el estado
+    setTimeout(() => {
+      logout();
+    }, 0);
   };
 
   const languageOptions = [

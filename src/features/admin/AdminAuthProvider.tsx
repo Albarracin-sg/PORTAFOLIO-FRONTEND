@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useMemo, useState, useEffect } from 'react';
 import { login as loginRequest } from './api/auth';
 
 type AdminAuthContextValue = {
@@ -54,6 +54,15 @@ export function AdminAuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem(STORAGE_KEY);
     setToken(null);
   }, []);
+
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      logout();
+    };
+
+    window.addEventListener('admin-unauthorized', handleUnauthorized);
+    return () => window.removeEventListener('admin-unauthorized', handleUnauthorized);
+  }, [logout]);
 
   const value = useMemo(() => ({ token, role, login, logout }), [token, role, login, logout]);
 

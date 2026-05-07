@@ -334,37 +334,41 @@ export default function BotMessagesPage() {
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="space-y-1">
-          <Button
-            variant="ghost"
-            asChild
-            className="group -ml-3 mb-2 rounded-full text-slate-600 hover:text-violet-700 dark:text-slate-400 dark:hover:text-violet-300"
-          >
-            <Link to="/admin">
-              <ArrowLeft className="h-4 w-4 mr-2 transition-transform group-hover:-translate-x-0.5" />
-              {t("admin.logs.back")}
-            </Link>
-          </Button>
-          <div className="flex items-center gap-3">
-            <Bot className="h-8 w-8 text-violet-500" />
-            <h1 className="text-4xl font-bold tracking-tight text-slate-900 dark:text-white">
+      {/* ── Header ── */}
+      <div className="mb-8 sm:mb-12">
+        <Button
+          variant="ghost"
+          asChild
+          className="group mb-2 sm:mb-6 rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-slate-600 transition-all hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 dark:border-white/10 dark:bg-white/[0.03] dark:text-slate-300 dark:hover:border-violet-400/30 dark:hover:bg-violet-500/10 dark:hover:text-violet-200"
+        >
+          <Link to="/admin">
+            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-0.5" />
+            {t("admin.logs.back")}
+          </Link>
+        </Button>
+
+        <div className="mx-auto max-w-4xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-violet-600 dark:text-violet-400">
+            {t("admin.bot.subtitle")}
+          </p>
+          <div className="mt-3 flex items-center justify-center gap-4">
+            <Bot className="h-10 w-10 text-violet-500 shrink-0 hidden sm:block" />
+            <h1 className="text-5xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-6xl">
               {t("admin.bot.title")}
             </h1>
           </div>
-          <p className="text-slate-500 dark:text-slate-400 text-base">
-            {t("admin.bot.subtitle")}
-          </p>
+          <div className="mt-6 flex justify-center">
+            <Button 
+              onClick={() => void loadThreads()} 
+              variant="outline" 
+              className="rounded-2xl border-violet-200 bg-violet-50/50 hover:bg-violet-50 dark:border-violet-500/20 dark:bg-violet-500/5 dark:hover:bg-violet-500/10"
+              disabled={isRefreshing}
+            >
+              <RefreshCcw className={cn("h-4 w-4 mr-2", isRefreshing && "animate-spin")} />
+              {t("admin.bot.refresh")}
+            </Button>
+          </div>
         </div>
-        <Button 
-          onClick={() => void loadThreads()} 
-          variant="outline" 
-          className="rounded-2xl border-violet-200 bg-violet-50/50 hover:bg-violet-50 dark:border-violet-500/20 dark:bg-violet-500/5 dark:hover:bg-violet-500/10"
-          disabled={isRefreshing}
-        >
-          <RefreshCcw className={cn("h-4 w-4 mr-2", isRefreshing && "animate-spin")} />
-          {t("admin.bot.refresh")}
-        </Button>
       </div>
 
       {errorMessage ? (
@@ -627,16 +631,16 @@ export default function BotMessagesPage() {
                 {selectedThreadMessages.map((msg) => (
                    <div 
                       key={msg.id}
-                      className={cn("flex", msg.role === BOT_MESSAGE_ROLE_LABEL.USER ? "justify-end" : "justify-start")}
+                      className={cn("flex", msg.role === BOT_MESSAGE_ROLE_LABEL.user ? "justify-end" : "justify-start")}
                     >
-                      <div className={cn("flex max-w-[85%] flex-col space-y-1", msg.role === BOT_MESSAGE_ROLE_LABEL.USER ? "items-end" : "items-start")}>
+                      <div className={cn("flex max-w-[85%] flex-col space-y-1", msg.role === BOT_MESSAGE_ROLE_LABEL.user ? "items-end" : "items-start")}>
                         <div className="flex items-center gap-2 px-1">
-                          {msg.role === BOT_MESSAGE_ROLE_LABEL.USER ? (
+                          {msg.role === BOT_MESSAGE_ROLE_LABEL.user ? (
                             <>
                               <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{t("admin.bot.visitor")}</span>
                               <User className="h-3 w-3 text-slate-400" />
                            </>
-                         ) : msg.role === BOT_MESSAGE_ROLE_LABEL.SYSTEM ? (
+                         ) : msg.role === BOT_MESSAGE_ROLE_LABEL.system ? (
                            <>
                              <Brain className="h-3 w-3 text-amber-500" />
                              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-500">
@@ -652,13 +656,13 @@ export default function BotMessagesPage() {
                        </div>
                         <div className={cn(
                           "p-3 rounded-2xl text-sm leading-relaxed shadow-sm",
-                          msg.role === BOT_MESSAGE_ROLE_LABEL.USER
+                          msg.role === BOT_MESSAGE_ROLE_LABEL.user
                             ? "bg-violet-600 text-white rounded-tr-none"
-                            : msg.role === BOT_MESSAGE_ROLE_LABEL.SYSTEM
+                            : msg.role === BOT_MESSAGE_ROLE_LABEL.system
                               ? "rounded-tl-none border border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-100"
                             : "bg-white border border-slate-100 dark:bg-white/5 dark:border-white/5 text-slate-800 dark:text-slate-200 rounded-tl-none",
                         )}>
-                          {msg.role === BOT_MESSAGE_ROLE_LABEL.ASSISTANT || msg.role === BOT_MESSAGE_ROLE_LABEL.SYSTEM ? (
+                          {msg.role === BOT_MESSAGE_ROLE_LABEL.assistant || msg.role === BOT_MESSAGE_ROLE_LABEL.system ? (
                             <Markdown className="prose prose-sm max-w-none prose-p:my-0 dark:prose-invert">
                               {msg.content}
                             </Markdown>
