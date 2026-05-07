@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 
 import { useAdminAuth } from '@/features/admin/AdminAuthProvider';
-import { fetchProjects, Project, updateProject } from '@/features/admin/api/projects';
+import { fetchProjects, updateProject } from '@/features/admin/api/projects';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';

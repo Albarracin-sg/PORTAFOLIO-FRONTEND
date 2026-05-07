@@ -9,7 +9,7 @@ export function mapPublicProjectToList(project: PublicProject): ListProject {
     title: project.title,
     name: project.title,
     description: project.description,
-    longDescription: project.description,
+    longDescription: project.description.es || '',
     image: project.imageUrl,
     technologies,
     category: project.category,
