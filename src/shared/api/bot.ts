@@ -192,8 +192,15 @@ export async function sendBotMessage(payload: BotChatRequest): Promise<BotChatRe
   });
 }
 
-export async function fetchBotThreads(token: string, page = 1, limit = 10): Promise<BotThreadsResponse> {
-  const response = await apiRequest<unknown>(`/admin/bot/threads?page=${page}&limit=${limit}`, {
+export async function fetchBotThreads(token: string, page = 1, limit = 10, q = ''): Promise<BotThreadsResponse> {
+  const query = new URLSearchParams({
+    page: String(page),
+    limit: String(limit),
+  });
+  if (q) {
+    query.set('q', q);
+  }
+  const response = await apiRequest<unknown>(`/admin/bot/threads?${query.toString()}`, {
     token,
   });
 
@@ -206,6 +213,25 @@ export async function fetchBotThreadMessages(token: string, id: string): Promise
   });
 
   return sortMessages(normalizeMessagesResponse(response));
+}
+
+export async function analyzeBotThread(token: string, id: string): Promise<string> {
+  const response = await apiRequest<{ analysis: string }>(`/admin/bot/threads/${id}/analyze`, {
+    method: 'POST',
+    token,
+  });
+
+  return response.analysis;
+}
+
+export async function analyzeBulkThreads(token: string, q = ''): Promise<string> {
+  const query = q ? `?q=${encodeURIComponent(q)}` : '';
+  const response = await apiRequest<{ analysis: string }>(`/admin/bot/threads/analyze${query}`, {
+    method: 'POST',
+    token,
+  });
+
+  return response.analysis;
 }
 
 export async function deleteBotThread(token: string, id: string): Promise<void> {
