@@ -124,7 +124,6 @@ export function AdminProjectEditPage() {
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [project, setProject] = useState<Project | null>(null);
 
   const [form, setForm] = useState({
     title: '',

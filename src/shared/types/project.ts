@@ -10,16 +10,16 @@ export interface ProjectBase {
   id: string;
   name: string;
   title?: string; // alias para AllProjects
-  description: string;
+  description: string | Record<string, string>;
   technologies: string[];
   image: string;
   githubUrl?: string;
   github?: string;
   liveUrl?: string;
   liveDemo?: string;
-  problem?: string;
-  challenge?: string;
-  solution?: string;
+  problem?: string | Record<string, string>;
+  challenge?: string | Record<string, string>;
+  solution?: string | Record<string, string>;
   featured?: boolean;
   stats?: ProjectStats;
   stars?: number;
@@ -28,14 +28,14 @@ export interface ProjectBase {
   date?: string;
   category?: string;
   status?: string;
-  longDescription?: string;
+  longDescription?: string | Record<string, string>;
 }
 
 /** Proyecto para Home/Projects (featured, modal) */
 export interface FeaturedProject extends ProjectBase {
-  problem: string;
-  challenge: string;
-  solution: string;
+  problem: string | Record<string, string>;
+  challenge: string | Record<string, string>;
+  solution: string | Record<string, string>;
   githubUrl: string;
   liveUrl?: string;
   stats: ProjectStats;

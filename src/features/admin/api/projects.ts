@@ -7,6 +7,7 @@ export type Project = {
   problem: Record<string, string>;
   challenge: Record<string, string>;
   solution: Record<string, string>;
+  imageUrl: string;
   category: string;
   status: string;
   featured: boolean;
@@ -25,12 +26,17 @@ export type UpdateProjectPayload = {
   problem?: Record<string, string>;
   challenge?: Record<string, string>;
   solution?: Record<string, string>;
+  imageUrl?: string;
   category?: string;
   status?: string;
   featured?: boolean;
   githubUrl?: string | null;
   liveUrl?: string | null;
   technologies?: string[];
+  stars?: number;
+  forks?: number;
+  views?: number;
+  date?: string;
 };
 
 export async function fetchProjects(token: string) {
