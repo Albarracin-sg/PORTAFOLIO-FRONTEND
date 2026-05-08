@@ -28,7 +28,7 @@ export default function Footer({ isDark, onPageChange, currentPage }: FooterProp
     },
     {
       icon: <Linkedin className="h-5 w-5" />,
-      href: "https://www.linkedin.com/in/Albarracin-sg",
+      href: "https://www.linkedin.com/in/juan-camilo-albarracin/",
       label: "LinkedIn",
     },
   ];

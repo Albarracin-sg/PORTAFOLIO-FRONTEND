@@ -140,7 +140,7 @@ export default function Contact({ section }: ContactProps) {
     },
     {
       label: "LinkedIn",
-      link: "https://www.linkedin.com/in/juan-camilo-albarrac%C3%ADn-urrego-077504296/",
+      link: "https://www.linkedin.com/in/juan-camilo-albarracin/",
       icon: "Linkedin",
     },
   ];
