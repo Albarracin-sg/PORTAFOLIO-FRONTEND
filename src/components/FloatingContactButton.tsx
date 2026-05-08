@@ -63,7 +63,7 @@ export default function FloatingContactButton() {
     },
     {
       icon: Linkedin,
-      href: '#',
+      href: 'https://www.linkedin.com/in/juan-camilo-albarracin/',
       label: t('floating.actions.linkedin'),
       color: 'hover:bg-blue-500/20 hover:text-blue-400',
     },
