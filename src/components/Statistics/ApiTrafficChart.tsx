@@ -3,13 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 
-// Lazy load recharts components
-const BarChart = React.lazy(() => import("recharts").then(m => ({ default: m.BarChart })));
-const Bar = React.lazy(() => import("recharts").then(m => ({ default: m.Bar })));
-const Cell = React.lazy(() => import("recharts").then(m => ({ default: m.Cell })));
-const CartesianGrid = React.lazy(() => import("recharts").then(m => ({ default: m.CartesianGrid })));
-const XAxis = React.lazy(() => import("recharts").then(m => ({ default: m.XAxis })));
-const YAxis = React.lazy(() => import("recharts").then(m => ({ default: m.YAxis })));
+import { BarChart, Bar, Cell, CartesianGrid, XAxis, YAxis } from "recharts";
 
 interface ApiTrafficChartProps {
   data: any[];

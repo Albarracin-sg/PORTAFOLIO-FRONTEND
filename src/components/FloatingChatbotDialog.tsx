@@ -103,7 +103,7 @@ export default function FloatingChatbotDialog({
     dispatch({ type: 'SET_INPUT', payload: '' });
     dispatch({ type: 'SET_ERROR', payload: null });
 
-    startTransition(async () => {
+    const handleChat = async () => {
       try {
         const data = await sendBotMessage({
           message: content.trim(),
@@ -116,7 +116,7 @@ export default function FloatingChatbotDialog({
           payload: { 
             id: crypto.randomUUID(), 
             role: 'assistant', 
-            content: data.response || data.reply || '' 
+            content: data.reply || '' 
           } 
         });
       } catch (err) {
@@ -126,6 +126,10 @@ export default function FloatingChatbotDialog({
           payload: isRateLimit ? t('contact.form.errors.rateLimit') : t('contact.form.errors.serverError') 
         });
       }
+    };
+
+    startTransition(() => {
+      handleChat();
     });
   };
 

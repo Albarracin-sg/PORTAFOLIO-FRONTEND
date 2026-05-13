@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { use } from 'react';
 
 type ThemeContextValue = {
   isDark: boolean;
@@ -57,7 +56,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useTheme(): ThemeContextValue {
-  const ctx = use(ThemeContext);
+  const ctx = React.useContext(ThemeContext);
   if (!ctx) throw new Error('useTheme must be used within ThemeProvider');
   return ctx;
 }

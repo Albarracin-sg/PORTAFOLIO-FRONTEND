@@ -1,4 +1,4 @@
-import { createContext, use, useMemo, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 
 type EditModeContextValue = {
   isEditMode: boolean;
@@ -20,7 +20,7 @@ export function EditModeProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useEditMode() {
-  const context = use(EditModeContext);
+  const context = useContext(EditModeContext);
   if (!context) {
     throw new Error('useEditMode must be used within EditModeProvider');
   }

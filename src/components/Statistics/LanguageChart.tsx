@@ -3,10 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
 
-// Lazy load recharts components
-const PieChart = React.lazy(() => import("recharts").then(m => ({ default: m.PieChart })));
-const Pie = React.lazy(() => import("recharts").then(m => ({ default: m.Pie })));
-const Cell = React.lazy(() => import("recharts").then(m => ({ default: m.Cell })));
+import { PieChart, Pie, Cell } from "recharts";
 
 interface LanguageChartProps {
   data: any[];
