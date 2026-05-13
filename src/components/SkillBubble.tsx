@@ -16,9 +16,9 @@ export function SkillBubble({ name, showName = false, className, size = 'md' }: 
   };
 
   const iconSizeClasses = {
-    sm: 'h-3.5 w-3.5',
-    md: 'h-5 w-5',
-    lg: 'h-7 w-7'
+    sm: 'size-3.5',
+    md: 'size-5',
+    lg: 'size-7'
   };
 
   return (

@@ -43,7 +43,7 @@ export function AdminLoginPage() {
           className="rounded-2xl gap-2 text-sm text-muted-foreground hover:text-foreground transition-all duration-200"
         >
           <Link to="/">
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="size-4" />
             {t('admin.login.backToSite')}
           </Link>
         </Button>
@@ -51,18 +51,18 @@ export function AdminLoginPage() {
 
       {/* Card */}
       <div className="relative z-10 w-full max-w-sm">
-        <div className="rounded-3xl border border-slate-200 dark:border-white/[0.07] bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl shadow-2xl shadow-black/5 p-8 space-y-7">
+        <div className="rounded-3xl border border-zinc-200 dark:border-white/[0.07] bg-white/80 dark:bg-white/[0.03] backdrop-blur-xl shadow-2xl shadow-black/5 p-8 space-y-7">
 
           {/* Icon + title */}
           <div className="text-center space-y-3">
-            <div className="mx-auto h-12 w-12 rounded-2xl bg-violet-500/10 flex items-center justify-center">
-              <Lock className="h-5 w-5 text-violet-500" />
+            <div className="mx-auto size-12 rounded-2xl bg-violet-500/10 flex items-center justify-center">
+              <Lock className="size-5 text-violet-500" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+              <h1 className="text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">
                 {t('admin.login.title')}
               </h1>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+              <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
                 {t('admin.login.subtitle')}
               </p>
             </div>
@@ -71,7 +71,7 @@ export function AdminLoginPage() {
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-xs font-medium text-slate-500 dark:text-slate-400 ml-1">
+              <Label htmlFor="email" className="text-xs font-medium text-zinc-500 dark:text-zinc-400 ml-1">
                 {t('admin.login.email')}
               </Label>
               <Input
@@ -81,12 +81,12 @@ export function AdminLoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] h-11 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus-visible:ring-violet-500 transition-all"
+                className="rounded-2xl border-zinc-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] h-11 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-600 focus-visible:ring-violet-500 transition-all"
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="password" className="text-xs font-medium text-slate-500 dark:text-slate-400 ml-1">
+              <Label htmlFor="password" className="text-xs font-medium text-zinc-500 dark:text-zinc-400 ml-1">
                 {t('admin.login.password')}
               </Label>
               <Input
@@ -96,7 +96,7 @@ export function AdminLoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] h-11 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus-visible:ring-violet-500 transition-all"
+                className="rounded-2xl border-zinc-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] h-11 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-600 focus-visible:ring-violet-500 transition-all"
               />
             </div>
 
@@ -113,7 +113,7 @@ export function AdminLoginPage() {
             >
               {loading ? (
                 <span className="flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin pointer-events-none" />
+                  <Loader2 className="size-4 animate-spin pointer-events-none" />
                   {t('admin.login.authenticating')}
                 </span>
               ) : t('admin.login.submit')}

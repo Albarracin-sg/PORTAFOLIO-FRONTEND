@@ -22,8 +22,8 @@
     "nowPlaying": "Now playing",
     "lastPlayed": "Last played",
     "openInSpotify": "Open in Spotify",
-    "loading": "Tuning into Spotify...",
-    "fetching": "Fetching recent activity..."
+    "loading": "Tuning into Spotify…",
+    "fetching": "Fetching recent activity…"
   },
   "nav": {
     "home": "Home",
@@ -169,7 +169,7 @@
     },
     "filters": {
       "searchLabel": "Search",
-      "searchPlaceholder": "Search projects, technologies...",
+      "searchPlaceholder": "Search projects, technologies…",
       "category": "Category",
       "technology": "Technology",
       "sortBy": "Sort by",
@@ -228,7 +228,7 @@
       "message": "Message",
       "messagePlaceholder": "Tell me briefly how I can help you",
       "send": "Send message",
-      "sending": "Sending...",
+      "sending": "Sending…",
       "thankYou": "Thank you for your message!",
       "responseTime": "I will respond within the next 24 hours.",
       "successMessage": "Message sent successfully",
@@ -270,7 +270,7 @@
       "title": "Portfolio assistant",
       "description": "Choose an option and I’ll answer quickly from here.",
       "intro": "Hi, I’m the portfolio chat bot. I can guide you about stack, projects, or how to contact Juan.",
-      "placeholder": "Type your message...",
+      "placeholder": "Type your message…",
       "prompts": {
         "stack": "What stack does he work with?",
         "projects": "I want to see projects",
@@ -373,7 +373,7 @@
       "email": "Email Address",
       "password": "Password",
       "submit": "Access Dashboard",
-      "authenticating": "Authenticating...",
+      "authenticating": "Authenticating…",
       "backToSite": "Back to site"
     },
     "dashboard": {
@@ -437,7 +437,7 @@
       "subtitle": "Curate and manage your best work. Sync with GitHub seamlessly.",
       "management": "Management",
       "manageMasterpieces": "Manage masterpieces",
-      "searchPlaceholder": "Search work...",
+      "searchPlaceholder": "Search work…",
       "sync": "Sync",
       "new": "New Project",
       "noResults": "No projects match your search.",
@@ -449,21 +449,21 @@
         "title": "Edit Project",
         "back": "Back to list",
         "save": "Save Project",
-        "saving": "Saving...",
+        "saving": "Saving…",
         "cancel": "Cancel",
         "viewOnSite": "View on site",
         "narrativeContent": "Narrative Content",
         "technicalDetails": "Technical Details",
         "preview": "Preview",
         "noImage": "No image",
-        "imageUrl": "Image URL...",
+        "imageUrl": "Image URL…",
         "general": "General",
         "whatIs": "What is the project?",
         "problem": "The Problem",
         "solution": "Solution",
         "challenge": "The Challenge",
         "placeholders": {
-          "description": "Describe the project...",
+          "description": "Describe the project…",
           "problem": "What problem does it solve?",
           "solution": "How did you solve it?",
           "challenge": "What was the biggest technical challenge?"

@@ -18,7 +18,7 @@ export default function ThemeToggle({ isDark, onToggle }: ThemeToggleProps) {
       {/* Sun Icon */}
       <Sun
         className={`
-          w-5 h-5 absolute transition-all duration-500 ease-in-out
+          size-5 absolute transition-all duration-500 ease-in-out
           ${
             isDark
               ? 'translate-y-8 rotate-90 opacity-0'
@@ -30,7 +30,7 @@ export default function ThemeToggle({ isDark, onToggle }: ThemeToggleProps) {
       {/* Moon Icon */}
       <Moon
         className={`
-          w-5 h-5 absolute transition-all duration-500 ease-in-out
+          size-5 absolute transition-all duration-500 ease-in-out
           ${
             isDark
               ? 'translate-y-0 rotate-0 opacity-100'

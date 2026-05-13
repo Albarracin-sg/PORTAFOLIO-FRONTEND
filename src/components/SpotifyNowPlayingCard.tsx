@@ -19,77 +19,89 @@ function getProgressPercentage(track: SpotifyTrack) {
 
 export function SpotifyNowPlayingCard() {
   const { t } = useTranslation();
-  const [track, setTrack] = useState<SpotifyTrack | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [state, setState] = useState<{
+    track: SpotifyTrack | null;
+    loading: boolean;
+    error: boolean;
+  }>({
+    track: null,
+    loading: true,
+    error: false,
+  });
 
   useEffect(() => {
     let cancelled = false;
+    let intervalId: number | undefined;
 
     async function loadTrack() {
       try {
         const data = await fetchNowPlaying();
         if (!cancelled) {
-          setTrack(data);
-          setError(false);
+          setState({ track: data, error: false, loading: false });
         }
       } catch {
         if (!cancelled) {
-          setError(true);
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false);
+          setState(prev => ({ ...prev, error: true, loading: false }));
         }
       }
     }
 
-    loadTrack();
-    // Polling cada 60s - antes era 5000ms (5s) para evitar excesso de requests
-    const intervalId = window.setInterval(() => {
-      // Solo consultar si la pestaña está visible
-      if (!document.hidden) {
-        loadTrack();
-      }
-    }, 60_000);
+    const startPolling = () => {
+      if (intervalId) window.clearInterval(intervalId);
+      intervalId = window.setInterval(() => {
+        if (!document.hidden) {
+          loadTrack();
+        }
+      }, 60_000);
+    };
 
-    // Pausar cuando la pestaña no está visible
-    const handleVisibilityChange = () => {
-      if (document.hidden) {
+    const stopPolling = () => {
+      if (intervalId) {
         window.clearInterval(intervalId);
-      } else {
-        loadTrack();
-        window.setInterval(() => {
-          if (!document.hidden) loadTrack();
-        }, 60_000);
+        intervalId = undefined;
       }
     };
+
+    loadTrack();
+    startPolling();
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopPolling();
+      } else {
+        loadTrack();
+        startPolling();
+      }
+    };
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       cancelled = true;
-      window.clearInterval(intervalId);
+      stopPolling();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
 
+  const { track, loading, error } = state;
   const progress = useMemo(() => (track ? getProgressPercentage(track) : 0), [track]);
 
   if (loading) {
     return (
-      <Card className="group mt-6 overflow-hidden border-violet-500/20 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-violet-500/10 dark:bg-slate-950/70">
+      <Card className="group mt-6 overflow-hidden border-violet-500/20 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-violet-500/10 dark:bg-zinc-950/70">
         <CardContent className="flex items-center gap-3 p-3.5 sm:gap-4 sm:p-4">
-          <div className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-violet-100 dark:bg-violet-500/15">
-            <Loader2 className="h-6 w-6 animate-spin text-violet-600 dark:text-violet-400" />
+          <div className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-violet-100 dark:bg-violet-500/15">
+            <Loader2 className="size-6 animate-spin text-violet-600 dark:text-violet-400" />
           </div>
-          <div className="flex-1 space-y-2">
+          <div className="flex-1 gap-y-2">
             <div className="flex items-center gap-2">
-              <div className="h-3 w-3 animate-pulse rounded-full bg-violet-400" />
+              <div className="size-3 animate-pulse rounded-full bg-violet-400" />
               <div className="h-3 w-24 animate-pulse rounded-full bg-violet-100 dark:bg-violet-500/15" />
             </div>
-            <p className="animate-pulse text-sm font-medium text-slate-600 dark:text-slate-300">
+            <p className="animate-pulse text-sm font-medium text-zinc-600 dark:text-white">
               {t('spotify.loading')}
             </p>
-            <div className="h-2 w-full max-w-[120px] animate-pulse rounded-full bg-slate-200 dark:bg-slate-800" />
+            <div className="h-2 w-full max-w-[120px] animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800" />
           </div>
         </CardContent>
       </Card>
@@ -98,19 +110,19 @@ export function SpotifyNowPlayingCard() {
 
   if (error || !track || track.type === 'none') {
     return (
-      <Card className="group mt-6 overflow-hidden border-violet-500/20 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-violet-500/10 dark:bg-slate-950/70">
+      <Card className="group mt-6 overflow-hidden border-violet-500/20 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-violet-500/10 dark:bg-zinc-950/70">
         <CardContent className="flex items-center gap-3 p-3.5 sm:gap-4 sm:p-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-600 dark:text-violet-400">
-            <Music2 className="h-6 w-6" />
+          <div className="flex size-14 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-600 dark:text-violet-400">
+            <Music2 className="size-6" />
           </div>
           <div className="min-w-0 flex-1">
             <p className="text-xs font-semibold uppercase tracking-[0.25em] text-violet-600 dark:text-violet-400">
               Spotify
             </p>
-            <p className="mt-1 text-sm font-medium text-slate-900 dark:text-slate-100">
+            <p className="mt-1 text-sm font-medium text-zinc-900 dark:text-white">
               {t('spotify.notListening')}
             </p>
-            <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+            <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
               {t('spotify.comeBackLater')}
             </p>
           </div>
@@ -132,54 +144,54 @@ export function SpotifyNowPlayingCard() {
       className="mt-6 block"
       aria-label={`${t('common.open')} ${track.name} ${t('common.in')} Spotify`}
     >
-      <Card className="group overflow-hidden border-violet-500/20 bg-white/85 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/40 hover:shadow-xl hover:shadow-violet-500/10 dark:bg-slate-950/75">
+      <Card className="group overflow-hidden border-violet-500/20 bg-white/85 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/40 hover:shadow-xl hover:shadow-violet-500/10 dark:bg-zinc-950/75">
         <CardContent className="p-3.5 sm:p-4">
           <div className="flex items-center gap-3 sm:gap-4">
-            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl sm:h-16 sm:w-16">
+            <div className="relative size-14 shrink-0 overflow-hidden rounded-2xl sm:size-16">
               <img
                 src={imageUrl}
                 alt={`Portada de ${track.album}`}
-                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
             </div>
 
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-violet-600 dark:text-violet-400 sm:text-[11px] sm:tracking-[0.25em]">
-                <StatusIcon className="h-3.5 w-3.5" />
+                <StatusIcon className="size-3.5" />
                 <span>{statusLabel}</span>
               </div>
 
               <div className="mt-2 flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-slate-900 dark:text-slate-100">
+                  <p className="truncate text-sm font-semibold text-zinc-900 dark:text-white">
                     {track.name}
                   </p>
-                  <p className="truncate text-sm text-slate-600 dark:text-slate-300">
+                  <p className="truncate text-sm text-zinc-600 dark:text-white">
                     {track.artists}
                   </p>
-                  <p className="mt-1 truncate text-xs text-slate-500 dark:text-slate-400">
+                  <p className="mt-1 truncate text-xs text-zinc-500 dark:text-zinc-400">
                     {track.album}
                   </p>
                 </div>
 
-                <ExternalLink className="mt-0.5 h-4 w-4 shrink-0 text-slate-400 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-violet-500" />
+                <ExternalLink className="mt-0.5 size-4 shrink-0 text-zinc-400 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-violet-500" />
               </div>
             </div>
           </div>
 
           <div className="mt-4 space-y-2">
-            <div className="h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+            <div className="h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-500"
                 style={{ width: `${progress}%` }}
               />
             </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-slate-500 dark:text-slate-400 sm:flex-nowrap">
+            <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-zinc-500 dark:text-zinc-400 sm:flex-nowrap">
               <span>{formatTime(track.progressMs)}</span>
               <span className="inline-flex items-center gap-1 text-violet-600 dark:text-violet-400">
-                <Waves className="h-3.5 w-3.5" />
+                <Waves className="size-3.5" />
                 {t('spotify.openInSpotify')}
               </span>
               <span>{track.durationMs > 0 ? formatTime(track.durationMs) : '--:--'}</span>

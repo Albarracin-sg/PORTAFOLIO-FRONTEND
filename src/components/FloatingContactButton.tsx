@@ -53,7 +53,7 @@ export default function FloatingContactButton() {
       icon: Github,
       href: 'https://github.com/Albarracin-sg',
       label: t('floating.actions.github'),
-      color: 'hover:bg-gray-500/20 hover:text-gray-300',
+      color: 'hover:bg-zinc-500/20 hover:text-white',
     },
     {
       icon: Bot,
@@ -117,8 +117,10 @@ export default function FloatingContactButton() {
   return (
     <>
       {isExpanded && isTouchDevice && (
-        <div
-          className="fixed inset-0 z-40 bg-transparent"
+        <button
+          type="button"
+          aria-label="Close menu"
+          className="fixed inset-0 z-40 bg-transparent cursor-default"
           onClick={() => setIsExpanded(false)}
         />
       )}
@@ -160,9 +162,9 @@ export default function FloatingContactButton() {
                 type="button"
                 className={`
                   absolute flex items-center justify-center rounded-full
-                  border border-gray-200 bg-white text-gray-600 shadow-lg backdrop-blur-sm
+                  border border-zinc-200 bg-white text-zinc-600 shadow-lg backdrop-blur-sm
                   transition-all duration-300 hover:scale-110 hover:shadow-xl
-                  dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400
+                  dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-400
                   pointer-events-auto cursor-pointer ${social.color}
                   ${isExpanded ? 'opacity-100' : 'opacity-0 pointer-events-none'}
                 `}
@@ -178,7 +180,7 @@ export default function FloatingContactButton() {
                   zIndex: 2,
                 }}
               >
-                <Icon className="h-5 w-5" />
+                <Icon className="size-5" />
               </button>
             );
           })}
@@ -199,8 +201,8 @@ export default function FloatingContactButton() {
             style={{ width: `${BUTTON_SIZE}px`, height: `${BUTTON_SIZE}px`, zIndex: 3 }}
           >
             {isExpanded
-              ? <ChevronUp className="h-6 w-6" />
-              : <Sparkles   className="h-6 w-6" />
+              ? <ChevronUp className="size-6" />
+              : <Sparkles   className="size-6" />
             }
           </Button>
         </div>

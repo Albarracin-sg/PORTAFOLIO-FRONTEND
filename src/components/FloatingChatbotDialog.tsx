@@ -13,6 +13,7 @@ import { sendBotMessage } from '../shared/api/bot';
 import { RateLimitError } from '../shared/api/http';
 
 interface Message {
+  id: string;
   role: 'user' | 'assistant';
   content: string;
 }
@@ -38,27 +39,34 @@ export default function FloatingChatbotDialog({
   const [conversationId, setConversationId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to bottom when new messages appear
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  // Show initial message when dialog opens
   useEffect(() => {
     if (open && messages.length === 0) {
       setMessages([
         {
+          id: 'initial',
           role: 'assistant',
           content: t('floating.chatbot.intro'),
         },
       ]);
     }
-  }, [open, messages.length, t]);
+    
+    if (messages.length > 0) {
+      const timer = setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [open, messages, t]);
 
   const sendMessage = async (content: string) => {
     if (!content.trim() || isLoading) return;
 
-    const userMessage: Message = { role: 'user', content: content.trim() };
+    const userMessage: Message = { 
+      id: crypto.randomUUID(),
+      role: 'user', 
+      content: content.trim() 
+    };
+    
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setError(null);
@@ -73,7 +81,11 @@ export default function FloatingChatbotDialog({
       setConversationId(data.conversationId);
       setMessages((prev) => [
         ...prev,
-        { role: 'assistant', content: data.reply },
+        { 
+          id: crypto.randomUUID(),
+          role: 'assistant', 
+          content: (data as any).response || (data as any).reply || ''
+        },
       ]);
     } catch (err) {
       const isRateLimit = err instanceof RateLimitError;
@@ -82,10 +94,6 @@ export default function FloatingChatbotDialog({
         : t('contact.form.errors.serverError');
       
       setError(errorMessage);
-      setMessages((prev) => [
-        ...prev,
-        { role: 'assistant', content: errorMessage },
-      ]);
     } finally {
       setIsLoading(false);
     }
@@ -106,10 +114,10 @@ export default function FloatingChatbotDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="border-violet-100 bg-white/95 sm:max-w-md dark:border-violet-500/20 dark:bg-gray-950 flex flex-col p-4 sm:p-6 overflow-hidden fixed max-h-[75dvh] sm:h-[600px] h-[70dvh]">
+      <DialogContent className="border-violet-100 bg-white/95 sm:max-w-md dark:border-violet-500/20 dark:bg-zinc-950 flex flex-col p-4 sm:p-6 overflow-hidden fixed max-h-[75dvh] sm:h-[600px] h-[70dvh]">
         <DialogHeader className="flex-shrink-0">
-          <DialogTitle className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <Bot className="h-5 w-5 text-violet-500" />
+          <DialogTitle className="flex items-center gap-2 text-zinc-900 dark:text-white">
+            <Bot className="size-5 text-violet-500" />
             {t('floating.chatbot.title')}
           </DialogTitle>
           <DialogDescription>
@@ -117,15 +125,14 @@ export default function FloatingChatbotDialog({
           </DialogDescription>
         </DialogHeader>
 
-        {/* Messages Container - Fixed height flex area */}
-        <div className="flex-1 overflow-y-auto space-y-4 my-4 p-1 custom-scrollbar">
-          {messages.map((msg, index) => (
+        <div className="flex-1 overflow-y-auto gap-y-4 my-4 p-1 custom-scrollbar">
+          {messages.map((msg) => (
             <div
-              key={index}
+              key={msg.id}
               className={`rounded-2xl px-4 py-3 text-sm transition-all duration-300 ${
                 msg.role === 'user'
-                  ? 'ml-auto border border-violet-200 bg-violet-50 text-gray-900 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-gray-100'
-                  : 'mr-auto border border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200'
+                  ? 'ml-auto border border-violet-200 bg-violet-50 text-zinc-900 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-white'
+                  : 'mr-auto border border-zinc-200 bg-zinc-50 text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white'
               } max-w-[85%] ${msg.role === 'user' ? 'text-right' : 'text-left'}`}
             >
               {msg.content}
@@ -133,15 +140,15 @@ export default function FloatingChatbotDialog({
           ))}
 
           {isLoading && (
-            <div className="flex items-center gap-2 text-gray-500 text-sm animate-pulse">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span>{t('common.loading')}...</span>
+            <div className="flex items-center gap-2 text-zinc-500 text-sm animate-pulse">
+              <Loader2 className="size-4 animate-spin" />
+              <span>{t('common.loading')}…</span>
             </div>
           )}
 
           {error && (
             <div className="flex items-center gap-2 text-red-500 text-sm">
-              <AlertCircle className="h-4 w-4" />
+              <AlertCircle className="size-4" />
               <span>{error}</span>
             </div>
           )}
@@ -149,15 +156,14 @@ export default function FloatingChatbotDialog({
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input Form */}
-        <div className="mt-auto space-y-4 flex-shrink-0">
+        <div className="mt-auto gap-y-4 flex-shrink-0">
           <form onSubmit={handleSubmit} className="flex gap-2">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder={t('floating.chatbot.placeholder') || 'Escribe tu mensaje...'}
-              className="flex-1 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm text-gray-900 placeholder:text-gray-400 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500"
+              placeholder={t('floating.chatbot.placeholder') || 'Escribe tu mensaje…'}
+              className="flex-1 rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white dark:placeholder:text-zinc-500"
               disabled={isLoading}
             />
             <Button
@@ -167,14 +173,13 @@ export default function FloatingChatbotDialog({
               className="flex-shrink-0 rounded-2xl bg-violet-600 hover:bg-violet-700 transition-all duration-300 hover:scale-105 active:scale-95"
             >
               {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <Loader2 className="size-4 animate-spin" />
               ) : (
-                <Send className="h-4 w-4" />
+                <Send className="size-4" />
               )}
             </Button>
           </form>
 
-          {/* Footer Actions */}
           <div className="flex flex-col sm:flex-row gap-2">
             <Button 
               type="button" 

@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useEffect, useReducer } from 'react';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
 import Projects from '@/components/Projects';
@@ -9,25 +8,55 @@ import { mapPublicProjectToFeatured } from '@/shared/api/mappers';
 import { LoadingScreen } from '@/components/ui/LoadingScreen';
 import { Skeleton } from '@/components/ui/skeleton';
 
+interface HomeState {
+  sections: Record<string, { id: string; type: string; content: Record<string, unknown> }>;
+  carouselProjects: any[];
+  isPageLoaded: boolean;
+  isProjectsLoaded: boolean;
+}
+
+type HomeAction = 
+  | { type: 'START_FETCH' }
+  | { type: 'SET_SECTIONS'; payload: Record<string, { id: string; type: string; content: Record<string, unknown> }> }
+  | { type: 'SET_PROJECTS'; payload: any[] }
+  | { type: 'FINISH_PAGE_LOAD' }
+  | { type: 'FINISH_PROJECTS_LOAD' };
+
+function homeReducer(state: HomeState, action: HomeAction): HomeState {
+  switch (action.type) {
+    case 'START_FETCH':
+      return { ...state, isPageLoaded: false, isProjectsLoaded: false };
+    case 'SET_SECTIONS':
+      return { ...state, sections: action.payload };
+    case 'SET_PROJECTS':
+      return { ...state, carouselProjects: action.payload };
+    case 'FINISH_PAGE_LOAD':
+      return { ...state, isPageLoaded: true };
+    case 'FINISH_PROJECTS_LOAD':
+      return { ...state, isProjectsLoaded: true };
+    default:
+      return state;
+  }
+}
+
 export function HomePage() {
-  const location = useLocation();
-  const [scrollY, setScrollY] = useState(0);
-  const [sections, setSections] = useState<Record<string, { id: string; type: string; content: Record<string, unknown> }>>({});
-  const [carouselProjects, setCarouselProjects] = useState<any[]>([]);
-  const [isPageLoaded, setIsPageLoaded] = useState(false);
-  const [isProjectsLoaded, setIsProjectsLoaded] = useState(false);
+  const scrollY = 0; // Or whatever default or hook use you prefer if scrollY is used below
+  const [state, dispatch] = useReducer(homeReducer, {
+    sections: {},
+    carouselProjects: [],
+    isPageLoaded: false,
+    isProjectsLoaded: false,
+  });
+
+  const { sections, carouselProjects, isPageLoaded, isProjectsLoaded } = state;
 
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [location.key]);
+  }, []);
 
   useEffect(() => {
     let isActive = true;
 
-    setIsPageLoaded(false);
-    setIsProjectsLoaded(false);
+    dispatch({ type: 'START_FETCH' });
 
     fetchPublicPage('home')
       .then((result) => {
@@ -39,19 +68,19 @@ export function HomePage() {
           },
           {},
         );
-        setSections(sectionMap);
+        dispatch({ type: 'SET_SECTIONS', payload: sectionMap });
       })
       .catch((error) => { console.error('Error loading home page:', error); })
-      .finally(() => { if (isActive) setIsPageLoaded(true); });
+      .finally(() => { if (isActive) dispatch({ type: 'FINISH_PAGE_LOAD' }); });
 
     fetchPublicProjects()
       .then((result) => {
         if (!isActive) return;
-        const orderedProjects = [...result].sort((a, b) => Number(b.featured) - Number(a.featured));
-        setCarouselProjects(orderedProjects.map(mapPublicProjectToFeatured));
+        const orderedProjects = result.toSorted((a, b) => Number(b.featured) - Number(a.featured));
+        dispatch({ type: 'SET_PROJECTS', payload: orderedProjects.map(mapPublicProjectToFeatured) });
       })
       .catch((error) => { console.error('Error loading projects:', error); })
-      .finally(() => { if (isActive) setIsProjectsLoaded(true); });
+      .finally(() => { if (isActive) dispatch({ type: 'FINISH_PROJECTS_LOAD' }); });
 
     return () => { isActive = false; };
   }, []);
@@ -105,7 +134,7 @@ export function HomePage() {
         {!isProjectsLoaded ? (
           <div className="mx-auto max-w-7xl px-4 py-24 relative">
             <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-              <div className="space-y-3 flex-1">
+              <div className="gap-y-3 flex-1">
                 <Skeleton className="h-12 w-64 rounded-lg" />
                 <Skeleton className="h-6 w-full max-w-2xl rounded-lg" />
               </div>

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect, useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bot, Send, Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -8,22 +8,91 @@ import { sendBotMessage } from '@/shared/api/bot';
 import { RateLimitError } from '@/shared/api/http';
 
 interface Message {
+  id: string;
   role: 'user' | 'assistant';
   content: string;
+  timestamp: number;
+}
+
+interface BotChatState {
+  messages: Message[];
+  input: string;
+  isLoading: boolean;
+  error: string | null;
+  conversationId: string | null;
+}
+
+type BotChatAction =
+  | { type: 'SET_MESSAGES'; payload: Message[] }
+  | { type: 'ADD_MESSAGE'; payload: Message }
+  | { type: 'SET_INPUT'; payload: string }
+  | { type: 'START_SEND' }
+  | { type: 'FINISH_SEND'; payload: { conversationId: string; reply: string } }
+  | { type: 'SET_ERROR'; payload: string }
+  | { type: 'FINISH_LOADING' };
+
+function botChatReducer(state: BotChatState, action: BotChatAction): BotChatState {
+  switch (action.type) {
+    case 'SET_MESSAGES':
+      return { ...state, messages: action.payload };
+    case 'ADD_MESSAGE':
+      return { ...state, messages: [...state.messages, action.payload] };
+    case 'SET_INPUT':
+      return { ...state, input: action.payload };
+    case 'START_SEND':
+      return { ...state, isLoading: true, error: null };
+    case 'FINISH_SEND':
+      return {
+        ...state,
+        isLoading: false,
+        conversationId: action.payload.conversationId,
+        messages: [
+          ...state.messages,
+          {
+            id: crypto.randomUUID(),
+            role: 'assistant',
+            content: action.payload.reply,
+            timestamp: Date.now(),
+          },
+        ],
+      };
+    case 'SET_ERROR':
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload,
+        messages: [
+          ...state.messages,
+          {
+            id: crypto.randomUUID(),
+            role: 'assistant',
+            content: action.payload,
+            timestamp: Date.now(),
+          },
+        ],
+      };
+    case 'FINISH_LOADING':
+      return { ...state, isLoading: false };
+    default:
+      return state;
+  }
 }
 
 export function BotChatPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [state, dispatch] = useReducer(botChatReducer, {
+    messages: [],
+    input: '',
+    isLoading: false,
+    error: null,
+    conversationId: null,
+  });
+
+  const { messages, input, isLoading, error, conversationId } = state;
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Scroll to bottom when new messages are added
   useEffect(() => {
     const container = messagesContainerRef.current;
     if (container) {
@@ -34,16 +103,22 @@ export function BotChatPage() {
     }
   }, [messages, isLoading]);
 
-  // Show initial message when page mounts
   useEffect(() => {
     if (messages.length === 0) {
-      setMessages([
-        { role: 'assistant', content: t('floating.chatbot.intro') },
-      ]);
+      dispatch({
+        type: 'SET_MESSAGES',
+        payload: [
+          {
+            id: 'initial',
+            role: 'assistant',
+            content: t('floating.chatbot.intro'),
+            timestamp: Date.now()
+          },
+        ],
+      });
     }
   }, [messages.length, t]);
 
-  // Focus input on mount
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
@@ -51,11 +126,17 @@ export function BotChatPage() {
   const sendMessage = async (content: string) => {
     if (!content.trim() || isLoading) return;
 
-    const userMessage: Message = { role: 'user', content: content.trim() };
-    setMessages((prev) => [...prev, userMessage]);
-    setInput('');
-    setError(null);
-    setIsLoading(true);
+    dispatch({
+      type: 'ADD_MESSAGE',
+      payload: {
+        id: crypto.randomUUID(),
+        role: 'user',
+        content: content.trim(),
+        timestamp: Date.now()
+      }
+    });
+    dispatch({ type: 'SET_INPUT', payload: '' });
+    dispatch({ type: 'START_SEND' });
 
     try {
       const data = await sendBotMessage({
@@ -63,18 +144,17 @@ export function BotChatPage() {
         conversationId: conversationId || undefined,
       });
 
-      setConversationId(data.conversationId);
-      setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
+      dispatch({
+        type: 'FINISH_SEND',
+        payload: { conversationId: data.conversationId, reply: data.reply }
+      });
     } catch (err) {
       const isRateLimit = err instanceof RateLimitError;
       const errorMessage = isRateLimit
         ? t('contact.form.errors.rateLimit')
         : t('contact.form.errors.serverError');
 
-      setError(errorMessage);
-      setMessages((prev) => [...prev, { role: 'assistant', content: errorMessage }]);
-    } finally {
-      setIsLoading(false);
+      dispatch({ type: 'SET_ERROR', payload: errorMessage });
     }
   };
 
@@ -86,8 +166,8 @@ export function BotChatPage() {
   return (
     <div className="h-[calc(100dvh-4.5rem)] md:h-[calc(100vh-4.5rem)] mt-[4.5rem] bg-background relative flex flex-col overflow-hidden">
       {/* Decorative side gradients — desktop only */}
-      <div className="fixed top-20 -left-48 w-[500px] h-[500px] bg-gradient-to-br from-violet-600/10 to-fuchsia-600/10 rounded-full blur-3xl animate-pulse pointer-events-none -z-10 hidden lg:block" />
-      <div className="fixed bottom-20 -right-48 w-[500px] h-[500px] bg-gradient-to-tl from-indigo-600/10 to-violet-600/10 rounded-full blur-3xl animate-pulse pointer-events-none -z-10 hidden lg:block" style={{ animationDelay: '1.5s' }} />
+      <div className="fixed top-20 -left-48 size-[500px] bg-gradient-to-br from-violet-600/10 to-fuchsia-600/10 rounded-full blur-3xl animate-pulse pointer-events-none -z-10 hidden lg:block" />
+      <div className="fixed bottom-20 -right-48 size-[500px] bg-gradient-to-tl from-violet-600/10 to-violet-700/10 rounded-full blur-3xl animate-pulse pointer-events-none -z-10 hidden lg:block" style={{ animationDelay: '1.5s' }} />
 
       <div className="flex flex-col flex-1 w-full max-w-2xl mx-auto px-4 pt-2 pb-4 relative z-10 overflow-hidden">
         {/* Header */}
@@ -96,13 +176,13 @@ export function BotChatPage() {
             variant="ghost"
             size="icon"
             onClick={() => navigate(-1)}
-            className="rounded-xl h-9 w-9"
+            className="rounded-xl size-9"
           >
-            <ArrowLeft className="h-5 w-5" />
+            <ArrowLeft className="size-5" />
           </Button>
-          <Bot className="h-6 w-6 md:h-7 md:w-7 text-violet-500 flex-shrink-0" />
+          <Bot className="size-6 md:size-7 text-violet-500 flex-shrink-0" />
           <div className="min-w-0">
-            <h1 className="text-lg md:text-xl font-semibold text-gray-900 dark:text-gray-100 truncate">
+            <h1 className="text-lg md:text-xl font-semibold text-zinc-900 dark:text-zinc-100 truncate">
               {t('floating.chatbot.title')}
             </h1>
             <p className="text-xs md:text-sm text-muted-foreground truncate">
@@ -114,15 +194,15 @@ export function BotChatPage() {
         {/* Messages */}
         <div 
           ref={messagesContainerRef}
-          className="flex-1 space-y-4 mb-4 pb-2 flex flex-col overflow-y-auto custom-scrollbar"
+          className="flex-1 gap-y-4 mb-4 pb-2 flex flex-col overflow-y-auto custom-scrollbar"
         >
-          {messages.map((msg, index) => (
+          {messages.map((msg) => (
             <div
-              key={index}
+              key={msg.id}
               className={`rounded-2xl px-4 py-2.5 transition-all duration-300 max-w-[90%] md:max-w-[85%] break-words ${
                 msg.role === 'user'
-                  ? 'self-end border border-violet-200 bg-violet-50 text-gray-900 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-gray-100 text-sm shadow-sm'
-                  : 'self-start border border-gray-200 bg-gray-50 text-gray-700 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-200 text-base shadow-sm'
+                  ? 'self-end border border-violet-200 bg-violet-50 text-zinc-900 dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-zinc-100 text-sm shadow-sm'
+                  : 'self-start border border-zinc-200 bg-zinc-50 text-zinc-700 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200 text-base shadow-sm'
               }`}
             >
               {msg.role === 'assistant' ? (
@@ -136,15 +216,15 @@ export function BotChatPage() {
           ))}
 
           {isLoading && (
-            <div className="flex items-center gap-2 text-gray-500 text-sm animate-pulse self-start ml-2">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span>{t('common.loading')}...</span>
+            <div className="flex items-center gap-2 text-zinc-500 text-sm animate-pulse self-start ml-2">
+              <Loader2 className="size-4 animate-spin" />
+              <span>{t('common.loading')}…</span>
             </div>
           )}
 
           {error && (
             <div className="flex items-center gap-2 text-red-500 text-sm self-start ml-2">
-              <AlertCircle className="h-4 w-4" />
+              <AlertCircle className="size-4" />
               <span>{error}</span>
             </div>
           )}
@@ -157,21 +237,21 @@ export function BotChatPage() {
               ref={inputRef}
               type="text"
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => dispatch({ type: 'SET_INPUT', payload: e.target.value })}
               placeholder={t('floating.chatbot.placeholder')}
-              className="flex-1 rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus-visible:!outline-none dark:border-gray-700 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-500 hover:border-gray-300 dark:hover:border-gray-600 min-w-0 shadow-inner"
+              className="flex-1 rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus-visible:!outline-none dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-100 dark:placeholder:text-zinc-500 hover:border-zinc-300 dark:hover:border-zinc-600 min-w-0 shadow-inner"
               disabled={isLoading}
             />
             <Button
               type="submit"
               size="icon"
               disabled={isLoading || !input.trim()}
-              className="flex-shrink-0 rounded-2xl bg-violet-600 hover:bg-violet-700 transition-all duration-300 hover:scale-105 active:scale-95 h-11 w-11 md:h-12 md:w-12 shrink-0 focus-visible:!outline-none shadow-lg shadow-violet-500/20"
+              className="flex-shrink-0 rounded-2xl bg-violet-600 hover:bg-violet-700 transition-all duration-300 hover:scale-105 active:scale-95 size-11 md:size-12 shrink-0 focus-visible:!outline-none shadow-lg shadow-violet-500/20"
             >
               {isLoading ? (
-                <Loader2 className="h-5 w-5 animate-spin" />
+                <Loader2 className="size-5 animate-spin" />
               ) : (
-                <Send className="h-5 w-5" />
+                <Send className="size-5" />
               )}
             </Button>
           </form>

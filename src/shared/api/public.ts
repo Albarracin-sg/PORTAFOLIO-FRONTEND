@@ -96,7 +96,7 @@ export type ApiStats = {
 };
 
 export async function fetchNowPlaying() {
-  // El backend devuelve { track, cached, stale, ... } - extraer solo track
+  // El backend devuelve { track, cached, stale, … } - extraer solo track
   const response = await apiRequest<{ track: SpotifyTrack; cached: boolean; stale: boolean }>('/public/spotify/now-playing', { cache: 'no-store' });
   return response.track;
 }

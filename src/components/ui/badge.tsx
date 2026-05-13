@@ -12,11 +12,11 @@ const badgeVariants = cva(
         default:
           "border-transparent bg-violet-600 text-white [a&]:hover:bg-violet-700 dark:bg-violet-500 dark:[a&]:hover:bg-violet-600",
         secondary:
-          "border-transparent bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200 [a&]:hover:bg-gray-300 dark:[a&]:hover:bg-gray-600",
+          "border-transparent bg-zinc-200 text-zinc-800 dark:bg-zinc-700 dark:text-zinc-200 [a&]:hover:bg-zinc-300 dark:[a&]:hover:bg-zinc-600",
         destructive:
           "border-transparent bg-red-600 text-white [a&]:hover:bg-red-700 dark:bg-red-500 dark:[a&]:hover:bg-red-600",
         outline:
-          "text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 [a&]:hover:bg-gray-100 [a&]:hover:text-gray-900 dark:[a&]:hover:bg-gray-800 dark:[a&]:hover:text-gray-100",
+          "text-zinc-900 dark:text-zinc-100 border-zinc-300 dark:border-zinc-600 [a&]:hover:bg-zinc-100 [a&]:hover:text-zinc-900 dark:[a&]:hover:bg-zinc-800 dark:[a&]:hover:text-zinc-100",
       },
     },
     defaultVariants: {

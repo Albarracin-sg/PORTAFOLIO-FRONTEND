@@ -13,7 +13,7 @@ interface Particle {
 export default function InteractiveParticles() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const mousePos = useRef({ x: 0, y: 0 });
   const particlesRef = useRef<Particle[]>([]);
   const animationFrameRef = useRef<number | undefined>(undefined);
 
@@ -60,8 +60,8 @@ export default function InteractiveParticles() {
         particle.y += particle.vy;
 
         // Mouse interaction
-        const dx = mousePos.x - particle.x;
-        const dy = mousePos.y - particle.y;
+        const dx = mousePos.current.x - particle.x;
+        const dy = mousePos.current.y - particle.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < 100) {
@@ -115,11 +115,11 @@ export default function InteractiveParticles() {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [dimensions, mousePos]);
+  }, [dimensions]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      mousePos.current = { x: e.clientX, y: e.clientY };
     };
 
     window.addEventListener('mousemove', handleMouseMove);

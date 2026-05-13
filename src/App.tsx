@@ -24,7 +24,7 @@ const AdminProjectEditPage = lazy(() => import('./pages/Admin/ProjectEditPage').
 function PageFallback() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center">
-      <div className="animate-pulse text-gray-500 dark:text-gray-400">Cargando...</div>
+      <div className="animate-pulse text-zinc-500 dark:text-zinc-400">Cargando…</div>
     </div>
   );
 }

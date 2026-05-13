@@ -22,8 +22,8 @@
     "nowPlaying": "Escuchando ahora",
     "lastPlayed": "Última canción",
     "openInSpotify": "Abrir en Spotify",
-    "loading": "Sintonizando con Spotify...",
-    "fetching": "Buscando actividad reciente..."
+    "loading": "Sintonizando con Spotify…",
+    "fetching": "Buscando actividad reciente…"
   },
   "nav": {
     "home": "Inicio",
@@ -169,7 +169,7 @@
     },
     "filters": {
       "searchLabel": "Buscar",
-      "searchPlaceholder": "Buscar proyectos, tecnologías...",
+      "searchPlaceholder": "Buscar proyectos, tecnologías…",
       "category": "Categoría",
       "technology": "Tecnología",
       "sortBy": "Ordenar",
@@ -228,7 +228,7 @@
       "message": "Mensaje",
       "messagePlaceholder": "Contame brevemente en qué puedo ayudar",
       "send": "Enviar mensaje",
-      "sending": "Enviando...",
+      "sending": "Enviando…",
       "thankYou": "¡Gracias por tu mensaje!",
       "responseTime": "Te responderé dentro de las próximas 24 horas.",
       "successMessage": "Mensaje enviado correctamente",
@@ -270,7 +270,7 @@
       "title": "Asistente del portafolio",
       "description": "Elegí una opción y te respondo rápido desde acá.",
       "intro": "Hola bro, ¿qué tal todo? Cuéntame, ¿en qué te ayudo?",
-      "placeholder": "Escribe tu mensaje...",
+      "placeholder": "Escribe tu mensaje…",
       "prompts": {
         "stack": "¿En qué stack trabaja?",
         "projects": "Quiero ver proyectos",
@@ -373,7 +373,7 @@
       "email": "Correo Electrónico",
       "password": "Contraseña",
       "submit": "Acceder al Panel",
-      "authenticating": "Autenticando...",
+      "authenticating": "Autenticando…",
       "backToSite": "Volver al sitio"
     },
     "dashboard": {
@@ -437,7 +437,7 @@
       "subtitle": "Curá y gestioná tus mejores trabajos. Sincronizá con GitHub sin problemas.",
       "management": "Gestión",
       "manageMasterpieces": "Gestionar obras maestras",
-      "searchPlaceholder": "Buscar trabajo...",
+      "searchPlaceholder": "Buscar trabajo…",
       "sync": "Sincronizar",
       "new": "Nuevo Proyecto",
       "noResults": "No hay proyectos que coincidan con tu búsqueda.",
@@ -449,21 +449,21 @@
         "title": "Editar Proyecto",
         "back": "Volver al listado",
         "save": "Guardar Proyecto",
-        "saving": "Guardando...",
+        "saving": "Guardando…",
         "cancel": "Cancelar",
         "viewOnSite": "Ver en el sitio",
         "narrativeContent": "Contenido Narrativo",
         "technicalDetails": "Detalles Técnicos",
         "preview": "Vista Previa",
         "noImage": "Sin imagen",
-        "imageUrl": "URL de la imagen...",
+        "imageUrl": "URL de la imagen…",
         "general": "General",
         "whatIs": "¿Qué es el proyecto?",
         "problem": "El Problema",
         "solution": "Solución",
         "challenge": "El Reto",
         "placeholders": {
-          "description": "Describe el proyecto...",
+          "description": "Describe el proyecto…",
           "problem": "¿Qué problema resuelve?",
           "solution": "¿Cómo lo solucionaste?",
           "challenge": "¿Cuál fue el mayor desafío técnico?"

@@ -19,9 +19,9 @@ export function Markdown({ children, className = "" }: MarkdownProps): ReactNode
         prose-a:text-violet-600 prose-a:underline prose-a:underline-offset-2
         prose-strong:font-bold
         prose-code:text-violet-600 prose-code:dark:text-violet-400
-        prose-code:bg-slate-100 prose-code:dark:bg-slate-800
+        prose-code:bg-zinc-100 prose-code:dark:bg-zinc-800
         prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
-        prose-pre:bg-slate-900 prose-pre:dark:bg-slate-950
+        prose-pre:bg-zinc-900 prose-pre:dark:bg-zinc-950
         prose-blockquote:border-l-violet-500
         ${className}`}
     >

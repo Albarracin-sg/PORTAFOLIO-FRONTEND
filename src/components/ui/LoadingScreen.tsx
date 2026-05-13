@@ -35,14 +35,14 @@ export function LoadingScreen({ variant = "full", className }: LoadingScreenProp
         {/* Decorative background glow */}
         <div className={cn(
           "absolute inset-0 bg-violet-500/20 blur-2xl rounded-full animate-pulse",
-          isFull ? "h-24 w-24" : "h-16 w-16"
+          isFull ? "size-24" : "size-16"
         )} />
         
         {/* Main Spinner Icon */}
         <Loader2 
           className={cn(
             "animate-spin text-violet-600 dark:text-violet-400 relative z-10 drop-shadow-[0_0_10px_rgba(139,92,246,0.3)]",
-            isFull ? "h-16 w-16" : "h-10 w-10"
+            isFull ? "size-16" : "size-10"
           )} 
         />
       </div>
@@ -52,15 +52,15 @@ export function LoadingScreen({ variant = "full", className }: LoadingScreenProp
           {t("loading.didYouKnow")}
         </p>
         <p className={cn(
-          "text-slate-600 dark:text-slate-400 leading-relaxed font-medium",
+          "text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium",
           isFull ? "text-base" : "text-sm"
         )}>
           {fact}
         </p>
         <div className="mt-4 flex justify-center gap-1.5">
-          <div className="h-1 w-1 rounded-full bg-violet-400 animate-bounce [animation-delay:-0.3s]" />
-          <div className="h-1 w-1 rounded-full bg-violet-400 animate-bounce [animation-delay:-0.15s]" />
-          <div className="h-1 w-1 rounded-full bg-violet-400 animate-bounce" />
+          <div className="size-1 rounded-full bg-violet-400 animate-pulse scale-105 transition-transform duration-1000 ease-in-out [animation-delay:-0.3s]" />
+          <div className="size-1 rounded-full bg-violet-400 animate-pulse scale-105 transition-transform duration-1000 ease-in-out [animation-delay:-0.15s]" />
+          <div className="size-1 rounded-full bg-violet-400 animate-pulse scale-105 transition-transform duration-1000 ease-in-out" />
         </div>
       </div>
     </div>

@@ -13,11 +13,11 @@ const buttonVariants = cva(
         destructive:
           "bg-red-600 text-white hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 focus-visible:ring-red-500/20 dark:focus-visible:ring-red-500/40",
         outline:
-          "border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800",
+          "border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800",
         secondary:
-          "bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600",
+          "bg-zinc-200 text-zinc-900 dark:bg-zinc-700 dark:text-zinc-100 hover:bg-zinc-300 dark:hover:bg-zinc-600",
         ghost:
-          "hover:bg-gray-100 hover:text-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-100",
+          "hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-100",
         link: "text-violet-600 dark:text-violet-400 underline-offset-4 hover:underline",
       },
       size: {
@@ -34,13 +34,18 @@ const buttonVariants = cva(
   },
 );
 
-const Button = React.forwardRef<
-  HTMLButtonElement,
-  React.ComponentProps<"button"> &
-    VariantProps<typeof buttonVariants> & {
-      asChild?: boolean;
-    }
->(({ className, variant, size, asChild = false, ...props }, ref) => {
+const Button = ({ 
+  className, 
+  variant, 
+  size, 
+  asChild = false, 
+  ref,
+  ...props 
+}: React.ComponentProps<"button"> &
+  VariantProps<typeof buttonVariants> & {
+    asChild?: boolean;
+    ref?: React.Ref<HTMLButtonElement>;
+  }) => {
   const Comp = asChild ? Slot : "button";
 
   return (
@@ -51,7 +56,7 @@ const Button = React.forwardRef<
       {...props}
     />
   );
-});
+};
 
 Button.displayName = "Button";
 

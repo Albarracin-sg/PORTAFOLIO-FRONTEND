@@ -1,15 +1,16 @@
-import { Button } from "./ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Check, FileText, Loader2, LogOut, Menu, Moon, Sun } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { AdminLoginModal } from "@/features/admin/AdminLoginModal";
+import { Menu } from "lucide-react";
+import { useEffect, useRef, useReducer } from "react";
 import { useAdminAuth } from "@/features/admin/AdminAuthProvider";
-import ThemeToggle from "./ThemeToggle";
 import { useTranslation } from "react-i18next";
 import logoImg from "@/assets/logo.png";
 import cvPdf from "@/assets/cv/JUAN_ALBARRACIN_CV.pdf";
 import type { Language } from "@/features/language";
+
+// Sub-components
+import { NavBrand } from "./Navbar/NavBrand";
+import { NavLinks } from "./Navbar/NavLinks";
+import { DesktopActions } from "./Navbar/DesktopActions";
+import { MobileMenu } from "./Navbar/MobileMenu";
 
 interface NavbarProps {
   currentPage: string;
@@ -19,6 +20,26 @@ interface NavbarProps {
   isDark: boolean;
   onThemeToggle: () => void;
   isChangingLang?: boolean;
+}
+
+interface NavbarState {
+  isMobileMenuOpen: boolean;
+  isVisible: boolean;
+}
+
+type NavbarAction =
+  | { type: "TOGGLE_MOBILE_MENU"; payload: boolean }
+  | { type: "SET_VISIBLE"; payload: boolean };
+
+function navbarReducer(state: NavbarState, action: NavbarAction): NavbarState {
+  switch (action.type) {
+    case "TOGGLE_MOBILE_MENU":
+      return { ...state, isMobileMenuOpen: action.payload };
+    case "SET_VISIBLE":
+      return { ...state, isVisible: action.payload };
+    default:
+      return state;
+  }
 }
 
 export default function Navbar({
@@ -31,8 +52,12 @@ export default function Navbar({
   isChangingLang,
 }: NavbarProps) {
   const { t } = useTranslation();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  const [state, dispatch] = useReducer(navbarReducer, {
+    isMobileMenuOpen: false,
+    isVisible: true,
+  });
+
+  const { isMobileMenuOpen, isVisible } = state;
   const lastScrollY = useRef(0);
   const lockedScrollY = useRef(0);
   const { token, logout } = useAdminAuth();
@@ -41,11 +66,11 @@ export default function Navbar({
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY < 24) {
-        setIsVisible(true);
+        dispatch({ type: "SET_VISIBLE", payload: true });
       } else if (currentScrollY < lastScrollY.current) {
-        setIsVisible(true);
+        dispatch({ type: "SET_VISIBLE", payload: true });
       } else if (currentScrollY > lastScrollY.current) {
-        setIsVisible(false);
+        dispatch({ type: "SET_VISIBLE", payload: false });
       }
       lastScrollY.current = currentScrollY;
     };
@@ -56,33 +81,39 @@ export default function Navbar({
   useEffect(() => {
     if (!isMobileMenuOpen) {
       const previousScrollY = lockedScrollY.current;
-      document.documentElement.style.overflow = "";
-      document.body.style.overflow = "";
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.left = "";
-      document.body.style.right = "";
-      document.body.style.width = "";
+      Object.assign(document.documentElement.style, { overflow: "" });
+      Object.assign(document.body.style, {
+        overflow: "",
+        position: "",
+        top: "",
+        left: "",
+        right: "",
+        width: ""
+      });
       if (previousScrollY) window.scrollTo(0, previousScrollY);
       return;
     }
     lockedScrollY.current = window.scrollY;
-    document.documentElement.style.overflow = "hidden";
-    document.body.style.overflow = "hidden";
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${lockedScrollY.current}px`;
-    document.body.style.left = "0";
-    document.body.style.right = "0";
-    document.body.style.width = "100%";
+    Object.assign(document.documentElement.style, { overflow: "hidden" });
+    Object.assign(document.body.style, {
+      overflow: "hidden",
+      position: "fixed",
+      top: `-${lockedScrollY.current}px`,
+      left: "0",
+      right: "0",
+      width: "100%"
+    });
     return () => {
       const previousScrollY = lockedScrollY.current;
-      document.documentElement.style.overflow = "";
-      document.body.style.overflow = "";
-      document.body.style.position = "";
-      document.body.style.top = "";
-      document.body.style.left = "";
-      document.body.style.right = "";
-      document.body.style.width = "";
+      Object.assign(document.documentElement.style, { overflow: "" });
+      Object.assign(document.body.style, {
+        overflow: "",
+        position: "",
+        top: "",
+        left: "",
+        right: "",
+        width: ""
+      });
       if (previousScrollY) window.scrollTo(0, previousScrollY);
     };
   }, [isMobileMenuOpen]);
@@ -103,40 +134,13 @@ export default function Navbar({
   const currentLanguage =
     languageOptions.find((option) => option.value === language) ?? languageOptions[0];
 
-  const themeLabel = language === "es" ? "Tema" : "Theme";
-  const themeModeLabel = isDark
-    ? language === "es" ? "Claro" : "Light"
-    : language === "es" ? "Oscuro" : "Dark";
-  const themeAriaLabel = isDark
-    ? language === "es" ? "Cambiar a modo claro" : "Switch to light mode"
-    : language === "es" ? "Cambiar a modo oscuro" : "Switch to dark mode";
-
   const activeLogo = isDark ? "/logoNigth.png" : logoImg;
-
-  const mobileSurfaceClass = isDark
-    ? "bg-background text-white border-white/10"
-    : "bg-background text-slate-900 border-slate-200";
-  const mobileMutedClass = isDark ? "text-white/70" : "text-slate-500";
-  const mobileActionButtonClass = isDark
-    ? "bg-white/[0.04] text-white/80 hover:bg-white/[0.08]"
-    : "bg-slate-50 text-slate-700 hover:bg-slate-100";
-  const mobileActiveButtonClass = isDark
-    ? "bg-violet-500/15 text-violet-300 shadow-[0_0_0_1px_rgba(139,92,246,0.22)]"
-    : "bg-violet-50 text-violet-700 shadow-[0_0_0_1px_rgba(139,92,246,0.12)]";
 
   const scrollToSection = (sectionId: string) => {
     if (sectionId === "stats") { onPageChange("stats"); return; }
     if (sectionId === "home") {
       onPageChange("home");
       window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
-    if (currentPage === "stats" || currentPage === "all-projects") {
-      onPageChange(sectionId);
-      setTimeout(() => {
-        const element = document.getElementById(sectionId);
-        if (element) element.scrollIntoView({ behavior: "smooth", block: "start" });
-      }, 100);
       return;
     }
     const element = document.getElementById(sectionId);
@@ -148,7 +152,6 @@ export default function Navbar({
 
   return (
     <>
-      {/* ── Nav: transparente en dark, opaco en light ── */}
       <nav
         className={`fixed inset-x-0 top-0 z-50 bg-background/95 dark:bg-transparent backdrop-blur supports-[backdrop-filter]:bg-background/80 dark:supports-[backdrop-filter]:bg-transparent transition-transform duration-300 ${
           isVisible ? "translate-y-0" : "-translate-y-full"
@@ -156,266 +159,58 @@ export default function Navbar({
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-18 min-h-[4.5rem]">
-            <div className="flex-shrink-0">
-              <Link
-                to="/"
-                onClick={() => scrollToSection("home")}
-                className="cursor-pointer bg-transparent border-none p-0 block"
-              >
-                <img src={activeLogo} alt="Juan Albarracín" className="h-12 w-auto" />
-              </Link>
-            </div>
+            <NavBrand logo={activeLogo} onClick={() => scrollToSection("home")} />
 
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-8">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.key}
-                    to={item.key === "stats" ? "/stats" : `/#${item.key}`}
-                    className={`relative cursor-pointer px-3 py-2 text-sm transition-colors after:absolute after:bottom-0 after:left-1/2 after:h-0.5 after:w-[calc(100%-1.5rem)] after:-translate-x-1/2 after:rounded-full after:bg-violet-500 after:transition-transform after:duration-300 ${
-                      currentPage === item.key || (currentPage === 'home' && item.key === 'home')
-                        ? "text-primary after:scale-x-100"
-                        : "text-muted-foreground after:scale-x-0 hover:text-primary hover:after:scale-x-100"
-                    }`}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
+            <NavLinks items={navItems} currentPage={currentPage} />
 
-            <div className="hidden md:flex items-center space-x-4">
-              <ThemeToggle isDark={isDark} onToggle={onThemeToggle} />
-
-              <Select value={language} onValueChange={onLanguageChange}>
-                <SelectTrigger className="w-24 cursor-pointer rounded-2xl transition-all duration-300 hover:scale-105 border-slate-200 dark:border-white/10">
-                  <SelectValue>
-                    {isChangingLang ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <span className="flex items-center gap-2 whitespace-nowrap">
-                        <span>{currentLanguage.flag}</span>
-                        <span>{currentLanguage.shortLabel}</span>
-                      </span>
-                    )}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  {languageOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value} className="cursor-pointer">
-                      <span className="flex items-center gap-2 whitespace-nowrap">
-                        <span>{option.flag}</span>
-                        <span>{option.shortLabel}</span>
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-
-              {token ? (
-                <div className="flex items-center gap-2">
-                  <Button variant="outline" className="gap-2 cursor-pointer rounded-2xl transition-all duration-300 hover:scale-105 hover:border-violet-400 hover:text-violet-600 dark:hover:border-violet-500 dark:hover:text-violet-400" asChild>
-                    <Link to="/admin">Admin</Link>
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => logout()}
-                    className="h-10 w-10 rounded-2xl text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 transition-all duration-300 hover:scale-105"
-                    title="Logout"
-                  >
-                    <LogOut className="h-4 w-4" />
-                  </Button>
-                </div>
-              ) : (
-                <AdminLoginModal triggerClassName="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium border border-slate-200 bg-white text-slate-700 rounded-2xl transition-all duration-300 hover:scale-105 hover:border-violet-400 hover:text-violet-600 dark:border-white/10 dark:bg-transparent dark:text-slate-300 dark:hover:border-violet-500 dark:hover:text-violet-400" />
-              )}
-
-              <Button variant="outline" className="gap-2 cursor-pointer rounded-2xl transition-all duration-300 hover:scale-105 hover:border-violet-400 hover:text-violet-600 dark:hover:border-violet-500 dark:hover:text-violet-400" asChild>
-                <a href={cvPdf} target="_blank" rel="noreferrer">
-                  <FileText className="h-4 w-4" />
-                  {t("nav.downloadCV")}
-                </a>
-              </Button>
-            </div>
+            <DesktopActions
+              isDark={isDark}
+              onThemeToggle={onThemeToggle}
+              language={language}
+              onLanguageChange={onLanguageChange}
+              languageOptions={languageOptions}
+              currentLanguage={currentLanguage}
+              isChangingLang={isChangingLang}
+              token={token}
+              logout={logout}
+              cvPdf={cvPdf}
+              t={t}
+            />
 
             <div className="md:hidden">
               <button
-                onClick={() => setIsMobileMenuOpen(true)}
+                onClick={() => dispatch({ type: "TOGGLE_MOBILE_MENU", payload: true })}
                 className={`rounded-xl border p-2.5 shadow-sm transition-all duration-300 cursor-pointer ${
                   isDark
                     ? "border-white/20 bg-white/10 text-white hover:bg-white/20"
-                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    : "border-zinc-200 bg-white text-zinc-700 hover:bg-zinc-50"
                 }`}
               >
-                <Menu className="h-6 w-6" />
+                <Menu className="size-6" />
               </button>
             </div>
           </div>
         </div>
       </nav>
 
-      <div
-        className={`fixed inset-0 z-[70] bg-background/80 backdrop-blur-sm transition-opacity md:hidden ${
-          isMobileMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-        onClick={() => setIsMobileMenuOpen(false)}
-      >
-        <aside
-          className={`absolute inset-0 flex h-[100dvh] w-full flex-col border-l shadow-2xl transition-transform duration-300 ${mobileSurfaceClass} ${
-            isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
-          }`}
-          onClick={(e) => e.stopPropagation()}
-          style={{ overscrollBehavior: "contain" }}
-        >
-          <div className={`flex items-center justify-between border-b px-5 py-4 ${mobileSurfaceClass}`}>
-            <Link
-              to="/"
-              className="cursor-pointer"
-              onClick={() => { scrollToSection("home"); setIsMobileMenuOpen(false); }}
-            >
-              <img src={activeLogo} alt="Juan Albarracín" className="h-9 w-auto" />
-            </Link>
-            <button
-              onClick={() => setIsMobileMenuOpen(false)}
-              className={`text-sm font-semibold transition-colors cursor-pointer px-3 py-1 rounded-lg bg-slate-100 dark:bg-white/5 ${mobileMutedClass}`}
-            >
-              {language === "es" ? "Cerrar" : "Close"}
-            </button>
-          </div>
-
-          <div
-            className="flex-1 overflow-y-auto px-5 py-6 custom-scrollbar"
-            style={{ overscrollBehavior: "contain" }}
-          >
-            <div className="space-y-1.5">
-              {navItems.map((item, index) => (
-                <Link
-                  key={item.key}
-                  to={item.key === "stats" ? "/stats" : `/#${item.key}`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={`block w-full rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 cursor-pointer ${
-                    currentPage === item.key || (currentPage === 'home' && item.key === 'home')
-                      ? isDark
-                        ? "bg-violet-500/15 text-violet-300 shadow-[0_0_0_1px_rgba(139,92,246,0.22)]"
-                        : "bg-violet-50 text-violet-700 shadow-[0_0_0_1px_rgba(139,92,246,0.12)]"
-                      : isDark
-                        ? "bg-white/[0.04] text-white/80 hover:bg-white/[0.08]"
-                        : "bg-slate-50 text-slate-700 hover:bg-slate-100"
-                  }`}
-                  style={{
-                    transform: isMobileMenuOpen ? "translateY(0)" : "translateY(10px)",
-                    opacity: isMobileMenuOpen ? 1 : 0,
-                    transitionDelay: isMobileMenuOpen ? `${index * 40}ms` : "0ms",
-                  }}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-
-            <div className="mt-6 space-y-2">
-              <button
-                type="button"
-                onClick={onThemeToggle}
-                className={`flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 cursor-pointer ${mobileActionButtonClass}`}
-                aria-label={themeAriaLabel}
-              >
-                <span className="flex items-center gap-3">
-                  {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-                  <span>{themeLabel}</span>
-                </span>
-                <span className={`text-sm ${mobileMutedClass}`}>{themeModeLabel}</span>
-              </button>
-
-              {languageOptions.map((option) => {
-                const isActive = language === option.value;
-                return (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() => onLanguageChange(option.value)}
-                    className={`flex w-full items-center justify-between rounded-2xl px-4 py-4 text-left text-base font-medium transition-all duration-300 cursor-pointer ${
-                      isActive ? mobileActiveButtonClass : mobileActionButtonClass
-                    }`}
-                    aria-pressed={isActive}
-                    disabled={isChangingLang}
-                  >
-                    <span className="flex items-center gap-3">
-                      {isChangingLang && isActive ? (
-                        <Loader2 className="h-5 w-5 animate-spin" />
-                      ) : (
-                        <span>{option.flag}</span>
-                      )}
-                      <span>{option.label}</span>
-                    </span>
-                    {isChangingLang && isActive ? (
-                      <span className={`text-sm ${mobileMutedClass}`}>Loading...</span>
-                    ) : isActive ? (
-                      <Check className="h-4 w-4" />
-                    ) : (
-                      <span className={`text-sm ${mobileMutedClass}`}>{option.shortLabel}</span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="mt-8 space-y-4">
-              <div className="flex items-center gap-3 px-2">
-                <div className={`h-px flex-1 ${isDark ? "bg-white/10" : "bg-slate-200"}`} />
-                <span className={`text-[10px] font-bold uppercase tracking-wider ${mobileMutedClass}`}>
-                  {language === "es" ? "Acciones" : "Actions"}
-                </span>
-                <div className={`h-px flex-1 ${isDark ? "bg-white/10" : "bg-slate-200"}`} />
-              </div>
-
-              <div className="space-y-2">
-                {token ? (
-                  <div className="space-y-2">
-                    <Link
-                      to="/admin"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 cursor-pointer ${mobileActiveButtonClass}`}
-                    >
-                      <span className="flex h-5 w-5 items-center justify-center">
-                        <span className="h-2 w-2 rounded-full bg-violet-500" />
-                      </span>
-                      Admin
-                    </Link>
-                    <button
-                      onClick={() => {
-                        logout();
-                        setIsMobileMenuOpen(false);
-                      }}
-                      className="flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 cursor-pointer bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/10 dark:text-red-400 dark:hover:bg-red-900/20"
-                    >
-                      <LogOut className="h-5 w-5" />
-                      Logout
-                    </button>
-                  </div>
-                ) : (
-                  <AdminLoginModal
-                    triggerLabel="Admin"
-                    onTriggerClick={() => setIsMobileMenuOpen(false)}
-                    triggerClassName={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 cursor-pointer ${mobileActiveButtonClass}`}
-                  />
-                )}
-
-                <a
-                  href={cvPdf}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`flex w-full items-center justify-center gap-3 rounded-2xl px-4 py-4 text-center text-base font-medium transition-all duration-300 cursor-pointer ${mobileActiveButtonClass}`}
-                >
-                  <FileText className="h-5 w-5" />
-                  {t("nav.downloadCV")}
-                </a>
-              </div>
-            </div>
-          </div>
-        </aside>
-      </div>
+      <MobileMenu
+        isOpen={isMobileMenuOpen}
+        onClose={() => dispatch({ type: "TOGGLE_MOBILE_MENU", payload: false })}
+        isDark={isDark}
+        navItems={navItems}
+        currentPage={currentPage}
+        onPageChange={onPageChange}
+        logo={activeLogo}
+        onThemeToggle={onThemeToggle}
+        language={language}
+        onLanguageChange={onLanguageChange}
+        languageOptions={languageOptions}
+        isChangingLang={isChangingLang}
+        token={token}
+        logout={logout}
+        cvPdf={cvPdf}
+        t={t}
+      />
     </>
   );
 }

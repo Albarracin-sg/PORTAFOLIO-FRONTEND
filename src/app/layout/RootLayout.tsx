@@ -40,7 +40,7 @@ export function RootLayout() {
   const isChatbot = pathname === '/chatbot';
 
   return (
-    <div className="min-h-screen bg-background dark:bg-gray-950 relative text-foreground flex flex-col">
+    <div className="min-h-screen bg-background dark:bg-zinc-950 relative text-foreground flex flex-col">
       {/* Skip link for keyboard users */}
       <a
         href="#main-content"

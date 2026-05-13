@@ -45,7 +45,7 @@ export interface BotThread {
 }
 
 function sortMessages(messages: BotThreadMessage[]): BotThreadMessage[] {
-  return [...messages].sort(
+  return messages.toSorted(
     (left, right) => new Date(left.createdAt).getTime() - new Date(right.createdAt).getTime(),
   );
 }

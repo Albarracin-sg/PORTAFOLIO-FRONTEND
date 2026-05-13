@@ -47,13 +47,13 @@ export default function Hero({ section }: HeroProps) {
           {/* Content */}
           <div className="space-y-6 sm:space-y-8 text-center lg:text-left">
             <div className="max-w-3xl mx-auto lg:mx-0 space-y-4 sm:space-y-5">
-              <h1 className="text-3xl font-semibold leading-tight tracking-tight text-gray-900 dark:text-gray-100 sm:text-5xl lg:text-6xl break-words">
+              <h1 className="text-3xl font-semibold leading-tight tracking-tight text-zinc-900 dark:text-white sm:text-5xl lg:text-6xl break-words">
                 {t('hero.greeting')}
               </h1>
               <div className="max-w-full text-xl font-semibold leading-tight tracking-tight text-violet-600 dark:text-violet-400 sm:text-3xl lg:text-4xl break-words">
                 {t('hero.role')}
               </div>
-              <p className="max-w-3xl text-sm leading-relaxed text-gray-600 dark:text-gray-400 sm:text-base break-words">
+              <p className="max-w-3xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-base break-words">
                 {t('hero.subtitle')}
               </p>
             </div>
@@ -73,7 +73,7 @@ export default function Hero({ section }: HeroProps) {
                 className="group flex items-center justify-center gap-3 rounded-2xl px-6 py-3.5 text-sm font-medium transition-all duration-300 bg-violet-600 text-white shadow-lg shadow-violet-500/20 hover:bg-violet-700 hover:scale-105 active:scale-95 dark:bg-violet-500 dark:hover:bg-violet-600"
               >
                 {t('hero.viewProjects')}
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
               </button>
 
               <button
@@ -86,9 +86,9 @@ export default function Hero({ section }: HeroProps) {
                     });
                   }
                 }}
-                className="flex items-center justify-center gap-3 rounded-2xl px-6 py-3.5 text-sm font-medium transition-all duration-300 border border-slate-200 bg-white text-slate-700 shadow-sm hover:bg-white hover:border-violet-300 hover:text-violet-600 hover:scale-105 active:scale-95 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/80 dark:hover:bg-white/[0.08] dark:hover:border-violet-500/30 dark:hover:text-violet-400"
+                className="flex items-center justify-center gap-3 rounded-2xl px-6 py-3.5 text-sm font-medium transition-all duration-300 border border-zinc-200 bg-white text-zinc-700 shadow-sm hover:bg-white hover:border-violet-300 hover:text-violet-600 hover:scale-105 active:scale-95 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/80 dark:hover:bg-white/[0.08] dark:hover:border-violet-500/30 dark:hover:text-violet-400"
               >
-                <Mail className="h-4 w-4" />
+                <Mail className="size-4" />
                 {t('hero.contactMe')}
               </button>
 
@@ -97,18 +97,18 @@ export default function Hero({ section }: HeroProps) {
                 download="JUAN_ALBARRACIN_CV.pdf"
                 className="flex sm:hidden items-center justify-center gap-3 rounded-2xl px-6 py-3.5 text-sm font-medium transition-all duration-300 border border-violet-200 bg-violet-50 text-violet-700 shadow-sm hover:bg-violet-100 hover:border-violet-300 hover:scale-105 active:scale-95 dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-300 dark:hover:bg-violet-500/20"
               >
-                <Download className="h-4 w-4" />
+                <Download className="size-4" />
                 {t('nav.downloadCV')}
               </a>
             </div>
 
             {/* Quick Stats */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-8 pt-8 border-t border-border dark:border-gray-700">
+            <div className="grid grid-cols-3 gap-2 sm:gap-8 pt-8 border-t border-border dark:border-zinc-700">
               <div className="text-center">
                 <div className="font-display text-xl sm:text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
                   1+
                 </div>
-                <div className="text-[10px] sm:text-sm text-muted-foreground dark:text-gray-400 leading-tight">
+                <div className="text-[10px] sm:text-sm text-muted-foreground dark:text-zinc-400 leading-tight">
                   {t('hero.yearsExperience')}
                 </div>
               </div>
@@ -116,7 +116,7 @@ export default function Hero({ section }: HeroProps) {
                 <div className="font-display text-xl sm:text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
                   10+
                 </div>
-                <div className="text-[10px] sm:text-sm text-muted-foreground dark:text-gray-400 leading-tight">
+                <div className="text-[10px] sm:text-sm text-muted-foreground dark:text-zinc-400 leading-tight">
                   {t('hero.projectsCompleted')}
                 </div>
               </div>
@@ -124,7 +124,7 @@ export default function Hero({ section }: HeroProps) {
                 <div className="font-display text-xl sm:text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
                   30+
                 </div>
-                <div className="text-[10px] sm:text-sm text-muted-foreground dark:text-gray-400 leading-tight">
+                <div className="text-[10px] sm:text-sm text-muted-foreground dark:text-zinc-400 leading-tight">
                   {t('hero.technologies')}
                 </div>
               </div>
@@ -137,20 +137,29 @@ export default function Hero({ section }: HeroProps) {
               {canEditImages && (
                 <div className="absolute top-0 right-3 z-20 flex gap-2">
                   <label className="rounded-md bg-black/60 px-2.5 py-1 text-xs text-white cursor-pointer">
-                    {uploading === 'primary' ? 'Subiendo...' : 'Base'}
+                    {uploading === 'primary' ? 'Subiendo…' : 'Base'}
                     <input type="file" accept="image/*" className="hidden" onChange={handleImageChange('primary')} />
                   </label>
                   <label className="rounded-md bg-black/60 px-2.5 py-1 text-xs text-white cursor-pointer">
-                    {uploading === 'secondary' ? 'Subiendo...' : 'Hover'}
+                    {uploading === 'secondary' ? 'Subiendo…' : 'Hover'}
                     <input type="file" accept="image/*" className="hidden" onChange={handleImageChange('secondary')} />
                   </label>
                 </div>
               )}
               <div
-                className="group relative w-full h-auto lg:h-[32rem] lg:w-[32rem] cursor-pointer overflow-visible flex items-center justify-center"
+                className="group relative size-full lg:h-[32rem] lg:w-[32rem] cursor-pointer overflow-visible flex items-center justify-center focus:outline-hidden"
                 onMouseEnter={() => setIsImageHovered(true)}
                 onMouseLeave={() => setIsImageHovered(false)}
                 onClick={() => setIsImageHovered(!isImageHovered)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setIsImageHovered(!isImageHovered);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={t('hero.imageInteraction', { defaultValue: 'Toggle image hover effect' })}
               >
                 {/* Logo Image with smooth scale on hover */}
                 <div

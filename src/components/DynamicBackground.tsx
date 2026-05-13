@@ -1,7 +1,7 @@
 export default function DynamicBackground() {
   return (
     <div
-      className="fixed inset-0 -z-10 bg-slate-50 dark:bg-gray-950 transition-colors duration-500"
+      className="fixed inset-0 -z-10 bg-zinc-50 dark:bg-zinc-950 transition-colors duration-500"
       aria-hidden
     >
       <div className="absolute inset-0 bg-linear-to-br from-violet-50/50 via-transparent to-blue-50/30 dark:from-violet-950/20 dark:via-transparent dark:to-blue-950/20 opacity-70" />

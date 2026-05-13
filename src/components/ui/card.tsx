@@ -7,7 +7,7 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="card"
       className={cn(
-        "bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 flex flex-col gap-6 rounded-xl border border-gray-200 dark:border-gray-700",
+        "bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 flex flex-col gap-6 rounded-xl border border-zinc-200 dark:border-zinc-700",
         className,
       )}
       {...props}
@@ -28,13 +28,16 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   );
 }
 
-function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
+function CardTitle({ className, children, ...props }: React.ComponentProps<"div">) {
+  if (!children) return null;
   return (
     <h4
       data-slot="card-title"
       className={cn("leading-none", className)}
       {...props}
-    />
+    >
+      {children}
+    </h4>
   );
 }
 
@@ -42,7 +45,7 @@ function CardDescription({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <p
       data-slot="card-description"
-      className={cn("text-gray-500 dark:text-gray-400", className)}
+      className={cn("text-zinc-500 dark:text-zinc-400", className)}
       {...props}
     />
   );

@@ -55,8 +55,8 @@ export default function ProjectModal({
   return (
     <Dialog open={dialogOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 gap-0">
-        <DialogHeader className="px-6 pt-6 pb-4 border-b border-gray-200 dark:border-gray-700">
-          <DialogTitle className="text-2xl text-gray-900 dark:text-gray-100 pr-8">
+        <DialogHeader className="px-6 pt-6 pb-4 border-b border-zinc-200 dark:border-zinc-700">
+          <DialogTitle className="text-2xl text-zinc-900 dark:text-white pr-8">
             {project.name}
           </DialogTitle>
         </DialogHeader>
@@ -65,16 +65,16 @@ export default function ProjectModal({
         <div className="flex flex-col md:flex-row md:min-h-[320px]">
           {/* Imagen */}
           <div className="w-full md:w-2/5 md:min-w-[280px] shrink-0">
-            <div className="aspect-video md:aspect-auto md:min-h-[280px] bg-gray-100 dark:bg-gray-800 rounded-b-lg md:rounded-b-none md:rounded-r-lg overflow-hidden">
+            <div className="aspect-video md:aspect-auto md:min-h-[280px] bg-zinc-100 dark:bg-zinc-800 rounded-b-lg md:rounded-b-none md:rounded-r-lg overflow-hidden">
               {project.image ? (
                 <img
                   src={project.image}
                   alt={project.name}
-                  className="w-full h-full object-cover"
+                  className="size-full object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-gray-500 dark:text-gray-400">
+                <div className="size-full flex items-center justify-center">
+                  <div className="text-zinc-500 dark:text-zinc-400">
                       {t('projects.modal.preview')}
                   </div>
                 </div>
@@ -83,10 +83,10 @@ export default function ProjectModal({
           </div>
 
           {/* Contenido: tecnologías, problema, reto, solución, botones */}
-          <div className="flex-1 overflow-y-auto px-6 py-4 md:max-h-[60vh] space-y-4">
+          <div className="flex-1 overflow-y-auto px-6 py-4 md:max-h-[60vh] gap-y-4">
             {/* Technologies */}
             <div>
-              <h4 className="mb-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+              <h4 className="mb-2 text-sm font-medium text-zinc-900 dark:text-white">
                 {t('projects.technologies')}
               </h4>
               <div className="flex flex-wrap gap-2">
@@ -97,7 +97,7 @@ export default function ProjectModal({
                     </Badge>
                   ))
                 ) : (
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                  <span className="text-sm text-zinc-600 dark:text-zinc-400">
                     {t('projects.modal.noTags')}
                   </span>
                 )}
@@ -110,7 +110,7 @@ export default function ProjectModal({
                 <h4 className="mb-1 text-sm font-medium text-violet-600 dark:text-violet-400">
                   {t('projects.modal.problem')}
                 </h4>
-                <Markdown className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                <Markdown className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
                   {problem}
                 </Markdown>
               </div>
@@ -122,7 +122,7 @@ export default function ProjectModal({
                 <h4 className="mb-1 text-sm font-medium text-violet-600 dark:text-violet-400">
                   {t('projects.modal.challenge')}
                 </h4>
-                <Markdown className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                <Markdown className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
                   {challenge}
                 </Markdown>
               </div>
@@ -134,21 +134,21 @@ export default function ProjectModal({
                 <h4 className="mb-1 text-sm font-medium text-violet-600 dark:text-violet-400">
                   {t('projects.modal.solution')}
                 </h4>
-                <Markdown className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                <Markdown className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
                   {solution}
                 </Markdown>
               </div>
             )}
 
             {/* Actions */}
-            <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex flex-wrap gap-2 pt-4 border-t border-zinc-200 dark:border-zinc-700">
               <Button className="gap-2" asChild>
                 <a
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <Github className="h-4 w-4" />
+                  <Github className="size-4" />
                   {t('projects.modal.viewGithub')}
                 </a>
               </Button>
@@ -159,7 +159,7 @@ export default function ProjectModal({
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <ExternalLink className="h-4 w-4" />
+                    <ExternalLink className="size-4" />
                     {t('projects.modal.viewLive')}
                   </a>
                 </Button>

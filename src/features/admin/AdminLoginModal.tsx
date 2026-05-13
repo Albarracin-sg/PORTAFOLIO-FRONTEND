@@ -8,7 +8,7 @@ import { useAdminAuth } from './AdminAuthProvider';
 import { Lock, Loader2, Eye, EyeOff } from 'lucide-react';
 
 export function AdminLoginModal({
-  triggerLabel = 'Admin',
+  triggerLabel,
   triggerClassName,
   onTriggerClick,
 }: {
@@ -19,24 +19,29 @@ export function AdminLoginModal({
   const { login } = useAdminAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+    showPassword: false,
+    loading: false,
+    error: null as string | null,
+  });
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    setLoading(true);
-    setError(null);
+    setForm(prev => ({ ...prev, loading: true, error: null }));
     try {
-      await login(email, password);
+      await login(form.email, form.password);
       setOpen(false);
       navigate('/admin');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Login failed');
+      setForm(prev => ({ 
+        ...prev, 
+        error: err instanceof Error ? err.message : 'Login failed',
+        loading: false 
+      }));
     } finally {
-      setLoading(false);
+      setForm(prev => ({ ...prev, loading: false }));
     }
   };
 
@@ -65,8 +70,8 @@ export function AdminLoginModal({
       <DialogContent className="
         w-[calc(100vw-2rem)] max-w-sm
         rounded-3xl
-        border border-slate-200 dark:border-white/[0.07]
-        bg-white/95 dark:bg-gray-950/95
+        border border-zinc-200 dark:border-white/[0.07]
+        bg-white/95 dark:bg-zinc-950/95
         backdrop-blur-2xl
         shadow-2xl shadow-black/10
         p-6 sm:p-8
@@ -74,14 +79,14 @@ export function AdminLoginModal({
       ">
         <DialogHeader className="mb-6">
           <div className="flex items-start gap-4 text-left">
-            <div className="h-11 w-11 rounded-2xl bg-violet-500/10 flex items-center justify-center shrink-0 border border-violet-500/20 mt-1">
-              <Lock className="h-5 w-5 text-violet-500 pointer-events-none" />
+            <div className="size-11 rounded-2xl bg-violet-500/10 flex items-center justify-center shrink-0 border border-violet-500/20 mt-1">
+              <Lock className="size-5 text-violet-500 pointer-events-none" />
             </div>
             <div className="min-w-0 pt-1">
-              <DialogTitle className="text-xl font-bold tracking-tight text-slate-900 dark:text-white truncate">
+              <DialogTitle className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white truncate">
                 Admin Access
               </DialogTitle>
-              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5 truncate">
                 Access the admin panel.
               </p>
             </div>
@@ -94,65 +99,65 @@ export function AdminLoginModal({
         <form onSubmit={handleSubmit} autoComplete="off" className="space-y-4">
           {/* Email */}
           <div className="space-y-1.5">
-            <Label htmlFor="admin-email" className="text-xs font-medium text-slate-500 dark:text-slate-400 ml-1">
+            <Label htmlFor="admin-email" className="text-xs font-medium text-zinc-500 dark:text-zinc-400 ml-1">
               Email
             </Label>
             <Input
               id="admin-email"
               type="email"
               placeholder="admin@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={form.email}
+              onChange={(e) => setForm(prev => ({ ...prev, email: e.target.value }))}
               required
               autoComplete="off"
-              className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] h-11 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus-visible:ring-violet-500 transition-all"
+              className="rounded-2xl border-zinc-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] h-11 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-600 focus-visible:ring-violet-500 transition-all"
             />
           </div>
 
           {/* Password + eye toggle */}
           <div className="space-y-1.5">
-            <Label htmlFor="admin-password" className="text-xs font-medium text-slate-500 dark:text-slate-400 ml-1">
+            <Label htmlFor="admin-password" className="text-xs font-medium text-zinc-500 dark:text-zinc-400 ml-1">
               Password
             </Label>
             <div className="relative">
               <Input
                 id="admin-password"
-                type={showPassword ? 'text' : 'password'}
+                type={form.showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                value={form.password}
+                onChange={(e) => setForm(prev => ({ ...prev, password: e.target.value }))}
                 required
                 autoComplete="new-password"
-                className="rounded-2xl border-slate-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] h-11 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-600 focus-visible:ring-violet-500 transition-all pr-11"
+                className="rounded-2xl border-zinc-200 dark:border-white/10 bg-white/60 dark:bg-white/[0.04] h-11 text-sm text-zinc-900 dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-600 focus-visible:ring-violet-500 transition-all pr-11"
               />
               <button
                 type="button"
-                onClick={() => setShowPassword((v) => !v)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                onClick={() => setForm(prev => ({ ...prev, showPassword: !prev.showPassword }))}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors"
                 tabIndex={-1}
               >
-                {showPassword
-                  ? <EyeOff className="h-4 w-4 pointer-events-none" />
-                  : <Eye className="h-4 w-4 pointer-events-none" />}
+                {form.showPassword
+                  ? <EyeOff className="size-4 pointer-events-none" />
+                  : <Eye className="size-4 pointer-events-none" />}
               </button>
             </div>
           </div>
 
-          {error && (
+          {form.error && (
             <div className="px-4 py-3 rounded-2xl bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-500/20 text-xs text-red-600 dark:text-red-400">
-              {error}
+              {form.error}
             </div>
           )}
 
           <Button
             type="submit"
-            disabled={loading}
+            disabled={form.loading}
             className="w-full h-11 rounded-2xl bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium shadow-lg shadow-violet-500/20 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
           >
-            {loading ? (
+            {form.loading ? (
               <span className="flex items-center gap-2">
-                <Loader2 className="h-4 w-4 animate-spin pointer-events-none" />
-                Signing in...
+                <Loader2 className="size-4 animate-spin pointer-events-none" />
+                Signing in…
               </span>
             ) : 'Sign in'}
           </Button>

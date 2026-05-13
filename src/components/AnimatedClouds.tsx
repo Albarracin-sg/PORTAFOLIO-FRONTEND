@@ -70,7 +70,7 @@ export default function AnimatedClouds({ scrollY }: AnimatedCloudsProps) {
           {/* Cloud SVG */}
           <svg
             viewBox="0 0 100 50"
-            className="w-full h-full filter drop-shadow-sm"
+            className="size-full filter drop-shadow-sm"
             style={{
               animation: `float-${cloud.id % 3} ${15 + cloud.id}s ease-in-out infinite`,
             }}
