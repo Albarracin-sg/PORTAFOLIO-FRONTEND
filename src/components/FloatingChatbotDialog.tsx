@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect, useReducer, useTransition, type FormEvent } from 'react';
 import { Bot, Send, Loader2, AlertCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from './ui/button';
@@ -18,6 +18,37 @@ interface Message {
   content: string;
 }
 
+interface ChatState {
+  messages: Message[];
+  input: string;
+  error: string | null;
+  conversationId: string | null;
+}
+
+type ChatAction = 
+  | { type: 'ADD_MESSAGE'; payload: Message }
+  | { type: 'SET_INPUT'; payload: string }
+  | { type: 'SET_ERROR'; payload: string | null }
+  | { type: 'SET_CONVERSATION_ID'; payload: string | null }
+  | { type: 'RESET' };
+
+function chatReducer(state: ChatState, action: ChatAction): ChatState {
+  switch (action.type) {
+    case 'ADD_MESSAGE':
+      return { ...state, messages: [...state.messages, action.payload] };
+    case 'SET_INPUT':
+      return { ...state, input: action.payload };
+    case 'SET_ERROR':
+      return { ...state, error: action.payload };
+    case 'SET_CONVERSATION_ID':
+      return { ...state, conversationId: action.payload };
+    case 'RESET':
+      return { messages: [], input: '', error: null, conversationId: null };
+    default:
+      return state;
+  }
+}
+
 interface FloatingChatbotDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -32,22 +63,23 @@ export default function FloatingChatbotDialog({
   onEmailClick,
 }: FloatingChatbotDialogProps) {
   const { t } = useTranslation();
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
+  const [state, dispatch] = useReducer(chatReducer, {
+    messages: [],
+    input: '',
+    error: null,
+    conversationId: null,
+  });
+
+  const { messages, input, error, conversationId } = state;
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (open && messages.length === 0) {
-      setMessages([
-        {
-          id: 'initial',
-          role: 'assistant',
-          content: t('floating.chatbot.intro'),
-        },
-      ]);
+      dispatch({ 
+        type: 'ADD_MESSAGE', 
+        payload: { id: 'initial', role: 'assistant', content: t('floating.chatbot.intro') } 
+      });
     }
     
     if (messages.length > 0) {
@@ -59,7 +91,7 @@ export default function FloatingChatbotDialog({
   }, [open, messages, t]);
 
   const sendMessage = async (content: string) => {
-    if (!content.trim() || isLoading) return;
+    if (!content.trim() || isPending) return;
 
     const userMessage: Message = { 
       id: crypto.randomUUID(),
@@ -67,48 +99,43 @@ export default function FloatingChatbotDialog({
       content: content.trim() 
     };
     
-    setMessages((prev) => [...prev, userMessage]);
-    setInput('');
-    setError(null);
-    setIsLoading(true);
+    dispatch({ type: 'ADD_MESSAGE', payload: userMessage });
+    dispatch({ type: 'SET_INPUT', payload: '' });
+    dispatch({ type: 'SET_ERROR', payload: null });
 
-    try {
-      const data = await sendBotMessage({
-        message: content.trim(),
-        conversationId: conversationId || undefined,
-      });
+    startTransition(async () => {
+      try {
+        const data = await sendBotMessage({
+          message: content.trim(),
+          conversationId: conversationId || undefined,
+        });
 
-      setConversationId(data.conversationId);
-      setMessages((prev) => [
-        ...prev,
-        { 
-          id: crypto.randomUUID(),
-          role: 'assistant', 
-          content: (data as any).response || (data as any).reply || ''
-        },
-      ]);
-    } catch (err) {
-      const isRateLimit = err instanceof RateLimitError;
-      const errorMessage = isRateLimit 
-        ? t('contact.form.errors.rateLimit') 
-        : t('contact.form.errors.serverError');
-      
-      setError(errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
+        dispatch({ type: 'SET_CONVERSATION_ID', payload: data.conversationId });
+        dispatch({ 
+          type: 'ADD_MESSAGE', 
+          payload: { 
+            id: crypto.randomUUID(), 
+            role: 'assistant', 
+            content: data.response || data.reply || '' 
+          } 
+        });
+      } catch (err) {
+        const isRateLimit = err instanceof RateLimitError;
+        dispatch({ 
+          type: 'SET_ERROR', 
+          payload: isRateLimit ? t('contact.form.errors.rateLimit') : t('contact.form.errors.serverError') 
+        });
+      }
+    });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     sendMessage(input);
   };
 
   const handleClose = () => {
-    setMessages([]);
-    setInput('');
-    setError(null);
-    setConversationId(null);
+    dispatch({ type: 'RESET' });
     onOpenChange(false);
   };
 
@@ -139,7 +166,7 @@ export default function FloatingChatbotDialog({
             </div>
           ))}
 
-          {isLoading && (
+          {isPending && (
             <div className="flex items-center gap-2 text-zinc-500 text-sm animate-pulse">
               <Loader2 className="size-4 animate-spin" />
               <span>{t('common.loading')}…</span>
@@ -161,18 +188,18 @@ export default function FloatingChatbotDialog({
             <input
               type="text"
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => dispatch({ type: 'SET_INPUT', payload: e.target.value })}
               placeholder={t('floating.chatbot.placeholder') || 'Escribe tu mensaje…'}
               className="flex-1 rounded-2xl border border-zinc-200 bg-zinc-50 px-4 py-2 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 dark:border-zinc-700 dark:bg-zinc-900 dark:text-white dark:placeholder:text-zinc-500"
-              disabled={isLoading}
+              disabled={isPending}
             />
             <Button
               type="submit"
               size="icon"
-              disabled={isLoading || !input.trim()}
+              disabled={isPending || !input.trim()}
               className="flex-shrink-0 rounded-2xl bg-violet-600 hover:bg-violet-700 transition-all duration-300 hover:scale-105 active:scale-95"
             >
-              {isLoading ? (
+              {isPending ? (
                 <Loader2 className="size-4 animate-spin" />
               ) : (
                 <Send className="size-4" />

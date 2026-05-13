@@ -1,8 +1,16 @@
+import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { Bar, BarChart, CartesianGrid, Cell, XAxis, YAxis } from "recharts";
 import { Globe, Shield, CheckCircle2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+
+// Lazy load recharts components
+const BarChart = React.lazy(() => import("recharts").then(m => ({ default: m.BarChart })));
+const Bar = React.lazy(() => import("recharts").then(m => ({ default: m.Bar })));
+const Cell = React.lazy(() => import("recharts").then(m => ({ default: m.Cell })));
+const CartesianGrid = React.lazy(() => import("recharts").then(m => ({ default: m.CartesianGrid })));
+const XAxis = React.lazy(() => import("recharts").then(m => ({ default: m.XAxis })));
+const YAxis = React.lazy(() => import("recharts").then(m => ({ default: m.YAxis })));
 
 interface TrafficChartsProps {
   chartData: any[];
@@ -52,25 +60,27 @@ export function TrafficCharts({
             config={{ requests: { label: t("admin.logs.requests"), color: "#8b5cf6" } }}
             className="aspect-video w-full"
           >
-            <BarChart data={chartData.slice(0, 15)} margin={{ bottom: 20 }}>
-              <CartesianGrid vertical={false} strokeDasharray="3 3" opacity={0.08} />
-              <XAxis dataKey="path" tickLine={false} axisLine={false} tick={false} />
-              <YAxis
-                tickLine={false}
-                axisLine={false}
-                tick={{ fontSize: 11, fill: "currentColor", opacity: 0.4 }}
-              />
-              <ChartTooltip cursor={{ fill: "rgba(139, 92, 246, 0.05)" }} content={<ChartTooltipContent />} />
-              <Bar dataKey="requests" radius={[6, 6, 0, 0]}>
-                {chartData.slice(0, 15).map((entry) => (
-                  <Cell
-                    key={entry.path}
-                    fill={entry.path.includes("admin") ? "#f43f5e" : "#8b5cf6"}
-                    opacity={0.85}
-                  />
-                ))}
-              </Bar>
-            </BarChart>
+            <React.Suspense fallback={<div className="flex h-full w-full items-center justify-center animate-pulse bg-zinc-100/50 dark:bg-zinc-800/50 rounded-lg" />}>
+              <BarChart data={chartData.slice(0, 15)} margin={{ bottom: 20 }}>
+                <CartesianGrid vertical={false} strokeDasharray="3 3" opacity={0.08} />
+                <XAxis dataKey="path" tickLine={false} axisLine={false} tick={false} />
+                <YAxis
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fontSize: 11, fill: "currentColor", opacity: 0.4 }}
+                />
+                <ChartTooltip cursor={{ fill: "rgba(139, 92, 246, 0.05)" }} content={<ChartTooltipContent />} />
+                <Bar dataKey="requests" radius={[6, 6, 0, 0]}>
+                  {chartData.slice(0, 15).map((entry) => (
+                    <Cell
+                      key={entry.path}
+                      fill={entry.path.includes("admin") ? "#f43f5e" : "#8b5cf6"}
+                      opacity={0.85}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </React.Suspense>
           </ChartContainer>
         </CardContent>
       </Card>
@@ -124,7 +134,7 @@ export function TrafficCharts({
               </span>
             </div>
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              {t("admin.logs.avgResponseText")} <strong className={hc.text}>{avgResponse}ms</strong> — {t("admin.logs.statusText")}{" "}
+              {t("admin.logs.avgResponseText")} <strong className={hc.text}>{avgResponse}ms</strong> - {t("admin.logs.statusText")}{" "}
               <strong className={`capitalize ${hc.text}`}>{t(`common.status.${healthStatus}`, { defaultValue: healthStatus })}</strong>
             </p>
           </div>

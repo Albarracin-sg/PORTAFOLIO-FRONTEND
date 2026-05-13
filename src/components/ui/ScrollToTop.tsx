@@ -22,10 +22,11 @@ export default function ScrollToTop() {
         element.scrollIntoView({ behavior: 'smooth' });
       } else {
         // Si el elemento no existe todavía (por lazy loading), reintentamos un toque después
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
           const el = document.getElementById(id);
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }, 100);
+        return () => clearTimeout(timeoutId);
       }
     }
 

@@ -7,15 +7,15 @@ import tailwindcss from '@tailwindcss/vite'
 const originalDefineConfig = defineConfig;
 export default originalDefineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const allowedHosts = (env.VITE_PUBLIC_SITE_URL ?? '')
-    .split(',')
-    .map((value) => value.trim())
-    .filter(Boolean)
-    .map((value) => {
+  const allowedHosts = (env.VITE_PUBLIC_SITE_URL ?? "")
+    .split(",")
+    .flatMap((value) => {
+      const trimmed = value.trim();
+      if (!trimmed) return [];
       try {
-        return new URL(value).hostname;
+        return [new URL(trimmed).hostname];
       } catch {
-        return value;
+        return [trimmed];
       }
     });
 

@@ -1,36 +1,67 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer } from 'react';
 import Statistics from '@/components/Statistics';
 import { fetchGithubStats, fetchApiStats, type ApiStats } from '@/shared/api/public';
 import { LoadingScreen } from '@/components/ui/LoadingScreen';
 import { Skeleton } from '@/components/ui/skeleton';
 
+interface StatsState {
+  githubStats: any | null;
+  apiStats: ApiStats | null;
+  isLoading: boolean;
+}
+
+type StatsAction = 
+  | { type: 'START_LOAD' }
+  | { type: 'SET_DATA'; payload: { github?: any; api?: ApiStats } }
+  | { type: 'FINISH_LOAD' };
+
+function statsReducer(state: StatsState, action: StatsAction): StatsState {
+  switch (action.type) {
+    case 'START_LOAD':
+      return { ...state, isLoading: true };
+    case 'SET_DATA':
+      return { 
+        ...state, 
+        githubStats: action.payload.github ?? state.githubStats,
+        apiStats: action.payload.api ?? state.apiStats 
+      };
+    case 'FINISH_LOAD':
+      return { ...state, isLoading: false };
+    default:
+      return state;
+  }
+}
+
 export function StatsPage() {
-  const [githubStats, setGithubStats] = useState<any | null>(null);
-  const [apiStats, setApiStats] = useState<ApiStats | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [state, dispatch] = useReducer(statsReducer, {
+    githubStats: null,
+    apiStats: null,
+    isLoading: true,
+  });
+
+  const { githubStats, apiStats, isLoading } = state;
 
   useEffect(() => {
     let isActive = true;
 
     const load = async () => {
+      dispatch({ type: 'START_LOAD' });
       try {
-        setIsLoading(true);
         const [statsResult, apiResult] = await Promise.allSettled([
           fetchGithubStats(),
           fetchApiStats(),
         ]);
         if (!isActive) return;
 
-        if (statsResult.status === 'fulfilled') {
-          setGithubStats(statsResult.value);
-        }
-        if (apiResult.status === 'fulfilled') {
-          setApiStats(apiResult.value);
-        }
+        const payload: { github?: any; api?: ApiStats } = {};
+        if (statsResult.status === 'fulfilled') payload.github = statsResult.value;
+        if (apiResult.status === 'fulfilled') payload.api = apiResult.value;
+        
+        dispatch({ type: 'SET_DATA', payload });
       } catch {
-        if (!isActive) return;
+        // Error handling if needed
       } finally {
-        if (isActive) setIsLoading(false);
+        if (isActive) dispatch({ type: 'FINISH_LOAD' });
       }
     };
 

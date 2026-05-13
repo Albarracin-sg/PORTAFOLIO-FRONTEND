@@ -1,11 +1,12 @@
-import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from 'react';
+import * as React from 'react';
+import { use } from 'react';
 
 type ThemeContextValue = {
   isDark: boolean;
   toggleTheme: () => void;
 };
 
-const ThemeContext = createContext<ThemeContextValue | null>(null);
+const ThemeContext = React.createContext<ThemeContextValue | null>(null);
 
 const STORAGE_KEY = 'theme';
 
@@ -15,17 +16,18 @@ const detectSystemTheme = (): boolean => {
   return window.matchMedia('(prefers-color-scheme: dark)').matches;
 };
 
-export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [isDark, setIsDark] = useState(detectSystemTheme);
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [isDark, setIsDark] = React.useState(detectSystemTheme);
 
   // Sincronizar con el sistema si no hay preferencia guardada
-  useEffect(() => {
+  React.useEffect(() => {
     const media = window.matchMedia('(prefers-color-scheme: dark)');
     
     const handleChange = (event: MediaQueryListEvent) => {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved === null) {
         setIsDark(event.matches);
+        document.documentElement.classList.toggle('dark', event.matches);
       }
     };
 
@@ -33,21 +35,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return () => media.removeEventListener('change', handleChange);
   }, []);
 
-  // Aplicar el tema al documento
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [isDark]);
-
-  const toggleTheme = useCallback(() => {
-    setIsDark((prev) => {
+  const toggleTheme = React.useCallback(() => {
+    setIsDark((prev: boolean) => {
       const next = !prev;
       localStorage.setItem(STORAGE_KEY, next ? 'dark' : 'light');
+      document.documentElement.classList.toggle('dark', next);
       return next;
     });
+  }, []);
+
+  // Set initial class on mount to ensure sync
+  React.useEffect(() => {
+    document.documentElement.classList.toggle('dark', detectSystemTheme());
   }, []);
 
   return (
@@ -58,7 +57,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 }
 
 export function useTheme(): ThemeContextValue {
-  const ctx = useContext(ThemeContext);
+  const ctx = use(ThemeContext);
   if (!ctx) throw new Error('useTheme must be used within ThemeProvider');
   return ctx;
 }

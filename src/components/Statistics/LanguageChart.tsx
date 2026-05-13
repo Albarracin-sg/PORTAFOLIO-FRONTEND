@@ -1,7 +1,12 @@
+import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PieChart, Pie, Cell } from "recharts";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
+
+// Lazy load recharts components
+const PieChart = React.lazy(() => import("recharts").then(m => ({ default: m.PieChart })));
+const Pie = React.lazy(() => import("recharts").then(m => ({ default: m.Pie })));
+const Cell = React.lazy(() => import("recharts").then(m => ({ default: m.Cell })));
 
 interface LanguageChartProps {
   data: any[];
@@ -20,14 +25,16 @@ export function LanguageChart({ data, config }: LanguageChartProps) {
       </CardHeader>
       <CardContent>
         <ChartContainer config={config} className="aspect-square h-64 sm:aspect-video sm:h-80 w-full">
-          <PieChart>
-            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} trigger="hover" />
-            <Pie data={data} dataKey="value" nameKey="name" innerRadius="60%" outerRadius="90%" paddingAngle={4} isAnimationActive={false}>
-              {data.map((entry) => (
-                <Cell key={`language-${entry.name}`} fill={String(entry.color ?? "#8b5cf6")} className="cursor-pointer outline-none" />
-              ))}
-            </Pie>
-          </PieChart>
+          <React.Suspense fallback={<div className="flex h-full w-full items-center justify-center animate-pulse bg-zinc-100/50 dark:bg-zinc-800/50 rounded-lg" />}>
+            <PieChart>
+              <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} trigger="hover" />
+              <Pie data={data} dataKey="value" nameKey="name" innerRadius="60%" outerRadius="90%" paddingAngle={4} isAnimationActive={false}>
+                {data.map((entry) => (
+                  <Cell key={`language-${entry.name}`} fill={String(entry.color ?? "#8b5cf6")} className="cursor-pointer outline-none" />
+                ))}
+              </Pie>
+            </PieChart>
+          </React.Suspense>
         </ChartContainer>
         <div className="mt-4 sm:mt-5 flex flex-wrap gap-2 sm:gap-3">
           {data.map((entry) => (

@@ -82,7 +82,7 @@ export default function AdminLogsPage() {
   }, [loadData]);
 
   const formatBigNumber = (num: number) => {
-    return new Intl.NumberFormat().format(num);
+    return getNumberFormatter(i18n.language).format(num);
   };
 
   const avgResponse = stats ? Math.round(stats.avgResponseTimeMs) : 0;
@@ -175,6 +175,14 @@ export default function AdminLogsPage() {
         endpointPage={endpointPage}
         totalPages={0}
         setEndpointPage={(p) => dispatch({ type: "SET_ENDPOINT_PAGE", payload: p })}
+        getEndpointIcon={() => Activity}
+        formatBigNumber={formatBigNumber}
+      />
+
+    </div>
+  );
+}
+AGE", payload: p })}
         getEndpointIcon={() => Activity}
         formatBigNumber={formatBigNumber}
       />
