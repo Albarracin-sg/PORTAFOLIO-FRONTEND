@@ -114,9 +114,13 @@ function normalizeBotThread(input: unknown): BotThread | null {
   const rawMessages = Array.isArray(input.messages) ? input.messages : [];
 
   const messages = sortMessages(
-    rawMessages
-      .map((message) => normalizeBotMessage(message))
-      .filter((message): message is BotThreadMessage => message !== null),
+    rawMessages.reduce<BotThreadMessage[]>((acc, message) => {
+      const normalized = normalizeBotMessage(message);
+      if (normalized !== null) {
+        acc.push(normalized);
+      }
+      return acc;
+    }, []),
   );
 
   return {

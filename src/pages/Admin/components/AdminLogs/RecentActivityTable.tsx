@@ -14,6 +14,19 @@ interface LogEntry {
   createdAt: string;
 }
 
+import { useState, useEffect } from "react";
+
+// Helper to avoid hydration mismatch
+function SafeTime({ date }: { date: string | number | Date }) {
+  const [time, setTime] = useState<string>("");
+  
+  useEffect(() => {
+    setTime(new Date(date).toLocaleTimeString());
+  }, [date]);
+
+  return <time suppressHydrationWarning>{time}</time>;
+}
+
 interface RecentActivityTableProps {
   pagedRecent: LogEntry[];
   recentPage: number;
@@ -79,7 +92,8 @@ export function RecentActivityTable({
                         <Globe className="size-3" /> {log.ip}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Clock className="size-3" /> {new Date(log.createdAt).toLocaleTimeString()}
+                        <Clock className="size-3" /> 
+                        <SafeTime date={log.createdAt} />
                       </span>
                       <span className="flex items-center gap-1">
                         <Activity className="size-3" /> {log.responseTime}ms

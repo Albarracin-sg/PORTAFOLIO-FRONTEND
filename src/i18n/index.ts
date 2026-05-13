@@ -3,16 +3,18 @@ import { initReactI18next } from 'react-i18next';
 import es from './locales/es.json';
 import en from './locales/en.json';
 
+const SUPPORTED_LANGS = new Set(['es', 'en']);
+
 function detectBrowserLanguage(): string {
   try {
     const saved = localStorage.getItem('language');
-    if (saved && ['es', 'en'].includes(saved)) return saved;
+    if (saved && SUPPORTED_LANGS.has(saved)) return saved;
 
     // Detectar idiomas del navegador en orden de preferencia
     const languages = navigator.languages || [navigator.language];
     for (const lang of languages) {
       const shortLang = lang.split('-')[0].toLowerCase();
-      if (['es', 'en'].includes(shortLang)) return shortLang;
+      if (SUPPORTED_LANGS.has(shortLang)) return shortLang;
     }
   } catch (e) {
     console.error('Error detecting language:', e);
