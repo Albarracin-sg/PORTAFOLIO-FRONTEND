@@ -13,6 +13,7 @@ import { useAdminAuth } from "@/features/admin/AdminAuthProvider";
 import { fetchAdminStats, type AdminStats } from "@/shared/api/stats";
 import { Button } from "@/components/ui/button";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
+import { getNumberFormatter } from "@/shared/utils/formatters";
 
 // Subcomponents
 import { LogMetricCards } from "./components/AdminLogs/LogMetricCards";
@@ -50,7 +51,7 @@ function logsReducer(state: LogsState, action: LogsAction): LogsState {
 }
 
 export default function AdminLogsPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { token } = useAdminAuth();
   
   const [state, dispatch] = useReducer(logsReducer, {
@@ -103,7 +104,7 @@ export default function AdminLogsPage() {
         <Button
           variant="ghost"
           asChild
-          className="group mb-2 sm:mb-6 rounded-full border border-zinc-200 bg-white px-4 py-2 text-black transition-all hover:bg-violet-700 hover:text-white hover:border-violet-700 dark:border-white/10 dark:bg-white/[0.03] dark:text-zinc-300 dark:hover:bg-violet-600 dark:hover:text-white"
+          className="group mb-2 sm:mb-6 rounded-full border border-zinc-200 bg-white px-4 py-2 text-black transition-all hover:bg-violet-700 hover:text-white hover:border-violet-700 dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:hover:bg-violet-600 dark:hover:text-white"
         >
           <Link to="/admin">
             <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
@@ -175,14 +176,6 @@ export default function AdminLogsPage() {
         endpointPage={endpointPage}
         totalPages={0}
         setEndpointPage={(p) => dispatch({ type: "SET_ENDPOINT_PAGE", payload: p })}
-        getEndpointIcon={() => Activity}
-        formatBigNumber={formatBigNumber}
-      />
-
-    </div>
-  );
-}
-AGE", payload: p })}
         getEndpointIcon={() => Activity}
         formatBigNumber={formatBigNumber}
       />
