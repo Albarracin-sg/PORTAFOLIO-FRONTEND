@@ -10,6 +10,18 @@ import {
   MessageSquare
 } from "lucide-react";
 import { useTranslation } from 'react-i18next';
+import { useState, useEffect } from "react";
+
+// SafeTime to avoid hydration mismatch
+function SafeTime({ date, locale }: { date: string | number | Date, locale: string }) {
+  const [formatted, setFormatted] = useState<string>("");
+  
+  useEffect(() => {
+    setFormatted(commonFormatters.shortTime(locale).format(new Date(date)));
+  }, [date, locale]);
+
+  return <time suppressHydrationWarning>{formatted}</time>;
+}
 import { commonFormatters } from '@/shared/utils/formatters';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -107,7 +119,7 @@ export function ThreadDetail({
             size="icon" 
             onClick={() => onDelete(selectedThread.id)}
             disabled={deletingThreadId === selectedThread.id}
-            className="text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10"
+            className="text-red-950 hover:text-red-600 hover:bg-red-50 dark:text-red-200 dark:hover:bg-red-500/10"
           >
             {deletingThreadId === selectedThread.id ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
           </Button>
@@ -115,7 +127,7 @@ export function ThreadDetail({
             variant="ghost" 
             size="icon" 
             onClick={onClose}
-            className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+            className="text-black hover:text-zinc-600 dark:text-white dark:hover:text-zinc-300"
           >
             <X className="size-4" />
           </Button>
@@ -255,8 +267,8 @@ export function ThreadDetail({
                      <p className="whitespace-pre-wrap">{msg.content}</p>
                    )}
                  </div>
-                 <span className="text-[10px] text-zinc-400 px-1" suppressHydrationWarning>
-                   {commonFormatters.shortTime(i18n.language).format(new Date(msg.createdAt))}
+                 <span className="text-[10px] text-zinc-400 px-1">
+                   <SafeTime date={msg.createdAt} locale={i18n.language} />
                  </span>
                </div>
              </div>

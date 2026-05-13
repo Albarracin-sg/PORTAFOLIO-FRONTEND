@@ -173,9 +173,13 @@ function normalizeThreadsResponse(input: unknown): BotThreadsResponse {
 
 function normalizeMessagesResponse(input: unknown): BotThreadMessage[] {
   if (Array.isArray(input)) {
-    return input
-      .map((message) => normalizeBotMessage(message))
-      .filter((message): message is BotThreadMessage => message !== null);
+    return input.reduce<BotThreadMessage[]>((acc, message) => {
+      const normalized = normalizeBotMessage(message);
+      if (normalized !== null) {
+        acc.push(normalized);
+      }
+      return acc;
+    }, []);
   }
 
   if (!isRecord(input)) {

@@ -39,6 +39,12 @@ export const getNumberFormatter = (
 };
 
 /**
+ * Truly hoisted common formatters to avoid any constructor call inside functions
+ */
+const shortTimeES = new Intl.DateTimeFormat('es', { hour: '2-digit', minute: '2-digit' });
+const shortTimeEN = new Intl.DateTimeFormat('en', { hour: '2-digit', minute: '2-digit' });
+
+/**
  * Common date formatters
  */
 export const commonFormatters = {
@@ -57,8 +63,12 @@ export const commonFormatters = {
     minute: "2-digit",
     second: "2-digit"
   }),
-  shortTime: (locale: string) => getDateTimeFormatter(locale, {
-    hour: '2-digit',
-    minute: '2-digit'
-  }),
+  shortTime: (locale: string) => {
+    if (locale === 'es') return shortTimeES;
+    if (locale === 'en') return shortTimeEN;
+    return getDateTimeFormatter(locale, {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  },
 };
