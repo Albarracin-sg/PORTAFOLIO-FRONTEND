@@ -88,21 +88,32 @@ function Carousel({
     [scrollPrev, scrollNext],
   );
 
+  const setApiRef = React.useRef(setApi);
+  setApiRef.current = setApi;
+
   React.useEffect(() => {
-    if (!api || !setApi) return;
-    setApi(api);
-  }, [api, setApi]);
+    if (!api || !setApiRef.current) return;
+    setApiRef.current(api);
+  }, [api]);
+
+  const onSelectRef = React.useRef(onSelect);
+  onSelectRef.current = onSelect;
 
   React.useEffect(() => {
     if (!api) return;
-    onSelect(api);
-    api.on("reInit", onSelect);
-    api.on("select", onSelect);
+    
+    const handler = () => {
+      if (api) onSelectRef.current(api);
+    };
+
+    handler();
+    api.on("reInit", handler);
+    api.on("select", handler);
 
     return () => {
-      api?.off("select", onSelect);
+      api?.off("select", handler);
     };
-  }, [api, onSelect]);
+  }, [api]);
 
   return (
     <CarouselContext.Provider

@@ -152,9 +152,13 @@ function normalizeThreadsResponse(input: unknown): BotThreadsResponse {
   const rawItems = Array.isArray(input.items) ? input.items : [];
   const rawMeta = isRecord(input.meta) ? input.meta : null;
 
-  const items = rawItems
-    .map((thread) => normalizeBotThread(thread))
-    .filter((thread): thread is BotThread => thread !== null);
+  const items = rawItems.reduce<BotThread[]>((acc, thread) => {
+    const normalized = normalizeBotThread(thread);
+    if (normalized !== null) {
+      acc.push(normalized);
+    }
+    return acc;
+  }, []);
 
   return {
     items,
