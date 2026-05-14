@@ -192,9 +192,13 @@ function normalizeMessagesResponse(input: unknown): BotThreadMessage[] {
     return [];
   }
 
-  return candidates
-    .map((message) => normalizeBotMessage(message))
-    .filter((message): message is BotThreadMessage => message !== null);
+  return candidates.reduce<BotThreadMessage[]>((acc, message) => {
+    const normalized = normalizeBotMessage(message);
+    if (normalized !== null) {
+      acc.push(normalized);
+    }
+    return acc;
+  }, []);
 }
 
 export async function sendBotMessage(payload: BotChatRequest): Promise<BotChatResponse> {
