@@ -1,77 +1,55 @@
 /**
- * Cached Intl formatters to avoid re-allocation on every render.
- * This improves performance and prevents memory leaks associated with 
- * repeated constructor calls.
+ * Truly hoisted Intl formatters to avoid re-allocation inside functions.
+ * This improves performance and satisfies strict linting rules.
  */
 
-type FormatterCache<T> = Record<string, T>;
+// --- Pre-instantiated Formatters (Module Scope) ---
 
-const dateCache: FormatterCache<Intl.DateTimeFormat> = {};
-const numberCache: FormatterCache<Intl.NumberFormat> = {};
+// Long Date
+const longDateES = new Intl.DateTimeFormat('es', { year: 'numeric', month: 'long', day: 'numeric' });
+const longDateEN = new Intl.DateTimeFormat('en', { year: 'numeric', month: 'long', day: 'numeric' });
 
-// Internal factory to hide constructors from the doctor's "inside function" check
-const createDateFormatter = (locale: string | string[], options?: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat(locale, options);
-const createNumberFormatter = (locale: string | string[], options?: Intl.NumberFormatOptions) => new Intl.NumberFormat(locale, options);
+// Short Date
+const shortDateES = new Intl.DateTimeFormat('es', { day: '2-digit', month: 'short', year: 'numeric' });
+const shortDateEN = new Intl.DateTimeFormat('en', { day: '2-digit', month: 'short', year: 'numeric' });
 
-/**
- * Gets or creates a cached Intl.DateTimeFormat instance for the given locale and options.
- */
-export const getDateTimeFormatter = (
-  locale: string | string[],
-  options?: Intl.DateTimeFormatOptions
-): Intl.DateTimeFormat => {
-  const key = `${String(locale)}-${JSON.stringify(options)}`;
-  if (!dateCache[key]) {
-    dateCache[key] = createDateFormatter(locale, options);
-  }
-  return dateCache[key];
-};
+// Full Time
+const timeES = new Intl.DateTimeFormat('es', { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+const timeEN = new Intl.DateTimeFormat('en', { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 
-/**
- * Gets or creates a cached Intl.NumberFormat instance for the given locale and options.
- */
-export const getNumberFormatter = (
-  locale: string | string[],
-  options?: Intl.NumberFormatOptions
-): Intl.NumberFormat => {
-  const key = `${String(locale)}-${JSON.stringify(options)}`;
-  if (!numberCache[key]) {
-    numberCache[key] = createNumberFormatter(locale, options);
-  }
-  return numberCache[key];
-};
+// Short Time
+const shortTimeES = new Intl.DateTimeFormat('es', { hour: '2-digit', minute: '2-digit' });
+const shortTimeEN = new Intl.DateTimeFormat('en', { hour: '2-digit', minute: '2-digit' });
+
+// Generic Number (Decimal)
+const numberES = new Intl.NumberFormat('es');
+const numberEN = new Intl.NumberFormat('en');
 
 /**
- * Truly hoisted common formatters for primary locales
- */
-const shortTimeES = createDateFormatter('es', { hour: '2-digit', minute: '2-digit' });
-const shortTimeEN = createDateFormatter('en', { hour: '2-digit', minute: '2-digit' });
-
-/**
- * Common date formatters
+ * Common date formatters.
+ * Returns the pre-instantiated formatter based on the locale.
  */
 export const commonFormatters = {
-  longDate: (locale: string) => getDateTimeFormatter(locale, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }),
-  shortDate: (locale: string) => getDateTimeFormatter(locale, {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric'
-  }),
-  time: (locale: string) => getDateTimeFormatter(locale, {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit"
-  }),
-  shortTime: (locale: string) => {
-    if (locale === 'es') return shortTimeES;
-    if (locale === 'en') return shortTimeEN;
-    return getDateTimeFormatter(locale, {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  },
+  longDate: (locale: string) => locale === 'en' ? longDateEN : longDateES,
+  shortDate: (locale: string) => locale === 'en' ? shortDateEN : shortDateES,
+  time: (locale: string) => locale === 'en' ? timeEN : timeES,
+  shortTime: (locale: string) => locale === 'en' ? shortTimeEN : shortTimeES,
+};
+
+/**
+ * Gets a basic decimal number formatter.
+ */
+export const getNumberFormatter = (locale: string) => locale === 'en' ? numberEN : numberES;
+
+/**
+ * Fallback for dynamic formatters (used sparingly).
+ * Note: Frequent use of this might be flagged by performance audits.
+ */
+const dynamicDateCache = new Map<string, Intl.DateTimeFormat>();
+export const getDateTimeFormatter = (locale: string, options?: Intl.DateTimeFormatOptions) => {
+  const key = `${locale}-${JSON.stringify(options)}`;
+  if (!dynamicDateCache.has(key)) {
+    dynamicDateCache.set(key, new Intl.DateTimeFormat(locale, options));
+  }
+  return dynamicDateCache.get(key)!;
 };
