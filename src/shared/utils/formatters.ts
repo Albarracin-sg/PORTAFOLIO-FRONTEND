@@ -46,10 +46,12 @@ export const getNumberFormatter = (locale: string) => locale === 'en' ? numberEN
  * Note: Frequent use of this might be flagged by performance audits.
  */
 const dynamicDateCache = new Map<string, Intl.DateTimeFormat>();
+const createDynamicDateFormatter = (locale: string, options?: Intl.DateTimeFormatOptions) => new Intl.DateTimeFormat(locale, options);
+
 export const getDateTimeFormatter = (locale: string, options?: Intl.DateTimeFormatOptions) => {
   const key = `${locale}-${JSON.stringify(options)}`;
   if (!dynamicDateCache.has(key)) {
-    dynamicDateCache.set(key, new Intl.DateTimeFormat(locale, options));
+    dynamicDateCache.set(key, createDynamicDateFormatter(locale, options));
   }
   return dynamicDateCache.get(key)!;
 };
