@@ -23,6 +23,7 @@ interface MobileMenuProps {
   currentPage: string;
   onPageChange: (page: string) => void;
   logo: string;
+  logoClassName?: string;
   onThemeToggle: () => void;
   language: Language;
   onLanguageChange: (lang: Language) => void;
@@ -42,6 +43,7 @@ export function MobileMenu({
   currentPage,
   onPageChange,
   logo,
+  logoClassName = "h-9 w-auto",
   onThemeToggle,
   language,
   onLanguageChange,
@@ -98,7 +100,7 @@ export function MobileMenu({
             className="cursor-pointer"
             onClick={() => handleNavClick("home")}
           >
-            <img src={logo} alt="Juan Albarracín" className="h-9 w-auto" />
+            <img src={logo} alt="Juan Albarracín" className={logoClassName} />
           </Link>
           <button
             onClick={onClose}

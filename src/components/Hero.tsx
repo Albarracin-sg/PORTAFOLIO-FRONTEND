@@ -171,7 +171,7 @@ export default function Hero({ section }: HeroProps) {
                     src={primaryImage}
                     alt="Developer Illustration"
                     onSave={(value) => updateField('primaryImage', value)}
-                    className="w-full h-auto max-h-[45vh] lg:max-h-full object-contain"
+                    className={`w-full h-auto max-h-[45vh] lg:max-h-full object-contain ${isDark ? "scale-110" : ""}`}
                   />
                 </div>
 

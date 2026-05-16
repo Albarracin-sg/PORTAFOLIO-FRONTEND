@@ -135,6 +135,7 @@ export default function Navbar({
     languageOptions.find((option) => option.value === language) ?? languageOptions[0];
 
   const activeLogo = isDark ? "/logoNigth.png" : logoImg;
+const logoSizes = isDark ? "h-16 w-auto" : "h-14 w-auto";
 
   const scrollToSection = (sectionId: string) => {
     if (sectionId === "stats") { onPageChange("stats"); return; }
@@ -159,7 +160,7 @@ export default function Navbar({
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-18 min-h-[4.5rem]">
-            <NavBrand logo={activeLogo} onClick={() => scrollToSection("home")} />
+            <NavBrand logo={activeLogo} onClick={() => scrollToSection("home")} className={logoSizes} />
 
             <NavLinks items={navItems} currentPage={currentPage} />
 
@@ -201,6 +202,7 @@ export default function Navbar({
         currentPage={currentPage}
         onPageChange={onPageChange}
         logo={activeLogo}
+        logoClassName={logoSizes}
         onThemeToggle={onThemeToggle}
         language={language}
         onLanguageChange={onLanguageChange}

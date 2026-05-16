@@ -170,7 +170,7 @@ export default function AllProjects() {
   ];
 
   return (
-    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+    <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 px-4 sm:px-6 lg:px-8 pt-24 pb-16 sm:pb-20 mx-auto max-w-7xl">
       {/* ── Header ── */}
       <div className="mb-8 sm:mb-12">
         <Button
@@ -178,7 +178,7 @@ export default function AllProjects() {
           onClick={() => navigate(-1)}
           className="group mb-2 sm:mb-6 rounded-full border border-zinc-200 bg-white px-4 py-2 text-black transition-all hover:bg-violet-50 hover:text-violet-950 hover:border-violet-300 dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:hover:bg-violet-500/10 dark:hover:text-violet-200"
         >
-          <span>
+          <span className="inline-flex items-center gap-2">
             <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
             {t("nav.back")}
           </span>
@@ -250,7 +250,7 @@ export default function AllProjects() {
             />
 
             <div className="flex-1 space-y-10">
-              <div className={viewMode === "grid" ? "grid gap-6 sm:grid-cols-2" : "grid gap-6"}>
+              <div className={viewMode === "grid" ? "grid gap-6 sm:grid-cols-2 lg:grid-cols-3" : "grid gap-6"}>
                 {paginatedProjects.map((project) => (
                   <ProjectCard
                     key={project.id}

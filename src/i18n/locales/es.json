@@ -31,7 +31,8 @@
     "projects": "Proyectos",
     "stats": "Estadísticas",
     "contact": "Contacto",
-    "downloadCV": "Descargar CV"
+    "downloadCV": "Descargar CV",
+    "back": "Volver"
   },
   "hero": {
     "greeting": "Hola, soy Juan Albarracín",
@@ -137,6 +138,7 @@
     "viewMore": "Ver más",
     "noProjects": "No hay proyectos que coincidan con el filtro seleccionado.",
     "totalProjects": "Total de proyectos",
+    "explore": "Explorá mi trabajo",
     "featuredProjects": "Proyectos destacados",
     "technologiesTracked": "Tecnologías detectadas",
     "updatedOn": "Actualizado",
@@ -168,6 +170,7 @@
       "noTags": "Sin etiquetas"
     },
     "filters": {
+      "all": "Todos",
       "searchLabel": "Buscar",
       "searchPlaceholder": "Buscar proyectos, tecnologías…",
       "category": "Categoría",
@@ -178,7 +181,8 @@
       "viewList": "Vista lista",
       "clearFilters": "Limpiar filtros",
       "viewDetails": "Ver detalles",
-      "projectsFound": "Proyectos encontrados"
+      "projectsFound": "Proyectos encontrados",
+      "resultsFound": "resultados encontrados"
     },
     "sortOptions": {
       "dateDesc": "Más reciente primero",

@@ -31,7 +31,8 @@
     "projects": "Projects",
     "stats": "Statistics",
     "contact": "Contact",
-    "downloadCV": "Download CV"
+    "downloadCV": "Download CV",
+    "back": "Back"
   },
   "hero": {
     "greeting": "Hello, I'm Juan Albarracín",
@@ -137,6 +138,7 @@
     "viewMore": "View more",
     "noProjects": "No projects match the selected filter.",
     "totalProjects": "Total projects",
+    "explore": "Explore my work",
     "featuredProjects": "Featured projects",
     "technologiesTracked": "Tracked technologies",
     "updatedOn": "Updated",
@@ -168,6 +170,7 @@
       "noTags": "No tags"
     },
     "filters": {
+      "all": "All",
       "searchLabel": "Search",
       "searchPlaceholder": "Search projects, technologies…",
       "category": "Category",
@@ -178,7 +181,8 @@
       "viewList": "List view",
       "clearFilters": "Clear filters",
       "viewDetails": "View details",
-      "projectsFound": "Projects found"
+      "projectsFound": "Projects found",
+      "resultsFound": "results found"
     },
     "sortOptions": {
       "dateDesc": "Latest first",
