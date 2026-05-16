@@ -14,61 +14,71 @@ interface ProjectsProps {
   section?: { id: string; type: string; content: Record<string, unknown> };
 }
 
-const AUTOPLAY_INTERVAL = 5000; // 5 segundos por slide
+const AUTOPLAY_INTERVAL = 5000;
+
+function ProgressBar({ api, interval }: { api: CarouselApi | undefined; interval: number }) {
+  const barRef = useRef<HTMLDivElement>(null);
+  const pausedRef = useRef(false);
+
+  useEffect(() => {
+    if (!api) return;
+
+    const onPointerDown = () => { pausedRef.current = true; };
+    const onPointerUp = () => { pausedRef.current = false; };
+    api.on("pointerDown", onPointerDown);
+    api.on("pointerUp", onPointerUp);
+
+    return () => {
+      api.off("pointerDown", onPointerDown);
+      api.off("pointerUp", onPointerUp);
+    };
+  }, [api]);
+
+  useEffect(() => {
+    if (!api) return;
+
+    let startTime = Date.now();
+    let rafId: number;
+
+    const tick = () => {
+      if (pausedRef.current) {
+        rafId = requestAnimationFrame(tick);
+        return;
+      }
+
+      const elapsed = Date.now() - startTime;
+      const pct = Math.min((elapsed / interval) * 100, 100);
+
+      if (barRef.current) barRef.current.style.width = `${pct}%`;
+
+      if (pct >= 100) {
+        api.scrollNext();
+        startTime = Date.now();
+      }
+
+      rafId = requestAnimationFrame(tick);
+    };
+
+    const onSelect = () => { startTime = Date.now(); };
+    api.on("select", onSelect);
+    rafId = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      api.off("select", onSelect);
+    };
+  }, [api, interval]);
+
+  return <div ref={barRef} className="absolute left-0 top-0 h-full bg-violet-500" />;
+}
 
 export default function Projects({ projects, section }: ProjectsProps) {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [api, setApi] = useState<CarouselApi>();
-  const [progress, setProgress] = useState(0);
-  const isPaused = useRef(false);
 
   const carouselProjects = Array.isArray(projects) ? projects : [];
   const { draft, updateField } = useSectionEditor(section as any);
-
-  // Efecto para el Autoplay y la barra de progreso
-  useEffect(() => {
-    if (!api) return;
-
-    const step = 100 / (AUTOPLAY_INTERVAL / 50);
-    const interval = setInterval(() => {
-      if (isPaused.current) return;
-      
-      setProgress((prev) => {
-        if (prev >= 100) {
-          api.scrollNext();
-          return 0;
-        }
-        return prev + step;
-      });
-    }, 50);
-
-    return () => clearInterval(interval);
-  }, [api]);
-
-  // Manejar el reinicio de la barra y la pausa por interacción
-  useEffect(() => {
-    if (!api) return;
-    
-    const onSelect = () => {
-      setProgress(0);
-    };
-
-    const onPointerDown = () => { isPaused.current = true; };
-    const onPointerUp = () => { isPaused.current = false; };
-
-    api.on("select", onSelect);
-    api.on("reInit", onSelect);
-    api.on("pointerDown", onPointerDown);
-    api.on("pointerUp", onPointerUp);
-    
-    return () => {
-      api.off("select", onSelect);
-      api.off("reInit", onSelect);
-      api.off("pointerDown", onPointerDown);
-      api.off("pointerUp", onPointerUp);
-    };
-  }, [api]);
 
   const handleViewMore = (project: any) => {
     navigate(`/projects/${project.id}`);
@@ -112,10 +122,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
           </Button>
         </div>
 
-        <div
-          onMouseEnter={() => { isPaused.current = true; }}
-          onMouseLeave={() => { isPaused.current = false; }}
-        >
+        <div>
           <Carousel
             setApi={setApi}
             opts={{ 
@@ -136,7 +143,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
                     key={project.id}
                     className="pl-4 basis-[85%] md:basis-[65%] lg:basis-[48%] xl:basis-[38%] 2xl:basis-[32%]"
                   >
-                    <Card className="flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200/80 bg-white/85 shadow-lg shadow-zinc-200/60 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 dark:border-white/10 dark:bg-zinc-950/75 dark:shadow-black/20">
+                    <Card className="flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200/80 bg-white/85 shadow-lg shadow-zinc-200/60 transition-transform duration-300 hover:-translate-y-1 dark:border-white/10 dark:bg-zinc-950/75 dark:shadow-black/20">
                       <div className="relative h-36 sm:h-44 overflow-hidden bg-zinc-100 dark:bg-zinc-900">
                         <img
                           src={project.image}
@@ -241,10 +248,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
               />
 
               <div className="relative h-1.5 flex-1 max-w-xs overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
-                <div 
-                  className="absolute left-0 top-0 h-full bg-violet-500 transition-all duration-50 ease-linear"
-                  style={{ width: `${progress}%` }}
-                />
+                <ProgressBar api={api} interval={AUTOPLAY_INTERVAL} />
               </div>
 
               <CarouselNext 
