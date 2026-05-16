@@ -244,7 +244,7 @@ export default function AllProjects() {
               onSortChange={(s: string, o: string) => dispatch({ type: "SET_SORT_BY", payload: `${s}-${o}` as any })}
               categories={[{ value: "all", label: t("projects.filters.all") }]}
               technologies={techOptions}
-              projectCountLabel={`${filteredAndSortedProjects.length} ${t("projects.resultsFound")}`}
+               projectCountLabel={`${filteredAndSortedProjects.length} ${t("projects.filters.resultsFound")}`}
               viewMode={viewMode}
               onViewModeChange={setViewMode}
             />
