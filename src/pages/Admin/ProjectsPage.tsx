@@ -211,7 +211,8 @@ export function AdminProjectsPage() {
             {currentItems.map((project) => (
               <div
                 key={project.id}
-                className="group rounded-2xl border border-zinc-200 dark:border-white/[0.07] bg-white/70 dark:bg-white/[0.025] hover:border-violet-400/20 hover:bg-white dark:hover:bg-white/[0.04] transition-all duration-200 overflow-hidden"
+                className="group rounded-2xl border border-zinc-200 dark:border-white/[0.07] bg-white/70 dark:bg-white/[0.025] hover:border-violet-400/20 hover:bg-white dark:hover:bg-white/[0.04] transition-all duration-200 overflow-hidden cursor-pointer"
+                onClick={() => handleEditClick(project.id)}
               >
                 <div className="px-5 py-3.5 flex items-center justify-between gap-4">
                   {/* Left: icon + info */}

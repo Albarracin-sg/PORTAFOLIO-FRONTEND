@@ -95,7 +95,7 @@ export function ProjectFilters({
 
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-zinc-200 pt-5 dark:border-white/[0.07]">
           <p className="text-sm text-zinc-600 dark:text-zinc-400">{projectCountLabel}</p>
-          <div className="flex items-center gap-1 rounded-lg bg-zinc-100 p-1 dark:bg-zinc-800/60">
+          <div className="hidden sm:flex items-center gap-1 rounded-lg bg-zinc-100 p-1 dark:bg-zinc-800/60">
             <Button
               variant={viewMode === "grid" ? "default" : "ghost"}
               size="sm"
