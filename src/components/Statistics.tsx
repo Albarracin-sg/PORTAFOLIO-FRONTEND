@@ -94,11 +94,23 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
     }, [] as any[]), [apiStats]);
 
   const barChartData = useMemo(() => {
-    const nonSpotify = endpointChartData.filter(e => !e.path.includes("spotify"));
-    const spotify = endpointChartData.find(e => e.path.includes("spotify"));
-    if (!spotify) return endpointChartData;
-    const maxOthers = Math.max(...nonSpotify.map(e => e.requests), 0);
-    return spotify.requests < maxOthers * 5 ? endpointChartData : nonSpotify;
+    const RATIO = 5;
+    let remaining = [...endpointChartData];
+
+    for (;;) {
+      if (remaining.length <= 1) break;
+      const sorted = [...remaining].sort((a, b) => b.requests - a.requests);
+      if (sorted[0].requests > sorted[1].requests * RATIO) {
+        const dom = sorted[0];
+        remaining = remaining.filter(
+          (e) => !(e.path === dom.path && e.method === dom.method),
+        );
+      } else {
+        break;
+      }
+    }
+
+    return remaining;
   }, [endpointChartData]);
 
   const apiMetricCards = useMemo(() => apiStats ? [
