@@ -421,7 +421,10 @@
       "highestLatency": "Mayor tiempo de respuesta promedio",
       "allEndpoints": "Todos los Endpoints",
       "routesTracked": "rutas monitoreadas",
-      "endpointsCount": "Endpoints"
+      "endpointsCount": "Endpoints",
+      "recentActivity": "Actividad Reciente",
+      "recentActivitySubtitle": "Últimas solicitudes API en tiempo real",
+      "noActivity": "Sin actividad reciente"
     },
     "bot": {
       "title": "Conversaciones del Bot",

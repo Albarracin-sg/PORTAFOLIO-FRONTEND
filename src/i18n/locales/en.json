@@ -421,7 +421,10 @@
       "highestLatency": "Highest avg response time",
       "allEndpoints": "All Endpoints",
       "routesTracked": "routes tracked",
-      "endpointsCount": "Endpoints"
+      "endpointsCount": "Endpoints",
+      "recentActivity": "Recent Activity",
+      "recentActivitySubtitle": "Latest API requests in real-time",
+      "noActivity": "No recent activity"
     },
     "bot": {
       "title": "Bot Conversations",

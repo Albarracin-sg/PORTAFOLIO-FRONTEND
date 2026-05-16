@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useReducer } from "react";
+import { useEffect, useCallback, useReducer, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 import { useAdminAuth } from "@/features/admin/AdminAuthProvider";
-import { fetchAdminStats, type AdminStats } from "@/shared/api/stats";
+import { fetchAdminStats, type AdminStats } from "@/shared/api/admin";
 import { Button } from "@/components/ui/button";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { getNumberFormatter } from "@/shared/utils/formatters";
@@ -88,11 +88,61 @@ export default function AdminLogsPage() {
 
   const avgResponse = stats ? Math.round(stats.avgResponseTimeMs) : 0;
 
+  // ── Recent activity ──
   const pagedRecent = stats 
     ? stats.recentRequests.slice((recentPage - 1) * recentItemsPerPage, recentPage * recentItemsPerPage)
     : [];
-  
   const recentTotalPages = stats ? Math.ceil(stats.recentRequests.length / recentItemsPerPage) : 0;
+
+  // ── Endpoints from API ──
+  const endpoints = useMemo(() => (stats?.endpoints ?? []).map(e => ({
+    path: e.path,
+    method: e.method,
+    requests: e.totalRequests,
+    avgTime: Math.round(e.avgResponseTime),
+  })), [stats]);
+
+  const chartData = useMemo(() => {
+    const RATIO = 5;
+    let remaining = [...endpoints];
+    for (;;) {
+      if (remaining.length <= 1) break;
+      const sorted = [...remaining].sort((a, b) => b.requests - a.requests);
+      if (sorted[0].requests > sorted[1].requests * RATIO) {
+        const dom = sorted[0];
+        remaining = remaining.filter(
+          (e) => !(e.path === dom.path && e.method === dom.method),
+        );
+      } else break;
+    }
+    return remaining;
+  }, [endpoints]);
+
+  const publicRequests = endpoints
+    .filter(e => !e.path.includes("admin"))
+    .reduce((s, e) => s + e.requests, 0);
+  const adminRequests = endpoints
+    .filter(e => e.path.includes("admin"))
+    .reduce((s, e) => s + e.requests, 0);
+
+  const topEndpoints = useMemo(
+    () => [...endpoints].sort((a, b) => b.requests - a.requests).slice(0, 5),
+    [endpoints],
+  );
+  const slowestEndpoints = useMemo(
+    () => [...endpoints].sort((a, b) => b.avgTime - a.avgTime).slice(0, 5),
+    [endpoints],
+  );
+
+  // ── Endpoint table pagination ──
+  const ENDPOINT_ITEMS_PER_PAGE = 10;
+  const totalEndpointPages = Math.ceil(endpoints.length / ENDPOINT_ITEMS_PER_PAGE);
+  const pagedEndpoints = endpoints.slice(
+    endpointPage * ENDPOINT_ITEMS_PER_PAGE,
+    (endpointPage + 1) * ENDPOINT_ITEMS_PER_PAGE,
+  );
+
+  const healthColor = avgResponse < 500 ? "emerald" : "red";
 
   if (isLoading && !stats) return <LoadingScreen />;
 
@@ -135,46 +185,49 @@ export default function AdminLogsPage() {
         ]}
       />
 
-      <TrafficCharts 
-        chartData={[]}
-        publicRequests={0}
-        adminRequests={0}
-        totalForRatio={0}
-        avgResponse={0}
-        healthStatus="healthy"
-        hc={[]}
+      <TrafficCharts
+        chartData={chartData}
+        publicRequests={publicRequests}
+        adminRequests={adminRequests}
+        totalForRatio={publicRequests + adminRequests || 1}
+        avgResponse={avgResponse}
+        healthStatus={healthColor === "emerald" ? "healthy" : "degraded"}
+        hc={{
+          bg: `bg-${healthColor}-500/10 border-${healthColor}-500/20`,
+          text: `text-${healthColor}-500`,
+        }}
         formatBigNumber={formatBigNumber}
       />
 
-      <EndpointStatsTable 
-        topEndpoints={[]}
-        slowestEndpoints={[]}
+      <EndpointStatsTable
+        topEndpoints={topEndpoints}
+        slowestEndpoints={slowestEndpoints}
         getEndpointIcon={() => Activity}
         formatBigNumber={formatBigNumber}
       />
 
-      <RecentActivityTable 
+      <RecentActivityTable
         pagedRecent={pagedRecent.map(req => ({
           id: req.id,
           method: req.method,
           path: req.path,
           timestamp: req.timestamp,
-          statusCode: 200,
+          statusCode: req.status,
           createdAt: req.timestamp,
-          ip: "0.0.0.0",
-          userAgent: "System",
-          responseTime: 0
+          ip: req.ip ?? "0.0.0.0",
+          userAgent: req.userAgent ?? "System",
+          responseTime: req.responseTime,
         }))}
         recentPage={recentPage}
         recentTotalPages={recentTotalPages}
         setRecentPage={(p) => dispatch({ type: "SET_RECENT_PAGE", payload: p })}
       />
 
-      <EndpointTable 
-        endpointData={[]}
-        pagedEndpoints={[]}
+      <EndpointTable
+        endpointData={endpoints}
+        pagedEndpoints={pagedEndpoints}
         endpointPage={endpointPage}
-        totalPages={0}
+        totalPages={totalEndpointPages}
         setEndpointPage={(p) => dispatch({ type: "SET_ENDPOINT_PAGE", payload: p })}
         getEndpointIcon={() => Activity}
         formatBigNumber={formatBigNumber}
