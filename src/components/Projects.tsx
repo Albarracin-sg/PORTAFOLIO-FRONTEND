@@ -136,7 +136,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
                     key={project.id}
                     className="pl-4 basis-[85%] md:basis-[65%] lg:basis-[48%] xl:basis-[38%] 2xl:basis-[32%]"
                   >
-                    <Card className="flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200/80 bg-white shadow-sm shadow-zinc-200/60 dark:border-white/10 dark:bg-zinc-950/90 dark:shadow-black/20">
+                    <Card className="flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200/80 bg-white/85 shadow-lg shadow-zinc-200/60 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 dark:border-white/10 dark:bg-zinc-950/75 dark:shadow-black/20">
                       <div className="relative h-36 sm:h-44 overflow-hidden bg-zinc-100 dark:bg-zinc-900">
                         <img
                           src={project.image}
@@ -147,7 +147,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
                         <div className="absolute bottom-0 left-0 h-[2px] w-full bg-linear-to-r from-transparent via-zinc-400/80 to-transparent dark:via-violet-500/40 z-10" />
                       </div>
 
-                      <CardHeader className="space-y-4 bg-white pb-2 text-zinc-900 dark:bg-zinc-950/95 dark:text-white">
+                      <CardHeader className="space-y-4 bg-transparent pb-2 text-zinc-900 dark:bg-transparent dark:text-white">
                         <div className="space-y-1">
                           <CardTitle className="font-display line-clamp-1 text-2xl font-semibold leading-tight text-zinc-900 dark:text-white">
                             {project.name}
@@ -185,7 +185,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
                         </div>
                       </CardHeader>
 
-                      <CardContent className="flex flex-1 flex-col bg-white pt-0 text-black dark:bg-zinc-950/95 dark:text-white">
+                      <CardContent className="flex flex-1 flex-col bg-transparent pt-0 text-black dark:bg-transparent dark:text-white">
                         <div className="h-24 sm:h-20 overflow-hidden">
                           <p className="line-clamp-4 sm:line-clamp-3 text-sm leading-6 text-zinc-600 dark:text-white">
                             {typeof project.description === 'object' 
@@ -195,7 +195,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
                         </div>
                       </CardContent>
 
-                      <CardFooter className="mt-auto flex items-center gap-2 border-t border-zinc-200 bg-white p-4 pt-4 dark:border-white/10 dark:bg-zinc-950/95">
+                      <CardFooter className="mt-auto flex items-center gap-2 border-t border-zinc-200 bg-transparent p-4 pt-4 dark:border-white/10 dark:bg-transparent">
                         <Button
                           className="h-10 flex-1 bg-violet-600 font-medium text-white hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-700"
                           onClick={() => handleViewMore(project)}
