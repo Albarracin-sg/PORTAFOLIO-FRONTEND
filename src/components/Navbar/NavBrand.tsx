@@ -13,7 +13,7 @@ export function NavBrand({ logo, onClick }: NavBrandProps) {
         onClick={onClick}
         className="cursor-pointer bg-transparent border-none p-0 block"
       >
-        <img src={logo} alt="Juan Albarracín" className="h-12 w-auto" />
+        <img src={logo} alt="Juan Albarracín" className="h-14 w-auto" />
       </Link>
     </div>
   );

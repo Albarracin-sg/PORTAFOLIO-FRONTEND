@@ -222,11 +222,11 @@ export default function AllProjects() {
         <>
           <div className="grid gap-4 sm:grid-cols-2">
             <SummaryCard
-              label={t("projects.stats.totalProjects")}
+              label={t("projects.totalProjects")}
               value={String(filteredAndSortedProjects.length)}
             />
             <SummaryCard
-              label={t("projects.stats.trackedTechnologies")}
+              label={t("projects.technologiesTracked")}
               value={String(trackedTechnologies)}
             />
           </div>
