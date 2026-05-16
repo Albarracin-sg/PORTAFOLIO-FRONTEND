@@ -34,17 +34,7 @@ function useChart() {
   return context;
 }
 
-const ResponsiveContainer = React.lazy(() => 
-  import("recharts").then(mod => ({ default: mod.ResponsiveContainer }))
-);
-
-const RechartsTooltip = React.lazy(() => 
-  import("recharts").then(mod => ({ default: mod.Tooltip }))
-);
-
-const RechartsLegend = React.lazy(() => 
-  import("recharts").then(mod => ({ default: mod.Legend }))
-);
+import { ResponsiveContainer, Tooltip as RechartsTooltip, Legend as RechartsLegend } from "recharts";
 
 const ChartContainer = ({
   id,
@@ -73,11 +63,9 @@ const ChartContainer = ({
         {...props}
       >
         <ChartStyle id={chartId} config={config} />
-        <React.Suspense fallback={<div className="flex h-full w-full items-center justify-center bg-zinc-50/50 dark:bg-zinc-900/50 animate-pulse rounded-lg" />}>
-          <ResponsiveContainer>
-            <>{children}</>
-          </ResponsiveContainer>
-        </React.Suspense>
+        <ResponsiveContainer>
+          {children as React.ReactElement}
+        </ResponsiveContainer>
       </div>
     </ChartContext.Provider>
   );

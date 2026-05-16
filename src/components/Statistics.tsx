@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, lazy, Suspense } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, FolderGit2, Star, GitBranch, Users, Activity, Zap, Clock, Server, Music, BarChart3, FolderOpen, Bot, Shield, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -12,11 +12,11 @@ import { StatsCard } from "./Statistics/StatsCard";
 import { MetricCard } from "./Statistics/MetricCard";
 import { EndpointList } from "./Statistics/EndpointList";
 
-// Lazy-loaded chart components
-const LanguageChart = lazy(() => import("./Statistics/LanguageChart").then(m => ({ default: m.LanguageChart })));
-const ProjectTimelineChart = lazy(() => import("./Statistics/ProjectTimelineChart").then(m => ({ default: m.ProjectTimelineChart })));
-const GithubActivityChart = lazy(() => import("./Statistics/GithubActivityChart").then(m => ({ default: m.GithubActivityChart })));
-const ApiTrafficChart = lazy(() => import("./Statistics/ApiTrafficChart").then(m => ({ default: m.ApiTrafficChart })));
+// Chart components
+import { LanguageChart } from "./Statistics/LanguageChart";
+import { ProjectTimelineChart } from "./Statistics/ProjectTimelineChart";
+import { GithubActivityChart } from "./Statistics/GithubActivityChart";
+import { ApiTrafficChart } from "./Statistics/ApiTrafficChart";
 
 function ChartFallback() {
   return (
