@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ExternalLink, Loader2, Music2, PauseCircle, Radio, Waves } from 'lucide-react';
+import { ExternalLink, Music2, PauseCircle, Radio, Waves } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from './ui/card';
 import { fetchNowPlaying, type SpotifyTrack } from '@/shared/api/public';
@@ -21,11 +21,9 @@ export function SpotifyNowPlayingCard() {
   const { t } = useTranslation();
   const [state, setState] = useState<{
     track: SpotifyTrack | null;
-    loading: boolean;
     error: boolean;
   }>({
     track: null,
-    loading: true,
     error: false,
   });
 
@@ -37,11 +35,11 @@ export function SpotifyNowPlayingCard() {
       try {
         const data = await fetchNowPlaying();
         if (!cancelled) {
-          setState({ track: data, error: false, loading: false });
+          setState({ track: data, error: false });
         }
       } catch {
         if (!cancelled) {
-          setState(prev => ({ ...prev, error: true, loading: false }));
+          setState(prev => ({ ...prev, error: true }));
         }
       }
     }
@@ -83,30 +81,8 @@ export function SpotifyNowPlayingCard() {
     };
   }, []);
 
-  const { track, loading, error } = state;
+  const { track, error } = state;
   const progress = useMemo(() => (track ? getProgressPercentage(track) : 0), [track]);
-
-  if (loading) {
-    return (
-      <Card className="group mt-6 overflow-hidden border-violet-500/20 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-violet-500/10 dark:bg-zinc-950/70">
-        <CardContent className="flex items-center gap-3 p-3.5 sm:gap-4 sm:p-4">
-          <div className="relative flex size-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-violet-100 dark:bg-violet-500/15">
-            <Loader2 className="size-6 animate-spin text-violet-600 dark:text-violet-400" />
-          </div>
-          <div className="flex-1 gap-y-2">
-            <div className="flex items-center gap-2">
-              <div className="size-3 animate-pulse rounded-full bg-violet-400" />
-              <div className="h-3 w-24 animate-pulse rounded-full bg-violet-100 dark:bg-violet-500/15" />
-            </div>
-            <p className="animate-pulse text-sm font-medium text-zinc-600 dark:text-white">
-              {t('spotify.loading')}
-            </p>
-            <div className="h-2 w-full max-w-[120px] animate-pulse rounded-full bg-zinc-200 dark:bg-zinc-800" />
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
 
   if (error || !track || track.type === 'none') {
     return (

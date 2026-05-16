@@ -61,11 +61,11 @@ export type SpotifyTrack = {
 };
 
 export async function fetchPublicPage(slug: string) {
-  return apiRequest<PublicPage>(`/public/pages/${slug}`, { cache: 'no-store' });
+  return apiRequest<PublicPage>(`/public/pages/${slug}`);
 }
 
 export async function fetchPublicProjects() {
-  return apiRequest<PublicProject[]>('/public/projects', { cache: 'no-store' });
+  return apiRequest<PublicProject[]>('/public/projects');
 }
 
 export async function sendContactMessage(payload: {
@@ -78,7 +78,7 @@ export async function sendContactMessage(payload: {
 }
 
 export async function fetchGithubStats() {
-  return apiRequest<GithubStats>('/public/github/stats', { cache: 'no-store' });
+  return apiRequest<GithubStats>('/public/github/stats');
 }
 
 export type ApiStats = {
@@ -97,10 +97,10 @@ export type ApiStats = {
 
 export async function fetchNowPlaying() {
   // El backend devuelve { track, cached, stale, … } - extraer solo track
-  const response = await apiRequest<{ track: SpotifyTrack; cached: boolean; stale: boolean }>('/public/spotify/now-playing', { cache: 'no-store' });
+  const response = await apiRequest<{ track: SpotifyTrack; cached: boolean; stale: boolean }>('/public/spotify/now-playing');
   return response.track;
 }
 
 export async function fetchApiStats() {
-  return apiRequest<ApiStats>('/public/stats', { cache: 'no-store' });
+  return apiRequest<ApiStats>('/public/stats');
 }

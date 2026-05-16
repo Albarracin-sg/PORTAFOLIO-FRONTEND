@@ -11,27 +11,20 @@ import { Skeleton } from '@/components/ui/skeleton';
 interface HomeState {
   sections: Record<string, { id: string; type: string; content: Record<string, unknown> }>;
   carouselProjects: any[];
-  isPageLoaded: boolean;
   isProjectsLoaded: boolean;
 }
 
 type HomeAction = 
-  | { type: 'START_FETCH' }
   | { type: 'SET_SECTIONS'; payload: Record<string, { id: string; type: string; content: Record<string, unknown> }> }
   | { type: 'SET_PROJECTS'; payload: any[] }
-  | { type: 'FINISH_PAGE_LOAD' }
   | { type: 'FINISH_PROJECTS_LOAD' };
 
 function homeReducer(state: HomeState, action: HomeAction): HomeState {
   switch (action.type) {
-    case 'START_FETCH':
-      return { ...state, isPageLoaded: false, isProjectsLoaded: false };
     case 'SET_SECTIONS':
       return { ...state, sections: action.payload };
     case 'SET_PROJECTS':
       return { ...state, carouselProjects: action.payload };
-    case 'FINISH_PAGE_LOAD':
-      return { ...state, isPageLoaded: true };
     case 'FINISH_PROJECTS_LOAD':
       return { ...state, isProjectsLoaded: true };
     default:
@@ -40,23 +33,17 @@ function homeReducer(state: HomeState, action: HomeAction): HomeState {
 }
 
 export function HomePage() {
-  const scrollY = 0; // Or whatever default or hook use you prefer if scrollY is used below
+  const scrollY = 0;
   const [state, dispatch] = useReducer(homeReducer, {
     sections: {},
     carouselProjects: [],
-    isPageLoaded: false,
     isProjectsLoaded: false,
   });
 
-  const { sections, carouselProjects, isPageLoaded, isProjectsLoaded } = state;
-
-  useEffect(() => {
-  }, []);
+  const { sections, carouselProjects, isProjectsLoaded } = state;
 
   useEffect(() => {
     let isActive = true;
-
-    dispatch({ type: 'START_FETCH' });
 
     fetchPublicPage('home')
       .then((result) => {
@@ -70,8 +57,7 @@ export function HomePage() {
         );
         dispatch({ type: 'SET_SECTIONS', payload: sectionMap });
       })
-      .catch((error) => { console.error('Error loading home page:', error); })
-      .finally(() => { if (isActive) dispatch({ type: 'FINISH_PAGE_LOAD' }); });
+      .catch((error) => { console.error('Error loading home page:', error); });
 
     fetchPublicProjects()
       .then((result) => {
@@ -89,20 +75,7 @@ export function HomePage() {
     <>
       {/* ── Hero ── */}
       <section id="home">
-        {!isPageLoaded ? (
-          <div className="flex h-[80vh] items-center justify-center">
-            <div className="space-y-6 text-center w-full max-w-3xl px-4">
-              <Skeleton className="mx-auto h-16 w-3/4 rounded-2xl" />
-              <Skeleton className="mx-auto h-24 w-full rounded-2xl" />
-              <div className="flex justify-center gap-4 mt-8">
-                <Skeleton className="h-12 w-40 rounded-xl" />
-                <Skeleton className="h-12 w-40 rounded-xl" />
-              </div>
-            </div>
-          </div>
-        ) : (
-          <Hero scrollY={scrollY} section={sections.HERO} />
-        )}
+        <Hero scrollY={scrollY} section={sections.HERO} />
       </section>
 
       {/* ── Separador Hero → About ── */}
@@ -110,20 +83,7 @@ export function HomePage() {
 
       {/* ── About ── */}
       <section id="about">
-        {!isPageLoaded ? (
-          <div className="mx-auto max-w-7xl px-4 py-24 space-y-10">
-            <div className="space-y-4">
-              <Skeleton className="h-10 w-48 rounded-lg" />
-              <Skeleton className="h-32 w-full rounded-2xl" />
-            </div>
-            <div className="grid gap-6 md:grid-cols-2">
-              <Skeleton className="h-64 w-full rounded-2xl" />
-              <Skeleton className="h-64 w-full rounded-2xl" />
-            </div>
-          </div>
-        ) : (
-          <About />
-        )}
+        <About />
       </section>
 
       {/* ── Separador About → Projects ── */}

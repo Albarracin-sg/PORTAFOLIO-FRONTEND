@@ -4,9 +4,9 @@ import { ArrowLeft, FolderKanban } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "./ui/button";
+import { Skeleton } from "./ui/skeleton";
 import { mapPublicProjectToList } from "@/shared/api/mappers";
 import { fetchPublicProjects } from "@/shared/api/public";
-import { LoadingScreen } from "./ui/LoadingScreen";
 import { commonFormatters } from "@/shared/utils/formatters";
 
 // Sub-components
@@ -162,8 +162,6 @@ export default function AllProjects() {
     }
   }, [t]);
 
-  if (loading) return <LoadingScreen />;
-
   const techOptions = [
     { value: "all", label: t("projects.filters.all") },
     ...Array.from(new Set(projects.flatMap((p) => p.technologies)))
@@ -199,85 +197,110 @@ export default function AllProjects() {
         </div>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        <SummaryCard
-          label={t("projects.stats.totalProjects")}
-          value={String(filteredAndSortedProjects.length)}
-        />
-        <SummaryCard
-          label={t("projects.stats.trackedTechnologies")}
-          value={String(trackedTechnologies)}
-        />
-      </div>
-
-      <div className="flex flex-col gap-8">
-        <ProjectFilters
-          searchTerm={searchQuery}
-          onSearchChange={(query: string) => dispatch({ type: "SET_SEARCH_QUERY", payload: query })}
-          selectedCategory="all"
-          onCategoryChange={() => {}} // Not used yet
-          selectedTech={filterTech}
-          onTechChange={(tech: string) => dispatch({ type: "SET_FILTER_TECH", payload: tech })}
-          sortBy={sortBy.split("-")[0]}
-          sortOrder={sortBy.split("-")[1] as "asc" | "desc"}
-          onSortChange={(s: string, o: string) => dispatch({ type: "SET_SORT_BY", payload: `${s}-${o}` as any })}
-          categories={[{ value: "all", label: t("projects.filters.all") }]}
-          technologies={techOptions}
-          projectCountLabel={`${filteredAndSortedProjects.length} ${t("projects.resultsFound")}`}
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
-        />
-
-        <div className="flex-1 space-y-10">
-          <div className={viewMode === "grid" ? "grid gap-6 sm:grid-cols-2" : "grid gap-6"}>
-            {paginatedProjects.map((project) => (
-              <ProjectCard
-                key={project.id}
-                project={project}
-                formatDate={formatDate}
-                getStatusColor={getStatusColor}
-                getStatusLabel={getStatusLabel}
-                onSelect={(p: any) => navigate(`/projects/${p.id}`)}
-                t={t}
-                i18n={i18n}
-                isListView={viewMode === "list"}
-              />
-            ))}
+      {loading ? (
+        <>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Skeleton className="h-24 w-full rounded-2xl" />
+            <Skeleton className="h-24 w-full rounded-2xl" />
           </div>
 
-          {filteredAndSortedProjects.length === 0 && (
-            <div className="flex min-h-[400px] flex-col items-center justify-center rounded-3xl border border-dashed border-zinc-200 bg-white/30 dark:border-white/10 dark:bg-white/[0.01]">
-              <div className="flex size-16 items-center justify-center rounded-2xl bg-zinc-100 dark:bg-white/5">
-                <FolderKanban className="size-8 text-zinc-400" />
-              </div>
-              <h3 className="mt-4 text-lg font-semibold text-zinc-900 dark:text-white">
-                {t("projects.noResults")}
-              </h3>
-              <p className="mt-1 text-sm text-zinc-500">{t("projects.tryAdjusting")}</p>
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  dispatch({ type: "SET_FILTER_TECH", payload: "all" });
-                  dispatch({ type: "SET_FILTER_STATUS", payload: "all" });
-                  dispatch({ type: "SET_SEARCH_QUERY", payload: "" });
-                }}
-                className="mt-6 rounded-xl hover:bg-violet-500/10 hover:text-violet-600"
-              >
-                {t("projects.clearFilters")}
-              </Button>
+          <div className="flex flex-col gap-8">
+            <div className="flex gap-4">
+              <Skeleton className="h-10 w-48 rounded-xl" />
+              <Skeleton className="h-10 w-32 rounded-xl" />
+              <Skeleton className="ml-auto h-10 w-40 rounded-xl" />
             </div>
-          )}
-
-          {totalPages > 1 && (
-            <ProjectPagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              onPageChange={(page: number) => dispatch({ type: "SET_PAGE", payload: page })}
-              t={t}
+            <div className="grid gap-6 sm:grid-cols-2">
+              <Skeleton className="aspect-video w-full rounded-3xl" />
+              <Skeleton className="aspect-video w-full rounded-3xl" />
+              <Skeleton className="aspect-video w-full rounded-3xl" />
+              <Skeleton className="aspect-video w-full rounded-3xl" />
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <SummaryCard
+              label={t("projects.stats.totalProjects")}
+              value={String(filteredAndSortedProjects.length)}
             />
-          )}
-        </div>
-      </div>
+            <SummaryCard
+              label={t("projects.stats.trackedTechnologies")}
+              value={String(trackedTechnologies)}
+            />
+          </div>
+
+          <div className="flex flex-col gap-8">
+            <ProjectFilters
+              searchTerm={searchQuery}
+              onSearchChange={(query: string) => dispatch({ type: "SET_SEARCH_QUERY", payload: query })}
+              selectedCategory="all"
+              onCategoryChange={() => {}} // Not used yet
+              selectedTech={filterTech}
+              onTechChange={(tech: string) => dispatch({ type: "SET_FILTER_TECH", payload: tech })}
+              sortBy={sortBy.split("-")[0]}
+              sortOrder={sortBy.split("-")[1] as "asc" | "desc"}
+              onSortChange={(s: string, o: string) => dispatch({ type: "SET_SORT_BY", payload: `${s}-${o}` as any })}
+              categories={[{ value: "all", label: t("projects.filters.all") }]}
+              technologies={techOptions}
+              projectCountLabel={`${filteredAndSortedProjects.length} ${t("projects.resultsFound")}`}
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+            />
+
+            <div className="flex-1 space-y-10">
+              <div className={viewMode === "grid" ? "grid gap-6 sm:grid-cols-2" : "grid gap-6"}>
+                {paginatedProjects.map((project) => (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    formatDate={formatDate}
+                    getStatusColor={getStatusColor}
+                    getStatusLabel={getStatusLabel}
+                    onSelect={(p: any) => navigate(`/projects/${p.id}`)}
+                    t={t}
+                    i18n={i18n}
+                    isListView={viewMode === "list"}
+                  />
+                ))}
+              </div>
+
+              {filteredAndSortedProjects.length === 0 && (
+                <div className="flex min-h-[400px] flex-col items-center justify-center rounded-3xl border border-dashed border-zinc-200 bg-white/30 dark:border-white/10 dark:bg-white/[0.01]">
+                  <div className="flex size-16 items-center justify-center rounded-2xl bg-zinc-100 dark:bg-white/5">
+                    <FolderKanban className="size-8 text-zinc-400" />
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold text-zinc-900 dark:text-white">
+                    {t("projects.noResults")}
+                  </h3>
+                  <p className="mt-1 text-sm text-zinc-500">{t("projects.tryAdjusting")}</p>
+                  <Button
+                    variant="ghost"
+                    onClick={() => {
+                      dispatch({ type: "SET_FILTER_TECH", payload: "all" });
+                      dispatch({ type: "SET_FILTER_STATUS", payload: "all" });
+                      dispatch({ type: "SET_SEARCH_QUERY", payload: "" });
+                    }}
+                    className="mt-6 rounded-xl hover:bg-violet-500/10 hover:text-violet-600"
+                  >
+                    {t("projects.clearFilters")}
+                  </Button>
+                </div>
+              )}
+
+              {totalPages > 1 && (
+                <ProjectPagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={(page: number) => dispatch({ type: "SET_PAGE", payload: page })}
+                  t={t}
+                />
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
