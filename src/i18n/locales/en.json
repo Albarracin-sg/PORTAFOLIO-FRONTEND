@@ -426,6 +426,10 @@
       "recentActivitySubtitle": "Latest API requests in real-time",
       "noActivity": "No recent activity"
     },
+    "messages": {
+      "back": "Back to Dashboard",
+      "reset": "Reset conversation"
+    },
     "bot": {
       "title": "Bot Conversations",
       "subtitle": "Review and manage interactions between users and the AI assistant.",

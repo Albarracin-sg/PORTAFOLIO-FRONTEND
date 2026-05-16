@@ -426,6 +426,10 @@
       "recentActivitySubtitle": "Últimas solicitudes API en tiempo real",
       "noActivity": "Sin actividad reciente"
     },
+    "messages": {
+      "back": "Volver al Panel",
+      "reset": "Reiniciar conversación"
+    },
     "bot": {
       "title": "Conversaciones del Bot",
       "subtitle": "Revisá y gestioná las interacciones entre los usuarios y el asistente de IA.",
