@@ -428,7 +428,15 @@
     },
     "messages": {
       "back": "Volver al Panel",
-      "reset": "Reiniciar conversación"
+      "inbox": "Bandeja de Entrada",
+      "title": "Mensajes",
+      "subtitle": "Consultas recientes del formulario de contacto de tu portafolio.",
+      "reset": "Reiniciar conversación",
+      "loading": "Cargando mensajes...",
+      "empty": "Todavía no hay mensajes.",
+      "received": "Recibido",
+      "content": "Contenido",
+      "reply": "Responder"
     },
     "bot": {
       "title": "Conversaciones del Bot",

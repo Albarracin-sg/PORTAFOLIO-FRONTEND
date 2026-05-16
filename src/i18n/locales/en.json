@@ -428,7 +428,15 @@
     },
     "messages": {
       "back": "Back to Dashboard",
-      "reset": "Reset conversation"
+      "inbox": "Inbox",
+      "title": "Messages",
+      "subtitle": "Recent queries from your portfolio contact form.",
+      "reset": "Reset conversation",
+      "loading": "Loading messages...",
+      "empty": "No messages yet.",
+      "received": "Received",
+      "content": "Content",
+      "reply": "Reply"
     },
     "bot": {
       "title": "Bot Conversations",
