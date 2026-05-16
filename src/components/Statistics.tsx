@@ -165,6 +165,9 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
           <Suspense fallback={<ChartFallback />}>
             <ProjectTimelineChart data={projectsData} config={{ projects: { label: t("stats.projectsTimeline"), color: "#8b5cf6" } }} />
           </Suspense>
+        </div>
+
+        <div className="mx-auto mt-8 max-w-4xl">
           <Suspense fallback={<ChartFallback />}>
             <GithubActivityChart data={githubActivity} config={{ commits: { label: t("stats.githubActivity"), color: "#8b5cf6" } }} />
           </Suspense>
