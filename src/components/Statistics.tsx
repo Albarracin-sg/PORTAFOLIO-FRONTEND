@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, Suspense } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, FolderGit2, Star, GitBranch, Users, Activity, Zap, Clock, Server, Music, BarChart3, FolderOpen, Bot, Shield, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -31,9 +31,10 @@ function ChartFallback() {
 interface StatisticsProps {
   githubStats?: GithubStats | null;
   apiStats?: ApiStats | null;
+  isLoading?: boolean;
 }
 
-export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
+export default function Statistics({ githubStats, apiStats, isLoading = true }: StatisticsProps) {
   const { t, i18n } = useTranslation();
   const isSpanish = i18n.language.startsWith("es");
   const [isMobile, setIsMobile] = useState(false);
@@ -155,22 +156,33 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
         </div>
 
         <div className="mb-8 sm:mb-12 grid grid-cols-2 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
-          {cards.map((stat) => <StatsCard key={stat.title} {...stat} />)}
+          {isLoading && !githubStats
+            ? Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="h-32 animate-pulse rounded-2xl border border-zinc-200/50 bg-zinc-50/50 dark:border-white/[0.05] dark:bg-white/[0.02]" />
+              ))
+            : cards.map((stat) => <StatsCard key={stat.title} {...stat} />)}
         </div>
 
         <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
-          <Suspense fallback={<ChartFallback />}>
-            <LanguageChart data={languageData} config={languageChartConfig} />
-          </Suspense>
-          <Suspense fallback={<ChartFallback />}>
-            <ProjectTimelineChart data={projectsData} config={{ projects: { label: t("stats.projectsTimeline"), color: "#8b5cf6" } }} />
-          </Suspense>
+          {isLoading && !githubStats ? (
+            <>
+              <ChartFallback />
+              <ChartFallback />
+            </>
+          ) : (
+            <>
+              <LanguageChart data={languageData} config={languageChartConfig} />
+              <ProjectTimelineChart data={projectsData} config={{ projects: { label: t("stats.projectsTimeline"), color: "#8b5cf6" } }} />
+            </>
+          )}
         </div>
 
         <div className="mx-auto mt-8 max-w-4xl">
-          <Suspense fallback={<ChartFallback />}>
+          {isLoading && !githubStats ? (
+            <ChartFallback />
+          ) : (
             <GithubActivityChart data={githubActivity} config={{ commits: { label: t("stats.githubActivity"), color: "#8b5cf6" } }} />
-          </Suspense>
+          )}
         </div>
 
         <div className="mt-8 sm:mt-12 grid gap-4 sm:gap-6 grid-cols-2 md:grid-cols-3">
@@ -179,7 +191,7 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
 
         <div className="relative mt-24 sm:mt-32 pb-16 sm:pb-20"><div className="w-full h-px bg-gradient-to-r from-transparent via-violet-500/40 to-transparent" /></div>
 
-        {apiStats && (
+        {(isLoading && !apiStats) || apiStats ? (
           <div>
             <div className="mb-6 sm:mb-8 text-center">
               <p className="text-sm font-semibold uppercase tracking-[0.22em] text-violet-600 dark:text-violet-400">{t("stats.apiPerformance")}</p>
@@ -190,19 +202,32 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
               </a>
               <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">{t("stats.docsCredentials")} <span className="font-medium text-violet-600 dark:text-violet-400">{t("stats.docsUsername")} / {t("stats.docsPassword")}</span></p>
             </div>
-            <div className="grid grid-cols-2 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
-              {apiMetricCards.map((card) => <StatsCard key={card.label} title={card.label} value={card.value} description="" icon={card.icon} />)}
-            </div>
-            {barChartData.length > 0 && (
-              <div className="mx-auto max-w-4xl">
-                <Suspense fallback={<ChartFallback />}>
-                  <ApiTrafficChart data={barChartData} isMobile={isMobile} />
-                </Suspense>
-                <EndpointList endpoints={pagedEndpoints} page={endpointPage} totalPages={totalPages} onPageChange={setEndpointPage} getIcon={getEndpointIcon} formatNumber={formatBigNumber} />
-              </div>
+            {isLoading && !apiStats ? (
+              <>
+                <div className="grid grid-cols-2 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="h-32 animate-pulse rounded-2xl border border-zinc-200/50 bg-zinc-50/50 dark:border-white/[0.05] dark:bg-white/[0.02]" />
+                  ))}
+                </div>
+                <div className="mx-auto mt-8 max-w-4xl">
+                  <ChartFallback />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="grid grid-cols-2 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
+                  {apiMetricCards.map((card) => <StatsCard key={card.label} title={card.label} value={card.value} description="" icon={card.icon} />)}
+                </div>
+                {barChartData.length > 0 && (
+                  <div className="mx-auto max-w-4xl">
+                    <ApiTrafficChart data={barChartData} isMobile={isMobile} />
+                    <EndpointList endpoints={pagedEndpoints} page={endpointPage} totalPages={totalPages} onPageChange={setEndpointPage} getIcon={getEndpointIcon} formatNumber={formatBigNumber} />
+                  </div>
+                )}
+              </>
             )}
           </div>
-        )}
+        ) : null}
       </div>
     </section>
   );

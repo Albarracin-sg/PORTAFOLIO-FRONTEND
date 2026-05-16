@@ -5,6 +5,7 @@ import { fetchGithubStats, fetchApiStats, type ApiStats } from '@/shared/api/pub
 export function StatsPage() {
   const [githubStats, setGithubStats] = useState<any | null>(null);
   const [apiStats, setApiStats] = useState<ApiStats | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let isActive = true;
@@ -18,11 +19,12 @@ export function StatsPage() {
 
       if (statsResult.status === 'fulfilled') setGithubStats(statsResult.value);
       if (apiResult.status === 'fulfilled') setApiStats(apiResult.value);
+      setIsLoading(false);
     };
 
     load();
     return () => { isActive = false; };
   }, []);
 
-  return <Statistics githubStats={githubStats} apiStats={apiStats} />;
+  return <Statistics githubStats={githubStats} apiStats={apiStats} isLoading={isLoading} />;
 }
