@@ -24,7 +24,7 @@ export function SkillBubble({ name, showName = false, className, size = 'md' }: 
   return (
     <div
       className={cn(
-        "inline-flex items-center justify-center rounded-full border border-violet-200/60 bg-violet-100/40 shadow-sm transition-all duration-300 hover:scale-110 hover:border-violet-400 hover:bg-violet-200/50 dark:border-violet-500/30 dark:bg-violet-950/30 dark:hover:border-violet-500/50 dark:hover:bg-violet-900/40",
+        "inline-flex items-center justify-center rounded-full border border-violet-200/60 bg-violet-100/40 shadow-sm transition-transform duration-300 hover:scale-110 hover:border-violet-400 hover:bg-violet-200/50 dark:border-violet-500/30 dark:bg-violet-950/30 dark:hover:border-violet-500/50 dark:hover:bg-violet-900/40",
         sizeClasses[size],
         className
       )}

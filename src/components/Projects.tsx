@@ -141,7 +141,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
                 return (
                   <CarouselItem
                     key={project.id}
-                    className="pl-4 basis-[85%] md:basis-[65%] lg:basis-[48%] xl:basis-[38%] 2xl:basis-[32%]"
+                    className="pl-4 basis-[85%] md:basis-[65%] lg:basis-[48%] xl:basis-[38%] 2xl:basis-[32%] will-change-transform"
                   >
                     <Card className="flex h-full flex-col overflow-hidden rounded-2xl border border-zinc-200/80 bg-white/85 shadow-lg shadow-zinc-200/60 transition-transform duration-300 hover:-translate-y-1 dark:border-white/10 dark:bg-zinc-950/75 dark:shadow-black/20">
                       <div className="relative h-36 sm:h-44 overflow-hidden bg-zinc-100 dark:bg-zinc-900">
