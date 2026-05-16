@@ -191,12 +191,12 @@ export default function Statistics({ githubStats, apiStats }: StatisticsProps) {
               {apiMetricCards.map((card) => <StatsCard key={card.label} title={card.label} value={card.value} description="" icon={card.icon} />)}
             </div>
             {barChartData.length > 0 && (
-              <>
+              <div className="mx-auto max-w-4xl">
                 <Suspense fallback={<ChartFallback />}>
                   <ApiTrafficChart data={barChartData} isMobile={isMobile} />
                 </Suspense>
                 <EndpointList endpoints={pagedEndpoints} page={endpointPage} totalPages={totalPages} onPageChange={setEndpointPage} getIcon={getEndpointIcon} formatNumber={formatBigNumber} />
-              </>
+              </div>
             )}
           </div>
         )}
