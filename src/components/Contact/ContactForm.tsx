@@ -21,7 +21,7 @@ export function ContactForm({ onSubmit, updateField, t }: ContactFormProps) {
 
   return (
     <div className="flex flex-col rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/40 p-7">
-      <p className="text-xs font-medium uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-6">
+      <p className="text-xs font-medium uppercase tracking-widest text-zinc-500 dark:text-zinc-500 mb-6">
         {t("contact.form.title")}
       </p>
 

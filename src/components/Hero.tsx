@@ -7,7 +7,7 @@ import { useEditMode } from "@/features/admin/EditModeProvider";
 import { uploadMedia } from "@/features/admin/api/media";
 import { useTheme } from "@/features/theme";
 import { useTranslation } from "react-i18next";
-import logoImg from "@/assets/logo.png";
+import logoImg from "@/assets/logo.webp";
 import cvPdf from "@/assets/cv/JUAN_ALBARRACIN_CV.pdf";
 import { SpotifyNowPlayingCard } from "./SpotifyNowPlayingCard";
 import { SkillBubble } from "./SkillBubble";
@@ -25,7 +25,7 @@ export default function Hero({ section }: HeroProps) {
   const { token } = useAdminAuth();
   const { isEditMode } = useEditMode();
   const [uploading, setUploading] = useState<'primary' | 'secondary' | null>(null);
-  const activeLogo = isDark ? '/logoNigth.png' : logoImg;
+  const activeLogo = isDark ? '/logoNigth.webp' : logoImg;
   const primaryImage = activeLogo;
   const canEditImages = isEditMode && !!token && window.location.pathname.startsWith('/admin/live');
 

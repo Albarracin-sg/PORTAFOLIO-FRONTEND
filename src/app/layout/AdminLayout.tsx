@@ -8,7 +8,7 @@ import { useTheme } from '@/features/theme';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { LayoutDashboard, FolderKanban, MessageSquare, LogOut, Loader2, Menu, Moon, Sun, X, Activity, Bot } from 'lucide-react';
 import { useState } from 'react';
-import logoImg from '@/assets/logo.png';
+import logoImg from '@/assets/logo.webp';
 
 const navItems = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
@@ -40,7 +40,7 @@ export function AdminLayout() {
   ] as const;
 
   const currentLanguage = languageOptions.find((opt) => opt.value === language) ?? languageOptions[0];
-  const activeLogo = isDark ? '/logoNigth.png' : logoImg;
+  const activeLogo = isDark ? '/logoNigth.webp' : logoImg;
 
   const mobileSurfaceClass = isDark
     ? 'bg-background text-white border-white/10'

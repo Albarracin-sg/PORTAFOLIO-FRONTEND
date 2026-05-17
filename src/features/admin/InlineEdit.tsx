@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useAdminAuth } from './AdminAuthProvider';
 import { useEditMode } from './EditModeProvider';
 import { uploadMedia } from './api/media';
-import logoImg from '@/assets/logo.png';
+import logoImg from '@/assets/logo.webp';
 
 type EditableTextProps = {
   value: string;

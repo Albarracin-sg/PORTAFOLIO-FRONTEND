@@ -48,3 +48,5 @@ coverage/
 # Optional: keep bun.lock or package-lock.json (no ignorar lockfiles por defecto)
 # bun.lock
 # package-lock.json
+lighthouse-*.json
+lighthouse-*.html
