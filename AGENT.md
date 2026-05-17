@@ -115,8 +115,9 @@ src/
 
 ### Componentes
 
-- **Named exports** — siempre `export function ComponentName()`, no `export default`
-- **Excepción:** `App.tsx` usa `export default` (requisito de React Router lazy)
+- **Export default** — mayoría de page/feature components usan `export default`
+- **Excepción:** componentes de `components/ui/` (shadcn-style) usan **named exports**
+- **Composición** sobre configuración — componentes chicos que se combinan
 - **Composición** sobre configuración — componentes chicos que se combinan
 - **shadcn/ui-style** — los wrappers de Radix están en `components/ui/` y siguen el patrón de shadcn (variants con `cva`, `cn()` para merge de clases)
 - **Radix directo** — features usan Radix primitives directamente cuando el wrapper de shadcn no existe o no alcanza
@@ -183,12 +184,14 @@ src/
 
 | Categoría      | Puntaje |
 | -------------- | ------- |
-| Performance    | **59**  |
-| Accesibilidad  | **81**  |
+| Performance    | **54**  |
+| Accesibilidad  | **100** |
 | Best Practices | **100** |
 | SEO            | **100** |
 
-**Métricas:** FCP 5.9s · LCP 7.7s · TBT 0.2s · CLS 0.006 · Peso total 2.7MB
-**Cuellos de botella:** JS no usado (~1.4s ahorrable), CSS no usado (~0.8s), imágenes sin lazy loading.
+**Métricas:** FCP ~10s · LCP ~11s · TBT 0.2s · CLS 0.006 · Peso total 1.9MB
+**Cuellos de botella:** React SPA bundle (~1.9MB), render-blocking CSS, sin SSR.
+**Para mejorar:** SSR/SSG, critical CSS inline, font optimization.
 
-> Reporte: `./lighthouse-prod.json`. Correr de nuevo: `bun run build && python3 -m http.server 4174 -d build/ && bunx lighthouse http://localhost:4174/`
+> Reporte: `docs/reports/lighthouse/2026-05-17/report.json` o `docs/reports/lighthouse/<fecha>/report.json`.
+> Correr de nuevo: `bun run build && python3 -m http.server 4174 -d build/ && bunx lighthouse http://localhost:4174/`
