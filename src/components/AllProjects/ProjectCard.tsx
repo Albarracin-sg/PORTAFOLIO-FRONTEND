@@ -40,6 +40,7 @@ export function ProjectCard({
           <img
             src={project.image}
             alt={project.title}
+            loading="lazy"
             className="size-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
@@ -64,11 +65,11 @@ export function ProjectCard({
         <div className={`${isListView ? "min-w-0 flex-1" : ""}`}>
           <CardHeader className="mb-4 p-0 space-y-3">
             <div className="space-y-1">
-              <CardTitle className="line-clamp-1 text-xl font-semibold tracking-tight text-zinc-900 dark:text-white">
+              <CardTitle as="h3" className="line-clamp-1 text-xl font-semibold tracking-tight text-zinc-900 dark:text-white">
                 {project.title}
               </CardTitle>
               
-              <div className="flex items-center gap-4 text-xs text-zinc-500 dark:text-zinc-400">
+              <div className="flex items-center gap-4 text-xs text-zinc-600 dark:text-zinc-400">
                 <div className="flex items-center gap-x-1">
                   <Star className="size-3.5" />
                   <span>{project.stars}</span>
@@ -113,7 +114,7 @@ export function ProjectCard({
         <div className={`${isListView ? "mt-6 lg:mt-0 lg:w-64 lg:border-l lg:border-zinc-200 lg:pl-6 dark:lg:border-white/[0.07]" : "mt-4"}`}>
           <CardContent className="space-y-4 p-0">
             {!isListView && (
-              <div className="flex items-center gap-x-1 text-xs text-zinc-500 dark:text-zinc-400">
+              <div className="flex items-center gap-x-1 text-xs text-zinc-600 dark:text-zinc-400">
                 <Calendar className="size-3.5" />
                 <span>
                   {t("projects.updatedOn")}: {formatDate(project.date)}

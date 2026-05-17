@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Github, Linkedin, Mail, Heart, MapPin, ArrowUpRight, Globe } from "lucide-react";
-import logoImg from "@/assets/logo.png";
+import logoImg from "@/assets/logo.webp";
 
 interface FooterProps {
   isDark: boolean;
@@ -61,7 +61,7 @@ export default function Footer({ isDark, onPageChange, currentPage }: FooterProp
     }
   };
 
-  const activeLogo = isDark ? "/logoNigth.png" : logoImg;
+  const activeLogo = isDark ? "/logoNigth.webp" : logoImg;
 
   return (
     <footer className="relative z-10 bg-background/95 dark:bg-transparent backdrop-blur supports-[backdrop-filter]:bg-background/80 dark:supports-[backdrop-filter]:bg-transparent pt-24 pb-12">
@@ -73,84 +73,86 @@ export default function Footer({ isDark, onPageChange, currentPage }: FooterProp
        <div className="block lg:hidden text-center mb-20 space-y-8">
            <div className="space-y-6">
              <Link to="/" onClick={() => scrollToSection("home")} className="inline-block transition-transform hover:scale-110 duration-300 cursor-pointer">
-               <img src={activeLogo} alt="Juan Albarracín" className="h-20 w-auto mx-auto dark:brightness-110" />
+                <img src={activeLogo} alt="Juan Albarracín" width={80} height={80} loading="lazy" className="h-20 w-auto mx-auto dark:brightness-110" />
              </Link>
              <p className="text-sm text-muted-foreground leading-relaxed max-w-xs mx-auto">
                {t("footer.description")}
              </p>
              <div className="flex gap-4 justify-center">
-               {socialLinks.map((social) => (
-                 <a
-                   key={social.label}
-                   href={social.href}
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   className="p-2.5 rounded-xl bg-muted/50 text-muted-foreground hover:text-violet-500 hover:bg-violet-500/10 border border-white/5 transition-all duration-300 cursor-pointer"
-                 >
-                   {social.icon}
-                 </a>
-               ))}
-             </div>
-           </div>
-           
-           <nav>
-             <ul className="flex flex-wrap justify-center gap-4">
-               {navItems.map((item) => (
-                 <li key={item.key}>
-                   <button
-                     onClick={() => scrollToSection(item.key)}
-                     className={`text-sm transition-colors hover:text-violet-500 cursor-pointer ${
-                       currentPage === item.key ? "text-violet-500 font-semibold" : "text-muted-foreground"
-                     }`}
-                   >
-                     {item.label}
-                   </button>
-                 </li>
-               ))}
-             </ul>
-           </nav>
-         </div>
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    className="p-2.5 rounded-xl bg-muted/50 text-muted-foreground hover:text-violet-500 hover:bg-violet-500/10 border border-white/5 transition-all duration-300 cursor-pointer"
+                  >
+                    {social.icon}
+                  </a>
+                ))}
+              </div>
+            </div>
+            
+            <nav>
+              <ul className="flex flex-wrap justify-center gap-4">
+                {navItems.map((item) => (
+                  <li key={item.key}>
+                    <button
+                      onClick={() => scrollToSection(item.key)}
+                      className={`text-sm transition-colors hover:text-violet-500 cursor-pointer ${
+                        currentPage === item.key ? "text-violet-600 dark:text-violet-400 font-semibold" : "text-muted-foreground"
+                      }`}
+                    >
+                      {item.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
 
-         <div className="hidden lg:grid lg:grid-cols-4 gap-8 mb-20">
-           
-           {/* Col 1: Identity */}
-           <div className="space-y-8">
-             <Link to="/" onClick={() => scrollToSection("home")} className="inline-block transition-transform hover:scale-110 duration-300 cursor-pointer">
-               <img src={activeLogo} alt="Juan Albarracín" className="h-24 w-auto dark:brightness-110" />
-             </Link>
-             <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-               {t("footer.description")}
-             </p>
-             <div className="flex gap-4">
-               {socialLinks.map((social) => (
-                 <a
-                   key={social.label}
-                   href={social.href}
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   className="p-2.5 rounded-xl bg-muted/50 text-muted-foreground hover:text-violet-500 hover:bg-violet-500/10 border border-white/5 transition-all duration-300 cursor-pointer"
-                 >
-                   {social.icon}
-                 </a>
-               ))}
+          <div className="hidden lg:grid lg:grid-cols-4 gap-8 mb-20">
+            
+            {/* Col 1: Identity */}
+            <div className="space-y-8">
+              <Link to="/" onClick={() => scrollToSection("home")} className="inline-block transition-transform hover:scale-110 duration-300 cursor-pointer">
+                <img src={activeLogo} alt="Juan Albarracín" width={96} height={96} loading="lazy" className="h-24 w-auto dark:brightness-110" />
+              </Link>
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
+                {t("footer.description")}
+              </p>
+              <div className="flex gap-4">
+                {socialLinks.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    className="p-2.5 rounded-xl bg-muted/50 text-muted-foreground hover:text-violet-500 hover:bg-violet-500/10 border border-white/5 transition-all duration-300 cursor-pointer"
+                  >
+                    {social.icon}
+                  </a>
+                ))}
              </div>
            </div>
            
            {/* Col 2: Navigation */}
            <div className="space-y-8">
-             <h3 className="text-[11px] font-semibold uppercase tracking-[0.3em] text-violet-500/80">
-               {t("footer.navigation")}
-             </h3>
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.3em] text-violet-600 dark:text-violet-400">
+                {t("footer.navigation")}
+              </h3>
              <ul className="space-y-4">
                {navItems.map((item) => (
                  <li key={item.key}>
                    <button
                      onClick={() => scrollToSection(item.key)}
                      className={`group flex items-center text-sm transition-colors hover:text-violet-500 cursor-pointer ${
-                       currentPage === item.key ? "text-violet-500 font-semibold" : "text-muted-foreground"
-                     }`}
-                   >
-                     {item.label}
+                        currentPage === item.key ? "text-violet-600 dark:text-violet-400 font-semibold" : "text-muted-foreground"
+                      }`}
+                    >
+                      {item.label}
                      <ArrowUpRight className={`ml-1.5 size-3.5 opacity-0 -translate-y-1 translate-x-1 transition-all group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 ${currentPage === item.key ? "opacity-100 translate-y-0 translate-x-0" : ""}`} />
                    </button>
                  </li>
@@ -160,9 +162,9 @@ export default function Footer({ isDark, onPageChange, currentPage }: FooterProp
            
            {/* Col 3: Contact */}
            <div className="space-y-8">
-             <h3 className="text-[11px] font-semibold uppercase tracking-[0.3em] text-violet-500/80">
-               {t("contact.info.title")}
-             </h3>
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.3em] text-violet-600 dark:text-violet-400">
+                {t("contact.info.title")}
+              </h3>
              <div className="space-y-6">
                <a href="mailto:albarrajuan5@gmail.com" className="group block space-y-2 cursor-pointer">
                  <span className="text-[10px] text-muted-foreground/50 uppercase tracking-widest block">{t("contact.info.directEmail")}</span>
@@ -176,9 +178,9 @@ export default function Footer({ isDark, onPageChange, currentPage }: FooterProp
            
            {/* Col 4: Status / Location */}
            <div className="space-y-8">
-             <h3 className="text-[11px] font-semibold uppercase tracking-[0.3em] text-violet-500/80">
-               {t("footer.presence")}
-             </h3>
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.3em] text-violet-600 dark:text-violet-400">
+                {t("footer.presence")}
+              </h3>
              <div className="space-y-6">
                <div className="flex items-start gap-3">
                  <div className="mt-1 p-2 rounded-lg bg-muted/50 border border-white/5">

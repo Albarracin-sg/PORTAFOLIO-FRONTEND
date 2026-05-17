@@ -70,6 +70,7 @@ export default function ProjectModal({
                 <img
                   src={project.image}
                   alt={project.name}
+                  loading="lazy"
                   className="size-full object-cover"
                 />
               ) : (

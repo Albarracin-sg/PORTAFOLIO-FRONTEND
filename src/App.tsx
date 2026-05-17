@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import '@/i18n';
 import { RootLayout } from './app/layout/RootLayout';
@@ -29,7 +29,23 @@ function PageFallback() {
   );
 }
 
+function useDecorativeIcons() {
+  useEffect(() => {
+    const fixSVGs = () => {
+      document.querySelectorAll('svg[role="img"]:not([aria-label]):not([title])').forEach((svg) => {
+        svg.setAttribute('aria-hidden', 'true');
+        svg.removeAttribute('role');
+      });
+    };
+    fixSVGs();
+    const observer = new MutationObserver(fixSVGs);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []);
+}
+
 export default function App() {
+  useDecorativeIcons();
   return (
     <>
       <ScrollToTop />

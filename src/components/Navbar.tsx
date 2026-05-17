@@ -2,7 +2,7 @@ import { Menu } from "lucide-react";
 import { useEffect, useRef, useReducer } from "react";
 import { useAdminAuth } from "@/features/admin/AdminAuthProvider";
 import { useTranslation } from "react-i18next";
-import logoImg from "@/assets/logo.png";
+import logoImg from "@/assets/logo.webp";
 import cvPdf from "@/assets/cv/JUAN_ALBARRACIN_CV.pdf";
 import type { Language } from "@/features/language";
 
@@ -134,7 +134,7 @@ export default function Navbar({
   const currentLanguage =
     languageOptions.find((option) => option.value === language) ?? languageOptions[0];
 
-  const activeLogo = isDark ? "/logoNigth.png" : logoImg;
+  const activeLogo = isDark ? "/logoNigth.webp" : logoImg;
 const logoSizes = isDark ? "h-16 w-auto" : "h-14 w-auto";
 
   const scrollToSection = (sectionId: string) => {
@@ -180,6 +180,7 @@ const logoSizes = isDark ? "h-16 w-auto" : "h-14 w-auto";
 
             <div className="md:hidden">
               <button
+                aria-label="Open menu"
                 onClick={() => dispatch({ type: "TOGGLE_MOBILE_MENU", payload: true })}
                 className={`rounded-xl border p-2.5 shadow-sm transition-all duration-300 cursor-pointer ${
                   isDark

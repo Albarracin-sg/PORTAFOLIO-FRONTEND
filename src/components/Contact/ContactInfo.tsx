@@ -20,7 +20,7 @@ export function ContactInfo({ infoItems, socialItems, socialTitle, updateField, 
                 <Icon className="size-4 text-violet-600 dark:text-violet-400" />
               </div>
               <div className="min-w-0">
-                <div className="text-xs font-medium uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-0.5">
+                <div className="text-xs font-medium uppercase tracking-widest text-zinc-500 dark:text-zinc-500 mb-0.5">
                   <EditableText
                     value={String(item.label)}
                     onSave={(value) => updateField(`info.${index}.label`, value)}
@@ -47,7 +47,7 @@ export function ContactInfo({ infoItems, socialItems, socialTitle, updateField, 
       </div>
 
       <div className="mt-auto pt-6 border-t border-zinc-100 dark:border-zinc-700/60">
-        <p className="text-xs font-medium uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-3">
+        <p className="text-xs font-medium uppercase tracking-widest text-zinc-500 dark:text-zinc-500 mb-3">
           {String(socialTitle)}
         </p>
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -65,7 +65,7 @@ export function ContactInfo({ infoItems, socialItems, socialTitle, updateField, 
                   <Icon className="size-4 text-violet-600 dark:text-violet-400" />
                 </div>
                 <div className="min-w-0">
-                  <div className="text-xs font-medium uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-0.5">
+                  <div className="text-xs font-medium uppercase tracking-widest text-zinc-500 dark:text-zinc-500 mb-0.5">
                     Social
                   </div>
                   <span className="block truncate text-sm font-semibold text-zinc-900 dark:text-zinc-100">
