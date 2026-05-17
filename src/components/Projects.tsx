@@ -148,6 +148,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
                         <img
                           src={project.image}
                           alt={project.name}
+                          loading="lazy"
                           className="size-full object-cover"
                         />
                         {/* Separador elegante más visible y asertivo */}
@@ -156,11 +157,11 @@ export default function Projects({ projects, section }: ProjectsProps) {
 
                       <CardHeader className="space-y-4 bg-transparent pb-2 text-zinc-900 dark:bg-transparent dark:text-white">
                         <div className="space-y-1">
-                          <CardTitle className="font-display line-clamp-1 text-2xl font-semibold leading-tight text-zinc-900 dark:text-white">
+                          <CardTitle as="h3" className="font-display line-clamp-1 text-2xl font-semibold leading-tight text-zinc-900 dark:text-white">
                             {project.name}
                           </CardTitle>
                           
-                          <div className="flex items-center gap-4 text-xs text-zinc-500 dark:text-zinc-400">
+                          <div className="flex items-center gap-4 text-xs text-zinc-600 dark:text-zinc-400">
                             <div className="flex items-center gap-1">
                               <Star className="size-3.5" />
                               <span>{project.stats?.stars ?? 0}</span>
@@ -169,7 +170,7 @@ export default function Projects({ projects, section }: ProjectsProps) {
                               <GitFork className="size-3.5" />
                               <span>{project.stats?.forks ?? 0}</span>
                             </div>
-                            <div className="ml-auto font-semibold uppercase tracking-wider text-violet-500/80">
+                            <div className="ml-auto font-semibold uppercase tracking-wider text-violet-600 dark:text-violet-400">
                               {project.category || 'Full Stack'}
                             </div>
                           </div>

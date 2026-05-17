@@ -20,6 +20,7 @@ export function ProjectContent({ project, getLocalizedValue }: ProjectContentPro
           <img
             src={project.imageUrl}
             alt={project.title}
+            loading="lazy"
             className="size-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
           />
         </div>

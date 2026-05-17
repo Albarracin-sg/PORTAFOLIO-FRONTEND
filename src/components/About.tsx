@@ -161,7 +161,7 @@ export default function About(_props: AboutProps) {
 
           {/* HEADER */}
           <div className="mx-auto mb-36 max-w-4xl text-center fu1">
-            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-400/25 bg-violet-500/8 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-violet-400">
+            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-400/25 bg-violet-500/8 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-violet-600 dark:text-violet-400">
               <Sparkles className="size-3" />
               Backend-first engineer
             </p>
@@ -242,10 +242,10 @@ export default function About(_props: AboutProps) {
                   >
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div>
-                        <h4 className="text-base font-semibold text-zinc-900 dark:text-white">{item.title}</h4>
-                        {item.company && <p className="mt-0.5 text-sm text-violet-400">{item.company}</p>}
+                        <h3 className="text-base font-semibold text-zinc-900 dark:text-white">{item.title}</h3>
+                        {item.company && <p className="mt-0.5 text-sm text-violet-600 dark:text-violet-400">{item.company}</p>}
                         {item.location && (
-                          <p className="mt-1 flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-600">
+                          <p className="mt-1 flex items-center gap-1 text-xs text-zinc-600 dark:text-zinc-600">
                             <MapPin className="size-3" />{item.location}
                           </p>
                         )}
@@ -319,11 +319,9 @@ export default function About(_props: AboutProps) {
                     className="flex h-full gap-5 rounded-2xl border border-zinc-200 bg-white/85 p-6 transition-colors hover:border-violet-400/20 dark:border-white/[0.07] dark:bg-white/[0.025]"
                   >
                     <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 dark:border-white/10 dark:bg-white/[0.04]">
-                      <GraduationCap className="size-5 text-violet-400" />
-                    </div>
-                    <div>
-                      <h4 className="text-base font-semibold text-zinc-900 dark:text-white">{item.title}</h4>
-                      {item.institution && <p className="mt-0.5 text-sm text-violet-400">{item.institution}</p>}
+                      <GraduationCap className="size-5 text-violet-600 dark:text-violet-400" />
+
+                      {item.institution && <p className="mt-0.5 text-sm text-violet-600 dark:text-violet-400">{item.institution}</p>}
                       {item.location && <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-600">{item.location}</p>}
                       {item.description && <p className="mt-3 text-sm leading-7 text-zinc-600 dark:text-zinc-400">{item.description}</p>}
                     </div>

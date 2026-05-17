@@ -118,7 +118,6 @@ export function SpotifyNowPlayingCard() {
       target="_blank"
       rel="noreferrer"
       className="mt-6 block"
-      aria-label={`${t('common.open')} ${track.name} ${t('common.in')} Spotify`}
     >
       <Card className="group overflow-hidden border-violet-500/20 bg-white/85 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/40 hover:shadow-xl hover:shadow-violet-500/10 dark:bg-zinc-950/75">
         <CardContent className="p-3.5 sm:p-4">
@@ -127,6 +126,7 @@ export function SpotifyNowPlayingCard() {
               <img
                 src={imageUrl}
                 alt={`Portada de ${track.album}`}
+                loading="lazy"
                 className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
