@@ -316,15 +316,19 @@ export default function About(_props: AboutProps) {
                 {about.educationItems.map((item) => (
                   <article
                     key={`${item.institution}-${item.title}`}
-                    className="flex h-full gap-5 rounded-2xl border border-zinc-200 bg-white/85 p-6 transition-colors hover:border-violet-400/20 dark:border-white/[0.07] dark:bg-white/[0.025]"
+                    className="rounded-2xl border border-zinc-200 bg-white/85 p-6 transition-colors hover:border-violet-400/20 hover:bg-white dark:border-white/[0.07] dark:bg-white/[0.025] dark:hover:bg-white/[0.04]"
                   >
-                    <div className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 dark:border-white/10 dark:bg-white/[0.04]">
-                      <GraduationCap className="size-5 text-violet-600 dark:text-violet-400" />
-
-                      {item.institution && <p className="mt-0.5 text-sm text-violet-600 dark:text-violet-400">{item.institution}</p>}
-                      {item.location && <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-600">{item.location}</p>}
-                      {item.description && <p className="mt-3 text-sm leading-7 text-zinc-600 dark:text-zinc-400">{item.description}</p>}
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 dark:border-white/10 dark:bg-white/[0.04]">
+                        <GraduationCap className="size-5 text-violet-600 dark:text-violet-400" />
+                      </div>
+                      <div>
+                        <h4 className="text-base font-semibold text-zinc-900 dark:text-white">{item.title}</h4>
+                        {item.institution && <p className="text-sm text-violet-600 dark:text-violet-400">{item.institution}</p>}
+                      </div>
                     </div>
+                    {item.location && <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">{item.location}</p>}
+                    {item.description && <p className="mt-3 text-sm leading-7 text-zinc-600 dark:text-zinc-400">{item.description}</p>}
                   </article>
                 ))}
               </div>

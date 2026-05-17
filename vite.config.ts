@@ -69,6 +69,9 @@ export default originalDefineConfig(({ mode }) => {
         target: 'esnext',
         outDir: 'build',
         chunkSizeWarningLimit: 500,
+        rollupOptions: {
+          output: {},
+        },
       },
       server: {
         port: 5173,
