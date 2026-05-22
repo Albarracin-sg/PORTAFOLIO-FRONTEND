@@ -5,6 +5,7 @@ import Projects from '@/components/Projects';
 import Contact from '@/components/Contact';
 import { fetchPublicPage, fetchPublicProjects } from '@/shared/api/public';
 import { mapPublicProjectToFeatured } from '@/shared/api/mappers';
+import { useLocalStorageSWR } from '@/shared/hooks/useLocalStorageSWR';
 import { LoadingScreen } from '@/components/ui/LoadingScreen';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -12,12 +13,14 @@ interface HomeState {
   sections: Record<string, { id: string; type: string; content: Record<string, unknown> }>;
   carouselProjects: any[];
   isProjectsLoaded: boolean;
+  sectionsLoaded: boolean;
 }
 
-type HomeAction = 
+type HomeAction =
   | { type: 'SET_SECTIONS'; payload: Record<string, { id: string; type: string; content: Record<string, unknown> }> }
   | { type: 'SET_PROJECTS'; payload: any[] }
-  | { type: 'FINISH_PROJECTS_LOAD' };
+  | { type: 'FINISH_PROJECTS_LOAD' }
+  | { type: 'FINISH_SECTIONS_LOAD' };
 
 function homeReducer(state: HomeState, action: HomeAction): HomeState {
   switch (action.type) {
@@ -27,6 +30,8 @@ function homeReducer(state: HomeState, action: HomeAction): HomeState {
       return { ...state, carouselProjects: action.payload };
     case 'FINISH_PROJECTS_LOAD':
       return { ...state, isProjectsLoaded: true };
+    case 'FINISH_SECTIONS_LOAD':
+      return { ...state, sectionsLoaded: true };
     default:
       return state;
   }
@@ -38,38 +43,45 @@ export function HomePage() {
     sections: {},
     carouselProjects: [],
     isProjectsLoaded: false,
+    sectionsLoaded: false,
   });
 
-  const { sections, carouselProjects, isProjectsLoaded } = state;
+  const { sections, carouselProjects, isProjectsLoaded, sectionsLoaded } = state;
 
+  const { data: pageData } = useLocalStorageSWR('home-page-cache', () => fetchPublicPage('home'));
+  const { data: projectsData, isLoading: projectsLoading } = useLocalStorageSWR(
+    'public-projects-cache',
+    fetchPublicProjects,
+  );
+
+  // Sync page sections
   useEffect(() => {
-    let isActive = true;
+    if (!pageData) return;
+    const sectionMap = pageData.sections.reduce<Record<string, { id: string; type: string; content: Record<string, unknown> }>>(
+      (acc, section) => {
+        acc[section.type] = { id: section.id, type: section.type, content: section.content };
+        return acc;
+      },
+      {},
+    );
+    dispatch({ type: 'SET_SECTIONS', payload: sectionMap });
+    dispatch({ type: 'FINISH_SECTIONS_LOAD' });
+  }, [pageData]);
 
-    fetchPublicPage('home')
-      .then((result) => {
-        if (!isActive) return;
-        const sectionMap = result.sections.reduce<Record<string, { id: string; type: string; content: Record<string, unknown> }>>(
-          (acc, section) => {
-            acc[section.type] = { id: section.id, type: section.type, content: section.content };
-            return acc;
-          },
-          {},
-        );
-        dispatch({ type: 'SET_SECTIONS', payload: sectionMap });
-      })
-      .catch((error) => { console.error('Error loading home page:', error); });
+  // Sync projects
+  useEffect(() => {
+    if (!projectsData) return;
+    const ordered = projectsData.toSorted((a, b) => Number(b.featured) - Number(a.featured));
+    dispatch({ type: 'SET_PROJECTS', payload: ordered.map(mapPublicProjectToFeatured) });
+    dispatch({ type: 'FINISH_PROJECTS_LOAD' });
+  }, [projectsData]);
 
-    fetchPublicProjects()
-      .then((result) => {
-        if (!isActive) return;
-        const orderedProjects = result.toSorted((a, b) => Number(b.featured) - Number(a.featured));
-        dispatch({ type: 'SET_PROJECTS', payload: orderedProjects.map(mapPublicProjectToFeatured) });
-      })
-      .catch((error) => { console.error('Error loading projects:', error); })
-      .finally(() => { if (isActive) dispatch({ type: 'FINISH_PROJECTS_LOAD' }); });
-
-    return () => { isActive = false; };
-  }, []);
+  // Si falló fetch + no cache, cerrar loading igual
+  useEffect(() => {
+    if (!projectsData && !projectsLoading && !isProjectsLoaded) {
+      dispatch({ type: 'FINISH_PROJECTS_LOAD' });
+    }
+  }, [projectsData, projectsLoading, isProjectsLoaded]);
 
   return (
     <>
@@ -123,7 +135,7 @@ export function HomePage() {
       </section>
 
       {/* ── Espacio antes del footer ── */}
-      <div className="py-4 sm:py-8" />
+      <div className="py-8 sm:py-16" />
     </>
   );
 }

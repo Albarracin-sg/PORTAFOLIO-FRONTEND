@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 import { mapPublicProjectToList } from "@/shared/api/mappers";
 import { fetchPublicProjects } from "@/shared/api/public";
+import { useLocalStorageSWR } from "@/shared/hooks/useLocalStorageSWR";
 import { commonFormatters } from "@/shared/utils/formatters";
 
 // Sub-components
@@ -88,21 +89,18 @@ export default function AllProjects() {
     pageSize,
   } = state;
 
+  const { data: rawProjects, isLoading: swrLoading } = useLocalStorageSWR(
+    'public-projects-cache',
+    fetchPublicProjects,
+  );
+
   useEffect(() => {
-    const load = async () => {
-      dispatch({ type: "SET_LOADING", payload: true });
-      try {
-        const raw = await fetchPublicProjects();
-        const mapped = raw.map(mapPublicProjectToList);
-        dispatch({ type: "SET_PROJECTS", payload: mapped });
-      } catch (err) {
-        console.error(err);
-      } finally {
-        dispatch({ type: "SET_LOADING", payload: false });
-      }
-    };
-    load();
-  }, []);
+    if (rawProjects) {
+      const mapped = rawProjects.map(mapPublicProjectToList);
+      dispatch({ type: "SET_PROJECTS", payload: mapped });
+    }
+    dispatch({ type: "SET_LOADING", payload: swrLoading });
+  }, [rawProjects, swrLoading]);
 
   const filteredAndSortedProjects = useMemo(() => {
     return projects

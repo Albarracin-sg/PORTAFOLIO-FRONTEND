@@ -1,30 +1,29 @@
-import { useEffect, useState } from 'react';
 import Statistics from '@/components/Statistics';
 import { fetchGithubStats, fetchApiStats, type ApiStats } from '@/shared/api/public';
+import { useLocalStorageSWR } from '@/shared/hooks/useLocalStorageSWR';
+
+const GITHUB_CACHE_KEY = 'github-stats-cache';
+const API_CACHE_KEY = 'api-stats-cache';
 
 export function StatsPage() {
-  const [githubStats, setGithubStats] = useState<any | null>(null);
-  const [apiStats, setApiStats] = useState<ApiStats | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: githubStats, isLoading: ghLoading } = useLocalStorageSWR(
+    GITHUB_CACHE_KEY,
+    fetchGithubStats,
+  );
 
-  useEffect(() => {
-    let isActive = true;
+  const { data: apiStats, isLoading: apiLoading } = useLocalStorageSWR(
+    API_CACHE_KEY,
+    fetchApiStats,
+  );
 
-    const load = async () => {
-      const [statsResult, apiResult] = await Promise.allSettled([
-        fetchGithubStats(),
-        fetchApiStats(),
-      ]);
-      if (!isActive) return;
+  // isLoading = true SOLO si no tenemos datos (ni localStorage, ni server)
+  const isLoading = !githubStats && !apiStats && (ghLoading || apiLoading);
 
-      if (statsResult.status === 'fulfilled') setGithubStats(statsResult.value);
-      if (apiResult.status === 'fulfilled') setApiStats(apiResult.value);
-      setIsLoading(false);
-    };
-
-    load();
-    return () => { isActive = false; };
-  }, []);
-
-  return <Statistics githubStats={githubStats} apiStats={apiStats} isLoading={isLoading} />;
+  return (
+    <Statistics
+      githubStats={githubStats}
+      apiStats={apiStats ?? null}
+      isLoading={isLoading}
+    />
+  );
 }
