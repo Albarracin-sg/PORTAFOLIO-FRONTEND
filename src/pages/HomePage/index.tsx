@@ -46,7 +46,7 @@ export function HomePage() {
     sectionsLoaded: false,
   });
 
-  const { sections, carouselProjects, isProjectsLoaded, sectionsLoaded } = state;
+  const { sections, carouselProjects, isProjectsLoaded } = state;
 
   const { data: pageData } = useLocalStorageSWR('home-page-cache', () => fetchPublicPage('home'));
   const { data: projectsData, isLoading: projectsLoading } = useLocalStorageSWR(

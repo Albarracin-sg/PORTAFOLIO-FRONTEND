@@ -1,5 +1,5 @@
 import Statistics from '@/components/Statistics';
-import { fetchGithubStats, fetchApiStats, type ApiStats } from '@/shared/api/public';
+import { fetchGithubStats, fetchApiStats } from '@/shared/api/public';
 import { useLocalStorageSWR } from '@/shared/hooks/useLocalStorageSWR';
 
 const GITHUB_CACHE_KEY = 'github-stats-cache';

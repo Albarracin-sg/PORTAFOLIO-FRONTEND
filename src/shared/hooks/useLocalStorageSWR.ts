@@ -23,7 +23,7 @@ type SWRState<T> = {
 export function useLocalStorageSWR<T>(
   cacheKey: string,
   fetcher: () => Promise<T>,
-  ttlMs = 30 * 60 * 1000,
+  _ttlMs = 30 * 60 * 1000,
 ): SWRState<T> {
   const [state, setState] = useState<SWRState<T>>({
     data: null,
