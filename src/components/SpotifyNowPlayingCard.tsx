@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from './ui/card';
 import { fetchNowPlaying, type SpotifyTrack } from '@/shared/api/public';
 
+const CACHE_KEY = 'spotify-playing-cache';
+
 function formatTime(milliseconds: number) {
   const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
   const minutes = Math.floor(totalSeconds / 60);
@@ -17,14 +19,37 @@ function getProgressPercentage(track: SpotifyTrack) {
   return Math.min(100, Math.max(0, (track.progressMs / track.durationMs) * 100));
 }
 
+function loadFromCache(): SpotifyTrack | null {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    const entry = JSON.parse(raw);
+    return entry?.data ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function saveToCache(track: SpotifyTrack) {
+  try {
+    localStorage.setItem(
+      CACHE_KEY,
+      JSON.stringify({ data: track, timestamp: Date.now() }),
+    );
+  } catch {
+    // localStorage lleno o deshabilitado — ignorar
+  }
+}
+
 export function SpotifyNowPlayingCard() {
   const { t } = useTranslation();
   const [state, setState] = useState<{
     track: SpotifyTrack | null;
     error: boolean;
-  }>({
-    track: null,
-    error: false,
+  }>(() => {
+    const cached = loadFromCache();
+    if (cached) return { track: cached, error: false };
+    return { track: null, error: false };
   });
 
   useEffect(() => {
@@ -36,6 +61,7 @@ export function SpotifyNowPlayingCard() {
         const data = await fetchNowPlaying();
         if (!cancelled) {
           setState({ track: data, error: false });
+          saveToCache(data);
         }
       } catch {
         if (!cancelled) {
