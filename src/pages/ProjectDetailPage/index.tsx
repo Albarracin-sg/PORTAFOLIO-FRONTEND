@@ -79,11 +79,15 @@ export function ProjectDetailPage() {
         />
 
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
-          <ProjectContent
-            project={project}
-            getLocalizedValue={getLocalizedValue}
-          />
-          <ProjectSidebar project={project} />
+          <div className="lg:col-span-8 min-w-0 w-full">
+            <ProjectContent
+              project={project}
+              getLocalizedValue={getLocalizedValue}
+            />
+          </div>
+          <div className="lg:col-span-4 min-w-0 w-full">
+            <ProjectSidebar project={project} />
+          </div>
         </div>
       </div>
     </div>

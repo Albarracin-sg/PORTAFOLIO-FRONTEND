@@ -12,11 +12,11 @@ export function ProjectContent({ project, getLocalizedValue }: ProjectContentPro
   const { t, i18n } = useTranslation();
 
   return (
-    <div className="lg:col-span-8 space-y-10">
-      <div className="group relative">
-        <div className="absolute -inset-1 bg-gradient-to-r from-violet-600 to-blue-600 rounded-[32px] blur-2xl opacity-10 dark:opacity-15 group-hover:opacity-20 transition duration-700" />
+    <div className="lg:col-span-8 space-y-10 w-full max-w-full overflow-hidden">
+      <div className="group relative w-full">
+        <div className="absolute inset-0 sm:-inset-1 bg-gradient-to-r from-violet-600 to-blue-600 rounded-2xl sm:rounded-[32px] blur-2xl opacity-10 dark:opacity-15 group-hover:opacity-20 transition duration-700" />
 
-        <div className="relative aspect-video rounded-[32px] overflow-hidden border border-zinc-200 dark:border-white/10 shadow-2xl shadow-zinc-200/50 dark:shadow-black/40 bg-zinc-100 dark:bg-zinc-900">
+        <div className="relative w-full aspect-video rounded-2xl sm:rounded-[32px] overflow-hidden border border-zinc-200 dark:border-white/10 shadow-2xl shadow-zinc-200/50 dark:shadow-black/40 bg-zinc-100 dark:bg-zinc-900">
           <img
             src={project.imageUrl}
             alt={project.title}
