@@ -40,7 +40,7 @@ export function ProjectInfo({ project, formattedDate }: ProjectInfoProps) {
 
         <div className="inline-flex items-center gap-1.5 bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 px-3 py-1.5 rounded-xl">
           <Calendar className="size-3.5 text-zinc-500 dark:text-zinc-400 shrink-0" />
-          <span className="text-zinc-600 dark:text-zinc-300 truncate">
+          <span className="text-zinc-600 dark:text-zinc-300">
             {formattedDate}
           </span>
         </div>

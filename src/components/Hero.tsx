@@ -41,7 +41,7 @@ export default function Hero({ section }: HeroProps) {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-4 pt-48 pb-20 sm:px-6 sm:pt-28 lg:px-8 lg:pt-32 lg:pb-16 relative">
+    <section className="min-h-screen flex items-center justify-center px-4 pt-48 pb-20 sm:px-6 sm:pt-28 lg:px-8 lg:pt-32 lg:pb-16 relative overflow-hidden">
       <div className="max-w-7xl mx-auto w-full relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
@@ -179,7 +179,7 @@ export default function Hero({ section }: HeroProps) {
                 <SkillBubble
                   name="React"
                   size="md"
-                  className={`absolute -right-2 top-2 sm:right-4 sm:top-10 z-10 pointer-events-none transition-all duration-500 transform scale-75 lg:scale-100 ${
+                  className={`absolute right-0 top-2 sm:right-4 sm:top-10 z-10 pointer-events-none transition-all duration-500 transform scale-75 lg:scale-100 ${
                     isImageHovered
                       ? "translate-x-0 translate-y-0 scale-90 lg:scale-110 opacity-100"
                       : "translate-x-4 -translate-y-4 scale-50 opacity-0"
@@ -188,7 +188,7 @@ export default function Hero({ section }: HeroProps) {
                 <SkillBubble
                   name="Node.js"
                   size="md"
-                  className={`absolute -left-2 top-8 sm:left-4 sm:top-20 z-10 pointer-events-none transition-all duration-500 transform scale-75 lg:scale-100 ${
+                  className={`absolute left-0 top-8 sm:left-4 sm:top-20 z-10 pointer-events-none transition-all duration-500 transform scale-75 lg:scale-100 ${
                     isImageHovered
                       ? "translate-x-0 translate-y-0 scale-90 lg:scale-110 opacity-100"
                       : "-translate-x-4 -translate-y-4 scale-50 opacity-0"
@@ -197,7 +197,7 @@ export default function Hero({ section }: HeroProps) {
                 <SkillBubble
                   name="TypeScript"
                   size="md"
-                  className={`absolute -left-2 bottom-16 sm:left-8 sm:bottom-32 z-10 pointer-events-none transition-all duration-700 transform scale-75 lg:scale-100 ${
+                  className={`absolute left-0 bottom-16 sm:left-8 sm:bottom-32 z-10 pointer-events-none transition-all duration-700 transform scale-75 lg:scale-100 ${
                     isImageHovered
                       ? "opacity-100 scale-90 lg:scale-110 translate-x-0"
                       : "opacity-0 scale-50 -translate-x-8"
@@ -206,7 +206,7 @@ export default function Hero({ section }: HeroProps) {
                 <SkillBubble
                   name="Nest.js"
                   size="md"
-                  className={`absolute -right-4 top-1/2 z-10 pointer-events-none transition-all duration-500 delay-100 transform scale-75 lg:scale-100 ${
+                  className={`absolute right-0 top-1/2 z-10 pointer-events-none transition-all duration-500 delay-100 transform scale-75 lg:scale-100 ${
                     isImageHovered
                       ? "opacity-100 scale-90 lg:scale-110 translate-y-0"
                       : "opacity-0 scale-50 translate-y-8"
@@ -215,7 +215,7 @@ export default function Hero({ section }: HeroProps) {
                 <SkillBubble
                   name="PostgreSQL"
                   size="md"
-                  className={`absolute -right-2 bottom-8 sm:right-8 sm:bottom-20 z-10 pointer-events-none transition-all duration-700 delay-200 transform scale-75 lg:scale-100 ${
+                  className={`absolute right-0 bottom-8 sm:right-8 sm:bottom-20 z-10 pointer-events-none transition-all duration-700 delay-200 transform scale-75 lg:scale-100 ${
                     isImageHovered
                       ? "opacity-100 scale-90 lg:scale-110 rotate-0"
                       : "opacity-0 scale-50 rotate-12 translate-y-8"
