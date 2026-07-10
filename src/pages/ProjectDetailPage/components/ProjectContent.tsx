@@ -1,7 +1,10 @@
+import { useState, useEffect } from 'react';
 import { Globe, Target, CheckCircle2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PublicProject } from '@/shared/api/public';
+import { fetchDiagramsByProject, type Diagram } from '@/shared/api/diagrams';
 import { DetailSection } from './DetailSection';
+import DiagramViewer from '@/components/DiagramViewer';
 
 interface ProjectContentProps {
   project: PublicProject;
@@ -10,6 +13,15 @@ interface ProjectContentProps {
 
 export function ProjectContent({ project, getLocalizedValue }: ProjectContentProps) {
   const { t, i18n } = useTranslation();
+  const [diagrams, setDiagrams] = useState<Diagram[]>([]);
+
+  useEffect(() => {
+    if (project.id) {
+      fetchDiagramsByProject(project.id)
+        .then(setDiagrams)
+        .catch(() => {});
+    }
+  }, [project.id]);
 
   return (
     <div className="lg:col-span-8 space-y-10 w-full max-w-full overflow-hidden">
@@ -50,6 +62,24 @@ export function ProjectContent({ project, getLocalizedValue }: ProjectContentPro
           {project.solution[i18n.language] || project.solution['es']}
         </DetailSection>
       </div>
+
+      {/* Interactive Architecture Diagrams */}
+      {diagrams.length > 0 && (
+        <div className="space-y-6">
+          <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+            {t('projects.detail.architecture', 'Architecture')}
+          </h3>
+          {diagrams.map((diagram) => (
+            <DiagramViewer
+              key={diagram.id}
+              title={diagram.title}
+              description={diagram.description}
+              source={diagram.source}
+              locale={i18n.language || 'es'}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -100,18 +100,23 @@ export function AdminProjectsPage() {
     load();
   }, [load]);
 
-  const handleSync = async () => {
-    if (!token) return;
-    dispatch({ type: 'SET_SYNCING', payload: true });
+  const handleSync = useCallback(async () => {
+    if (syncing || !token) return;
     try {
-      await syncGithubProjects(token);
-      await load();
-    } catch (err) {
-      console.error('Error syncing projects:', err);
+      dispatch({ type: 'SET_SYNCING', payload: true });
+      const results = await syncGithubProjects(token);
+      const msg = `Sync complete!\n\n` +
+        `Projects: ${results.total} total, ${results.created} new, ${results.updated} updated\n` +
+        `Content generated: ${results.contentGenerated || 0} projects`;
+      window.alert(msg);
+      load();
+    } catch (err: any) {
+      console.error('Sync failed:', err);
+      window.alert(`Sync failed: ${err.message || 'Unknown error'}`);
     } finally {
       dispatch({ type: 'SET_SYNCING', payload: false });
     }
-  };
+  }, [syncing, load, token]);
 
   const filteredProjects = useMemo(() => {
     return projects.filter(
@@ -182,7 +187,7 @@ export function AdminProjectsPage() {
               ) : (
                 <Github className="size-3.5" />
               )}
-              <span className="font-medium hidden sm:inline">{t('admin.projects.sync')}</span>
+              <span className="font-medium hidden sm:inline">{syncing ? 'Syncing & generating...' : t('admin.projects.sync')}</span>
             </Button>
 
             <Button

@@ -56,7 +56,7 @@ export async function updateProject(
 }
 
 export async function syncGithubProjects(token: string) {
-  return apiRequest<{ total: number; created: number; updated: number }>(
+  return apiRequest<{ total: number; created: number; updated: number; contentGenerated?: number }>(
     '/admin/projects/github-sync',
     { method: 'POST', token },
   );

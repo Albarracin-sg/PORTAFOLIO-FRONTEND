@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { SkillBubble } from '@/components/SkillBubble';
 import { PublicProject } from '@/shared/api/public';
 import { DetailSection } from './DetailSection';
+import { RelatedArticles } from './RelatedArticles';
 
 interface ProjectSidebarProps {
   project: PublicProject;
@@ -174,6 +175,8 @@ export function ProjectSidebar({ project }: ProjectSidebarProps) {
         >
           {project.challenge[i18n.language] || project.challenge['es']}
         </DetailSection>
+
+        {project.id && <RelatedArticles projectId={project.id} />}
       </div>
     </aside>
   );

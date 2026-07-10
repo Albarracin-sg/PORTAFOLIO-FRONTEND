@@ -5,9 +5,9 @@ import {
   FolderKanban,
   MessageSquare,
   ArrowRight,
-  
   Activity,
   Bot,
+  Newspaper,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
@@ -20,7 +20,7 @@ interface DashboardItem {
   isKey: boolean;
   href: string;
   icon: any;
-  accent: 'violet' | 'emerald' | 'blue' | 'orange';
+  accent: 'violet' | 'emerald' | 'blue' | 'orange' | 'purple';
 }
 
 const dashboardItems: DashboardItem[] = [
@@ -47,6 +47,14 @@ const dashboardItems: DashboardItem[] = [
     href: '/admin/bot-messages',
     icon: Bot,
     accent: 'blue',
+  },
+  {
+    title: 'Blog',
+    description: 'Manage blog articles and content',
+    isKey: false,
+    href: '/admin/blog',
+    icon: Newspaper,
+    accent: 'purple',
   },
   {
     title: 'Server Logs',
@@ -82,6 +90,12 @@ const accentMap = {
     border: 'hover:border-orange-400/30',
     arrow: 'group-hover:text-orange-500',
     badge: 'bg-orange-500/8 border-orange-400/25 text-orange-400',
+  },
+  purple: {
+    icon: 'bg-purple-500/10 text-purple-500 dark:text-purple-400',
+    border: 'hover:border-purple-400/30',
+    arrow: 'group-hover:text-purple-500',
+    badge: 'bg-purple-500/8 border-purple-400/25 text-purple-400',
   },
 };
 

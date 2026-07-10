@@ -29,10 +29,19 @@
     "home": "Inicio",
     "about": "Sobre mí",
     "projects": "Proyectos",
+    "blog": "Blog",
     "stats": "Estadísticas",
     "contact": "Contacto",
     "downloadCV": "Descargar CV",
     "back": "Volver"
+  },
+  "blogPreview": {
+    "title": "Blog",
+    "subtitle": "Ideas, tutoriales y Deep Dives técnicos sobre arquitectura de software, microservicios e inteligencia artificial.",
+    "viewAll": "Ver todos los artículos"
+  },
+  "blogDetail": {
+    "architecture": "Arquitectura"
   },
   "hero": {
     "greeting": "Hola, soy Juan Albarracín",
@@ -208,6 +217,8 @@
       "problem": "El Problema",
       "solution": "Solución",
       "challenge": "El Reto",
+      "relatedArticles": "Artículos",
+      "architecture": "Arquitectura",
       "techStack": "Stack Técnico",
       "summary": "Resumen",
       "category": "Categoría",
@@ -459,6 +470,9 @@
       "searchPlaceholder": "Buscar trabajo…",
       "sync": "Sincronizar",
       "new": "Nuevo Proyecto",
+      "generateAll": "Generar contenido",
+      "generateContent": "Generar contenido",
+      "generating": "Generando…",
       "noResults": "No hay proyectos que coincidan con tu búsqueda.",
       "pagination": {
         "prev": "Anterior",
@@ -528,6 +542,16 @@
           "save": "Guardar Cambios"
         }
       }
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Gestiona los artículos del blog",
+      "newArticle": "Nuevo Artículo",
+      "editArticle": "Editar Artículo",
+      "noArticles": "No hay artículos aún",
+      "confirmDelete": "¿Estás seguro de que quieres eliminar este artículo?",
+      "saved": "Artículo guardado correctamente",
+      "deleted": "Artículo eliminado"
     },
     "messages": {
       "title": "Bandeja de Entrada",

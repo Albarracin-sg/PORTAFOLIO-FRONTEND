@@ -6,6 +6,7 @@ import type { Language } from "@/features/language";
 interface NavItem {
   key: string;
   label: string;
+  isRoute?: boolean;
 }
 
 interface LanguageOption {
@@ -119,7 +120,7 @@ export function MobileMenu({
             {navItems.map((item, index) => (
               <Link
                 key={item.key}
-                to={item.key === "stats" ? "/stats" : `/#${item.key}`}
+                to={item.isRoute ? `/${item.key}` : item.key === "stats" ? "/stats" : `/#${item.key}`}
                 onClick={() => handleNavClick(item.key)}
                 className={`block w-full rounded-2xl p-4 text-left text-base font-medium transition-all duration-300 cursor-pointer ${
                   currentPage === item.key || (currentPage === 'home' && item.key === 'home')

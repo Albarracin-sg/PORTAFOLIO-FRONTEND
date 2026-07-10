@@ -6,7 +6,7 @@ import ThemeToggle from '@/components/ThemeToggle';
 import { useLanguage } from '@/features/language';
 import { useTheme } from '@/features/theme';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { LayoutDashboard, FolderKanban, MessageSquare, LogOut, Loader2, Menu, Moon, Sun, X, Activity, Bot } from 'lucide-react';
+import { LayoutDashboard, FolderKanban, MessageSquare, LogOut, Loader2, Menu, Moon, Sun, X, Activity, Bot, Newspaper } from 'lucide-react';
 import { useState } from 'react';
 import logoImg from '@/assets/logo.webp';
 
@@ -14,6 +14,7 @@ const navItems = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { label: 'Projects', href: '/admin/projects', icon: FolderKanban },
   { label: 'Messages', href: '/admin/messages', icon: MessageSquare },
+  { label: 'Blog', href: '/admin/blog', icon: Newspaper },
   { label: 'Bot', href: '/admin/bot-messages', icon: Bot },
   { label: 'Logs', href: '/admin/logs', icon: Activity },
 ];

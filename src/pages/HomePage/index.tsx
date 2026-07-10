@@ -3,6 +3,7 @@ import Hero from '@/components/Hero';
 import About from '@/components/About';
 import Projects from '@/components/Projects';
 import Contact from '@/components/Contact';
+import { BlogPreview } from '@/components/BlogPreview';
 import { fetchPublicPage, fetchPublicProjects } from '@/shared/api/public';
 import { mapPublicProjectToFeatured } from '@/shared/api/mappers';
 import { useLocalStorageSWR } from '@/shared/hooks/useLocalStorageSWR';
@@ -126,7 +127,15 @@ export function HomePage() {
         )}
       </section>
 
-      {/* ── Separador Projects → Contact (igual) ── */}
+      {/* ── Separador Projects → Blog ── */}
+      <div className="py-8 sm:py-16" />
+
+      {/* ── Blog Preview ── */}
+      <section id="blog">
+        <BlogPreview />
+      </section>
+
+      {/* ── Separador Blog → Contact ── */}
       <div className="py-8 sm:py-16" />
 
       {/* ── Contact ── */}

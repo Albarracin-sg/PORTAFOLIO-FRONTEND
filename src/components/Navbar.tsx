@@ -122,6 +122,7 @@ export default function Navbar({
     { key: "home", label: t("nav.home") },
     { key: "about", label: t("nav.about") },
     { key: "projects", label: t("nav.projects") },
+    { key: "blog", label: t("nav.blog"), isRoute: true },
     { key: "stats", label: t("nav.stats") },
     { key: "contact", label: t("nav.contact") },
   ];

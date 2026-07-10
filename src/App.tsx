@@ -14,12 +14,16 @@ import { Toaster } from '@/components/ui/sonner';
 const StatsPage = lazy(() => import('./pages/StatsPage/index').then(m => ({ default: m.StatsPage })));
 const AllProjectsPage = lazy(() => import('./pages/AllProjectsPage/index').then(m => ({ default: m.AllProjectsPage })));
 const ProjectDetailPage = lazy(() => import('./pages/ProjectDetailPage/index').then(m => ({ default: m.ProjectDetailPage })));
+const BlogPage = lazy(() => import('./pages/BlogPage/index').then(m => ({ default: m.BlogPage })));
+const BlogDetailPage = lazy(() => import('./pages/BlogDetailPage/index').then(m => ({ default: m.BlogDetailPage })));
 const BotChatPage = lazy(() => import('./pages/BotChatPage/index').then(m => ({ default: m.BotChatPage })));
 const AdminLogsPage = lazy(() => import('./pages/Admin/AdminLogsPage'));
 const BotMessagesPage = lazy(() => import('./pages/Admin/BotMessagesPage'));
 const AdminProjectsPage = lazy(() => import('./pages/Admin/ProjectsPage').then(m => ({ default: m.AdminProjectsPage })));
 const AdminMessagesPage = lazy(() => import('./pages/Admin/MessagesPage').then(m => ({ default: m.AdminMessagesPage })));
 const AdminProjectEditPage = lazy(() => import('./pages/Admin/ProjectEditPage').then(m => ({ default: m.AdminProjectEditPage })));
+const BlogAdminPage = lazy(() => import('./pages/Admin/BlogPage').then(m => ({ default: m.BlogAdminPage })));
+const BlogEditPage = lazy(() => import('./pages/Admin/BlogEditPage').then(m => ({ default: m.BlogEditPage })));
 
 function PageFallback() {
   return (
@@ -81,6 +85,21 @@ export default function App() {
             <AdminLogsPage />
           </Suspense>
         } />
+        <Route path="blog" element={
+          <Suspense fallback={<PageFallback />}>
+            <BlogAdminPage />
+          </Suspense>
+        } />
+        <Route path="blog/:id" element={
+          <Suspense fallback={<PageFallback />}>
+            <BlogEditPage />
+          </Suspense>
+        } />
+        <Route path="blog/new" element={
+          <Suspense fallback={<PageFallback />}>
+            <BlogEditPage />
+          </Suspense>
+        } />
         <Route path="bot-messages" element={
           <Suspense fallback={<PageFallback />}>
             <BotMessagesPage />
@@ -96,6 +115,16 @@ export default function App() {
         <Route path="projects/:id" element={
           <Suspense fallback={<PageFallback />}>
             <ProjectDetailPage />
+          </Suspense>
+        } />
+        <Route path="blog" element={
+          <Suspense fallback={<PageFallback />}>
+            <BlogPage />
+          </Suspense>
+        } />
+        <Route path="blog/:slug" element={
+          <Suspense fallback={<PageFallback />}>
+            <BlogDetailPage />
           </Suspense>
         } />
         <Route path="stats" element={

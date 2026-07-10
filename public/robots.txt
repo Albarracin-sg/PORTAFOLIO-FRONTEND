@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /chatbot
+
+Sitemap: https://jcalbarracin.vercel.app/sitemap.xml

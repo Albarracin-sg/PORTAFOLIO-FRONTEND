@@ -29,10 +29,19 @@
     "home": "Home",
     "about": "About",
     "projects": "Projects",
+    "blog": "Blog",
     "stats": "Statistics",
     "contact": "Contact",
     "downloadCV": "Download CV",
     "back": "Back"
+  },
+  "blogPreview": {
+    "title": "Blog",
+    "subtitle": "Ideas, tutorials, and technical deep dives on software architecture, microservices, and artificial intelligence.",
+    "viewAll": "View all articles"
+  },
+  "blogDetail": {
+    "architecture": "Architecture"
   },
   "hero": {
     "greeting": "Hello, I'm Juan Albarracín",
@@ -208,6 +217,8 @@
       "problem": "The Problem",
       "solution": "Solution",
       "challenge": "The Challenge",
+      "relatedArticles": "Articles",
+      "architecture": "Architecture",
       "techStack": "Technical Stack",
       "summary": "Summary",
       "category": "Category",
@@ -459,6 +470,9 @@
       "searchPlaceholder": "Search work…",
       "sync": "Sync",
       "new": "New Project",
+      "generateAll": "Generate content",
+      "generateContent": "Generate content",
+      "generating": "Generating…",
       "noResults": "No projects match your search.",
       "pagination": {
         "prev": "Previous",
@@ -528,6 +542,16 @@
           "save": "Save Changes"
         }
       }
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Manage blog articles",
+      "newArticle": "New Article",
+      "editArticle": "Edit Article",
+      "noArticles": "No articles yet",
+      "confirmDelete": "Are you sure you want to delete this article?",
+      "saved": "Article saved successfully",
+      "deleted": "Article deleted"
     },
     "messages": {
       "title": "Inbox",
