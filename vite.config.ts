@@ -2,10 +2,6 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
-import vitePrerender from 'vite-plugin-prerender';
-import { createRequire } from 'module';
-
-const require_ = createRequire(import.meta.url);
 
 // Polyfill for React 18 compatibility with libraries expecting React 19
 const originalDefineConfig = defineConfig;
@@ -27,15 +23,6 @@ export default originalDefineConfig(({ mode }) => {
     plugins: [
       react(),
       tailwindcss(),
-      vitePrerender({
-        staticDir: path.resolve(__dirname, 'build'),
-        routes: ['/', '/projects', '/blog', '/stats'],
-        renderer: new (require_('@prerenderer/renderer-puppeteer'))({
-          headless: true,
-          executablePath: '/usr/bin/google-chrome-stable',
-          args: ['--no-sandbox', '--disable-setuid-sandbox'],
-        }),
-      }),
     ],
     resolve: {
         extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
