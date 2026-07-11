@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkBreaks from "remark-breaks";
 import rehypeHighlight from "rehype-highlight";
+import { MermaidDiagram } from "./MermaidDiagram";
 
 interface MarkdownProps {
   children: string;
@@ -42,24 +43,31 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
+function extractCodeText(element: React.ReactNode): string {
+  if (!element || typeof element !== "object" || !("props" in element)) return "";
+  const props = (element as { props: { children?: string | ReactNode[] } }).props;
+  if (typeof props.children === "string") return props.children;
+  if (Array.isArray(props.children))
+    return props.children.map((c) => (typeof c === "string" ? c : "")).join("");
+  return "";
+}
+
 function PreBlock({ children, ...props }: HTMLAttributes<HTMLPreElement>) {
   const codeElement = children as React.ReactNode;
-  let codeText = "";
 
   if (
     codeElement &&
     typeof codeElement === "object" &&
     "props" in codeElement
   ) {
-    const props = (codeElement as { props: { children?: string } }).props;
-    if (typeof props.children === "string") {
-      codeText = props.children;
-    } else if (Array.isArray(props.children)) {
-      codeText = (props.children as ReactNode[])
-        .map((c) => (typeof c === "string" ? c : ""))
-        .join("");
+    const className = (codeElement as { props: { className?: string } }).props.className ?? "";
+    if (className.includes("language-mermaid")) {
+      const rawText = extractCodeText(codeElement);
+      return <MermaidDiagram code={rawText} />;
     }
   }
+
+  const codeText = extractCodeText(codeElement);
 
   return (
     <pre className="relative group" {...props}>

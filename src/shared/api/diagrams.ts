@@ -4,7 +4,13 @@ export type DiagramNode = {
   id: string;
   type?: string;
   position: { x: number; y: number };
-  data: { label: string; description?: string };
+  data: {
+    label: string;
+    description?: string;
+    inputs?: string[];
+    outputs?: string[];
+    metadata?: Record<string, string>;
+  };
 };
 
 export type DiagramEdge = {
@@ -13,6 +19,9 @@ export type DiagramEdge = {
   target: string;
   animated?: boolean;
   label?: string;
+  data?: {
+    flowType?: 'sync' | 'async' | 'error';
+  };
 };
 
 export type Diagram = {
