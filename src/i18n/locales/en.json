@@ -51,6 +51,30 @@
     "downloadCV": "Download CV",
     "back": "Back"
   },
+  "blog": {
+    "explore": "Blog",
+    "title": "Articles",
+    "subtitle": "Ideas, tutorials, and reflections on software development.",
+    "featured": "Featured",
+    "empty": "No articles available yet.",
+    "emptyHint": "New content coming soon.",
+    "backToBlog": "Back to blog",
+    "relatedProject": "Related project",
+    "viewProject": "View project",
+    "pagination": {
+      "prev": "Previous",
+      "next": "Next",
+      "page": "Page {{current}} of {{total}}"
+    }
+  },
+  "blogPage": {
+    "filterBy": "Filter by",
+    "clearFilter": "Clear filter",
+    "all": "All",
+    "showMoreFilters": "Show more filters",
+    "showLessFilters": "Show fewer filters",
+    "less": "Less"
+  },
   "blogPreview": {
     "title": "Blog",
     "subtitle": "Ideas, tutorials, and technical deep dives on software architecture, microservices, and artificial intelligence.",

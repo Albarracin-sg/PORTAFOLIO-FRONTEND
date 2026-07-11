@@ -107,7 +107,7 @@ function ArticleWithDiagrams({
 
 export function BlogDetailPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
   const { data: article, isLoading } = useLocalStorageSWR<BlogArticleDetail | null>(
@@ -186,7 +186,7 @@ export function BlogDetailPage() {
         >
           <span className="inline-flex items-center gap-2">
             <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
-            Blog
+            {t("blog.explore")}
           </span>
         </Button>
 
@@ -247,7 +247,7 @@ export function BlogDetailPage() {
         {article.project && (
           <div className="mt-12 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 dark:border-zinc-700/50 dark:bg-zinc-800/30">
             <p className="text-xs font-semibold uppercase tracking-wider text-violet-600 dark:text-violet-400">
-              Proyecto relacionado
+              {t("blog.relatedProject")}
             </p>
             <div className="mt-3 flex items-center gap-4">
               {article.project.imageUrl && (
@@ -265,7 +265,7 @@ export function BlogDetailPage() {
               <Link to={`/projects/${article.project.id}`}>
                 <Button variant="outline" size="sm" className="shrink-0 rounded-xl">
                   <ExternalLink className="size-3.5" />
-                  Ver proyecto
+                  {t("blog.viewProject")}
                   <ArrowUpRight className="size-3.5" />
                 </Button>
               </Link>
@@ -280,7 +280,7 @@ export function BlogDetailPage() {
               className="rounded-full border border-zinc-200 bg-white px-5 py-2 text-black transition-all hover:bg-violet-50 hover:text-violet-950 hover:border-violet-300 dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:hover:bg-violet-500/10 dark:hover:text-violet-200"
             >
               <ArrowLeft className="size-4" />
-              Volver al blog
+              {t("blog.backToBlog")}
             </Button>
           </Link>
         </div>

@@ -51,6 +51,30 @@
     "downloadCV": "Descargar CV",
     "back": "Volver"
   },
+  "blog": {
+    "explore": "Blog",
+    "title": "Artículos",
+    "subtitle": "Ideas, tutoriales y reflexiones sobre desarrollo de software.",
+    "featured": "Destacado",
+    "empty": "No hay artículos disponibles aún.",
+    "emptyHint": "Próximamente compartiré contenido nuevo.",
+    "backToBlog": "Volver al blog",
+    "relatedProject": "Proyecto relacionado",
+    "viewProject": "Ver proyecto",
+    "pagination": {
+      "prev": "Anterior",
+      "next": "Siguiente",
+      "page": "Página {{current}} de {{total}}"
+    }
+  },
+  "blogPage": {
+    "filterBy": "Filtrar por",
+    "clearFilter": "Limpiar filtro",
+    "all": "Todos",
+    "showMoreFilters": "Mostrar más filtros",
+    "showLessFilters": "Mostrar menos filtros",
+    "less": "Menos"
+  },
   "blogPreview": {
     "title": "Blog",
     "subtitle": "Ideas, tutoriales y Deep Dives técnicos sobre arquitectura de software, microservicios e inteligencia artificial.",
