@@ -9,6 +9,8 @@ import { mapPublicProjectToFeatured } from '@/shared/api/mappers';
 import { useLocalStorageSWR } from '@/shared/hooks/useLocalStorageSWR';
 import { LoadingScreen } from '@/components/ui/LoadingScreen';
 import { Skeleton } from '@/components/ui/skeleton';
+import { usePageSeo } from '@/shared/seo/usePageSeo';
+import { usePrerenderReady } from '@/shared/seo/usePrerenderReady';
 
 interface HomeState {
   sections: Record<string, { id: string; type: string; content: Record<string, unknown> }>;
@@ -49,7 +51,7 @@ export function HomePage() {
 
   const { sections, carouselProjects, isProjectsLoaded } = state;
 
-  const { data: pageData } = useLocalStorageSWR('home-page-cache', () => fetchPublicPage('home'));
+  const { data: pageData, isLoading: pageLoading } = useLocalStorageSWR('home-page-cache', () => fetchPublicPage('home'));
   const { data: projectsData, isLoading: projectsLoading } = useLocalStorageSWR(
     'public-projects-cache',
     fetchPublicProjects,
@@ -69,6 +71,12 @@ export function HomePage() {
     dispatch({ type: 'FINISH_SECTIONS_LOAD' });
   }, [pageData]);
 
+  useEffect(() => {
+    if (!pageData && !pageLoading && !state.sectionsLoaded) {
+      dispatch({ type: 'FINISH_SECTIONS_LOAD' });
+    }
+  }, [pageData, pageLoading, state.sectionsLoaded]);
+
   // Sync projects
   useEffect(() => {
     if (!projectsData) return;
@@ -83,6 +91,24 @@ export function HomePage() {
       dispatch({ type: 'FINISH_PROJECTS_LOAD' });
     }
   }, [projectsData, projectsLoading, isProjectsLoaded]);
+
+  usePageSeo({
+    title: 'Juan Camilo Albarracin | Portafolio Full Stack Backend e IA',
+    description:
+      'Portafolio de Juan Camilo Albarracin, Full-Stack Engineer con foco en backend, microservicios, NestJS, arquitectura distribuida e integracion de IA y MCP en Bogota, Colombia.',
+    path: '/',
+    keywords: [
+      'juan camilo albarracin',
+      'juan camilo albarracín',
+      'albarracin portafolio',
+      'portafolio backend',
+      'backend engineer colombia',
+      'nest js developer',
+      'microservicios colombia',
+    ],
+  });
+
+  usePrerenderReady(state.sectionsLoaded && isProjectsLoaded, 250);
 
   return (
     <>

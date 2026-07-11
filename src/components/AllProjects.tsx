@@ -9,6 +9,8 @@ import { mapPublicProjectToList } from "@/shared/api/mappers";
 import { fetchPublicProjects } from "@/shared/api/public";
 import { useLocalStorageSWR } from "@/shared/hooks/useLocalStorageSWR";
 import { commonFormatters } from "@/shared/utils/formatters";
+import { usePageSeo } from "@/shared/seo/usePageSeo";
+import { usePrerenderReady } from "@/shared/seo/usePrerenderReady";
 
 // Sub-components
 import { SummaryCard } from "./AllProjects/SummaryCard";
@@ -167,6 +169,21 @@ export default function AllProjects() {
       .map((tech) => ({ value: tech, label: tech })),
   ];
 
+  usePageSeo({
+    title: "Proyectos de Juan Camilo Albarracin | Portafolio",
+    description:
+      "Explora los proyectos de Juan Camilo Albarracin: backend, microservicios, automatizacion, IA aplicada, arquitectura distribuida y productos full-stack.",
+    path: "/projects",
+    keywords: [
+      "proyectos juan camilo albarracin",
+      "albarracin proyectos",
+      "portafolio de proyectos backend",
+      "microservicios nestjs portfolio",
+    ],
+  });
+
+  usePrerenderReady(!loading, 250);
+
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 px-4 sm:px-6 lg:px-8 pt-24 pb-16 sm:pb-20 mx-auto max-w-7xl">
       {/* ── Header ── */}
@@ -302,4 +319,3 @@ export default function AllProjects() {
     </div>
   );
 }
-

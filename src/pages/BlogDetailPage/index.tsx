@@ -14,6 +14,8 @@ import { commonFormatters } from "@/shared/utils/formatters";
 
 import DiagramViewer from "@/components/DiagramViewer";
 import type { BlogArticleDetail } from "@/shared/api/blog";
+import { usePageSeo } from "@/shared/seo/usePageSeo";
+import { usePrerenderReady } from "@/shared/seo/usePrerenderReady";
 
 function resolveLocale(field: Record<string, string> | null | undefined, locale: string): string {
   if (!field) return '';
@@ -132,27 +134,6 @@ export function BlogDetailPage() {
   }, [isLoading, article, slug, navigate]);
 
   useEffect(() => {
-    if (!article) return;
-
-    const title = resolveLocale(article.metaTitle, i18n.language) || resolveLocale(article.title, i18n.language);
-    document.title = `${title} | Juan Albarracín`;
-
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement("meta");
-      metaDesc.setAttribute("name", "description");
-      document.head.appendChild(metaDesc);
-    }
-    const description = resolveLocale(article.metaDescription, i18n.language) || resolveLocale(article.excerpt, i18n.language) || "";
-    metaDesc.setAttribute("content", description);
-
-    return () => {
-      document.title = "Juan Albarracín | Portfolio";
-      metaDesc?.removeAttribute("content");
-    };
-  }, [article, i18n.language]);
-
-  useEffect(() => {
     if (article?.projectId) {
       fetchDiagramsByProject(article.projectId)
         .then(setDiagrams)
@@ -164,6 +145,29 @@ export function BlogDetailPage() {
     if (!article?.content) return null;
     return resolveLocale(article.content, i18n.language);
   }, [article?.content, i18n.language]);
+
+  const seoTitle = article
+    ? resolveLocale(article.metaTitle, i18n.language) || resolveLocale(article.title, i18n.language)
+    : "Blog | Juan Camilo Albarracin";
+  const seoDescription = article
+    ? resolveLocale(article.metaDescription, i18n.language) || resolveLocale(article.excerpt, i18n.language) || ""
+    : "Articulo tecnico del blog de Juan Camilo Albarracin.";
+
+  usePageSeo({
+    title: seoTitle,
+    description: seoDescription,
+    path: slug ? `/blog/${slug}` : "/blog",
+    type: "article",
+    publishedTime: article?.publishedAt ?? null,
+    keywords: [
+      "juan camilo albarracin blog",
+      "articulo backend",
+      "articulo microservicios",
+      slug ?? "blog",
+    ],
+  });
+
+  usePrerenderReady(!isLoading && !!article, 250);
 
   if (isLoading) return <BlogDetailSkeleton />;
   if (!article) return null;

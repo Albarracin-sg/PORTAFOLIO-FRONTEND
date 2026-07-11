@@ -4,11 +4,19 @@ import { Home, FolderOpen, AlertCircle } from 'lucide-react';
 import { useLanguage } from '@/features/language';
 import { useTranslation } from 'react-i18next';
 import InteractiveParticles from '@/components/InteractiveParticles';
+import { usePageSeo } from '@/shared/seo/usePageSeo';
 
 export function NotFoundPage() {
   const { language } = useLanguage();
   const { t } = useTranslation();
   const isEs = language === 'es';
+
+  usePageSeo({
+    title: 'Pagina no encontrada | Juan Camilo Albarracin',
+    description: 'La pagina solicitada no existe en el portafolio de Juan Camilo Albarracin.',
+    path: '/404',
+    robots: 'noindex, follow',
+  });
 
   return (
     <div className="relative min-h-[90vh] flex flex-col items-center justify-center px-4 overflow-hidden">

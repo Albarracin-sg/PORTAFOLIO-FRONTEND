@@ -9,6 +9,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { fetchBlogArticles, fetchBlogTags } from "@/shared/api/blog";
 import { useLocalStorageSWR } from "@/shared/hooks/useLocalStorageSWR";
 import { commonFormatters } from "@/shared/utils/formatters";
+import { usePageSeo } from "@/shared/seo/usePageSeo";
+import { usePrerenderReady } from "@/shared/seo/usePrerenderReady";
 
 import type { BlogArticleSummary, BlogTagWithCount } from "@/shared/api/blog";
 
@@ -77,6 +79,21 @@ export function BlogPage() {
     () => sortedTags.reduce((sum, t) => sum + t.articleCount, 0),
     [sortedTags],
   );
+
+  usePageSeo({
+    title: "Blog de Juan Camilo Albarracin | Backend, IA y Microservicios",
+    description:
+      "Articulos tecnicos de Juan Camilo Albarracin sobre backend, microservicios, NestJS, arquitectura distribuida, integracion de IA, MCP y buenas practicas de software.",
+    path: "/blog",
+    keywords: [
+      "blog juan camilo albarracin",
+      "albarracin blog backend",
+      "articulos microservicios nestjs",
+      "blog arquitectura de software colombia",
+    ],
+  });
+
+  usePrerenderReady(!articlesLoading && !tagsLoading, 250);
 
   return (
     <section className="min-h-screen px-4 py-24 sm:px-6 lg:px-8">

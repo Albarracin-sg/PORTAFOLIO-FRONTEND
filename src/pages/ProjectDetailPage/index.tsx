@@ -10,6 +10,8 @@ import { ProjectHeader } from './components/ProjectHeader';
 import { ProjectInfo } from './components/ProjectInfo';
 import { ProjectContent } from './components/ProjectContent';
 import { ProjectSidebar } from './components/ProjectSidebar';
+import { usePageSeo } from '@/shared/seo/usePageSeo';
+import { usePrerenderReady } from '@/shared/seo/usePrerenderReady';
 
 export function ProjectDetailPage() {
   const { id } = useParams<{ id: string }>();
@@ -64,6 +66,25 @@ export function ProjectDetailPage() {
     },
     [i18n.language],
   );
+
+  const seoDescription = project
+    ? getLocalizedValue(project.description).slice(0, 180)
+    : 'Proyecto del portafolio de Juan Camilo Albarracin.';
+
+  usePageSeo({
+    title: project ? `${project.title} | Proyecto de Juan Camilo Albarracin` : 'Proyecto | Juan Camilo Albarracin',
+    description: seoDescription,
+    path: id ? `/projects/${id}` : '/projects',
+    keywords: project
+      ? [
+          `proyecto ${project.title}`,
+          'juan camilo albarracin proyectos',
+          ...project.technologies.map((item) => item.technology.name.toLowerCase()),
+        ]
+      : ['juan camilo albarracin proyectos'],
+  });
+
+  usePrerenderReady(!isLoading && !!project, 250);
 
   if (isLoading) return <ProjectDetailSkeleton />;
   if (!project) return null;
