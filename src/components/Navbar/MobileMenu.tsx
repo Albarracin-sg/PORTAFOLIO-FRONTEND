@@ -116,13 +116,21 @@ export function MobileMenu({
           className="min-h-0 flex-1 overflow-hidden px-5 py-6 [@media(max-height:700px)]:[zoom:.9] [@media(max-height:620px)]:py-3 [@media(max-height:620px)]:[zoom:.82] [@media(max-height:520px)]:[zoom:.72]"
           style={{ overscrollBehavior: "contain" }}
         >
-            <div className="space-y-1.5 [@media(max-height:620px)]:space-y-0.5">
+          <div className="mb-3 flex items-center gap-3 px-2 [@media(max-height:620px)]:mb-2">
+            <div className={`h-px flex-1 ${isDark ? "bg-white/10" : "bg-zinc-200"}`} />
+            <span className={`text-[10px] font-bold uppercase tracking-wider ${mobileMutedClass}`}>
+              {t("nav.navigation")}
+            </span>
+            <div className={`h-px flex-1 ${isDark ? "bg-white/10" : "bg-zinc-200"}`} />
+          </div>
+
+            <div className="grid grid-cols-2 gap-1.5 [@media(max-height:620px)]:gap-0.5">
             {navItems.map((item, index) => (
               <Link
                 key={item.key}
                 to={item.isRoute ? `/${item.key}` : item.key === "stats" ? "/stats" : `/#${item.key}`}
                 onClick={() => handleNavClick(item.key)}
-                className={`block w-full rounded-2xl p-4 text-left text-base font-medium transition-all duration-300 cursor-pointer [@media(max-height:620px)]:px-3 [@media(max-height:620px)]:py-2 [@media(max-height:620px)]:text-sm ${
+                className={`block w-full rounded-2xl p-4 text-center text-base font-medium transition-all duration-300 cursor-pointer [@media(max-height:620px)]:px-3 [@media(max-height:620px)]:py-2 [@media(max-height:620px)]:text-sm ${
                   currentPage === item.key || (currentPage === 'home' && item.key === 'home')
                     ? mobileActiveButtonClass
                     : mobileActionButtonClass
@@ -139,6 +147,14 @@ export function MobileMenu({
           </div>
 
           <div className="mt-6 space-y-2 [@media(max-height:620px)]:mt-3 [@media(max-height:620px)]:space-y-1">
+            <div className="flex items-center gap-3 px-2">
+              <div className={`h-px flex-1 ${isDark ? "bg-white/10" : "bg-zinc-200"}`} />
+              <span className={`text-[10px] font-bold uppercase tracking-wider ${mobileMutedClass}`}>
+                {t("nav.preferences")}
+              </span>
+              <div className={`h-px flex-1 ${isDark ? "bg-white/10" : "bg-zinc-200"}`} />
+            </div>
+
             <button
               type="button"
               onClick={onThemeToggle}
