@@ -3,7 +3,9 @@ import {
   ReactFlow,
   Background,
   Controls,
+  Handle,
   MiniMap,
+  Position,
   type Node,
   type Edge,
   type NodeProps,
@@ -80,6 +82,12 @@ function DiagramNodeComponent({ data }: NodeProps) {
           : `0 1px 3px ${c.glow}, 0 0 0 1px ${c.glow}`,
       } as CSSProperties}
     >
+      <Handle
+        type="target"
+        position={Position.Left}
+        className="!size-2 !border-0"
+        style={{ background: c.border, boxShadow: `0 0 8px ${c.glow}` }}
+      />
       <div
         className="text-sm font-semibold"
         style={{ color: c.text }}
@@ -94,6 +102,12 @@ function DiagramNodeComponent({ data }: NodeProps) {
           {nodeData.description as ReactNode}
         </div>
       )}
+      <Handle
+        type="source"
+        position={Position.Right}
+        className="!size-2 !border-0"
+        style={{ background: c.border, boxShadow: `0 0 8px ${c.glow}` }}
+      />
     </div>
   );
 }
@@ -130,10 +144,11 @@ export default function DiagramViewer({ title, description, source, locale = 'es
         target: e.target,
         animated: e.animated ?? true,
         label: e.label,
+        type: 'smoothstep',
         style: {
           stroke: edgeColor,
-          strokeWidth: 2,
-          opacity: 0.7,
+          strokeWidth: 2.5,
+          opacity: 0.9,
         },
         labelStyle: {
           fill: isDark ? '#a1a1aa' : '#52525b',
