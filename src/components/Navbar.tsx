@@ -59,6 +59,7 @@ export default function Navbar({
 
   const { isMobileMenuOpen, isVisible } = state;
   const lastScrollY = useRef(0);
+  const visibleAnchorY = useRef(0);
   const lockedScrollY = useRef(0);
   const { token, logout } = useAdminAuth();
 
@@ -67,9 +68,11 @@ export default function Navbar({
       const currentScrollY = window.scrollY;
       if (currentScrollY < 24) {
         dispatch({ type: "SET_VISIBLE", payload: true });
+        visibleAnchorY.current = currentScrollY;
       } else if (currentScrollY < lastScrollY.current) {
         dispatch({ type: "SET_VISIBLE", payload: true });
-      } else if (currentScrollY > lastScrollY.current) {
+        visibleAnchorY.current = currentScrollY;
+      } else if (currentScrollY - visibleAnchorY.current > 48) {
         dispatch({ type: "SET_VISIBLE", payload: false });
       }
       lastScrollY.current = currentScrollY;
