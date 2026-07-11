@@ -59,10 +59,6 @@ function ArticleWithDiagrams({
           prose-headings:my-4 prose-headings:font-semibold
           prose-a:text-violet-600 prose-a:underline prose-a:underline-offset-2
           prose-strong:font-bold
-          prose-code:text-violet-600 prose-code:dark:text-violet-400
-          prose-code:bg-zinc-100 prose-code:dark:bg-zinc-800
-          prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-normal
-          prose-pre:bg-zinc-900 prose-pre:dark:bg-zinc-950 prose-pre:rounded-xl prose-pre:border prose-pre:border-zinc-200 prose-pre:dark:border-zinc-800
           prose-blockquote:border-l-violet-500 prose-blockquote:pl-4 prose-blockquote:italic
           prose-img:rounded-xl prose-img:border prose-img:border-zinc-200 prose-img:dark:border-zinc-800"
       >
@@ -91,10 +87,6 @@ function ArticleWithDiagrams({
             prose-headings:my-4 prose-headings:font-semibold
             prose-a:text-violet-600 prose-a:underline prose-a:underline-offset-2
             prose-strong:font-bold
-            prose-code:text-violet-600 prose-code:dark:text-violet-400
-            prose-code:bg-zinc-100 prose-code:dark:bg-zinc-800
-            prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-normal
-            prose-pre:bg-zinc-900 prose-pre:dark:bg-zinc-950 prose-pre:rounded-xl prose-pre:border prose-pre:border-zinc-200 prose-pre:dark:border-zinc-800
             prose-blockquote:border-l-violet-500 prose-blockquote:pl-4 prose-blockquote:italic
             prose-img:rounded-xl prose-img:border prose-img:border-zinc-200 prose-img:dark:border-zinc-800"
         >
