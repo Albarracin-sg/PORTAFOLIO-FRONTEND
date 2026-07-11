@@ -1,4 +1,4 @@
-import { memo, useMemo, useEffect, useRef, useReducer } from "react";
+import { memo, useEffect, useMemo, useRef, useReducer, useState, type PointerEvent } from "react";
 import { Briefcase, GraduationCap, MapPin, ArrowRight, Code2, Brain } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { SkillBubble } from "./SkillBubble";
@@ -43,47 +43,85 @@ type AboutDictionary = {
 };
 
 const SkillMarqueeRow = memo(function SkillMarqueeRow({ items, reverse }: { items: string[]; reverse?: boolean }) {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef({ active: false, startX: 0, startScrollLeft: 0 });
+  const [isDragging, setIsDragging] = useState(false);
   const animationStyle = useMemo(
     () => ({
       animation: `marquee${reverse ? "R" : ""} ${Math.max(items.length, 1) * 4}s linear infinite`,
+      animationPlayState: isDragging ? "paused" : "running",
       width: "max-content",
     }),
-    [items.length, reverse]
+    [isDragging, items.length, reverse]
   );
 
+  const startDrag = (event: PointerEvent<HTMLDivElement>) => {
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+
+    dragRef.current = {
+      active: true,
+      startX: event.clientX,
+      startScrollLeft: scroller.scrollLeft,
+    };
+    setIsDragging(true);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const drag = (event: PointerEvent<HTMLDivElement>) => {
+    const scroller = scrollerRef.current;
+    if (!scroller || !dragRef.current.active) return;
+    const delta = event.clientX - dragRef.current.startX;
+    scroller.scrollLeft = dragRef.current.startScrollLeft - delta;
+  };
+
+  const endDrag = () => {
+    dragRef.current.active = false;
+    setIsDragging(false);
+  };
+
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative">
+      <div
+        ref={scrollerRef}
+        className="cursor-grab select-none overflow-x-scroll overflow-y-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden active:cursor-grabbing"
+        onPointerDown={startDrag}
+        onPointerMove={drag}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+      >
+        <div className="flex gap-4 py-3" style={animationStyle}>
+          {items.map((skill) => (
+            <SkillBubble
+              key={`m1-${skill}`}
+              name={skill}
+              showName={true}
+              size="md"
+              className="cursor-grab whitespace-nowrap active:cursor-grabbing"
+            />
+          ))}
+          {items.map((skill) => (
+            <SkillBubble
+              key={`m2-${skill}`}
+              name={skill}
+              showName={true}
+              size="md"
+              className="cursor-grab whitespace-nowrap active:cursor-grabbing"
+            />
+          ))}
+          {items.map((skill) => (
+            <SkillBubble
+              key={`m3-${skill}`}
+              name={skill}
+              showName={true}
+              size="md"
+              className="cursor-grab whitespace-nowrap active:cursor-grabbing"
+            />
+          ))}
+        </div>
+      </div>
       <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-background to-transparent" />
       <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-background to-transparent" />
-      <div className="flex gap-4 py-3" style={animationStyle}>
-        {items.map((skill) => (
-          <SkillBubble
-            key={`m1-${skill}`}
-            name={skill}
-            showName={true}
-            size="md"
-            className="cursor-default whitespace-nowrap"
-          />
-        ))}
-        {items.map((skill) => (
-          <SkillBubble
-            key={`m2-${skill}`}
-            name={skill}
-            showName={true}
-            size="md"
-            className="cursor-default whitespace-nowrap"
-          />
-        ))}
-        {items.map((skill) => (
-          <SkillBubble
-            key={`m3-${skill}`}
-            name={skill}
-            showName={true}
-            size="md"
-            className="cursor-default whitespace-nowrap"
-          />
-        ))}
-      </div>
     </div>
   );
 });

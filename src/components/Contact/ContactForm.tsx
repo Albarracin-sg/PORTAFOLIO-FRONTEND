@@ -16,6 +16,7 @@ export function ContactForm({ onSubmit, updateField, t }: ContactFormProps) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm({ mode: "onChange" });
 
@@ -26,7 +27,10 @@ export function ContactForm({ onSubmit, updateField, t }: ContactFormProps) {
       </p>
 
       <form 
-        onSubmit={handleSubmit(onSubmit)} 
+        onSubmit={handleSubmit(async (data) => {
+          await onSubmit(data);
+          reset();
+        })}
         noValidate 
         className="flex flex-col flex-1 gap-5"
       >

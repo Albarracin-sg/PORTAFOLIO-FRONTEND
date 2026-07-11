@@ -25,7 +25,7 @@ export function ProjectHeader({ project }: ProjectHeaderProps) {
       </Button>
 
       <div className="flex flex-wrap items-center gap-3">
-        <Button
+        {project.githubUrl && <Button
           size="sm"
           className="flex-1 sm:flex-none rounded-full bg-violet-600 hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-600 px-5 h-9 shadow-lg shadow-violet-600/20 text-white text-sm"
           asChild
@@ -34,7 +34,7 @@ export function ProjectHeader({ project }: ProjectHeaderProps) {
             <Github className="size-3.5 mr-2" />
             GitHub
           </a>
-        </Button>
+        </Button>}
 
         {project.liveUrl && (
           <Button

@@ -58,6 +58,11 @@ export function ProjectCard({
         )}
         <div className="absolute right-3 top-3">
           <Badge className={getStatusColor(effectiveStatus)}>{getStatusLabel(effectiveStatus)}</Badge>
+          {project.kind === "PRIVATE" && (
+            <Badge className="ml-2 bg-amber-500/15 text-amber-700 dark:text-amber-300">
+              {t("projects.private.badge")}
+            </Badge>
+          )}
         </div>
       </div>
 
@@ -85,8 +90,8 @@ export function ProjectCard({
               </div>
             </div>
 
-            <div className="flex h-20 sm:h-16 flex-wrap content-start gap-1.5 overflow-hidden">
-              {project.technologies.slice(0, 5).map((tech: string) => (
+            <div className="flex h-20 gap-1.5 overflow-x-auto overflow-y-hidden pb-1 sm:h-16 [scrollbar-width:thin]">
+              {project.technologies.map((tech: string) => (
                 <SkillBubble
                   key={tech}
                   name={tech}
@@ -94,16 +99,13 @@ export function ProjectCard({
                   size="sm"
                 />
               ))}
-              {project.technologies.length > 5 && (
-                <div className="flex items-center justify-center rounded-full border border-zinc-200 bg-zinc-50/50 px-2 py-1 text-[10px] font-bold text-zinc-500 dark:border-white/10 dark:bg-white/5 dark:text-zinc-400">
-                  +{project.technologies.length - 5}
-                </div>
-              )}
             </div>
 
             <div className="h-24 sm:h-20 overflow-hidden">
               <p className="line-clamp-4 sm:line-clamp-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-                {typeof project.description === 'object' 
+                {project.kind === 'PRIVATE'
+                  ? t('projects.private.description')
+                  : typeof project.description === 'object'
                   ? (project.description[i18n.language] || project.description['es'] || '')
                   : project.description}
               </p>
@@ -142,7 +144,7 @@ export function ProjectCard({
               </Button>
               
               <div className={`flex items-center gap-2 ${isListView ? "w-full lg:w-auto" : ""}`}>
-                <Button
+                {project.github && <Button
                   size="sm"
                   variant="outline"
                   className="size-9 p-0 border-zinc-200 text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 dark:border-white/10 dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white"
@@ -150,7 +152,7 @@ export function ProjectCard({
                   title={t("projects.actions.github")}
                 >
                   <Github className="size-4.5" />
-                </Button>
+                </Button>}
                 
                 {project.liveDemo && (
                   <Button

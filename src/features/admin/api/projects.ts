@@ -10,6 +10,8 @@ export type Project = {
   imageUrl: string;
   category: string;
   status: string;
+  isActive: boolean;
+  kind: 'PUBLIC' | 'PRIVATE';
   featured: boolean;
   stars: number;
   forks: number;
@@ -29,6 +31,8 @@ export type UpdateProjectPayload = {
   imageUrl?: string;
   category?: string;
   status?: string;
+  isActive?: boolean;
+  kind?: 'PUBLIC' | 'PRIVATE';
   featured?: boolean;
   githubUrl?: string | null;
   liveUrl?: string | null;

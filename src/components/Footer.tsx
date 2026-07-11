@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import { Github, Linkedin, Mail, Heart, MapPin, ArrowUpRight, Globe } from "lucide-react";
 import logoImg from "@/assets/logo.webp";
 
@@ -13,11 +14,13 @@ interface FooterProps {
 export default function Footer({ isDark, onPageChange, currentPage }: FooterProps) {
   const { t } = useTranslation();
   const [currentYear] = useState(() => new Date().getFullYear());
+  const emailAddress = ["albarrajuan5", "gmail.com"].join(String.fromCharCode(64));
 
   const navItems = [
     { key: "home", label: t("nav.home") },
     { key: "about", label: t("nav.about") },
     { key: "projects", label: t("nav.projects") },
+    { key: "blog", label: t("nav.blog") },
     { key: "stats", label: t("nav.stats") },
     { key: "contact", label: t("nav.contact") },
   ];
@@ -36,11 +39,6 @@ export default function Footer({ isDark, onPageChange, currentPage }: FooterProp
   ];
 
   const scrollToSection = (sectionId: string) => {
-    if (sectionId === "stats") {
-      onPageChange("stats");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      return;
-    }
     if (sectionId === "home") {
       onPageChange("home");
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -62,6 +60,11 @@ export default function Footer({ isDark, onPageChange, currentPage }: FooterProp
   };
 
   const activeLogo = isDark ? "/logoNigth.webp" : logoImg;
+
+  const copyEmail = async () => {
+    await navigator.clipboard.writeText(emailAddress);
+    toast.success(t("footer.emailCopied"));
+  };
 
   return (
     <footer className="relative z-10 bg-background/95 dark:bg-transparent backdrop-blur supports-[backdrop-filter]:bg-background/80 dark:supports-[backdrop-filter]:bg-transparent pt-24 pb-12">
@@ -166,13 +169,13 @@ export default function Footer({ isDark, onPageChange, currentPage }: FooterProp
                 {t("contact.info.title")}
               </h3>
              <div className="space-y-6">
-               <a href="mailto:albarrajuan5@gmail.com" className="group block space-y-2 cursor-pointer">
-                 <span className="text-[10px] text-muted-foreground/50 uppercase tracking-widest block">{t("contact.info.directEmail")}</span>
-                 <span className="text-sm font-medium text-foreground group-hover:text-violet-500 transition-colors flex items-center gap-2">
-                   albarrajuan5@gmail.com
-                   <Mail className="size-4 opacity-50" />
-                 </span>
-               </a>
+                <button type="button" onClick={copyEmail} className="group block space-y-2 text-left cursor-pointer">
+                  <span className="text-[10px] text-muted-foreground/50 uppercase tracking-widest block">{t("contact.info.directEmail")}</span>
+                  <span className="text-sm font-medium text-foreground group-hover:text-violet-500 transition-colors flex items-center gap-2">
+                    {t("footer.copyEmail")}
+                    <Mail className="size-4 opacity-50" />
+                  </span>
+                </button>
              </div>
            </div>
            

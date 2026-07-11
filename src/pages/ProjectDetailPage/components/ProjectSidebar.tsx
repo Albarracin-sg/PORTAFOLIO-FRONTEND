@@ -108,7 +108,7 @@ export function ProjectSidebar({ project }: ProjectSidebarProps) {
             </h4>
 
             <div className="space-y-1.5">
-              <a
+              {project.githubUrl && <a
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -121,7 +121,7 @@ export function ProjectSidebar({ project }: ProjectSidebarProps) {
                 </span>
 
                 <ExternalLink className="size-3 text-zinc-400 dark:text-zinc-500 shrink-0 ml-auto" />
-              </a>
+              </a>}
 
               {project.liveUrl && (
                 <a
@@ -143,7 +143,7 @@ export function ProjectSidebar({ project }: ProjectSidebarProps) {
           </div>
 
           <div className="p-6 flex flex-col gap-2.5">
-            <Button
+            {project.githubUrl && <Button
               className="w-full rounded-xl bg-violet-600 hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-600 h-10 text-white text-sm shadow-md shadow-violet-600/10"
               asChild
             >
@@ -151,7 +151,7 @@ export function ProjectSidebar({ project }: ProjectSidebarProps) {
                 <Github className="size-4 mr-2" />
                 {t('projects.detail.exploreCode')}
               </a>
-            </Button>
+            </Button>}
 
             {project.liveUrl && (
               <Button

@@ -122,7 +122,7 @@ export default function Navbar({
     { key: "home", label: t("nav.home") },
     { key: "about", label: t("nav.about") },
     { key: "projects", label: t("nav.projects") },
-    { key: "blog", label: t("nav.blog"), isRoute: true },
+    { key: "blog", label: t("nav.blog") },
     { key: "stats", label: t("nav.stats") },
     { key: "contact", label: t("nav.contact") },
   ];
@@ -139,7 +139,6 @@ export default function Navbar({
 const logoSizes = isDark ? "h-16 w-auto" : "h-14 w-auto";
 
   const scrollToSection = (sectionId: string) => {
-    if (sectionId === "stats") { onPageChange("stats"); return; }
     if (sectionId === "home") {
       onPageChange("home");
       window.scrollTo({ top: 0, behavior: "smooth" });

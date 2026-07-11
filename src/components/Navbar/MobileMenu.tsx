@@ -128,7 +128,7 @@ export function MobileMenu({
             {navItems.map((item, index) => (
               <Link
                 key={item.key}
-                to={item.isRoute ? `/${item.key}` : item.key === "stats" ? "/stats" : `/#${item.key}`}
+                to={item.isRoute ? `/${item.key}` : `/#${item.key}`}
                 onClick={() => handleNavClick(item.key)}
                 className={`block w-full rounded-2xl p-4 text-center text-base font-medium transition-all duration-300 cursor-pointer [@media(max-height:620px)]:px-3 [@media(max-height:620px)]:py-2 [@media(max-height:620px)]:text-sm ${
                   currentPage === item.key || (currentPage === 'home' && item.key === 'home')

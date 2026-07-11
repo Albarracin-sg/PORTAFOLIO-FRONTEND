@@ -1,14 +1,14 @@
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { Mail, Github, Linkedin, MapPin } from "lucide-react";
 import { sendContactMessage } from "@/shared/api/public";
 import { useSectionEditor } from "@/features/admin/hooks/useSectionEditor";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 // Sub-components
 import { ContactHeader } from "./Contact/ContactHeader";
 import { ContactForm } from "./Contact/ContactForm";
 import { ContactInfo } from "./Contact/ContactInfo";
-import { ContactFeedback } from "./Contact/ContactFeedback";
 
 type ContactFormData = {
   name: string;
@@ -31,45 +31,19 @@ type ContactContent = Record<string, unknown> & {
   social?: Array<Record<string, string>>;
 };
 
-type SubmitFeedback = {
-  open: boolean;
-  type: "success" | "error";
-  title: string;
-  description: string;
-  emailStatus?: "sent" | "failed";
-};
-
 interface ContactProps {
   section?: { id: string; type: string; content: Record<string, unknown> };
 }
 
 export default function Contact({ section }: ContactProps) {
   const { t } = useTranslation();
-  const [submitFeedback, setSubmitFeedback] = useState<SubmitFeedback>({
-    open: false,
-    type: "success",
-    title: "",
-    description: "",
-  });
-
   const onSubmit = async (data: ContactFormData) => {
     try {
-      const response = await sendContactMessage({ ...data, subject: "Consulta desde Portfolio" });
-      const emailStatus = (response as any)?.emailStatus;
-      setSubmitFeedback({
-        open: true,
-        type: "success",
-        title: t("contact.form.modal.successTitle"),
-        description: t("contact.form.modal.successDescription"),
-        emailStatus: emailStatus,
-      });
+      await sendContactMessage({ ...data, subject: "Consulta desde Portfolio" });
+      toast.success(t("contact.form.successMessage"));
     } catch (error) {
-      setSubmitFeedback({
-        open: true,
-        type: "error",
-        title: t("contact.form.modal.errorTitle"),
-        description: error instanceof Error && error.message ? error.message : t("contact.form.modal.errorDescription"),
-      });
+      toast.error(error instanceof Error && error.message ? error.message : t("contact.form.errorMessage"));
+      throw error;
     }
   };
 
@@ -122,12 +96,6 @@ export default function Contact({ section }: ContactProps) {
           />
         </div>
       </div>
-
-      <ContactFeedback 
-        feedback={submitFeedback} 
-        onOpenChange={(open) => setSubmitFeedback(prev => ({ ...prev, open }))} 
-        confirmLabel={t("contact.form.modal.confirm")} 
-      />
     </section>
   );
 }

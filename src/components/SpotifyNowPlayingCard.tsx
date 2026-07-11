@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Music2, PauseCircle, Radio } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { fetchNowPlaying, type SpotifyTrack } from '@/shared/api/public';
@@ -101,7 +101,7 @@ export function SpotifyNowPlayingCard() {
   }, []);
 
   const { track, error } = state;
-  const progress = useMemo(() => (track ? getProgressPercentage(track) : 0), [track]);
+  const progress = track ? getProgressPercentage(track) : 0;
 
   const imageUrl = track?.albumImageUrl || 'https://placehold.co/96x96/7c3aed/ffffff?text=%E2%99%AA';
 
@@ -120,6 +120,7 @@ export function SpotifyNowPlayingCard() {
 
   const isPlaying = track.type === 'now_playing';
   const StatusIcon = isPlaying ? Radio : PauseCircle;
+  const listeningStatus = isPlaying ? t('spotify.nowPlaying') : t('spotify.lastPlayed');
 
   return (
     <a
@@ -149,10 +150,11 @@ export function SpotifyNowPlayingCard() {
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
             <StatusIcon className="size-3 shrink-0 text-violet-500 dark:text-violet-400" />
-            <p className="truncate text-sm font-medium leading-tight text-zinc-700 dark:text-zinc-200">
-              {track.name}
-            </p>
+            <span className="text-xs font-medium text-violet-600 dark:text-violet-300">{listeningStatus}</span>
           </div>
+          <p className="mt-0.5 truncate text-sm font-medium leading-tight text-zinc-700 dark:text-zinc-200">
+            {track.name}
+          </p>
           <p className="mt-0.5 truncate text-xs leading-tight text-zinc-400 dark:text-zinc-500">
             {track.artists}
           </p>

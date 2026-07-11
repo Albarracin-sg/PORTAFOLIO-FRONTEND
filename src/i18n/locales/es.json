@@ -95,7 +95,7 @@
   "about": {
     "title": "Sobre mí",
     "pill": "Con propósito, no por defecto",
-    "bio": "Tengo 19 años y estoy por terminar Ingeniería de Software. Hace alrededor de un año y medio empecé a construir proyectos que realmente me importan, y en ese proceso descubrí que no me interesan las soluciones fáciles: disfruto ir a la raíz de los problemas y pensar con intención antes de actuar. Me gusta aprender, enseñar y trabajar en equipo; también busco que me desafíen y me digan cuando la estoy embarrando, porque el feedback honesto es parte de crecer. Por eso valoro tanto la planeación: ahí se entienden los riesgos reales y se toman las decisiones que dan rumbo al trabajo. Creo en la eudaimonía: no en la felicidad pasajera, sino en construir una vida con propósito. Me apasiona la tecnología porque atraviesa todo y abre posibilidades sin límite; quiero seguir creando cosas que importen, aprendiendo de otros y aportando donde haga falta.",
+    "bio": "Estoy por terminar Ingeniería de Software y construyo proyectos que realmente me importan. En ese proceso descubrí que no me interesan las soluciones fáciles: disfruto ir a la raíz de los problemas y pensar con intención antes de actuar. Me gusta aprender, enseñar y trabajar en equipo; también busco que me desafíen y me digan cuando la estoy embarrando, porque el feedback honesto es parte de crecer. Por eso valoro tanto la planeación: ahí se entienden los riesgos reales y se toman las decisiones que dan rumbo al trabajo. Creo en la eudaimonía: no en la felicidad pasajera, sino en construir una vida con propósito. Me apasiona la tecnología porque atraviesa todo y abre posibilidades sin límite; quiero seguir creando cosas que importen, aprendiendo de otros y aportando donde haga falta.",
     "technicalSkills": "Habilidades Técnicas",
     "professionalExperience": "Experiencia Profesional",
     "personalProjects": "Proyectos Personales",
@@ -217,6 +217,12 @@
       "viewLive": "Ver proyecto",
       "preview": "Vista previa del proyecto",
       "noTags": "Sin etiquetas"
+    },
+    "private": {
+      "badge": "Proyecto privado",
+      "title": "Trabajo bajo confidencialidad",
+      "description": "Este proyecto pertenece a una organización o acuerdo privado. Comparto el contexto y los resultados, pero no el código fuente ni el repositorio.",
+      "noRepository": "Repositorio no disponible"
     },
     "filters": {
       "all": "Todos",
@@ -343,6 +349,12 @@
     }
   },
   "stats": {
+    "preview": {
+      "eyebrow": "Transparencia técnica",
+      "title": "Estadísticas del portafolio",
+      "description": "Consultá las tecnologías, actividad y métricas que respaldan este sitio.",
+      "action": "Ver estadísticas completas"
+    },
     "title": "Estadísticas Técnicas",
     "subtitle": "Indicadores reales de experiencia técnica",
     "totalProjects": "Proyectos Totales",
@@ -419,7 +431,9 @@
     "remoteExpert": "Experto remoto",
     "softwareEngineer": "Ingeniero de Software",
     "craftedWith": "Hecho con",
-    "in": "en"
+    "in": "en",
+    "copyEmail": "Copiar correo",
+    "emailCopied": "Correo copiado al portapapeles"
   },
   "admin": {
     "login": {
@@ -544,9 +558,13 @@
         "fields": {
           "title": "Título",
           "category": "Categoría",
-          "status": "Estado",
-          "featured": "Proyecto Destacado",
-          "github": "Repositorio GitHub",
+           "status": "Estado",
+           "featured": "Proyecto Destacado",
+           "active": "Visible en el portafolio",
+           "kind": "Tipo de proyecto",
+           "publicProject": "Proyecto público",
+           "privateProject": "Proyecto privado",
+           "github": "Repositorio GitHub",
           "live": "Live Demo",
           "date": "Fecha de Lanzamiento",
           "techStack": "Stack Tecnológico (separado por comas)"

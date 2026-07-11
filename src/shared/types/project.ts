@@ -28,6 +28,8 @@ export interface ProjectBase {
   date?: string;
   category?: string;
   status?: string;
+  isActive?: boolean;
+  kind?: 'PUBLIC' | 'PRIVATE';
   longDescription?: string | Record<string, string>;
 }
 
@@ -36,7 +38,7 @@ export interface FeaturedProject extends ProjectBase {
   problem: string | Record<string, string>;
   challenge: string | Record<string, string>;
   solution: string | Record<string, string>;
-  githubUrl: string;
+  githubUrl?: string;
   liveUrl?: string;
   stats: ProjectStats;
   featured: true;
@@ -48,7 +50,7 @@ export interface ListProject extends ProjectBase {
   longDescription?: string;
   category: string;
   status: string;
-  github: string;
+  github?: string;
   liveDemo?: string;
   stars: number;
   forks: number;

@@ -67,7 +67,13 @@ export function RootLayout() {
         onPageChange={onPageChange}
       />
       {!isChatbot && <FloatingContactButton />}
-      <Toaster />
+      <Toaster
+        toastOptions={{
+          classNames: {
+            toast: '!bg-white !text-zinc-900 !border-zinc-200 !shadow-xl',
+          },
+        }}
+      />
     </div>
   );
 }

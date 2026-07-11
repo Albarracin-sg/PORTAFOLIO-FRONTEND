@@ -22,10 +22,12 @@ export type PublicProject = {
   challenge: Record<string, string>;
   solution: Record<string, string>;
   imageUrl: string;
-  githubUrl: string;
+  githubUrl?: string | null;
   liveUrl?: string | null;
   category: string;
   status: string;
+  isActive: boolean;
+  kind: 'PUBLIC' | 'PRIVATE';
   featured: boolean;
   stars: number;
   forks: number;

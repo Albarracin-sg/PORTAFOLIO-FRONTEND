@@ -1,4 +1,6 @@
 import { EditableText } from "@/features/admin/InlineEdit";
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 
 interface ContactInfoProps {
   infoItems: Array<Record<string, string>>;
@@ -9,11 +11,19 @@ interface ContactInfoProps {
 }
 
 export function ContactInfo({ infoItems, socialItems, socialTitle, updateField, resolveIcon }: ContactInfoProps) {
+  const { t } = useTranslation();
+
+  const copyEmail = async (email: string) => {
+    await navigator.clipboard.writeText(email);
+    toast.success(t("footer.emailCopied"));
+  };
+
   return (
     <div className="flex flex-col rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/40 p-7">
       <div className="flex flex-col gap-3">
         {infoItems.map((item, index) => {
           const Icon = resolveIcon(item.icon);
+          const isEmail = item.value.includes("@") || item.label.toLowerCase().includes("email") || item.label.toLowerCase().includes("correo");
           const content = (
             <div className="flex items-center gap-4 rounded-xl border border-zinc-100 dark:border-zinc-700/60 bg-zinc-50 dark:bg-zinc-800/40 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-violet-200 dark:hover:border-violet-500/30">
               <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 dark:bg-violet-900/50 ring-1 ring-violet-200/60 dark:ring-violet-500/20">
@@ -27,16 +37,22 @@ export function ContactInfo({ infoItems, socialItems, socialTitle, updateField, 
                   />
                 </div>
                 <div className="truncate text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-                  <EditableText
-                    value={String(item.value)}
-                    onSave={(value) => updateField(`info.${index}.value`, value)}
-                  />
+                  {isEmail ? t("footer.copyEmail") : (
+                    <EditableText
+                      value={String(item.value)}
+                      onSave={(value) => updateField(`info.${index}.value`, value)}
+                    />
+                  )}
                 </div>
               </div>
             </div>
           );
 
-          return item.link ? (
+          return isEmail ? (
+            <button key={String(item.label)} type="button" onClick={() => copyEmail(item.value)} className="block text-left">
+              {content}
+            </button>
+          ) : item.link ? (
             <a key={String(item.link)} href={String(item.link)} className="block">
               {content}
             </a>

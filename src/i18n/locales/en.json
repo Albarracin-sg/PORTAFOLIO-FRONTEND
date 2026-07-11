@@ -88,14 +88,14 @@
   "hero": {
     "greeting": "Hello, I'm Juan Albarracín",
     "tagline": "I build solutions where technology meets purpose",
-    "quote": "\"Si puedes imaginarlo, puedes programarlo\" — Alejandro Taboada Sánchez",
+    "quote": "\"If you can imagine it, you can program it\" — Alejandro Taboada Sánchez",
     "viewProjects": "View projects",
     "contactMe": "Contact me"
   },
   "about": {
     "title": "About Me",
     "pill": "With purpose, not by default",
-    "bio": "I'm 19 and about to finish Software Engineering. About a year and a half ago, I started building projects that genuinely matter to me, and along the way I discovered that easy solutions do not interest me: I enjoy getting to the root of problems and thinking with intention before acting. I enjoy learning, teaching, and working with others; I also seek out challenges and want people to tell me when I'm getting it wrong, because honest feedback is part of growth. That is why I value planning so much: it is where real risks become clear and the decisions that shape the work are made. I believe in eudaimonia: not fleeting happiness, but building a life with purpose. Technology excites me because it touches everything and opens up limitless possibilities; I want to keep creating things that matter, learning from others, and contributing wherever I can.",
+    "bio": "I am about to finish Software Engineering and build projects that genuinely matter to me. Along the way, I discovered that easy solutions do not interest me: I enjoy getting to the root of problems and thinking with intention before acting. I enjoy learning, teaching, and working with others; I also seek out challenges and want people to tell me when I'm getting it wrong, because honest feedback is part of growth. That is why I value planning so much: it is where real risks become clear and the decisions that shape the work are made. I believe in eudaimonia: not fleeting happiness, but building a life with purpose. Technology excites me because it touches everything and opens up limitless possibilities; I want to keep creating things that matter, learning from others, and contributing wherever I can.",
     "technicalSkills": "Technical Skills",
     "professionalExperience": "Professional Experience",
     "personalProjects": "Personal Projects",
@@ -217,6 +217,12 @@
       "viewLive": "View project",
       "preview": "Project preview",
       "noTags": "No tags"
+    },
+    "private": {
+      "badge": "Private project",
+      "title": "Work under confidentiality",
+      "description": "This project belongs to an organization or private agreement. I share its context and outcomes, but not its source code or repository.",
+      "noRepository": "Repository unavailable"
     },
     "filters": {
       "all": "All",
@@ -343,6 +349,12 @@
     }
   },
   "stats": {
+    "preview": {
+      "eyebrow": "Technical transparency",
+      "title": "Portfolio statistics",
+      "description": "Explore the technologies, activity, and metrics behind this site.",
+      "action": "View full statistics"
+    },
     "title": "Technical Statistics",
     "subtitle": "Real technical experience indicators",
     "totalProjects": "Total Projects",
@@ -419,7 +431,9 @@
     "remoteExpert": "Remote expert",
     "softwareEngineer": "Software Engineer",
     "craftedWith": "Crafted with",
-    "in": "in"
+    "in": "in",
+    "copyEmail": "Copy email",
+    "emailCopied": "Email copied to clipboard"
   },
   "admin": {
     "login": {
@@ -544,9 +558,13 @@
         "fields": {
           "title": "Title",
           "category": "Category",
-          "status": "Status",
-          "featured": "Featured Project",
-          "github": "GitHub Repository",
+           "status": "Status",
+           "featured": "Featured Project",
+           "active": "Visible in portfolio",
+           "kind": "Project type",
+           "publicProject": "Public project",
+           "privateProject": "Private project",
+           "github": "GitHub Repository",
           "live": "Live Demo",
           "date": "Release Date",
           "techStack": "Tech Stack (comma separated)"

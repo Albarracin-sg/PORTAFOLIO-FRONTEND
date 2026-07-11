@@ -9,7 +9,6 @@ import { NotFoundPage } from '@/pages/NotFoundPage';
 import { AdminLoginPage } from '@/pages/Admin/LoginPage';
 import { AdminDashboardPage } from '@/pages/Admin/DashboardPage';
 import ScrollToTop from './components/ui/ScrollToTop';
-import { Toaster } from '@/components/ui/sonner';
 import loadingImg from '@/assets/looading.png';
 
 const StatsPage = lazy(() => import('./pages/StatsPage/index').then(m => ({ default: m.StatsPage })));
@@ -63,7 +62,6 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
-      <Toaster position="top-center" richColors />
       <Routes>
       <Route path="admin/login" element={<AdminLoginPage />} />
       <Route

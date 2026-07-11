@@ -1,14 +1,18 @@
 import { useEffect, useReducer } from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowRight, FolderGit2, GitBranch, Star, Users } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
 import Projects from '@/components/Projects';
 import Contact from '@/components/Contact';
 import { BlogPreview } from '@/components/BlogPreview';
-import { fetchPublicPage, fetchPublicProjects } from '@/shared/api/public';
+import { fetchGithubStats, fetchPublicPage, fetchPublicProjects } from '@/shared/api/public';
 import { mapPublicProjectToFeatured } from '@/shared/api/mappers';
 import { useLocalStorageSWR } from '@/shared/hooks/useLocalStorageSWR';
 import { LoadingScreen } from '@/components/ui/LoadingScreen';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Card, CardContent } from '@/components/ui/card';
 import { usePageSeo } from '@/shared/seo/usePageSeo';
 import { usePrerenderReady } from '@/shared/seo/usePrerenderReady';
 
@@ -41,6 +45,7 @@ function homeReducer(state: HomeState, action: HomeAction): HomeState {
 }
 
 export function HomePage() {
+  const { t } = useTranslation();
   const scrollY = 0;
   const [state, dispatch] = useReducer(homeReducer, {
     sections: {},
@@ -56,6 +61,19 @@ export function HomePage() {
     'public-projects-cache',
     fetchPublicProjects,
   );
+  const { data: githubStats, isLoading: statsLoading } = useLocalStorageSWR(
+    'github-stats-cache',
+    fetchGithubStats,
+  );
+
+  const previewStats = githubStats
+    ? [
+        { label: t('stats.totalRepos'), value: githubStats.totalRepos, icon: FolderGit2 },
+        { label: t('stats.totalStars'), value: githubStats.stars, icon: Star },
+        { label: t('stats.totalForks'), value: githubStats.forks, icon: GitBranch },
+        { label: t('stats.followers'), value: githubStats.followers, icon: Users },
+      ]
+    : [];
 
   // Sync page sections
   useEffect(() => {
@@ -150,7 +168,48 @@ export function HomePage() {
         )}
       </section>
 
-      {/* ── Separador Projects → Blog ── */}
+      {/* ── Separador Projects → Statistics ── */}
+      <div className="py-8 sm:py-16" />
+
+      <section id="stats" className="px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-12 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl text-center lg:text-left">
+              <h2 className="mb-4 text-4xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-5xl">
+                {t('stats.preview.title')}
+              </h2>
+              <p className="max-w-3xl text-sm leading-7 text-zinc-600 dark:text-zinc-400 sm:text-base">
+                {t('stats.preview.description')}
+              </p>
+            </div>
+            <Link
+              to="/stats"
+              className="inline-flex self-center items-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-violet-700 dark:bg-violet-500 dark:hover:bg-violet-600 lg:self-auto"
+            >
+              {t('stats.preview.action')} <ArrowRight className="size-4" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
+            {statsLoading && !githubStats
+              ? Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} className="h-36 rounded-2xl" />)
+              : previewStats.map(({ label, value, icon: Icon }) => (
+                <Card key={label} className="group overflow-hidden rounded-2xl border-zinc-200/80 bg-white/85 shadow-lg shadow-zinc-200/50 transition-all duration-300 hover:-translate-y-1 hover:border-violet-300/70 hover:shadow-xl dark:border-white/10 dark:bg-zinc-950/75 dark:shadow-black/20 dark:hover:border-violet-400/30">
+                  <CardContent className="relative p-5 sm:p-6">
+                    <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-violet-500/70 to-transparent" />
+                    <div className="mb-5 flex size-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-400">
+                      <Icon className="size-5" aria-hidden="true" />
+                    </div>
+                    <p className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">{value}</p>
+                    <p className="mt-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 sm:text-sm">{label}</p>
+                  </CardContent>
+                </Card>
+              ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Separador Statistics → Blog ── */}
       <div className="py-8 sm:py-16" />
 
       {/* ── Blog Preview ── */}

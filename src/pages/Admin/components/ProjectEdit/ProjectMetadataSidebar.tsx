@@ -80,6 +80,19 @@ export function ProjectMetadataSidebar({ form, setForm, t }: ProjectMetadataSide
             </div>
           </div>
 
+          <div className="space-y-2">
+            <label className="text-[10px] font-semibold uppercase tracking-widest text-zinc-500 ml-1">{t('admin.projects.edit.fields.kind')}</label>
+            <Select value={form.kind} onValueChange={(value) => setForm((prev: any) => ({ ...prev, kind: value }))}>
+              <SelectTrigger className="rounded-xl border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-black/40 text-xs h-10">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl border-zinc-200 dark:border-white/10">
+                <SelectItem value="PUBLIC">{t('admin.projects.edit.fields.publicProject')}</SelectItem>
+                <SelectItem value="PRIVATE">{t('admin.projects.edit.fields.privateProject')}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           <div className="flex items-center justify-between p-4 rounded-2xl bg-violet-500/5 dark:bg-violet-500/10 border border-violet-500/10">
             <div className="flex items-center gap-2">
               <Star className="size-4 text-amber-500 fill-amber-500" />
@@ -88,6 +101,16 @@ export function ProjectMetadataSidebar({ form, setForm, t }: ProjectMetadataSide
             <Switch
               checked={form.featured}
               onCheckedChange={(checked) => setForm((prev: any) => ({ ...prev, featured: checked }))}
+            />
+          </div>
+
+          <div className="flex items-center justify-between p-4 rounded-2xl bg-zinc-500/5 border border-zinc-500/10">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold">{t('admin.projects.edit.fields.active')}</span>
+            </div>
+            <Switch
+              checked={form.isActive}
+              onCheckedChange={(checked) => setForm((prev: any) => ({ ...prev, isActive: checked }))}
             />
           </div>
 
