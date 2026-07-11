@@ -165,7 +165,7 @@ async function collectRoutes(apiUrl) {
 // ---------------------------------------------------------------------------
 
 function escapeHtml(str) {
-  return str
+  return String(str ?? '')
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
@@ -176,7 +176,7 @@ function escapeHtml(str) {
 function generateRouteContent(route) {
   if (route.path === '/') return null;
 
-  const heading = route.title.split('|')[0].trim();
+  const heading = String(route.title ?? '').split('|')[0].trim();
 
   return `
     <main style="max-width:960px;margin:0 auto;padding:48px 20px;font-family:Inter,system-ui,sans-serif;line-height:1.6;color:#18181b">
