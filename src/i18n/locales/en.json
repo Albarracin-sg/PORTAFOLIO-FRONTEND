@@ -85,17 +85,15 @@
   },
   "hero": {
     "greeting": "Hello, I'm Juan Albarracín",
-    "role": "Full-Stack Engineer (Backend Focus) Microservices & Distributed Architecture AI & MCP Integration",
-    "subtitle": "I design MCP-based orchestrators, NestJS/gRPC microservices and automation pipelines that eliminate real operational load — I don't optimize processes, I transform them.",
+    "tagline": "I build solutions where technology meets purpose",
+    "quote": "\"Si puedes imaginarlo, puedes programarlo\" — Alejandro Taboada Sánchez",
     "viewProjects": "View projects",
-    "contactMe": "Contact me",
-    "yearsExperience": "Years of experience",
-    "projectsCompleted": "Projects completed",
-    "technologies": "Technologies"
+    "contactMe": "Contact me"
   },
   "about": {
     "title": "About Me",
-    "bio": "Backend-focused Full-Stack Engineer specialized in replacing manual processes with intelligent systems powered by distributed architecture and AI. I design MCP-based orchestrators, NestJS/gRPC microservices, and automation pipelines that remove real operational load while keeping strong product and architecture thinking.",
+    "pill": "With purpose, not by default",
+    "bio": "I'm 19 and about to finish Software Engineering. About a year and a half ago, I started building projects that genuinely matter to me, and along the way I discovered that easy solutions do not interest me: I enjoy getting to the root of problems and thinking with intention before acting. I enjoy learning, teaching, and working with others; I also seek out challenges and want people to tell me when I'm getting it wrong, because honest feedback is part of growth. That is why I value planning so much: it is where real risks become clear and the decisions that shape the work are made. I believe in eudaimonia: not fleeting happiness, but building a life with purpose. Technology excites me because it touches everything and opens up limitless possibilities; I want to keep creating things that matter, learning from others, and contributing wherever I can.",
     "technicalSkills": "Technical Skills",
     "professionalExperience": "Professional Experience",
     "personalProjects": "Personal Projects",

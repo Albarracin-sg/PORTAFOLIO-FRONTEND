@@ -117,9 +117,6 @@ export function HomePage() {
         <Hero scrollY={scrollY} section={sections.HERO} />
       </section>
 
-      {/* ── Separador Hero → About ── */}
-      <div className="py-8 sm:py-16" />
-
       {/* ── About ── */}
       <section id="about">
         <About />

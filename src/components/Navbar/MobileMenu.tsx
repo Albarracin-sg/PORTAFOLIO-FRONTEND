@@ -95,7 +95,7 @@ export function MobileMenu({
         }`}
         style={{ overscrollBehavior: "contain" }}
       >
-        <div className={`flex items-center justify-between border-b px-5 py-4 ${mobileSurfaceClass}`}>
+        <div className={`flex items-center justify-between border-b px-5 py-4 [@media(max-height:620px)]:py-2 ${mobileSurfaceClass}`}>
           <Link
             to="/"
             className="cursor-pointer"
@@ -113,16 +113,16 @@ export function MobileMenu({
         </div>
 
         <div
-          className="flex-1 overflow-y-auto px-5 py-6 custom-scrollbar"
+          className="min-h-0 flex-1 overflow-hidden px-5 py-6 [@media(max-height:700px)]:[zoom:.9] [@media(max-height:620px)]:py-3 [@media(max-height:620px)]:[zoom:.82] [@media(max-height:520px)]:[zoom:.72]"
           style={{ overscrollBehavior: "contain" }}
         >
-          <div className="space-y-1.5">
+            <div className="space-y-1.5 [@media(max-height:620px)]:space-y-0.5">
             {navItems.map((item, index) => (
               <Link
                 key={item.key}
                 to={item.isRoute ? `/${item.key}` : item.key === "stats" ? "/stats" : `/#${item.key}`}
                 onClick={() => handleNavClick(item.key)}
-                className={`block w-full rounded-2xl p-4 text-left text-base font-medium transition-all duration-300 cursor-pointer ${
+                className={`block w-full rounded-2xl p-4 text-left text-base font-medium transition-all duration-300 cursor-pointer [@media(max-height:620px)]:px-3 [@media(max-height:620px)]:py-2 [@media(max-height:620px)]:text-sm ${
                   currentPage === item.key || (currentPage === 'home' && item.key === 'home')
                     ? mobileActiveButtonClass
                     : mobileActionButtonClass
@@ -138,11 +138,11 @@ export function MobileMenu({
             ))}
           </div>
 
-          <div className="mt-6 space-y-2">
+          <div className="mt-6 space-y-2 [@media(max-height:620px)]:mt-3 [@media(max-height:620px)]:space-y-1">
             <button
               type="button"
               onClick={onThemeToggle}
-              className={`flex w-full items-center justify-between rounded-2xl p-4 text-left text-base font-medium transition-all duration-300 cursor-pointer ${mobileActionButtonClass}`}
+              className={`flex w-full items-center justify-between rounded-2xl p-4 text-left text-base font-medium transition-all duration-300 cursor-pointer [@media(max-height:620px)]:px-3 [@media(max-height:620px)]:py-2 [@media(max-height:620px)]:text-sm ${mobileActionButtonClass}`}
               aria-label={themeAriaLabel}
             >
               <span className="flex items-center gap-3">
@@ -159,7 +159,7 @@ export function MobileMenu({
                   key={option.value}
                   type="button"
                   onClick={() => onLanguageChange(option.value)}
-                  className={`flex w-full items-center justify-between rounded-2xl p-4 text-left text-base font-medium transition-all duration-300 cursor-pointer ${
+                  className={`flex w-full items-center justify-between rounded-2xl p-4 text-left text-base font-medium transition-all duration-300 cursor-pointer [@media(max-height:620px)]:px-3 [@media(max-height:620px)]:py-2 [@media(max-height:620px)]:text-sm ${
                     isActive ? mobileActiveButtonClass : mobileActionButtonClass
                   }`}
                   aria-pressed={isActive}
@@ -178,14 +178,14 @@ export function MobileMenu({
                   ) : isActive ? (
                     <Check className="size-4" />
                   ) : (
-                    <span className={`text-sm ${mobileMutedClass}`}>{option.shortLabel}</span>
+                      <span className={`text-sm ${mobileMutedClass}`}>{option.shortLabel}</span>
                   )}
                 </button>
               );
             })}
           </div>
 
-          <div className="mt-8 space-y-4">
+          <div className="mt-8 space-y-4 [@media(max-height:620px)]:mt-4 [@media(max-height:620px)]:space-y-2">
             <div className="flex items-center gap-3 px-2">
               <div className={`h-px flex-1 ${isDark ? "bg-white/10" : "bg-zinc-200"}`} />
               <span className={`text-[10px] font-bold uppercase tracking-wider ${mobileMutedClass}`}>
@@ -200,7 +200,7 @@ export function MobileMenu({
                   <Link
                     to="/admin"
                     onClick={() => handleNavClick("admin")}
-                    className={`flex w-full items-center justify-center gap-3 rounded-2xl p-4 text-center text-base font-medium transition-all duration-300 cursor-pointer ${mobileActiveButtonClass}`}
+                    className={`flex w-full items-center justify-center gap-3 rounded-2xl p-4 text-center text-base font-medium transition-all duration-300 cursor-pointer [@media(max-height:620px)]:px-3 [@media(max-height:620px)]:py-2 [@media(max-height:620px)]:text-sm ${mobileActiveButtonClass}`}
                   >
                     <span className="flex size-5 items-center justify-center">
                       <span className="size-2 rounded-full bg-violet-500" />
@@ -212,7 +212,7 @@ export function MobileMenu({
                       logout();
                       onClose();
                     }}
-                    className="flex w-full items-center justify-center gap-3 rounded-2xl p-4 text-center text-base font-medium transition-all duration-300 cursor-pointer bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/10 dark:text-red-400 dark:hover:bg-red-900/20"
+                    className="flex w-full items-center justify-center gap-3 rounded-2xl p-4 text-center text-base font-medium transition-all duration-300 cursor-pointer [@media(max-height:620px)]:px-3 [@media(max-height:620px)]:py-2 [@media(max-height:620px)]:text-sm bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/10 dark:text-red-400 dark:hover:bg-red-900/20"
                   >
                     <LogOut className="size-5" />
                     Logout
@@ -222,7 +222,7 @@ export function MobileMenu({
                 <AdminLoginModal
                   triggerLabel="Admin"
                   onTriggerClick={onClose}
-                  triggerClassName={`flex w-full items-center justify-center gap-3 rounded-2xl p-4 text-center text-base font-medium transition-all duration-300 cursor-pointer ${mobileActiveButtonClass}`}
+                  triggerClassName={`flex w-full items-center justify-center gap-3 rounded-2xl p-4 text-center text-base font-medium transition-all duration-300 cursor-pointer [@media(max-height:620px)]:px-3 [@media(max-height:620px)]:py-2 [@media(max-height:620px)]:text-sm ${mobileActiveButtonClass}`}
                 />
               )}
 
@@ -230,7 +230,7 @@ export function MobileMenu({
                 href={cvPdf}
                 target="_blank"
                 rel="noreferrer"
-                className={`flex w-full items-center justify-center gap-3 rounded-2xl p-4 text-center text-base font-medium transition-all duration-300 cursor-pointer ${mobileActiveButtonClass}`}
+                  className={`flex w-full items-center justify-center gap-3 rounded-2xl p-4 text-center text-base font-medium transition-all duration-300 cursor-pointer [@media(max-height:620px)]:px-3 [@media(max-height:620px)]:py-2 [@media(max-height:620px)]:text-sm ${mobileActiveButtonClass}`}
               >
                 <FileText className="size-5" />
                 {t("nav.downloadCV")}

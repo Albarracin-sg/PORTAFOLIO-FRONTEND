@@ -10,6 +10,7 @@ import { AdminLoginPage } from '@/pages/Admin/LoginPage';
 import { AdminDashboardPage } from '@/pages/Admin/DashboardPage';
 import ScrollToTop from './components/ui/ScrollToTop';
 import { Toaster } from '@/components/ui/sonner';
+import loadingImg from '@/assets/looading.png';
 
 const StatsPage = lazy(() => import('./pages/StatsPage/index').then(m => ({ default: m.StatsPage })));
 const AllProjectsPage = lazy(() => import('./pages/AllProjectsPage/index').then(m => ({ default: m.AllProjectsPage })));
@@ -27,8 +28,17 @@ const BlogEditPage = lazy(() => import('./pages/Admin/BlogEditPage').then(m => (
 
 function PageFallback() {
   return (
-    <div className="min-h-[60vh] flex items-center justify-center">
-      <div className="animate-pulse text-zinc-500 dark:text-zinc-400">Cargando…</div>
+    <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
+      <img
+        src={loadingImg}
+        alt="Loading"
+        className="w-16 h-16 sm:w-20 sm:h-20 object-contain animate-pulse"
+      />
+      <div className="flex gap-1.5">
+        <div className="size-1 rounded-full bg-violet-400 animate-bounce [animation-delay:-0.3s]" />
+        <div className="size-1 rounded-full bg-violet-400 animate-bounce [animation-delay:-0.15s]" />
+        <div className="size-1 rounded-full bg-violet-400 animate-bounce" />
+      </div>
     </div>
   );
 }

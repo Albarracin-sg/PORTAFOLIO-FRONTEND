@@ -18,7 +18,14 @@
   outline: none;
 }
 
-/* Componentes UI (Input, Select, Dialog, Popover…) */
+/* ─── Typography tokens ─── */
+@theme {
+  --font-display: "Rethink Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-body: "Roboto", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}
+
+/* ─── Component design tokens (Input, Select, Dialog, Popover…) ─── */
 @theme {
   --color-background: #fafafa;
   --color-foreground: #0a0a0a;
@@ -58,6 +65,23 @@
   --color-popover: #18181b;
   --color-popover-foreground: #fafafa;
   --color-input-background: #27272a;
+}
+
+/* ─── Global typography hierarchy ─── */
+html {
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+/* Navigation & button labels inherit Rethink Sans via display stack */
+nav, nav a, button, [role="button"], label, th, thead {
+  font-family: var(--font-display);
 }
 
 html,

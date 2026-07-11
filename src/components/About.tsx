@@ -1,7 +1,9 @@
 import { memo, useMemo, useEffect, useRef, useReducer } from "react";
-import { Briefcase, GraduationCap, MapPin, Sparkles, ArrowRight, Code2, Brain } from "lucide-react";
+import { Briefcase, GraduationCap, MapPin, ArrowRight, Code2, Brain } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { SkillBubble } from "./SkillBubble";
+import skateDayImg from "@/assets/about/skate-day.png";
+import skateNightImg from "@/assets/about/skate-nitgh.png";
 
 interface AboutProps {
   section?: { id: string; type: string; content: Record<string, unknown> };
@@ -26,6 +28,7 @@ type EducationEntry = {
 };
 type AboutDictionary = {
   title: string;
+  pill: string;
   bio: string;
   technicalSkills: string;
   softSkillsTitle: string;
@@ -161,28 +164,26 @@ export default function About(_props: AboutProps) {
 
           {/* HEADER */}
           <div className="mx-auto mb-36 max-w-4xl text-center fu1">
-            <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-violet-400/25 bg-violet-500/8 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-violet-600 dark:text-violet-400">
-              <Sparkles className="size-3" />
-              Backend-first engineer
-            </p>
             <h2 className="text-5xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-6xl">
               {about.title}
             </h2>
             <p className="mx-auto mt-5 max-w-3xl text-sm leading-7 text-zinc-600 dark:text-zinc-400 sm:text-base">
               {about.bio}
             </p>
-            <div className="mt-8 flex justify-center gap-12 border-y border-zinc-200/80 py-5 dark:border-white/[0.07]">
-              {[
-                ["MCP", "orquestadores"],
-                ["DDD", "CQRS + Clean Arch"],
-                ["IA", "aplicada a producto"],
-              ].map(([v, l]) => (
-                <div key={l} className="flex flex-col items-center gap-0.5">
-                  <span className="font-mono text-xl font-bold text-zinc-900 dark:text-white">{v}</span>
-                  <span className="text-[10px] uppercase tracking-widest text-zinc-500 dark:text-zinc-600">{l}</span>
-                </div>
-              ))}
-            </div>
+            <img
+              src={skateDayImg}
+              alt=""
+              width={320}
+              height={320}
+              className="mx-auto mt-6 size-44 object-contain dark:hidden sm:size-56 lg:size-80"
+            />
+            <img
+              src={skateNightImg}
+              alt=""
+              width={320}
+              height={320}
+              className="mx-auto mt-6 hidden size-44 object-contain dark:block sm:size-56 lg:size-80"
+            />
           </div>
 
           {/* SKILLS MARQUEE */}

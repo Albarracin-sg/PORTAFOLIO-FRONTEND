@@ -33,6 +33,11 @@
   <link rel="preconnect" href="https://opengraph.githubassets.com" />
   <link rel="preconnect" href="https://open.spotify.com" />
 
+  <!-- Google Fonts: Rethink Sans (display/UI) + Roboto (body/prose) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rethink+Sans:ital,wght@0,400..800;1,400..800&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/logo.webp" />
 
@@ -100,27 +105,35 @@
       ? window.matchMedia('(prefers-color-scheme: dark)').matches
       : saved === 'dark';
     if (dark) document.documentElement.classList.add('dark');
+
+    // A reload starts at the portfolio's beginning, never at the prior scroll position.
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.addEventListener('load', () => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }));
   </script>
 </head>
 
 <body>
   <div id="root">
-    <main style="max-width:960px;margin:0 auto;padding:48px 20px;font-family:Inter,system-ui,sans-serif;line-height:1.6;color:#18181b">
-      <header>
-        <p style="margin:0 0 8px;color:#6d28d9;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Portafolio profesional</p>
-        <h1 style="margin:0 0 16px;font-size:clamp(2rem,5vw,3.5rem);line-height:1.1">Juan Camilo Albarracin — Full-Stack Engineer con foco en Backend e IA</h1>
-        <p style="margin:0 0 24px;font-size:1.05rem;color:#52525b">
-          Portafolio de Juan Camilo Albarracin Urrego. Desarrollo backend con NestJS, microservicios, arquitectura distribuida,
-          automatizacion, integracion de IA y MCP desde Bogota, Colombia.
-        </p>
-        <nav aria-label="Enlaces principales" style="display:flex;gap:16px;flex-wrap:wrap">
-          <a href="/projects">Ver proyectos</a>
-          <a href="/blog">Leer blog</a>
-          <a href="/stats">Ver estadisticas</a>
-        </nav>
-      </header>
-    </main>
+    <div
+      role="status"
+      aria-label="Cargando portafolio"
+      style="min-height:100vh;display:grid;place-items:center;background:#fafafa"
+    >
+      <img
+        src="/src/assets/looading.png"
+        alt=""
+        width="320"
+        height="320"
+        style="width:min(58vw,320px);height:auto;animation:boot-loader-pulse 1.4s ease-in-out infinite"
+      />
+    </div>
   </div>
+  <style>
+    html.dark #root > div { background: #09090b !important; }
+    @keyframes boot-loader-pulse {
+      50% { transform: scale(.94); opacity: .72; }
+    }
+  </style>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 

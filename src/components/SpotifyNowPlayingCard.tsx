@@ -1,18 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ExternalLink, Music2, PauseCircle, Radio, Waves } from 'lucide-react';
+import { Music2, PauseCircle, Radio } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent } from './ui/card';
 import { fetchNowPlaying, type SpotifyTrack } from '@/shared/api/public';
+import musicDayImg from '@/assets/music/music-day.png';
+import musicNightImg from '@/assets/music/music-nitgh.png';
 
 const CACHE_KEY = 'spotify-playing-cache';
-
-function formatTime(milliseconds: number) {
-  const totalSeconds = Math.max(0, Math.floor(milliseconds / 1000));
-  const minutes = Math.floor(totalSeconds / 60);
-  const seconds = totalSeconds % 60;
-
-  return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-}
 
 function getProgressPercentage(track: SpotifyTrack) {
   if (track.durationMs <= 0) return 0;
@@ -37,7 +30,7 @@ function saveToCache(track: SpotifyTrack) {
       JSON.stringify({ data: track, timestamp: Date.now() }),
     );
   } catch {
-    // localStorage lleno o deshabilitado — ignorar
+    // localStorage lleno o deshabilitado
   }
 }
 
@@ -110,97 +103,83 @@ export function SpotifyNowPlayingCard() {
   const { track, error } = state;
   const progress = useMemo(() => (track ? getProgressPercentage(track) : 0), [track]);
 
+  const imageUrl = track?.albumImageUrl || 'https://placehold.co/96x96/7c3aed/ffffff?text=%E2%99%AA';
+
   if (error || !track || track.type === 'none') {
     return (
-      <Card className="group mt-6 overflow-hidden border-violet-500/20 bg-white/80 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-violet-500/10 dark:bg-zinc-950/70">
-        <CardContent className="flex items-center gap-3 p-3.5 sm:gap-4 sm:p-4">
-          <div className="flex size-14 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-600 dark:text-violet-400">
-            <Music2 className="size-6" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-violet-600 dark:text-violet-400">
-              Spotify
-            </p>
-            <p className="mt-1 text-sm font-medium text-zinc-900 dark:text-white">
-              {t('spotify.notListening')}
-            </p>
-            <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-              {t('spotify.comeBackLater')}
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="flex items-center gap-2.5 rounded-xl border border-zinc-200/60 bg-white/40 px-3.5 py-2.5 dark:border-white/[0.06] dark:bg-white/[0.03]">
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-zinc-100 dark:bg-white/[0.05]">
+          <Music2 className="size-3.5 text-zinc-400 dark:text-zinc-500" />
+        </div>
+        <span className="text-xs tracking-wide text-zinc-400 dark:text-zinc-500">
+          {t('spotify.notListening')}
+        </span>
+      </div>
     );
   }
 
-  const statusLabel = track.type === 'now_playing' ? t('spotify.nowPlaying') : t('spotify.lastPlayed');
-  const statusIcon = track.type === 'now_playing' ? Radio : PauseCircle;
-  const StatusIcon = statusIcon;
-  const imageUrl = track.albumImageUrl || 'https://placehold.co/96x96/7c3aed/ffffff?text=%E2%99%AA';
+  const isPlaying = track.type === 'now_playing';
+  const StatusIcon = isPlaying ? Radio : PauseCircle;
 
   return (
     <a
       href={track.url}
       target="_blank"
       rel="noreferrer"
-      className="mt-6 block"
+      className="group relative block w-full overflow-hidden rounded-xl border border-zinc-200/60 bg-white/40 p-3.5 transition-all duration-300 hover:border-violet-300/50 hover:bg-white/60 sm:p-3 dark:border-white/[0.06] dark:bg-white/[0.03] dark:hover:border-violet-400/20 dark:hover:bg-white/[0.06]"
     >
-      <Card className="group overflow-hidden border-violet-500/20 bg-white/85 shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/40 hover:shadow-xl hover:shadow-violet-500/10 dark:bg-zinc-950/75">
-        <CardContent className="p-3.5 sm:p-4">
-          <div className="flex items-center gap-3 sm:gap-4">
-            <div className="relative size-14 shrink-0 overflow-hidden rounded-2xl sm:size-16">
-              <img
-                src={imageUrl}
-                alt={`Portada de ${track.album}`}
-                loading="lazy"
-                className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/25 to-transparent" />
-            </div>
+      <div className="flex items-center gap-3">
+        {/* Album art */}
+        <div className="relative size-20 shrink-0 overflow-hidden rounded-lg ring-1 ring-zinc-900/5 sm:size-10 dark:ring-white/[0.08]">
+          <img
+            src={imageUrl}
+            alt={`Portada de ${track.album}`}
+            loading="lazy"
+            className="size-full object-cover"
+          />
+          {isPlaying && (
+            <span className="absolute bottom-0.5 right-0.5 flex size-2">
+              <span className="absolute inline-flex size-full animate-ping rounded-full bg-violet-400 opacity-60 dark:bg-violet-500" />
+              <span className="relative inline-flex size-2 rounded-full bg-violet-500 dark:bg-violet-400" />
+            </span>
+          )}
+        </div>
 
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-violet-600 dark:text-violet-400 sm:text-[11px] sm:tracking-[0.25em]">
-                <StatusIcon className="size-3.5" />
-                <span>{statusLabel}</span>
-              </div>
-
-              <div className="mt-2 flex items-start justify-between gap-3">
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-zinc-900 dark:text-white">
-                    {track.name}
-                  </p>
-                  <p className="truncate text-sm text-zinc-600 dark:text-white">
-                    {track.artists}
-                  </p>
-                  <p className="mt-1 truncate text-xs text-zinc-500 dark:text-zinc-400">
-                    {track.album}
-                  </p>
-                </div>
-
-                <ExternalLink className="mt-0.5 size-4 shrink-0 text-zinc-400 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-violet-500" />
-              </div>
-            </div>
+        {/* Track info */}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5">
+            <StatusIcon className="size-3 shrink-0 text-violet-500 dark:text-violet-400" />
+            <p className="truncate text-sm font-medium leading-tight text-zinc-700 dark:text-zinc-200">
+              {track.name}
+            </p>
           </div>
+          <p className="mt-0.5 truncate text-xs leading-tight text-zinc-400 dark:text-zinc-500">
+            {track.artists}
+          </p>
+        </div>
 
-          <div className="mt-4 space-y-2">
-            <div className="h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
-              <div
-                className="h-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-500"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
+        {/* Day-mode mobile flourish: hidden in dark mode and desktop. */}
+        <img
+          src={musicDayImg}
+          alt=""
+          aria-hidden="true"
+          className="h-20 w-14 shrink-0 object-contain opacity-80 sm:hidden dark:hidden"
+        />
+        <img
+          src={musicNightImg}
+          alt=""
+          aria-hidden="true"
+          className="hidden h-20 w-14 shrink-0 object-contain opacity-80 dark:block sm:dark:hidden"
+        />
+      </div>
 
-            <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] text-zinc-500 dark:text-zinc-400 sm:flex-nowrap">
-              <span>{formatTime(track.progressMs)}</span>
-              <span className="inline-flex items-center gap-1 text-violet-600 dark:text-violet-400">
-                <Waves className="size-3.5" />
-                {t('spotify.openInSpotify')}
-              </span>
-              <span>{track.durationMs > 0 ? formatTime(track.durationMs) : '--:--'}</span>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Progress bar — full width bottom edge */}
+      <div className="mt-2.5 h-px overflow-hidden rounded-full bg-zinc-200/80 dark:bg-white/[0.06]">
+        <div
+          className="h-full rounded-full bg-violet-400/70 transition-[width] duration-1000 ease-linear dark:bg-violet-500/60"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
     </a>
   );
 }

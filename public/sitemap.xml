@@ -157,6 +157,30 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://jcalbarracin.vercel.app/blog/construyendo-un-sistema-de-gestion-hotelera-full-stack-con-typescript</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jcalbarracin.vercel.app/blog/construyendo-sentinelai-un-sistema-hibrido-de-seguridad-web</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jcalbarracin.vercel.app/blog/ailocal-tu-asistente-de-codigo-offline</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jcalbarracin.vercel.app/blog/construyendo-chatbot-valle-un-backend-minimalista-para-conversaciones-con-ia</loc>
+    <lastmod>2026-07-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://jcalbarracin.vercel.app/blog/listenup-english-cuando-el-aprendizaje-de-ingles-necesita-un-backend-robusto</loc>
     <lastmod>2026-07-11</lastmod>
     <changefreq>monthly</changefreq>

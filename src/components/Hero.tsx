@@ -7,10 +7,10 @@ import { useEditMode } from "@/features/admin/EditModeProvider";
 import { uploadMedia } from "@/features/admin/api/media";
 import { useTheme } from "@/features/theme";
 import { useTranslation } from "react-i18next";
+import { SkillBubble } from "./SkillBubble";
+import { SpotifyNowPlayingCard } from "./SpotifyNowPlayingCard";
 import logoImg from "@/assets/logo.webp";
 import cvPdf from "@/assets/cv/JUAN_ALBARRACIN_CV.pdf";
-import { SpotifyNowPlayingCard } from "./SpotifyNowPlayingCard";
-import { SkillBubble } from "./SkillBubble";
 
 interface HeroProps {
   scrollY?: number;
@@ -43,23 +43,24 @@ export default function Hero({ section }: HeroProps) {
   return (
     <section className="min-h-screen flex items-center justify-center px-4 pt-48 pb-20 sm:px-6 sm:pt-28 lg:px-8 lg:pt-32 lg:pb-16 relative overflow-hidden">
       <div className="max-w-7xl mx-auto w-full relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-2 lg:gap-12 items-center">
           {/* Content */}
-          <div className="space-y-6 sm:space-y-8 text-center lg:text-left">
-            <div className="max-w-3xl mx-auto lg:mx-0 space-y-4 sm:space-y-5">
+          <div className="contents lg:block lg:space-y-8 lg:text-left">
+            <div className="order-1 max-w-3xl mx-auto space-y-4 sm:space-y-5 text-center lg:mx-0 lg:text-left">
               <h1 className="text-3xl font-semibold leading-tight tracking-tight text-zinc-900 dark:text-white sm:text-5xl lg:text-6xl break-words">
                 {t('hero.greeting')}
               </h1>
-              <div className="max-w-full text-xl font-semibold leading-tight tracking-tight text-violet-600 dark:text-violet-400 sm:text-3xl lg:text-4xl break-words">
-                {t('hero.role')}
-              </div>
-              <p className="max-w-3xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400 sm:text-base break-words">
-                {t('hero.subtitle')}
+              <p className="max-w-2xl text-lg font-medium leading-snug text-violet-600 dark:text-violet-400 sm:text-2xl lg:text-3xl break-words">
+                {t('hero.tagline')}
               </p>
             </div>
 
-            {/* CTA Buttons - Navbar Mobile Menu Aesthetic */}
-            <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+            <p className="order-3 max-w-2xl text-center text-sm leading-relaxed text-zinc-500 dark:text-zinc-500 sm:text-base italic break-words lg:text-left">
+              {t('hero.quote')}
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="order-4 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
               <button
                 onClick={() => {
                   const element = document.getElementById("projects");
@@ -102,37 +103,14 @@ export default function Hero({ section }: HeroProps) {
               </a>
             </div>
 
-            {/* Quick Stats */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-8 pt-8 border-t border-border dark:border-zinc-700">
-              <div className="text-center">
-                <div className="font-display text-xl sm:text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
-                  1+
-                </div>
-                <div className="text-[10px] sm:text-sm text-muted-foreground dark:text-zinc-400 leading-tight">
-                  {t('hero.yearsExperience')}
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="font-display text-xl sm:text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
-                  10+
-                </div>
-                <div className="text-[10px] sm:text-sm text-muted-foreground dark:text-zinc-400 leading-tight">
-                  {t('hero.projectsCompleted')}
-                </div>
-              </div>
-              <div className="text-center">
-                <div className="font-display text-xl sm:text-2xl mb-1 font-semibold text-violet-700 dark:text-violet-400">
-                  30+
-                </div>
-                <div className="text-[10px] sm:text-sm text-muted-foreground dark:text-zinc-400 leading-tight">
-                  {t('hero.technologies')}
-                </div>
-              </div>
+            {/* Spotify Now Playing */}
+            <div className="order-5 mx-auto w-full max-w-sm lg:mx-0">
+              <SpotifyNowPlayingCard />
             </div>
           </div>
 
-          {/* Profile Image — centered on mobile, right-aligned on desktop */}
-          <div className="flex flex-col items-center lg:items-end mt-8 lg:mt-0">
+          {/* Profile Image */}
+          <div className="order-2 relative mt-0 flex flex-col items-center lg:order-none lg:items-end lg:mt-0">
             <div className="relative w-full max-w-[280px] sm:max-w-xs lg:max-w-none px-2 sm:px-4 lg:p-0">
               {canEditImages && (
                 <div className="absolute top-0 right-3 z-20 flex gap-2">
@@ -161,7 +139,6 @@ export default function Hero({ section }: HeroProps) {
                 tabIndex={0}
                 aria-label={t('hero.imageInteraction', { defaultValue: 'Toggle image hover effect' })}
               >
-                {/* Logo Image with smooth scale on hover */}
                 <div
                   className={`transition-all duration-700 transform ${
                     isImageHovered ? "scale-[1.05]" : "scale-100"
@@ -175,7 +152,7 @@ export default function Hero({ section }: HeroProps) {
                   />
                 </div>
 
-                {/* Skill Bubbles */}
+                {/* Skill Bubbles — appear on hover */}
                 <SkillBubble
                   name="React"
                   size="md"
@@ -222,9 +199,6 @@ export default function Hero({ section }: HeroProps) {
                   }`}
                 />
               </div>
-            </div>
-            <div className="w-full max-w-sm lg:max-w-none relative z-20">
-              <SpotifyNowPlayingCard />
             </div>
           </div>
         </div>

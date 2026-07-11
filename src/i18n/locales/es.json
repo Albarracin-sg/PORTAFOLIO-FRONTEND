@@ -85,17 +85,15 @@
   },
   "hero": {
     "greeting": "Hola, soy Juan Albarracín",
-    "role": "Full-Stack Engineer (Backend Focus) Microservices & Distributed Architecture AI & MCP Integration",
-    "subtitle": "Diseño orquestadores basados en MCP, microservicios con NestJS/gRPC y pipelines de automatización que eliminan carga operativa real — no optimizo procesos, los transformo.",
+    "tagline": "Construyo soluciones donde la tecnología se encuentra con el propósito",
+    "quote": "\"Si puedes imaginarlo, puedes programarlo\" — Alejandro Taboada Sánchez",
     "viewProjects": "Ver proyectos",
-    "contactMe": "Contactarme",
-    "yearsExperience": "Años de experiencia",
-    "projectsCompleted": "Proyectos completados",
-    "technologies": "Tecnologías"
+    "contactMe": "Contactarme"
   },
   "about": {
     "title": "Sobre mí",
-    "bio": "Full-Stack Engineer con foco en backend, especializado en reemplazar procesos manuales por sistemas inteligentes usando arquitectura distribuida e IA. Diseña orquestadores basados en MCP, microservicios con NestJS/gRPC y pipelines de automatización que eliminan carga operativa real. Aplica DDD, CQRS y Clean Architecture en entornos productivos, con capacidad full-stack y mentalidad de producto.",
+    "pill": "Con propósito, no por defecto",
+    "bio": "Tengo 19 años y estoy por terminar Ingeniería de Software. Hace alrededor de un año y medio empecé a construir proyectos que realmente me importan, y en ese proceso descubrí que no me interesan las soluciones fáciles: disfruto ir a la raíz de los problemas y pensar con intención antes de actuar. Me gusta aprender, enseñar y trabajar en equipo; también busco que me desafíen y me digan cuando la estoy embarrando, porque el feedback honesto es parte de crecer. Por eso valoro tanto la planeación: ahí se entienden los riesgos reales y se toman las decisiones que dan rumbo al trabajo. Creo en la eudaimonía: no en la felicidad pasajera, sino en construir una vida con propósito. Me apasiona la tecnología porque atraviesa todo y abre posibilidades sin límite; quiero seguir creando cosas que importen, aprendiendo de otros y aportando donde haga falta.",
     "technicalSkills": "Habilidades Técnicas",
     "professionalExperience": "Experiencia Profesional",
     "personalProjects": "Proyectos Personales",
