@@ -1,5 +1,11 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 
+const CACHE_VERSION = 'v2';
+
+export function buildCacheKey(key: string): string {
+  return `${CACHE_VERSION}:${key}`;
+}
+
 type CacheEntry<T> = {
   data: T;
   timestamp: number;
@@ -12,18 +18,17 @@ type SWRState<T> = {
 };
 
 /**
- * Stale-While-Revalidate con localStorage.
+ * Stale-While-Revalidate con localStorage y versioning.
  *
- * 1. Renderiza desde cache INSTANTÁNEO (0ms)
- * 2. Fetch en background
- * 3. Cuando el server responde → actualiza cache + UI
- *
- * El usuario SIEMPRE ve datos, incluso si Render está en cold start.
+ * 1. Renderiza desde cache INSTANTÁNEO (0ms) si existe y TTL no expiró.
+ * 2. Si TTL expiró, sirve stale y fetch en background.
+ * 3. Si no hay cache, muestra loading hasta que el fetch responda.
+ * 4. Cache version prefix permite invalidar globalmente.
  */
 export function useLocalStorageSWR<T>(
   cacheKey: string,
   fetcher: () => Promise<T>,
-  _ttlMs = 30 * 60 * 1000,
+  _ttlMs = 10 * 60 * 1000,
 ): SWRState<T> {
   const [state, setState] = useState<SWRState<T>>({
     data: null,
@@ -31,45 +36,48 @@ export function useLocalStorageSWR<T>(
     isFromCache: false,
   });
   const fetcherRef = useRef(fetcher);
-
   fetcherRef.current = fetcher;
 
-  const loadFromCache = useCallback((): T | null => {
+  const storageKey = buildCacheKey(cacheKey);
+
+  const loadFromCache = useCallback((): { data: T | null; withinTTL: boolean } => {
     try {
-      const raw = localStorage.getItem(cacheKey);
-      if (!raw) return null;
+      const raw = localStorage.getItem(storageKey);
+      if (!raw) return { data: null, withinTTL: false };
       const entry: CacheEntry<T> = JSON.parse(raw);
-      // Si pasó TTL, igual servimos stale data — el fetch background lo refresca
-      return entry.data;
+      const elapsed = Date.now() - entry.timestamp;
+      const withinTTL = elapsed < _ttlMs;
+      return { data: entry.data, withinTTL };
     } catch {
-      return null;
+      return { data: null, withinTTL: false };
     }
-  }, [cacheKey]);
+  }, [storageKey, _ttlMs]);
 
   useEffect(() => {
     let cancelled = false;
 
-    // 1. Carga instantánea desde localStorage
     const cached = loadFromCache();
-    if (cached) {
-      setState({ data: cached, isLoading: false, isFromCache: true });
+
+    if (cached.data && cached.withinTTL) {
+      setState({ data: cached.data, isLoading: false, isFromCache: true });
+      return;
     }
 
-    // 2. Fetch en background (siempre, refresh)
+    if (cached.data && !cached.withinTTL) {
+      setState({ data: cached.data, isLoading: false, isFromCache: true });
+    }
+
     fetcherRef
       .current()
       .then((fresh) => {
         if (cancelled) return;
-        // Guardar en localStorage
         const entry: CacheEntry<T> = { data: fresh, timestamp: Date.now() };
-        localStorage.setItem(cacheKey, JSON.stringify(entry));
+        localStorage.setItem(storageKey, JSON.stringify(entry));
         setState({ data: fresh, isLoading: false, isFromCache: false });
       })
       .catch(() => {
         if (cancelled) return;
-        // Si NO teníamos cache → mostrar loading paró acá
-        // Si SÍ teníamos cache → ya mostramos datos, no hay problema
-        if (!cached) {
+        if (!cached.data) {
           setState({ data: null, isLoading: false, isFromCache: false });
         }
       });
@@ -77,7 +85,7 @@ export function useLocalStorageSWR<T>(
     return () => {
       cancelled = true;
     };
-  }, [cacheKey, loadFromCache]);
+  }, [storageKey, loadFromCache, _ttlMs]);
 
   return state;
 }

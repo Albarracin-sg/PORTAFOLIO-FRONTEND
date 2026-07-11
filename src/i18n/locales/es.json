@@ -9,6 +9,22 @@
       "next": "Siguiente",
       "page": "Página {{current}} de {{total}}"
     },
+    "blogPage": {
+      "filterBy": "Filtrar por",
+      "clearFilter": "Limpiar filtro",
+      "all": "Todos",
+      "showMoreFilters": "Mostrar más filtros",
+      "less": "Menos",
+      "showLessFilters": "Mostrar menos filtros",
+      "empty": "No hay artículos disponibles aún.",
+      "emptyHint": "Próximamente compartiré contenido nuevo.",
+      "featured": "Destacado",
+      "pagination": {
+        "prev": "Anterior",
+        "next": "Siguiente",
+        "page": "Página {{current}} de {{total}}"
+      }
+    },
     "status": {
       "excellent": "Excelente",
       "good": "Bueno",

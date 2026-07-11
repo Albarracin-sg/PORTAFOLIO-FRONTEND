@@ -15,10 +15,94 @@ import { commonFormatters } from "@/shared/utils/formatters";
 import DiagramViewer from "@/components/DiagramViewer";
 import type { BlogArticleDetail } from "@/shared/api/blog";
 
-/** Resolve a bilingual field to the current locale, with fallback to any available value */
 function resolveLocale(field: Record<string, string> | null | undefined, locale: string): string {
   if (!field) return '';
   return field[locale] ?? field['es'] ?? field['en'] ?? Object.values(field)[0] ?? '';
+}
+
+const DIAGRAM_HEADING = /^#{1,3}\s+(Arquitectura|Architecture)\s*$/im;
+const HEADING_SPLIT = /^#{1,3}\s+/m;
+
+function splitContentAtArchitecture(content: string): { before: string; after: string; atEnd: boolean } {
+  const match = content.match(DIAGRAM_HEADING);
+  if (!match) return { before: content, after: '', atEnd: true };
+
+  const idx = match.index!;
+  const nextHeading = content.slice(idx + match[0].length).search(HEADING_SPLIT);
+  const afterIdx = nextHeading !== -1 ? idx + match[0].length + nextHeading : content.length;
+  const afterContent = nextHeading !== -1 ? content.slice(afterIdx) : '';
+
+  return {
+    before: content.slice(0, afterIdx),
+    after: afterContent,
+    atEnd: false,
+  };
+}
+
+function ArticleWithDiagrams({
+  content,
+  diagrams,
+  locale,
+}: {
+  content: string;
+  diagrams: Diagram[];
+  locale: string;
+}) {
+  const { before, after } = useMemo(() => splitContentAtArchitecture(content), [content]);
+
+  return (
+    <>
+      <article
+        className="prose prose-base max-w-none dark:prose-invert mt-10
+          prose-p:leading-relaxed prose-p:my-3
+          prose-ul:my-3 prose-ol:my-3 prose-li:my-1
+          prose-headings:my-4 prose-headings:font-semibold
+          prose-a:text-violet-600 prose-a:underline prose-a:underline-offset-2
+          prose-strong:font-bold
+          prose-code:text-violet-600 prose-code:dark:text-violet-400
+          prose-code:bg-zinc-100 prose-code:dark:bg-zinc-800
+          prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-normal
+          prose-pre:bg-zinc-900 prose-pre:dark:bg-zinc-950 prose-pre:rounded-xl prose-pre:border prose-pre:border-zinc-200 prose-pre:dark:border-zinc-800
+          prose-blockquote:border-l-violet-500 prose-blockquote:pl-4 prose-blockquote:italic
+          prose-img:rounded-xl prose-img:border prose-img:border-zinc-200 prose-img:dark:border-zinc-800"
+      >
+        <Markdown>{before}</Markdown>
+      </article>
+
+      {diagrams.length > 0 && (
+        <div className="mt-8 space-y-6">
+          {diagrams.map((diagram) => (
+            <DiagramViewer
+              key={diagram.id}
+              title={diagram.title}
+              description={diagram.description}
+              source={diagram.source}
+              locale={locale}
+            />
+          ))}
+        </div>
+      )}
+
+      {after && (
+        <article
+          className="prose prose-base max-w-none dark:prose-invert mt-10
+            prose-p:leading-relaxed prose-p:my-3
+            prose-ul:my-3 prose-ol:my-3 prose-li:my-1
+            prose-headings:my-4 prose-headings:font-semibold
+            prose-a:text-violet-600 prose-a:underline prose-a:underline-offset-2
+            prose-strong:font-bold
+            prose-code:text-violet-600 prose-code:dark:text-violet-400
+            prose-code:bg-zinc-100 prose-code:dark:bg-zinc-800
+            prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-normal
+            prose-pre:bg-zinc-900 prose-pre:dark:bg-zinc-950 prose-pre:rounded-xl prose-pre:border prose-pre:border-zinc-200 prose-pre:dark:border-zinc-800
+            prose-blockquote:border-l-violet-500 prose-blockquote:pl-4 prose-blockquote:italic
+            prose-img:rounded-xl prose-img:border prose-img:border-zinc-200 prose-img:dark:border-zinc-800"
+        >
+          <Markdown>{after}</Markdown>
+        </article>
+      )}
+    </>
+  );
 }
 
 export function BlogDetailPage() {
@@ -43,21 +127,18 @@ export function BlogDetailPage() {
     [i18n.language],
   );
 
-  // Redirect: sin slug
   useEffect(() => {
     if (!slug) {
       navigate("/blog", { replace: true });
     }
   }, [slug, navigate]);
 
-  // Redirect: artículo no encontrado y ya cargó
   useEffect(() => {
     if (!isLoading && !article && slug) {
       navigate("/blog", { replace: true });
     }
   }, [isLoading, article, slug, navigate]);
 
-  // Dynamic SEO
   useEffect(() => {
     if (!article) return;
 
@@ -98,7 +179,6 @@ export function BlogDetailPage() {
   return (
     <div className="min-h-screen pt-28 pb-24 selection:bg-violet-500/30">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* ── Back link ── */}
         <Button
           variant="ghost"
           onClick={() => navigate("/blog")}
@@ -110,7 +190,6 @@ export function BlogDetailPage() {
           </span>
         </Button>
 
-        {/* ── Cover Image ── */}
         {article.coverImage && (
           <div className="mb-8 overflow-hidden rounded-2xl">
             <img
@@ -121,7 +200,6 @@ export function BlogDetailPage() {
           </div>
         )}
 
-        {/* ── Tags ── */}
         {article.tags.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-2">
             {article.tags.map((tag) => (
@@ -132,12 +210,10 @@ export function BlogDetailPage() {
           </div>
         )}
 
-        {/* ── Title ── */}
         <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-4xl lg:text-5xl">
           {resolveLocale(article.title, i18n.language)}
         </h1>
 
-        {/* ── Meta ── */}
         <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-zinc-500 dark:text-zinc-400">
           {article.author && (
             <span className="inline-flex items-center gap-1.5">
@@ -153,49 +229,21 @@ export function BlogDetailPage() {
           )}
         </div>
 
-        {/* ── Excerpt ── */}
         {article.excerpt && (
           <p className="mt-6 text-base leading-7 text-zinc-600 dark:text-zinc-400 sm:text-lg">
             {resolveLocale(article.excerpt, i18n.language)}
           </p>
         )}
 
-        {/* ── Article Content ── */}
+        {/* Article content with inline architecture diagrams */}
         {articleContent && (
-          <article className="prose prose-base max-w-none dark:prose-invert mt-10
-            prose-p:leading-relaxed prose-p:my-3
-            prose-ul:my-3 prose-ol:my-3 prose-li:my-1
-            prose-headings:my-4 prose-headings:font-semibold
-            prose-a:text-violet-600 prose-a:underline prose-a:underline-offset-2
-            prose-strong:font-bold
-            prose-code:text-violet-600 prose-code:dark:text-violet-400
-            prose-code:bg-zinc-100 prose-code:dark:bg-zinc-800
-            prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-normal
-            prose-pre:bg-zinc-900 prose-pre:dark:bg-zinc-950 prose-pre:rounded-xl prose-pre:border prose-pre:border-zinc-200 prose-pre:dark:border-zinc-800
-            prose-blockquote:border-l-violet-500 prose-blockquote:pl-4 prose-blockquote:italic
-            prose-img:rounded-xl prose-img:border prose-img:border-zinc-200 prose-img:dark:border-zinc-800
-          ">
-            <Markdown>{articleContent}</Markdown>
-          </article>
+          <ArticleWithDiagrams
+            content={articleContent}
+            diagrams={diagrams}
+            locale={i18n.language || 'es'}
+          />
         )}
 
-        {/* Interactive Architecture Diagrams */}
-        {diagrams.length > 0 && (
-          <div className="mt-12 space-y-8">
-            <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">Architecture</h2>
-            {diagrams.map((diagram) => (
-              <DiagramViewer
-                key={diagram.id}
-                title={diagram.title}
-                description={diagram.description}
-                source={diagram.source}
-                locale={i18n.language || 'es'}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* ── Related Project CTA ── */}
         {article.project && (
           <div className="mt-12 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 dark:border-zinc-700/50 dark:bg-zinc-800/30">
             <p className="text-xs font-semibold uppercase tracking-wider text-violet-600 dark:text-violet-400">
@@ -225,7 +273,6 @@ export function BlogDetailPage() {
           </div>
         )}
 
-        {/* ── Back to blog bottom ── */}
         <div className="mt-12 flex justify-center">
           <Link to="/blog">
             <Button

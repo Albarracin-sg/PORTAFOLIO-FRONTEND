@@ -116,13 +116,13 @@ export function BlogPage() {
             <div className="mb-8 rounded-2xl border border-zinc-100 bg-zinc-50/50 p-4 dark:border-white/[0.06] dark:bg-white/[0.02] sm:p-5">
               <div className="mb-3 flex items-center justify-between">
                 <span className="text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                  {t("blog.filterBy", "Filtrar por")}
+                  {t("blogPage.filterBy", "Filtrar por")}
                 </span>
                 {selectedTag && (
                   <button
                     onClick={() => { setSelectedTag(null); setPage(1); }}
                     className="group flex items-center gap-1.5 rounded-full bg-violet-50 px-3 py-1 text-[11px] font-medium text-violet-600 transition-colors hover:bg-violet-100 dark:bg-violet-500/10 dark:text-violet-400 dark:hover:bg-violet-500/15"
-                    aria-label={t("blog.clearFilter", "Limpiar filtro")}
+                    aria-label={t("blogPage.clearFilter", "Limpiar filtro")}
                   >
                     <X className="size-3 transition-transform group-hover:rotate-90" />
                     {selectedTag}
@@ -130,7 +130,7 @@ export function BlogPage() {
                 )}
               </div>
 
-              <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={t("blog.filterBy", "Filtrar por")}>
+              <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={t("blogPage.filterBy", "Filtrar por")}>
                 <button
                   role="radio"
                   aria-checked={!selectedTag}
@@ -141,7 +141,7 @@ export function BlogPage() {
                       : "bg-white text-zinc-600 hover:bg-zinc-100 dark:bg-white/[0.04] dark:text-zinc-400 dark:hover:bg-white/[0.08]"
                   }`}
                 >
-                  {t("blog.all", "Todos")}
+                  {t("blogPage.all", "Todos")}
                   <span className={`ml-1.5 text-[10px] ${
                     !selectedTag
                       ? "text-zinc-400 dark:text-zinc-500"
@@ -181,7 +181,7 @@ export function BlogPage() {
                   <button
                     onClick={() => setExpandedFilters(true)}
                     className="flex items-center gap-1 rounded-lg border border-dashed border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:border-zinc-300 hover:text-zinc-600 dark:border-white/10 dark:text-zinc-500 dark:hover:border-white/20 dark:hover:text-zinc-300"
-                    aria-label={t("blog.showMoreFilters", "Mostrar más filtros")}
+                    aria-label={t("blogPage.showMoreFilters", "Mostrar más filtros")}
                   >
                     <ChevronDown className="size-3" />
                     +{hiddenTagCount}
@@ -192,10 +192,10 @@ export function BlogPage() {
                   <button
                     onClick={() => setExpandedFilters(false)}
                     className="flex items-center gap-1 rounded-lg border border-dashed border-zinc-200 px-3 py-1.5 text-xs font-medium text-zinc-400 transition-colors hover:border-zinc-300 hover:text-zinc-600 dark:border-white/10 dark:text-zinc-500 dark:hover:border-white/20 dark:hover:text-zinc-300"
-                    aria-label={t("blog.showLessFilters", "Mostrar menos filtros")}
+                    aria-label={t("blogPage.showLessFilters", "Mostrar menos filtros")}
                   >
                     <ChevronUp className="size-3" />
-                    {t("blog.less", "Menos")}
+                    {t("blogPage.less", "Menos")}
                   </button>
                 )}
               </div>
@@ -276,28 +276,30 @@ export function BlogPage() {
 
           {/* ── Pagination ── */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page <= 1}
-                onClick={() => setPage((p) => p - 1)}
-                className="rounded-xl"
-              >
-                {t("pagination.prev", "Anterior")}
-              </Button>
-              <span className="px-3 text-sm text-zinc-500 dark:text-zinc-400">
-                {page} / {totalPages}
+            <div className="mt-12 flex flex-col items-center gap-2">
+              <span className="text-xs text-zinc-400 dark:text-zinc-500">
+                {t("blog.pagination.page", "Página {{current}} de {{total}}", { current: page, total: totalPages })}
               </span>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={page >= totalPages}
-                onClick={() => setPage((p) => p + 1)}
-                className="rounded-xl"
-              >
-                {t("pagination.next", "Siguiente")}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={page <= 1}
+                  onClick={() => setPage((p) => p - 1)}
+                  className="rounded-xl"
+                >
+                  {t("blog.pagination.prev", "Anterior")}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={page >= totalPages}
+                  onClick={() => setPage((p) => p + 1)}
+                  className="rounded-xl"
+                >
+                  {t("blog.pagination.next", "Siguiente")}
+                </Button>
+              </div>
             </div>
           )}
         </>

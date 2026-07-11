@@ -9,6 +9,22 @@
       "next": "Next",
       "page": "Page {{current}} of {{total}}"
     },
+    "blogPage": {
+      "filterBy": "Filter by",
+      "clearFilter": "Clear filter",
+      "all": "All",
+      "showMoreFilters": "Show more filters",
+      "less": "Less",
+      "showLessFilters": "Show fewer filters",
+      "empty": "There are no articles yet.",
+      "emptyHint": "New content will be available soon.",
+      "featured": "Featured",
+      "pagination": {
+        "prev": "Previous",
+        "next": "Next",
+        "page": "Page {{current}} of {{total}}"
+      }
+    },
     "status": {
       "excellent": "Excellent",
       "good": "Good",
