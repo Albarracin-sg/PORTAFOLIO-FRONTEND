@@ -16,7 +16,7 @@ export function ProjectHeader({ project }: ProjectHeaderProps) {
       <Button
         variant="ghost"
         asChild
-        className="group rounded-full bg-zinc-100 dark:bg-white/5 border border-zinc-200 dark:border-white/10 px-5 h-9 hover:bg-zinc-200 dark:hover:bg-white/10 transition-all text-zinc-700 dark:text-zinc-200 text-sm w-fit"
+        className="group rounded-full bg-zinc-100 dark:bg-zinc-950 border border-zinc-200 dark:border-white/10 px-5 h-9 hover:bg-zinc-200 dark:hover:bg-white/[0.06] transition-all text-zinc-700 dark:text-zinc-200 text-sm w-fit"
       >
         <Link to="/projects">
           <ArrowLeft className="size-3.5 mr-2 transition-transform group-hover:-translate-x-1 text-zinc-500 dark:text-zinc-400" />
@@ -40,7 +40,7 @@ export function ProjectHeader({ project }: ProjectHeaderProps) {
           <Button
             size="sm"
             variant="outline"
-            className="flex-1 sm:flex-none rounded-full border-zinc-200 dark:border-white/10 bg-white dark:bg-white/5 hover:bg-zinc-50 dark:hover:bg-white/10 px-5 h-9 text-zinc-700 dark:text-zinc-200 text-sm"
+            className="flex-1 sm:flex-none rounded-full border-zinc-200 dark:border-white/10 bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-white/[0.06] px-5 h-9 text-zinc-700 dark:text-zinc-200 text-sm"
             asChild
           >
             <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">

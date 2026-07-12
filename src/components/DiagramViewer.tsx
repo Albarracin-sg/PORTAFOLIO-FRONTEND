@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, type CSSProperties, type ReactNode } from 'react';
+import { toast } from 'sonner';
 import {
   ReactFlow,
   ReactFlowProvider,
@@ -238,7 +239,7 @@ function DetailPanel({ node, edges, allNodes, isDark, onClose }: DetailPanelProp
       className="absolute top-0 right-0 z-30 h-full w-[320px] border-l overflow-y-auto backdrop-blur-xl"
       style={{
         borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
-        background: isDark ? 'rgba(10,10,10,0.92)' : 'rgba(255,255,255,0.95)',
+        background: isDark ? '#030303' : 'rgba(255,255,255,0.95)',
       }}
     >
       {/* Header */}
@@ -531,7 +532,7 @@ function DiagramViewerInner({ source, isDark, onSelectNode, selectedId }: {
         className="!rounded-xl !border backdrop-blur-sm"
         style={{
           borderColor: isDark ? 'rgba(255,255,255,0.1)' : '#e4e4e7',
-          background: isDark ? 'rgba(24,24,27,0.8)' : 'rgba(255,255,255,0.9)',
+          background: isDark ? '#030303' : 'rgba(255,255,255,0.9)',
           color: isDark ? '#e4e4e7' : '#18181b',
         }}
       />
@@ -544,7 +545,7 @@ function DiagramViewerInner({ source, isDark, onSelectNode, selectedId }: {
         className="!rounded-xl !border !backdrop-blur-sm"
         style={{
           borderColor: isDark ? 'rgba(255,255,255,0.1)' : '#e4e4e7',
-          background: isDark ? 'rgba(10,10,10,0.8)' : '#ffffff',
+          background: isDark ? '#030303' : '#ffffff',
           width: 140,
           height: 100,
         }}
@@ -559,7 +560,7 @@ export default function DiagramViewer({ title, description, source, locale = 'es
   const { isDark } = useTheme();
   const [copied, setCopied] = useState(false);
   const [selectedNode, setSelectedNode] = useState<RawDiagramNode | null>(null);
-  const [layoutKey, setLayoutKey] = useState(0);
+  const [layoutKey] = useState(0);
 
   const resolvedTitle = title?.[locale] ?? title?.['es'] ?? title?.['en'] ?? '';
   const resolvedDesc = description?.[locale] ?? description?.['es'] ?? description?.['en'] ?? null;
@@ -575,15 +576,12 @@ export default function DiagramViewer({ title, description, source, locale = 'es
     try {
       await navigator.clipboard.writeText(JSON.stringify(source, null, 2));
       setCopied(true);
+      toast.success("Copiado al portapapeles");
       setTimeout(() => setCopied(false), 2000);
     } catch {
       // Clipboard API may fail
     }
   }, [source]);
-
-  const handleRelayout = useCallback(() => {
-    setLayoutKey((k) => k + 1);
-  }, []);
 
   const handleCloseDetail = useCallback(() => {
     setSelectedNode(null);
@@ -599,7 +597,7 @@ export default function DiagramViewer({ title, description, source, locale = 'es
       )}
       style={{
         borderColor: isDark ? 'rgba(255,255,255,0.06)' : '#e4e4e7',
-        background: isDark ? 'rgba(5,5,5,0.6)' : 'rgba(255,255,255,0.6)',
+        background: isDark ? '#030303' : 'rgba(255,255,255,0.6)',
       }}
     >
       {/* Header bar */}
@@ -616,32 +614,16 @@ export default function DiagramViewer({ title, description, source, locale = 'es
             </p>
           )}
           <div className="absolute top-4 right-4 flex items-center gap-1.5">
-            {/* Relayout button */}
-            <button
-              onClick={handleRelayout}
-              className="flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-all duration-200 hover:scale-105 active:scale-95"
-              style={{
-                borderColor: isDark ? 'rgba(255,255,255,0.1)' : '#e4e4e7',
-                background: isDark ? 'rgba(24,24,27,0.8)' : 'rgba(255,255,255,0.9)',
-                color: isDark ? '#a1a1aa' : '#52525b',
-              }}
-              title="Re-layout diagram"
-            >
-              <svg className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z" />
-              </svg>
-              Layout
-            </button>
             {/* Copy button */}
             <button
               onClick={handleCopyDiagram}
               className="flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-all duration-200 hover:scale-105 active:scale-95"
               style={{
                 borderColor: isDark ? 'rgba(255,255,255,0.1)' : '#e4e4e7',
-                background: isDark ? 'rgba(24,24,27,0.8)' : 'rgba(255,255,255,0.9)',
-                color: isDark ? '#a1a1aa' : '#52525b',
-              }}
-              title="Copy diagram as JSON"
+                  background: isDark ? '#030303' : 'rgba(255,255,255,0.9)',
+                  color: isDark ? '#a1a1aa' : '#52525b',
+                }}
+                title="Copy diagram as JSON"
             >
               {copied ? (
                 <svg className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -652,7 +634,6 @@ export default function DiagramViewer({ title, description, source, locale = 'es
                   <path strokeLinecap="round" strokeLinejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
                 </svg>
               )}
-              {copied ? 'Copied!' : 'Copy'}
             </button>
           </div>
         </div>
@@ -688,7 +669,7 @@ export default function DiagramViewer({ title, description, source, locale = 'es
           className="absolute bottom-3 right-3 z-10 rounded-lg border px-3 py-1.5 text-[10px] backdrop-blur-sm"
           style={{
             borderColor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
-            background: isDark ? 'rgba(5,5,5,0.5)' : 'rgba(255,255,255,0.7)',
+            background: isDark ? '#030303' : 'rgba(255,255,255,0.7)',
             color: isDark ? '#71717a' : '#a1a1aa',
           }}
         >

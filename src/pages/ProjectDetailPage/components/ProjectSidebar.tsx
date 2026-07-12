@@ -18,7 +18,7 @@ export function ProjectSidebar({ project }: ProjectSidebarProps) {
   return (
     <aside className="lg:col-span-4">
       <div className="sticky top-28 gap-y-6 flex flex-col">
-        <div className="rounded-2xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/10 shadow-sm overflow-hidden shrink-0">
+        <div className="rounded-2xl bg-zinc-50 dark:bg-zinc-950/75 border border-zinc-200 dark:border-white/10 shadow-sm overflow-hidden shrink-0">
           <div className="p-6 border-b border-zinc-100 dark:border-white/5">
             <div className="flex items-center gap-2 mb-4">
               <Code2 className="size-4 text-violet-600 dark:text-violet-400 shrink-0" />
@@ -112,7 +112,7 @@ export function ProjectSidebar({ project }: ProjectSidebarProps) {
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-zinc-100 dark:bg-white/5 hover:bg-violet-50 dark:hover:bg-violet-500/10 border border-transparent hover:border-violet-200 dark:hover:border-violet-500/20 transition-all group"
+                  className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-950 hover:bg-violet-50 dark:hover:bg-white/[0.06] border border-transparent hover:border-violet-200 dark:hover:border-violet-500/20 transition-all group"
               >
                 <Github className="size-3.5 text-zinc-500 dark:text-zinc-400 group-hover:text-violet-600 dark:group-hover:text-violet-400 shrink-0 transition-colors" />
 
@@ -128,7 +128,7 @@ export function ProjectSidebar({ project }: ProjectSidebarProps) {
                   href={project.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-zinc-100 dark:bg-white/5 hover:bg-violet-50 dark:hover:bg-violet-500/10 border border-transparent hover:border-violet-200 dark:hover:border-violet-500/20 transition-all group"
+                  className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-zinc-100 dark:bg-zinc-950 hover:bg-violet-50 dark:hover:bg-white/[0.06] border border-transparent hover:border-violet-200 dark:hover:border-violet-500/20 transition-all group"
                 >
                   <Link2 className="size-3.5 text-zinc-500 dark:text-zinc-400 group-hover:text-violet-600 dark:group-hover:text-violet-400 shrink-0 transition-colors" />
 
@@ -156,7 +156,7 @@ export function ProjectSidebar({ project }: ProjectSidebarProps) {
             {project.liveUrl && (
               <Button
                 variant="outline"
-                className="w-full rounded-xl border-zinc-200 dark:border-white/10 bg-white dark:bg-white/5 hover:bg-zinc-50 dark:hover:bg-white/10 h-10 text-zinc-700 dark:text-zinc-200 text-sm"
+                className="w-full rounded-xl border-zinc-200 dark:border-white/10 bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-white/[0.06] h-10 text-zinc-700 dark:text-zinc-200 text-sm"
                 asChild
               >
                 <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">

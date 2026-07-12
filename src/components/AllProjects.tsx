@@ -149,7 +149,7 @@ export default function AllProjects() {
       case "prototype":
         return "border-amber-300 bg-amber-50 text-amber-900 dark:border-amber-500/30 dark:bg-amber-500/10 dark:text-amber-300";
       default:
-        return "border-zinc-200 bg-zinc-50 text-zinc-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-400";
+        return "border-zinc-200 bg-zinc-50 text-zinc-600 dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-400";
     }
   }, []);
 
@@ -191,7 +191,7 @@ export default function AllProjects() {
         <Button
           variant="ghost"
           onClick={() => navigate(-1)}
-          className="group mb-2 sm:mb-6 rounded-full border border-zinc-200 bg-white px-4 py-2 text-black transition-all hover:bg-violet-50 hover:text-violet-950 hover:border-violet-300 dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:hover:bg-violet-500/10 dark:hover:text-violet-200"
+          className="group mb-2 sm:mb-6 rounded-full border border-zinc-200 bg-white px-4 py-2 text-black transition-all hover:bg-violet-50 hover:text-violet-950 hover:border-violet-300 dark:border-white/10 dark:bg-zinc-950 dark:text-white dark:hover:bg-white/[0.06] dark:hover:text-violet-200"
         >
           <span className="inline-flex items-center gap-2">
             <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
@@ -282,8 +282,8 @@ export default function AllProjects() {
               </div>
 
               {filteredAndSortedProjects.length === 0 && (
-                <div className="flex min-h-[400px] flex-col items-center justify-center rounded-3xl border border-dashed border-zinc-200 bg-white/30 dark:border-white/10 dark:bg-white/[0.01]">
-                  <div className="flex size-16 items-center justify-center rounded-2xl bg-zinc-100 dark:bg-white/5">
+                <div className="flex min-h-[400px] flex-col items-center justify-center rounded-3xl border border-dashed border-zinc-200 bg-white/30 dark:border-white/10 dark:bg-zinc-950/75">
+                  <div className="flex size-16 items-center justify-center rounded-2xl bg-zinc-100 dark:bg-zinc-950">
                     <FolderKanban className="size-8 text-zinc-400" />
                   </div>
                   <h3 className="mt-4 text-lg font-semibold text-zinc-900 dark:text-white">

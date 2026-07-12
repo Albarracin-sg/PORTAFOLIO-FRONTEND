@@ -19,13 +19,13 @@ export function ContactInfo({ infoItems, socialItems, socialTitle, updateField, 
   };
 
   return (
-    <div className="flex flex-col rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/40 p-7">
+    <div className="flex flex-col rounded-2xl border border-zinc-200 dark:border-white/10 bg-white dark:bg-zinc-950/75 p-7">
       <div className="flex flex-col gap-3">
         {infoItems.map((item, index) => {
           const Icon = resolveIcon(item.icon);
           const isEmail = item.value.includes("@") || item.label.toLowerCase().includes("email") || item.label.toLowerCase().includes("correo");
           const content = (
-            <div className="flex items-center gap-4 rounded-xl border border-zinc-100 dark:border-zinc-700/60 bg-zinc-50 dark:bg-zinc-800/40 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-violet-200 dark:hover:border-violet-500/30">
+            <div className="flex items-center gap-4 rounded-xl border border-zinc-100 dark:border-white/10 bg-zinc-50 dark:bg-zinc-900/40 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-violet-200 dark:hover:border-violet-500/30">
               <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 dark:bg-violet-900/50 ring-1 ring-violet-200/60 dark:ring-violet-500/20">
                 <Icon className="size-4 text-violet-600 dark:text-violet-400" />
               </div>
@@ -62,7 +62,7 @@ export function ContactInfo({ infoItems, socialItems, socialTitle, updateField, 
         })}
       </div>
 
-      <div className="mt-auto pt-6 border-t border-zinc-100 dark:border-zinc-700/60">
+      <div className="mt-auto pt-6 border-t border-zinc-100 dark:border-white/10">
         <p className="text-xs font-medium uppercase tracking-widest text-zinc-500 dark:text-zinc-500 mb-3">
           {String(socialTitle)}
         </p>
@@ -75,7 +75,7 @@ export function ContactInfo({ infoItems, socialItems, socialTitle, updateField, 
                 href={String(social.link)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-xl border border-zinc-100 dark:border-zinc-700/60 bg-zinc-50 dark:bg-zinc-800/40 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-violet-200 dark:hover:border-violet-500/30"
+                className="flex items-center gap-3 rounded-xl border border-zinc-100 dark:border-white/10 bg-zinc-50 dark:bg-zinc-900/40 p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-violet-200 dark:hover:border-violet-500/30"
               >
                 <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 dark:bg-violet-900/50 ring-1 ring-violet-200/60 dark:ring-violet-500/20">
                   <Icon className="size-4 text-violet-600 dark:text-violet-400" />

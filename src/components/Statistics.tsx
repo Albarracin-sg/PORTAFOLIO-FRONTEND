@@ -21,7 +21,7 @@ import { ApiTrafficChart } from "./Statistics/ApiTrafficChart";
 
 function ChartFallback() {
   return (
-    <div className="flex h-64 sm:h-80 w-full items-center justify-center rounded-3xl border border-dashed border-zinc-200 bg-zinc-50/50 dark:border-white/10 dark:bg-white/[0.02]">
+    <div className="flex h-64 sm:h-80 w-full items-center justify-center rounded-3xl border border-dashed border-zinc-200 bg-zinc-50/50 dark:border-white/10 dark:bg-zinc-950/75">
       <div className="flex flex-col items-center gap-2">
         <Activity className="size-8 text-violet-500/20 animate-pulse" />
       </div>
@@ -160,7 +160,7 @@ export default function Statistics({ githubStats, apiStats, isLoading = true }: 
         <div className="mb-8 sm:mb-12 grid grid-cols-2 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
           {isLoading && !githubStats
             ? Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="h-32 animate-pulse rounded-2xl border border-zinc-200/50 bg-zinc-50/50 dark:border-white/[0.05] dark:bg-white/[0.02]" />
+                <div key={i} className="h-32 animate-pulse rounded-2xl border border-zinc-200/50 bg-zinc-50/50 dark:border-white/10 dark:bg-zinc-950/75" />
               ))
             : cards.map((stat) => <StatsCard key={stat.title} {...stat} isDark={isDark} />)}
         </div>
@@ -208,7 +208,7 @@ export default function Statistics({ githubStats, apiStats, isLoading = true }: 
               <>
                 <div className="grid grid-cols-2 gap-4 sm:gap-6 sm:grid-cols-2 xl:grid-cols-4">
                   {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="h-32 animate-pulse rounded-2xl border border-zinc-200/50 bg-zinc-50/50 dark:border-white/[0.05] dark:bg-white/[0.02]" />
+                    <div key={i} className="h-32 animate-pulse rounded-2xl border border-zinc-200/50 bg-zinc-50/50 dark:border-white/10 dark:bg-zinc-950/75" />
                   ))}
                 </div>
                 <div className="mx-auto mt-8 max-w-4xl">

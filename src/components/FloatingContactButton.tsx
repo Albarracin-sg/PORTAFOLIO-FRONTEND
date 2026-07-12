@@ -164,7 +164,7 @@ export default function FloatingContactButton() {
                   absolute flex items-center justify-center rounded-full
                   border border-zinc-200 bg-white text-zinc-600 shadow-lg backdrop-blur-sm
                   transition-all duration-300 hover:scale-110 hover:shadow-xl
-                  dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-400
+                  dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-400
                   pointer-events-auto cursor-pointer ${social.color}
                   ${isExpanded ? 'opacity-100' : 'opacity-0 pointer-events-none'}
                 `}

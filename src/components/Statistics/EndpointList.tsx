@@ -30,7 +30,7 @@ export function EndpointList({
             className={`flex items-center justify-between rounded-lg border px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm ${
               isSpotify
                 ? "border-emerald-200 bg-emerald-50 dark:border-emerald-500/20 dark:bg-emerald-500/10"
-                : "border-zinc-200 bg-zinc-50 dark:border-white/10 dark:bg-white/[0.04]"
+                : "border-zinc-200 bg-zinc-50 dark:border-white/10 dark:bg-zinc-950"
             }`}
           >
             <div className="flex items-center gap-2 sm:gap-3">
@@ -68,7 +68,7 @@ export function EndpointList({
               type="button"
               onClick={() => onPageChange(Math.max(0, page - 1))}
               disabled={page === 0}
-              className="rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:opacity-30 disabled:cursor-not-allowed dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.08]"
+              className="rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:opacity-30 disabled:cursor-not-allowed dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-900/60"
             >
               {t("stats.prev")}
             </button>
@@ -76,7 +76,7 @@ export function EndpointList({
               type="button"
               onClick={() => onPageChange(Math.min(totalPages - 1, page + 1))}
               disabled={page === totalPages - 1}
-              className="rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:opacity-30 disabled:cursor-not-allowed dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-300 dark:hover:bg-white/[0.08]"
+              className="rounded-md border border-zinc-200 bg-white px-3 py-1.5 text-xs font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:opacity-30 disabled:cursor-not-allowed dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-300 dark:hover:bg-zinc-900/60"
             >
               {t("stats.next")}
             </button>

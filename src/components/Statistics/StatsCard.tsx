@@ -14,7 +14,7 @@ export function StatsCard({ title, value, description, icon: Icon, catIndex, isD
   const cat = catIndex !== undefined ? catImages[catIndex] : undefined;
 
   return (
-    <Card className="flex flex-col overflow-hidden border-zinc-200 bg-white/85 transition-colors hover:border-violet-400/30 hover:bg-white dark:border-white/[0.07] dark:bg-white/[0.025] dark:hover:bg-white/[0.04]">
+    <Card className="flex flex-col overflow-hidden border-zinc-200 bg-white/85 transition-colors hover:border-violet-400/30 hover:bg-white dark:bg-zinc-950/75 dark:border-white/10 dark:hover:bg-zinc-950/90">
       <CardHeader className="pb-2 sm:pb-3">
         <div className="mb-2 sm:mb-3 flex size-10 sm:size-11 items-center justify-center rounded-xl border border-zinc-200 bg-violet-50 text-violet-700 dark:border-violet-400/20 dark:bg-violet-500/10 dark:text-violet-300">
           <Icon className="size-5" />

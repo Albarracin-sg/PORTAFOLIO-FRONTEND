@@ -107,7 +107,7 @@ export function SpotifyNowPlayingCard() {
 
   if (error || !track || track.type === 'none') {
     return (
-      <div className="flex items-center gap-2.5 rounded-xl border border-zinc-200/60 bg-white/40 px-3.5 py-2.5 dark:border-white/[0.06] dark:bg-white/[0.03]">
+      <div className="flex items-center gap-2.5 rounded-xl border border-zinc-200/60 bg-white/40 px-3.5 py-2.5 dark:bg-zinc-950/75 dark:border-white/10">
         <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-zinc-100 dark:bg-white/[0.05]">
           <Music2 className="size-3.5 text-zinc-400 dark:text-zinc-500" />
         </div>
@@ -127,7 +127,7 @@ export function SpotifyNowPlayingCard() {
       href={track.url}
       target="_blank"
       rel="noreferrer"
-      className="group relative block w-full overflow-hidden rounded-xl border border-zinc-200/60 bg-white/40 p-3.5 transition-all duration-300 hover:border-violet-300/50 hover:bg-white/60 sm:p-3 lg:p-4 dark:border-white/[0.06] dark:bg-white/[0.03] dark:hover:border-violet-400/20 dark:hover:bg-white/[0.06]"
+      className="group relative block w-full overflow-hidden rounded-xl border border-zinc-200/60 bg-white/40 p-3.5 transition-all duration-300 hover:border-violet-300/50 hover:bg-white/60 sm:p-3 lg:p-4 dark:bg-zinc-950/75 dark:border-white/10 dark:hover:border-violet-400/20 dark:hover:bg-zinc-950/90"
     >
       <div className="flex items-center gap-3">
         {/* Album art */}

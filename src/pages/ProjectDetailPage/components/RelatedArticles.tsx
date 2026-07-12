@@ -27,7 +27,7 @@ export function RelatedArticles({ projectId }: RelatedArticlesProps) {
   if (!articles || articles.length === 0) return null;
 
   return (
-    <div className="rounded-2xl bg-zinc-50 dark:bg-white/[0.03] border border-zinc-200 dark:border-white/10 shadow-sm overflow-hidden">
+    <div className="rounded-2xl bg-zinc-50 dark:bg-zinc-950/75 border border-zinc-200 dark:border-white/10 shadow-sm overflow-hidden">
       <div className="p-6 border-b border-zinc-100 dark:border-white/5">
         <div className="flex items-center gap-2 mb-4">
           <BookOpen className="size-4 text-violet-600 dark:text-violet-400 shrink-0" />

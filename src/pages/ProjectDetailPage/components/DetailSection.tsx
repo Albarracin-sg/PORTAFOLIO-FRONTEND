@@ -16,9 +16,9 @@ export function DetailSection({
   className = "" 
 }: DetailSectionProps) {
   return (
-    <section className={["p-5 sm:p-7 rounded-2xl border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-white/[0.03] flex flex-col overflow-hidden", className].join(' ')}>
+    <section className={["p-5 sm:p-7 rounded-2xl border border-zinc-200 dark:border-white/10 bg-zinc-50 dark:bg-zinc-950/75 flex flex-col overflow-hidden", className].join(' ')}>
       <div className="flex items-center gap-2.5 mb-4">
-        <div className="p-2 rounded-xl bg-zinc-200/60 dark:bg-white/5 shrink-0">{icon}</div>
+        <div className="p-2 rounded-xl bg-zinc-200/60 dark:bg-zinc-950 shrink-0">{icon}</div>
         <h2 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 break-words">
           {title}
         </h2>

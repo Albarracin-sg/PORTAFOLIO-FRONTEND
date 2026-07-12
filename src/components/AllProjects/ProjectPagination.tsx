@@ -26,19 +26,20 @@ export function ProjectPagination({
           size="sm"
           onClick={() => onPageChange(Math.max(1, currentPage - 1))}
           disabled={currentPage === 1}
+          className="dark:bg-zinc-950 dark:border-white/10 dark:hover:bg-white/[0.06]"
         >
           {t("projects.pagination.previous")}
         </Button>
         {Array.from({ length: totalPages }).map((_, index) => {
           const page = index + 1;
           return (
-            <Button
-              key={page}
-              variant={page === currentPage ? "default" : "outline"}
-              size="sm"
-              onClick={() => onPageChange(page)}
-              className="min-w-9"
-            >
+              <Button
+                key={page}
+                variant={page === currentPage ? "default" : "outline"}
+                size="icon"
+                onClick={() => onPageChange(page)}
+                className={`h-10 w-10 shrink-0 rounded-xl ${page === currentPage ? "" : "dark:bg-zinc-950 dark:border-white/10 dark:hover:bg-white/[0.06]"}`}
+              >
               {page}
             </Button>
           );
@@ -48,6 +49,7 @@ export function ProjectPagination({
           size="sm"
           onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}
           disabled={currentPage === totalPages}
+          className="dark:bg-zinc-950 dark:border-white/10 dark:hover:bg-white/[0.06]"
         >
           {t("projects.pagination.next")}
         </Button>

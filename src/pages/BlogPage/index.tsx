@@ -107,7 +107,7 @@ export function BlogPage() {
         <Button
           variant="ghost"
           asChild
-          className="group mb-2 sm:mb-6 rounded-full border border-zinc-200 bg-white/80 px-4 py-2 text-black transition-all hover:border-violet-300 hover:bg-violet-50 hover:text-violet-900 dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:hover:border-violet-400/30 dark:hover:bg-violet-500/10 dark:hover:text-violet-200"
+          className="group mb-2 sm:mb-6 rounded-full border border-zinc-200 bg-white/80 px-4 py-2 text-black transition-all hover:border-violet-300 hover:bg-violet-50 hover:text-violet-900 dark:border-white/10 dark:bg-zinc-950 dark:text-white dark:hover:border-violet-400/30 dark:hover:bg-white/[0.06] dark:hover:text-violet-200"
         >
           <Link to="/">
             <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
@@ -128,6 +128,10 @@ export function BlogPage() {
         </div>
       </div>
 
+      {articlesLoading || tagsLoading ? (
+        <BlogSkeleton />
+      ) : (
+        <>
           <div className="mb-4 flex justify-end">
             <label className="sr-only" htmlFor="blog-sort">{t("blogPage.sortBy")}</label>
             <select
@@ -141,13 +145,9 @@ export function BlogPage() {
             </select>
           </div>
 
-      {articlesLoading || tagsLoading ? (
-        <BlogSkeleton />
-      ) : (
-        <>
           {/* ── Tags Filter ── */}
           {sortedTags.length > 0 && (
-            <div className="mb-8 rounded-2xl border border-zinc-100 bg-zinc-50/50 p-4 dark:border-white/[0.06] dark:bg-white/[0.02] sm:p-5">
+            <div className="mb-8 rounded-2xl border border-zinc-100 bg-zinc-50/50 p-4 dark:border-white/10 dark:bg-zinc-950/75 sm:p-5">
               <div className="mb-3 flex items-center justify-between">
                 <span className="text-[11px] font-medium uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
                   {t("blogPage.filterBy", "Filtrar por")}
@@ -171,8 +171,8 @@ export function BlogPage() {
                   onClick={() => { setSelectedTag(null); setPage(1); }}
                   className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200 ${
                     !selectedTag
-                      ? "bg-zinc-900 text-white shadow-sm dark:bg-white dark:text-zinc-900"
-                      : "bg-white text-zinc-600 hover:bg-zinc-100 dark:bg-white/[0.04] dark:text-zinc-400 dark:hover:bg-white/[0.08]"
+                      ? "bg-zinc-900 text-white shadow-sm dark:bg-violet-500 dark:text-white"
+                      : "bg-white text-zinc-600 hover:bg-zinc-100 dark:bg-zinc-950 dark:text-zinc-400 dark:hover:bg-white/[0.06]"
                   }`}
                 >
                   {t("blogPage.all", "Todos")}
@@ -196,7 +196,7 @@ export function BlogPage() {
                       className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all duration-200 ${
                         isSelected
                           ? "bg-violet-600 text-white shadow-sm shadow-violet-600/20 dark:bg-violet-500 dark:shadow-violet-500/20"
-                          : "bg-white text-zinc-600 hover:bg-violet-50 hover:text-violet-700 dark:bg-white/[0.04] dark:text-zinc-400 dark:hover:bg-violet-500/10 dark:hover:text-violet-300"
+                           : "bg-white text-zinc-600 hover:bg-violet-50 hover:text-violet-700 dark:bg-zinc-950 dark:text-zinc-400 dark:hover:bg-violet-500/10 dark:hover:text-violet-300"
                       }`}
                     >
                       {tag.name}
@@ -242,7 +242,7 @@ export function BlogPage() {
               onClick={() => navigate(`/blog/${featuredArticle.slug}`)}
               className="group w-full text-left"
             >
-              <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white transition-all hover:shadow-lg hover:shadow-violet-500/5 dark:border-zinc-700/50 dark:bg-zinc-900 dark:hover:shadow-violet-500/10">
+              <div className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white transition-all hover:shadow-lg hover:shadow-violet-500/5 dark:border-white/10 dark:bg-zinc-950/75 dark:hover:shadow-violet-500/10">
                 {featuredArticle.coverImage && (
                   <div className="aspect-[21/9] w-full overflow-hidden">
                     <img
@@ -294,8 +294,8 @@ export function BlogPage() {
             </div>
           ) : (
             !featuredArticle && (
-              <div className="flex min-h-[400px] flex-col items-center justify-center rounded-3xl border border-dashed border-zinc-200 bg-white/30 dark:border-white/10 dark:bg-white/[0.01]">
-                <div className="flex size-16 items-center justify-center rounded-2xl bg-zinc-100 dark:bg-white/5">
+              <div className="flex min-h-[400px] flex-col items-center justify-center rounded-3xl border border-dashed border-zinc-200 bg-white/30 dark:border-white/10 dark:bg-zinc-950">
+                <div className="flex size-16 items-center justify-center rounded-2xl bg-zinc-100 dark:bg-zinc-950">
                   <BookOpen className="size-8 text-zinc-400" />
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-zinc-900 dark:text-white">
@@ -357,7 +357,7 @@ function ArticleCard({
   return (
     <button
       onClick={() => onSelect(article.slug)}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white text-left transition-all hover:shadow-lg hover:shadow-violet-500/5 dark:border-zinc-700/50 dark:bg-zinc-900 dark:hover:shadow-violet-500/10"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white text-left transition-all hover:shadow-lg hover:shadow-violet-500/5 dark:border-white/10 dark:bg-zinc-950/75 dark:hover:bg-white/[0.06] dark:hover:shadow-violet-500/10"
     >
       {article.coverImage && (
         <div className="aspect-video w-full overflow-hidden">

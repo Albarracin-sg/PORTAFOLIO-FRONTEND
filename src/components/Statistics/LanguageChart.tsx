@@ -27,7 +27,7 @@ export function LanguageChart({ data, config }: Props) {
 
   if (!data || data.length === 0) {
     return (
-      <Card>
+      <Card className="dark:bg-zinc-950/75 dark:border-white/10">
         <CardHeader>
           <CardTitle>
             {isSpanish ? "Distribución de Lenguajes" : "Language Distribution"}
@@ -43,7 +43,7 @@ export function LanguageChart({ data, config }: Props) {
   }
 
   return (
-    <Card>
+    <Card className="dark:bg-zinc-950/75 dark:border-white/10">
       <CardHeader>
         <CardTitle>
           {isSpanish ? "Distribución de Lenguajes" : "Language Distribution"}

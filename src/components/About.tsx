@@ -236,7 +236,7 @@ export default function About(_props: AboutProps) {
               {about.softSkillsList.map((skill, index) => (
                 <div
                   key={`soft-skill-${skill.toLowerCase().replace(/\s+/g, "-")}`}
-                  className="relative rounded-2xl border border-zinc-200 bg-white px-5 py-3.5 text-sm text-black transition-colors hover:border-violet-300 hover:bg-violet-50 hover:text-violet-950 dark:border-white/[0.07] dark:bg-white/[0.025] dark:text-white dark:hover:bg-white/[0.05] dark:hover:text-white"
+                  className="relative rounded-2xl border border-zinc-200 bg-white px-5 py-3.5 text-sm text-black transition-colors hover:border-violet-300 hover:bg-violet-50 hover:text-violet-950 dark:border-white/10 dark:bg-zinc-950/75 dark:text-white dark:hover:bg-zinc-900/50 dark:hover:text-white"
                 >
                   <span className="absolute right-3 top-2.5 font-mono text-[9px] text-zinc-500 dark:text-zinc-500">
                     {String(index + 1).padStart(2, "0")}
@@ -274,7 +274,7 @@ export default function About(_props: AboutProps) {
                 {about.professionalExperienceItems.map((item) => (
                   <article
                     key={`${item.company}-${item.title}`}
-                    className="relative rounded-2xl border border-zinc-200 bg-white/85 p-6 transition-colors hover:border-violet-400/20 hover:bg-white dark:border-white/[0.07] dark:bg-white/[0.025] dark:hover:bg-white/[0.04]"
+                    className="relative rounded-2xl border border-zinc-200 bg-white/85 p-6 transition-colors hover:border-violet-400/20 hover:bg-white dark:border-white/10 dark:bg-zinc-950/75 dark:hover:bg-zinc-900/50"
                   >
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div>
@@ -287,7 +287,7 @@ export default function About(_props: AboutProps) {
                         )}
                       </div>
                       {item.period && (
-                        <span className="shrink-0 self-start rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-mono text-zinc-500 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-400">
+                        <span className="shrink-0 self-start rounded-full border border-zinc-200 bg-zinc-50 px-3 py-1 text-xs font-mono text-zinc-500 dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-400">
                           {item.period}
                         </span>
                       )}
@@ -298,7 +298,7 @@ export default function About(_props: AboutProps) {
                         {item.highlights?.map((h) => {
                           const highlightId = `h-${h.toLowerCase().replace(/\s+/g, "-").slice(0, 20)}`;
                           return (
-                            <li key={highlightId} className="flex gap-2.5 rounded-xl border border-zinc-200/80 bg-zinc-50/80 px-3.5 py-2.5 text-xs leading-6 text-zinc-600 dark:border-white/[0.05] dark:bg-white/[0.02] dark:text-zinc-400">
+                            <li key={highlightId} className="flex gap-2.5 rounded-xl border border-zinc-200/80 bg-zinc-50/80 px-3.5 py-2.5 text-xs leading-6 text-zinc-600 dark:border-white/10 dark:bg-zinc-950/50 dark:text-zinc-400">
                               <ArrowRight className="mt-0.5 size-3 shrink-0 text-violet-500" />
                               {h}
                             </li>
@@ -318,13 +318,13 @@ export default function About(_props: AboutProps) {
                 {about.personalProjectItems.map((item) => (
                   <article
                     key={item.title}
-                    className="rounded-2xl border border-zinc-200 bg-white/85 p-6 transition-colors hover:border-violet-400/20 hover:bg-white dark:border-white/[0.07] dark:bg-white/[0.025] dark:hover:bg-white/[0.04]"
+                    className="rounded-2xl border border-zinc-200 bg-white/85 p-6 transition-colors hover:border-violet-400/20 hover:bg-white dark:border-white/10 dark:bg-zinc-950/75 dark:hover:bg-zinc-900/50"
                   >
                     <h4 className="text-base font-semibold text-zinc-900 dark:text-white">{item.title}</h4>
                     {item.company && (
                       <p className="mt-2 flex flex-wrap gap-1.5">
                         {item.company.split("·").map((tag) => (
-                          <span key={tag} className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-0.5 text-[11px] text-zinc-600 dark:border-white/10 dark:bg-white/[0.04] dark:text-zinc-400">
+                          <span key={tag} className="rounded-full border border-zinc-200 bg-zinc-50 px-2.5 py-0.5 text-[11px] text-zinc-600 dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-400">
                             {tag.trim()}
                           </span>
                         ))}
@@ -352,10 +352,10 @@ export default function About(_props: AboutProps) {
                 {about.educationItems.map((item) => (
                   <article
                     key={`${item.institution}-${item.title}`}
-                    className="rounded-2xl border border-zinc-200 bg-white/85 p-6 transition-colors hover:border-violet-400/20 hover:bg-white dark:border-white/[0.07] dark:bg-white/[0.025] dark:hover:bg-white/[0.04]"
+                    className="rounded-2xl border border-zinc-200 bg-white/85 p-6 transition-colors hover:border-violet-400/20 hover:bg-white dark:border-white/10 dark:bg-zinc-950/75 dark:hover:bg-zinc-900/50"
                   >
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 dark:border-white/10 dark:bg-white/[0.04]">
+                      <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-zinc-200 bg-zinc-50 dark:border-white/10 dark:bg-zinc-950">
                         <GraduationCap className="size-5 text-violet-600 dark:text-violet-400" />
                       </div>
                       <div>

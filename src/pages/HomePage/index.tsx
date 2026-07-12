@@ -206,7 +206,7 @@ export function HomePage() {
             {statsLoading && !githubStats
               ? Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} className="h-36 rounded-2xl" />)
               : previewStats.map(({ label, value, icon: Icon }, index) => (
-                <Card key={label} className="group relative cursor-pointer overflow-hidden rounded-2xl border-zinc-200/80 bg-white/85 shadow-lg shadow-zinc-200/50 transition-all duration-300 hover:-translate-y-1 hover:border-violet-300/70 hover:shadow-xl active:scale-[1.03] active:shadow-xl dark:border-white/10 dark:bg-zinc-950/75 dark:shadow-black/20 dark:hover:border-violet-400/30">
+                <Card key={label} className="group relative overflow-hidden rounded-2xl border-zinc-200/80 bg-white/85 shadow-lg shadow-zinc-200/50 transition-all duration-300 hover:-translate-y-1 hover:border-violet-300/70 hover:shadow-xl active:scale-[1.03] active:shadow-xl dark:border-white/10 dark:bg-zinc-950/75 dark:shadow-black/20 dark:hover:border-violet-400/30">
                   <CardContent className="relative p-5 sm:p-6">
                     <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-violet-500/70 to-transparent" />
                     <div className="mb-5 flex size-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-400">

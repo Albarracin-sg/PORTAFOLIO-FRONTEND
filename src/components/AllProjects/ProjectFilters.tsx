@@ -42,7 +42,7 @@ export function ProjectFilters({
   const { t } = useTranslation();
 
   return (
-    <Card className="mb-8 border-zinc-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
+    <Card className="mb-8 border-zinc-200 bg-white/85 dark:border-white/10 dark:bg-zinc-950/75">
       <CardContent className="p-5 sm:p-6">
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
@@ -55,7 +55,7 @@ export function ProjectFilters({
                 placeholder={t("projects.filters.searchPlaceholder")}
                 value={searchTerm}
                 onChange={(e) => onSearchChange(e.target.value)}
-                className="h-10 rounded-lg border-zinc-200 bg-zinc-50/80 pl-10 focus-visible:ring-violet-500/50 dark:border-zinc-600 dark:bg-zinc-800/50"
+                className="h-10 rounded-lg border-zinc-200 bg-zinc-50/80 pl-10 focus-visible:ring-violet-500/50 dark:border-white/10 dark:bg-zinc-950"
               />
             </div>
           </div>
@@ -93,9 +93,9 @@ export function ProjectFilters({
           />
         </div>
 
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-zinc-200 pt-5 dark:border-white/[0.07]">
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-zinc-200 pt-5 dark:border-white/10">
           <p className="text-sm text-zinc-600 dark:text-zinc-400">{projectCountLabel}</p>
-          <div className="hidden sm:flex items-center gap-1 rounded-lg bg-zinc-100 p-1 dark:bg-zinc-800/60">
+          <div className="hidden sm:flex items-center gap-1 rounded-lg bg-zinc-100 p-1 dark:bg-zinc-950">
             <Button
               variant={viewMode === "grid" ? "default" : "ghost"}
               size="sm"
@@ -138,7 +138,7 @@ function FilterSelect({
         {label}
       </label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="h-10 rounded-lg border-zinc-200 bg-zinc-50/80 dark:border-zinc-600 dark:bg-zinc-800/50">
+        <SelectTrigger className="h-10 rounded-lg border-zinc-200 bg-zinc-50/80 dark:border-white/10 dark:bg-zinc-950">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

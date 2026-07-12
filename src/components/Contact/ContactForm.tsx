@@ -21,7 +21,7 @@ export function ContactForm({ onSubmit, updateField, t }: ContactFormProps) {
   } = useForm({ mode: "onChange" });
 
   return (
-    <div className="flex flex-col rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/40 p-7">
+    <div className="flex flex-col rounded-2xl border border-zinc-200 dark:border-white/10 bg-white dark:bg-zinc-950/75 p-7">
       <p className="text-xs font-medium uppercase tracking-widest text-zinc-500 dark:text-zinc-500 mb-6">
         {t("contact.form.title")}
       </p>
@@ -53,7 +53,7 @@ export function ContactForm({ onSubmit, updateField, t }: ContactFormProps) {
             })}
             placeholder={String(t("contact.form.namePlaceholder"))}
             disabled={isSubmitting}
-            className={`bg-zinc-50 dark:bg-zinc-800/60 border-zinc-200 dark:border-zinc-700 focus-visible:ring-violet-500 ${
+            className={`bg-zinc-50 dark:bg-zinc-900/40 border-zinc-200 dark:border-white/10 focus-visible:ring-violet-500 ${
               errors.name ? "border-red-500 focus-visible:ring-red-500" : ""
             }`}
           />
@@ -84,7 +84,7 @@ export function ContactForm({ onSubmit, updateField, t }: ContactFormProps) {
             })}
             placeholder={String(t("contact.form.emailPlaceholder"))}
             disabled={isSubmitting}
-            className={`bg-zinc-50 dark:bg-zinc-800/60 border-zinc-200 dark:border-zinc-700 focus-visible:ring-violet-500 ${
+            className={`bg-zinc-50 dark:bg-zinc-900/40 border-zinc-200 dark:border-white/10 focus-visible:ring-violet-500 ${
               errors.email ? "border-red-500 focus-visible:ring-red-500" : ""
             }`}
           />
@@ -108,7 +108,7 @@ export function ContactForm({ onSubmit, updateField, t }: ContactFormProps) {
             {...register("company")}
             placeholder={String(t("contact.form.companyPlaceholder") || "Where do you work?")}
             disabled={isSubmitting}
-            className="bg-zinc-50 dark:bg-zinc-800/60 border-zinc-200 dark:border-zinc-700 focus-visible:ring-violet-500"
+            className="bg-zinc-50 dark:bg-zinc-900/40 border-zinc-200 dark:border-white/10 focus-visible:ring-violet-500"
           />
         </div>
 
@@ -131,7 +131,7 @@ export function ContactForm({ onSubmit, updateField, t }: ContactFormProps) {
             })}
             placeholder={String(t("contact.form.messagePlaceholder"))}
             disabled={isSubmitting}
-            className={`flex-1 min-h-[140px] bg-zinc-50 dark:bg-zinc-800/60 border-zinc-200 dark:border-zinc-700 focus-visible:ring-violet-500 resize-none ${
+            className={`flex-1 min-h-[140px] bg-zinc-50 dark:bg-zinc-900/40 border-zinc-200 dark:border-white/10 focus-visible:ring-violet-500 resize-none ${
               errors.message ? "border-red-500 focus-visible:ring-red-500" : ""
             }`}
           />

@@ -50,7 +50,7 @@ export function DesktopActions({
           <Button
             variant="outline"
             size="icon"
-            className="size-10 cursor-pointer rounded-2xl border-zinc-200 dark:border-white/10 transition-all duration-300 hover:scale-105 hover:border-violet-400 hover:text-violet-600 dark:hover:border-violet-500 dark:hover:text-violet-400"
+            className="size-10 cursor-pointer rounded-2xl border-zinc-200 dark:bg-zinc-950 dark:border-white/10 transition-all duration-300 hover:scale-105 hover:border-violet-400 hover:text-violet-600 dark:hover:border-violet-500 dark:hover:text-violet-400"
             aria-label={t("nav.preferences")}
           >
             <Settings className="size-4" />

@@ -29,7 +29,7 @@ export function ProjectCard({
 
   return (
     <Card
-      className={`group overflow-hidden border-zinc-200 bg-white/85 transition-all duration-300 hover:border-violet-400/30 hover:bg-white dark:border-white/[0.07] dark:bg-white/[0.025] dark:hover:bg-white/[0.04] ${
+      className={`group overflow-hidden border-zinc-200 bg-white/85 transition-all duration-300 hover:border-violet-400/30 hover:bg-white dark:border-white/10 dark:bg-zinc-950/75 dark:hover:border-violet-400/20 dark:hover:bg-zinc-900/40 dark:hover:shadow-lg dark:hover:shadow-violet-500/10 ${
         isListView ? "flex flex-col lg:flex-row" : ""
       }`}
     >
@@ -90,8 +90,8 @@ export function ProjectCard({
               </div>
             </div>
 
-            <div className="flex h-20 gap-1.5 overflow-x-auto overflow-y-hidden pb-1 sm:h-16 [scrollbar-width:thin]">
-              {project.technologies.map((tech: string) => (
+            <div className="flex h-20 sm:h-16 flex-wrap content-start gap-1.5 overflow-hidden">
+              {project.technologies.slice(0, 5).map((tech: string) => (
                 <SkillBubble
                   key={tech}
                   name={tech}
@@ -99,6 +99,11 @@ export function ProjectCard({
                   size="sm"
                 />
               ))}
+              {project.technologies.length > 5 && (
+                <div className="flex items-center justify-center rounded-full border border-zinc-200 bg-zinc-50/50 px-2 py-1 text-[10px] font-bold text-zinc-500 dark:border-white/10 dark:bg-white/5 dark:text-zinc-400">
+                  +{project.technologies.length - 5}
+                </div>
+              )}
             </div>
 
             <div className="h-24 sm:h-20 overflow-hidden">
@@ -113,7 +118,7 @@ export function ProjectCard({
           </CardHeader>
         </div>
 
-        <div className={`${isListView ? "mt-6 lg:mt-0 lg:w-64 lg:border-l lg:border-zinc-200 lg:pl-6 dark:lg:border-white/[0.07]" : "mt-4"}`}>
+        <div className={`${isListView ? "mt-6 lg:mt-0 lg:w-64 lg:border-l lg:border-zinc-200 lg:pl-6 dark:lg:border-white/10" : "mt-4"}`}>
           <CardContent className="space-y-4 p-0">
             {!isListView && (
               <div className="flex items-center gap-x-1 text-xs text-zinc-600 dark:text-zinc-400">

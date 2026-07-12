@@ -12,7 +12,7 @@ export function GithubActivityChart({ data, config }: GithubActivityChartProps) 
   const { t } = useTranslation();
 
   return (
-    <Card className="border-zinc-200 bg-white/85 dark:border-white/[0.07] dark:bg-white/[0.025]">
+    <Card className="border-zinc-200 bg-white/85 dark:bg-zinc-950/75 dark:border-white/10">
       <CardHeader>
         <CardTitle className="text-xl sm:text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">
           {t("stats.githubActivity")}

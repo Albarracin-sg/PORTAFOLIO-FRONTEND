@@ -174,6 +174,7 @@ export function BlogDetailPage() {
       window.removeEventListener('scroll', recordQualifiedRead);
     };
   }, [article]);
+
   const articleContent = useMemo(() => {
     if (!article?.content) return null;
     return resolveLocale(article.content, i18n.language);
@@ -211,7 +212,7 @@ export function BlogDetailPage() {
         <Button
           variant="ghost"
           onClick={() => navigate("/blog")}
-          className="group mb-8 rounded-full border border-zinc-200 bg-white px-4 py-2 text-black transition-all hover:bg-violet-50 hover:text-violet-950 hover:border-violet-300 dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:hover:bg-violet-500/10 dark:hover:text-violet-200"
+          className="group mb-8 rounded-full border border-zinc-200 bg-white px-4 py-2 text-black transition-all hover:bg-violet-50 hover:text-violet-950 hover:border-violet-300 dark:border-white/10 dark:bg-zinc-950 dark:text-white dark:hover:bg-white/[0.06] dark:hover:text-violet-200"
         >
           <span className="inline-flex items-center gap-2">
             <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
@@ -274,7 +275,7 @@ export function BlogDetailPage() {
         )}
 
         {article.project && (
-          <div className="mt-12 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 dark:border-zinc-700/50 dark:bg-zinc-800/30">
+          <div className="mt-12 rounded-2xl border border-zinc-200 bg-zinc-50 p-6 dark:border-white/10 dark:bg-zinc-950/75">
             <p className="text-xs font-semibold uppercase tracking-wider text-violet-600 dark:text-violet-400">
               {t("blog.relatedProject")}
             </p>
@@ -306,7 +307,7 @@ export function BlogDetailPage() {
           <Link to="/blog">
             <Button
               variant="ghost"
-              className="rounded-full border border-zinc-200 bg-white px-5 py-2 text-black transition-all hover:bg-violet-50 hover:text-violet-950 hover:border-violet-300 dark:border-white/10 dark:bg-white/[0.03] dark:text-white dark:hover:bg-violet-500/10 dark:hover:text-violet-200"
+              className="rounded-full border border-zinc-200 bg-white px-5 py-2 text-black transition-all hover:bg-violet-50 hover:text-violet-950 hover:border-violet-300 dark:border-white/10 dark:bg-zinc-950 dark:text-white dark:hover:bg-white/[0.06] dark:hover:text-violet-200"
             >
               <ArrowLeft className="size-4" />
               {t("blog.backToBlog")}
