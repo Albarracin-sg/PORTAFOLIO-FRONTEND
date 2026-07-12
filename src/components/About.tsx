@@ -90,33 +90,19 @@ const SkillMarqueeRow = memo(function SkillMarqueeRow({ items, reverse }: { item
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
       >
-        <div className="flex gap-4 py-3" style={animationStyle}>
-          {items.map((skill) => (
-            <SkillBubble
-              key={`m1-${skill}`}
-              name={skill}
-              showName={true}
-              size="md"
-              className="cursor-grab whitespace-nowrap active:cursor-grabbing"
-            />
-          ))}
-          {items.map((skill) => (
-            <SkillBubble
-              key={`m2-${skill}`}
-              name={skill}
-              showName={true}
-              size="md"
-              className="cursor-grab whitespace-nowrap active:cursor-grabbing"
-            />
-          ))}
-          {items.map((skill) => (
-            <SkillBubble
-              key={`m3-${skill}`}
-              name={skill}
-              showName={true}
-              size="md"
-              className="cursor-grab whitespace-nowrap active:cursor-grabbing"
-            />
+        <div className="flex py-3" style={animationStyle}>
+          {[0, 1, 2].map((copy) => (
+            <div key={copy} className="flex shrink-0 gap-4 pr-4">
+              {items.map((skill) => (
+                <SkillBubble
+                  key={`m${copy}-${skill}`}
+                  name={skill}
+                  showName={true}
+                  size="md"
+                  className="cursor-grab whitespace-nowrap active:cursor-grabbing"
+                />
+              ))}
+            </div>
           ))}
         </div>
       </div>

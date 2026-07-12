@@ -92,6 +92,16 @@ body,
   cursor: default;
 }
 
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-33.333333%); }
+}
+
+@keyframes marqueeR {
+  from { transform: translateX(-33.333333%); }
+  to { transform: translateX(0); }
+}
+
 /* Solo forzar default en elementos puramente de texto para evitar I-beam */
 h1, h2, h3, h4, h5, h6, p, li, section, article {
   cursor: default;
