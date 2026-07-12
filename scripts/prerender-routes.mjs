@@ -105,9 +105,10 @@ async function collectRoutes(apiUrl) {
   const routes = [
     {
       path: '/',
-      title: 'Juan Camilo Albarracin | Backend Engineer',
+      title: 'Albarracín Portafolio | Juan Camilo Albarracín — Backend e IA',
+      heading: 'Portafolio de Juan Camilo Albarracín',
       description:
-        'Backend Engineer especializado en sistemas distribuidos e integraciones de IA, con foco en mantenibilidad, observabilidad y despliegue en producción.',
+        'Portafolio de Juan Camilo Albarracín: proyectos de software, backend, microservicios, NestJS, TypeScript e integración de inteligencia artificial.',
     },
     {
       path: '/projects',
@@ -136,7 +137,7 @@ async function collectRoutes(apiUrl) {
   }
   for (const project of projects ?? []) {
     if (!project?.id) continue;
-    const projectName = localizedText(project.name, `project ${project.id} name`, 'Proyecto');
+    const projectName = localizedText(project.name ?? project.title, `project ${project.id} name`, 'Proyecto');
     const projectDescription = localizedText(
       project.description,
       `project ${project.id} description`,
@@ -155,7 +156,7 @@ async function collectRoutes(apiUrl) {
       .filter((project) => project?.id)
       .map((project) => ({
         href: `/projects/${project.id}`,
-        title: localizedText(project.name, `project ${project.id} name`, 'Proyecto'),
+        title: localizedText(project.name ?? project.title, `project ${project.id} name`, 'Proyecto'),
         description: localizedText(project.description, `project ${project.id} description`, ''),
       }));
   }

@@ -175,79 +175,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jcalbarracin.vercel.app/blog/construyendo-pagina-u-una-plataforma-universitaria-con-arquitectura-desacoplada</loc>
-    <lastmod>2026-07-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://jcalbarracin.vercel.app/blog/construyendo-un-portafolio-moderno-con-react-19-y-un-dashboard-de-administracion</loc>
-    <lastmod>2026-07-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://jcalbarracin.vercel.app/blog/construyendo-chatbot-valle-un-backend-minimalista-para-conversaciones-con-ia</loc>
-    <lastmod>2026-07-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://jcalbarracin.vercel.app/blog/listenup-english-cuando-el-aprendizaje-de-ingles-necesita-un-backend-robusto</loc>
-    <lastmod>2026-07-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://jcalbarracin.vercel.app/blog/paractica-vocales-cuando-la-ia-se-encuentra-con-la-fonetica</loc>
-    <lastmod>2026-07-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://jcalbarracin.vercel.app/blog/construyendo-la-interfaz-administrativa-de-un-sistema-de-salud-ips-cuando-la-efi</loc>
-    <lastmod>2026-07-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://jcalbarracin.vercel.app/blog/construyendo-un-bot-que-cualifica-leads-con-ia-sin-perder-la-cabeza</loc>
     <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jcalbarracin.vercel.app/blog/construyendo-un-portafolio-de-doble-personalidad-con-react-19-y-arquitectura-scr</loc>
-    <lastmod>2026-07-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://jcalbarracin.vercel.app/blog/construyendo-una-plataforma-de-retos-de-programacion-desde-cero</loc>
-    <lastmod>2026-07-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://jcalbarracin.vercel.app/blog/centralizando-la-documentacion-de-python-una-pagina-para-gobernarlos-a-todos</loc>
-    <lastmod>2026-07-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://jcalbarracin.vercel.app/blog/construyendo-un-entorno-academico-de-pruebas-en-nodejs-jest-vs-bun-test</loc>
-    <lastmod>2026-07-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://jcalbarracin.vercel.app/blog/construyendo-un-chatbot-documentado-mas-alla-de-la-logica-conversacional</loc>
-    <lastmod>2026-07-12</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://jcalbarracin.vercel.app/blog/construyendo-un-cms-backend-para-portafolios-con-nestjs-y-postgresql</loc>
+    <loc>https://jcalbarracin.vercel.app/blog/construyendo-un-portafolio-moderno-con-react-19-y-un-dashboard-de-administracion</loc>
     <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -265,13 +199,13 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jcalbarracin.vercel.app/blog/construyendo-sentinelai-un-sistema-hibrido-de-seguridad-web</loc>
+    <loc>https://jcalbarracin.vercel.app/blog/construyendo-un-chatbot-documentado-mas-alla-de-la-logica-conversacional</loc>
     <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://jcalbarracin.vercel.app/blog/construyendo-vibe-pulse-mi-plataforma-e-commerce-fullstack-con-typescript</loc>
+    <loc>https://jcalbarracin.vercel.app/blog/construyendo-sentinelai-un-sistema-hibrido-de-seguridad-web</loc>
     <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -283,7 +217,73 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://jcalbarracin.vercel.app/blog/construyendo-chatbot-valle-un-backend-minimalista-para-conversaciones-con-ia</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jcalbarracin.vercel.app/blog/construyendo-un-cms-backend-para-portafolios-con-nestjs-y-postgresql</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jcalbarracin.vercel.app/blog/listenup-english-cuando-el-aprendizaje-de-ingles-necesita-un-backend-robusto</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jcalbarracin.vercel.app/blog/construyendo-la-interfaz-administrativa-de-un-sistema-de-salud-ips-cuando-la-efi</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jcalbarracin.vercel.app/blog/construyendo-un-portafolio-de-doble-personalidad-con-react-19-y-arquitectura-scr</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jcalbarracin.vercel.app/blog/construyendo-un-entorno-academico-de-pruebas-en-nodejs-jest-vs-bun-test</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://jcalbarracin.vercel.app/blog/construyendo-semestre-4-un-repositorio-academico-que-evoluciono-mas-alla-de-la-t</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jcalbarracin.vercel.app/blog/centralizando-la-documentacion-de-python-una-pagina-para-gobernarlos-a-todos</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jcalbarracin.vercel.app/blog/paractica-vocales-cuando-la-ia-se-encuentra-con-la-fonetica</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jcalbarracin.vercel.app/blog/construyendo-vibe-pulse-mi-plataforma-e-commerce-fullstack-con-typescript</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jcalbarracin.vercel.app/blog/construyendo-pagina-u-una-plataforma-universitaria-con-arquitectura-desacoplada</loc>
+    <lastmod>2026-07-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://jcalbarracin.vercel.app/blog/construyendo-una-plataforma-de-retos-de-programacion-desde-cero</loc>
     <lastmod>2026-07-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
