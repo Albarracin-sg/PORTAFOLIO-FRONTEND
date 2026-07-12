@@ -135,9 +135,6 @@ export default function Navbar({
     { value: "en", label: "English", flag: "🇺🇸", shortLabel: "EN" },
   ] as const;
 
-  const currentLanguage =
-    languageOptions.find((option) => option.value === language) ?? languageOptions[0];
-
   const activeLogo = isDark ? "/logoNigth.webp" : logoImg;
 const logoSizes = isDark ? "h-16 w-auto" : "h-14 w-auto";
 
@@ -173,7 +170,6 @@ const logoSizes = isDark ? "h-16 w-auto" : "h-14 w-auto";
               language={language}
               onLanguageChange={onLanguageChange}
               languageOptions={languageOptions}
-              currentLanguage={currentLanguage}
               isChangingLang={isChangingLang}
               token={token}
               logout={logout}

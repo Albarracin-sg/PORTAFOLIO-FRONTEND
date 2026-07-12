@@ -2,11 +2,13 @@ import { useEffect, useReducer } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, FolderGit2, GitBranch, Star, Users } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useTheme } from '@/features/theme';
 import Hero from '@/components/Hero';
 import About from '@/components/About';
 import Projects from '@/components/Projects';
 import Contact from '@/components/Contact';
 import { BlogPreview } from '@/components/BlogPreview';
+import { SpotifyNowPlayingCard } from '@/components/SpotifyNowPlayingCard';
 import { fetchGithubStats, fetchPublicPage, fetchPublicProjects } from '@/shared/api/public';
 import { mapPublicProjectToFeatured } from '@/shared/api/mappers';
 import { useLocalStorageSWR } from '@/shared/hooks/useLocalStorageSWR';
@@ -15,6 +17,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent } from '@/components/ui/card';
 import { usePageSeo } from '@/shared/seo/usePageSeo';
 import { usePrerenderReady } from '@/shared/seo/usePrerenderReady';
+
+import { catImages } from '@/assets/stack/cats';
 
 interface HomeState {
   sections: Record<string, { id: string; type: string; content: Record<string, unknown> }>;
@@ -46,6 +50,7 @@ function homeReducer(state: HomeState, action: HomeAction): HomeState {
 
 export function HomePage() {
   const { t } = useTranslation();
+  const { isDark } = useTheme();
   const scrollY = 0;
   const [state, dispatch] = useReducer(homeReducer, {
     sections: {},
@@ -135,6 +140,13 @@ export function HomePage() {
         <Hero scrollY={scrollY} section={sections.HERO} />
       </section>
 
+      {/* ── Spotify — mobile only ── */}
+      <section className="sm:hidden px-4 pt-6 pb-12">
+        <div className="mx-auto max-w-sm">
+          <SpotifyNowPlayingCard />
+        </div>
+      </section>
+
       {/* ── About ── */}
       <section id="about">
         <About />
@@ -193,8 +205,8 @@ export function HomePage() {
           <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
             {statsLoading && !githubStats
               ? Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} className="h-36 rounded-2xl" />)
-              : previewStats.map(({ label, value, icon: Icon }) => (
-                <Card key={label} className="group overflow-hidden rounded-2xl border-zinc-200/80 bg-white/85 shadow-lg shadow-zinc-200/50 transition-all duration-300 hover:-translate-y-1 hover:border-violet-300/70 hover:shadow-xl dark:border-white/10 dark:bg-zinc-950/75 dark:shadow-black/20 dark:hover:border-violet-400/30">
+              : previewStats.map(({ label, value, icon: Icon }, index) => (
+                <Card key={label} className="group relative cursor-pointer overflow-hidden rounded-2xl border-zinc-200/80 bg-white/85 shadow-lg shadow-zinc-200/50 transition-all duration-300 hover:-translate-y-1 hover:border-violet-300/70 hover:shadow-xl active:scale-[1.03] active:shadow-xl dark:border-white/10 dark:bg-zinc-950/75 dark:shadow-black/20 dark:hover:border-violet-400/30">
                   <CardContent className="relative p-5 sm:p-6">
                     <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-violet-500/70 to-transparent" />
                     <div className="mb-5 flex size-10 items-center justify-center rounded-xl bg-violet-500/10 text-violet-600 dark:text-violet-400">
@@ -202,6 +214,12 @@ export function HomePage() {
                     </div>
                     <p className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-white sm:text-4xl">{value}</p>
                     <p className="mt-1 text-xs font-medium text-zinc-500 dark:text-zinc-400 sm:text-sm">{label}</p>
+                    <img
+                      src={isDark ? catImages[index].night : catImages[index].day}
+                      alt=""
+                      aria-hidden="true"
+                      className={`pointer-events-none absolute bottom-0 right-0 opacity-80 transition-opacity group-hover:opacity-100 ${index === 3 ? 'size-24 sm:size-32' : 'size-20 sm:size-24'}`}
+                    />
                   </CardContent>
                 </Card>
               ))}

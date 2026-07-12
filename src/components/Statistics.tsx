@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { ArrowLeft, FolderGit2, Star, GitBranch, Users, Activity, Zap, Clock, Server, Music, BarChart3, FolderOpen, Bot, Shield, Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "@/features/theme";
 import { Button } from "@/components/ui/button";
 import { type GithubStats, type ApiStats } from "@/shared/api/public";
 import { type ChartConfig } from "@/components/ui/chart";
@@ -36,6 +37,7 @@ interface StatisticsProps {
 
 export default function Statistics({ githubStats, apiStats, isLoading = true }: StatisticsProps) {
   const { t, i18n } = useTranslation();
+  const { isDark } = useTheme();
   const isSpanish = i18n.language.startsWith("es");
   const [isMobile, setIsMobile] = useState(false);
 
@@ -51,10 +53,10 @@ export default function Statistics({ githubStats, apiStats, isLoading = true }: 
   const githubActivity = (githubStats?.githubActivity as Array<Record<string, unknown>>) ?? [];
 
   const cards = useMemo(() => githubStats ? [
-    { title: t("stats.totalRepos"), value: String(githubStats.totalRepos), description: githubStats.privateRepos > 0 ? t("stats.totalReposDescription", { public: githubStats.publicRepos, private: githubStats.privateRepos }) : t("stats.publicReposDescription", { public: githubStats.publicRepos }), icon: FolderGit2 },
-    { title: t("stats.totalStars"), value: String(githubStats.stars), description: t("stats.totalStarsDescription"), icon: Star },
-    { title: t("stats.totalForks"), value: String(githubStats.forks), description: t("stats.totalForksDescription"), icon: GitBranch },
-    { title: t("stats.followers"), value: String(githubStats.followers), description: t("stats.followersDescription"), icon: Users },
+    { title: t("stats.totalRepos"), value: String(githubStats.totalRepos), description: githubStats.privateRepos > 0 ? t("stats.totalReposDescription", { public: githubStats.publicRepos, private: githubStats.privateRepos }) : t("stats.publicReposDescription", { public: githubStats.publicRepos }), icon: FolderGit2, catIndex: 0 },
+    { title: t("stats.totalStars"), value: String(githubStats.stars), description: t("stats.totalStarsDescription"), icon: Star, catIndex: 1 },
+    { title: t("stats.totalForks"), value: String(githubStats.forks), description: t("stats.totalForksDescription"), icon: GitBranch, catIndex: 2 },
+    { title: t("stats.followers"), value: String(githubStats.followers), description: t("stats.followersDescription"), icon: Users, catIndex: 3 },
   ] : [], [githubStats, t]);
 
   const factualMetrics = useMemo(() => githubStats
@@ -160,7 +162,7 @@ export default function Statistics({ githubStats, apiStats, isLoading = true }: 
             ? Array.from({ length: 4 }).map((_, i) => (
                 <div key={i} className="h-32 animate-pulse rounded-2xl border border-zinc-200/50 bg-zinc-50/50 dark:border-white/[0.05] dark:bg-white/[0.02]" />
               ))
-            : cards.map((stat) => <StatsCard key={stat.title} {...stat} />)}
+            : cards.map((stat) => <StatsCard key={stat.title} {...stat} isDark={isDark} />)}
         </div>
 
         <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">

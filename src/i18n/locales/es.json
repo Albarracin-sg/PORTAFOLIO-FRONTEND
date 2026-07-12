@@ -50,6 +50,11 @@
     "contact": "Contacto",
     "downloadCV": "Descargar CV",
     "preferences": "Preferencias",
+    "theme": "Tema",
+    "actions": "Acciones",
+    "admin": "Admin",
+    "logout": "Cerrar sesión",
+    "language": "Idioma",
     "navigation": "Navegación",
     "back": "Volver"
   },
@@ -88,9 +93,11 @@
   "hero": {
     "greeting": "Hola, soy Juan Albarracín",
     "tagline": "Construyo soluciones donde la tecnología se encuentra con el propósito",
-    "quote": "\"Si puedes imaginarlo, puedes programarlo\" — Alejandro Taboada Sánchez",
+    "quote": "\"Si puedes imaginarlo, puedes programarlo\"",
+    "quoteAuthor": "Alejandro Taboada Sánchez",
     "viewProjects": "Ver proyectos",
-    "contactMe": "Contactarme"
+    "contactMe": "Contactarme",
+    "scrollDown": "Desplazar"
   },
   "about": {
     "title": "Sobre mí",
@@ -138,7 +145,7 @@
         "type": "work",
         "title": "Desarrollador Backend & Arquitectura (Prácticas Profesionales)",
         "company": "Universitaria de Colombia – Área de Innovación",
-        "period": "Ene 2025 – 2026",
+        "period": "Ene 2025 – Abr 2026",
         "location": "Bogotá, Colombia",
         "highlights": [
           "Diseñé sistemas de microservicios con NestJS, gRPC y PostgreSQL aplicando DDD, CQRS y Clean Architecture en entornos productivos.",
@@ -350,9 +357,9 @@
   },
   "stats": {
     "preview": {
-      "eyebrow": "Transparencia técnica",
-      "title": "Estadísticas del portafolio",
-      "description": "Consultá las tecnologías, actividad y métricas que respaldan este sitio.",
+      "eyebrow": "Actividad en GitHub",
+      "title": "Estadísticas",
+      "description": "Repositorios, estrellas, forks y seguidores de mi actividad en GitHub.",
       "action": "Ver estadísticas completas"
     },
     "title": "Estadísticas Técnicas",

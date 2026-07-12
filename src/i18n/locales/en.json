@@ -50,6 +50,11 @@
     "contact": "Contact",
     "downloadCV": "Download CV",
     "preferences": "Preferences",
+    "theme": "Theme",
+    "actions": "Actions",
+    "admin": "Admin",
+    "logout": "Logout",
+    "language": "Language",
     "navigation": "Navigation",
     "back": "Back"
   },
@@ -88,9 +93,11 @@
   "hero": {
     "greeting": "Hello, I'm Juan Albarracín",
     "tagline": "I build solutions where technology meets purpose",
-    "quote": "\"If you can imagine it, you can program it\" — Alejandro Taboada Sánchez",
+    "quote": "\"If you can imagine it, you can program it\"",
+    "quoteAuthor": "Alejandro Taboada Sánchez",
     "viewProjects": "View projects",
-    "contactMe": "Contact me"
+    "contactMe": "Contact me",
+    "scrollDown": "Scroll"
   },
   "about": {
     "title": "About Me",
@@ -138,7 +145,7 @@
         "type": "work",
         "title": "Backend Developer & Architecture (Professional Internship)",
         "company": "Universitaria de Colombia – Innovation Area",
-        "period": "Jan 2025 – 2026",
+        "period": "Jan 2025 – Apr 2026",
         "location": "Bogotá, Colombia",
         "highlights": [
           "Designed NestJS, gRPC and PostgreSQL microservice systems applying DDD, CQRS and Clean Architecture in production.",
@@ -350,9 +357,9 @@
   },
   "stats": {
     "preview": {
-      "eyebrow": "Technical transparency",
-      "title": "Portfolio statistics",
-      "description": "Explore the technologies, activity, and metrics behind this site.",
+      "eyebrow": "GitHub activity",
+      "title": "Statistics",
+      "description": "Repositories, stars, forks, and followers from my GitHub activity.",
       "action": "View full statistics"
     },
     "title": "Technical Statistics",

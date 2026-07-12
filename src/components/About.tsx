@@ -59,6 +59,11 @@ const SkillMarqueeRow = memo(function SkillMarqueeRow({ items, reverse }: { item
     const scroller = scrollerRef.current;
     if (!scroller) return;
 
+    const loopWidth = scroller.scrollWidth / 3;
+    if (loopWidth > 0 && (scroller.scrollLeft <= 1 || scroller.scrollLeft >= loopWidth * 2)) {
+      scroller.scrollLeft = loopWidth;
+    }
+
     dragRef.current = {
       active: true,
       startX: event.clientX,
@@ -72,7 +77,13 @@ const SkillMarqueeRow = memo(function SkillMarqueeRow({ items, reverse }: { item
     const scroller = scrollerRef.current;
     if (!scroller || !dragRef.current.active) return;
     const delta = event.clientX - dragRef.current.startX;
-    scroller.scrollLeft = dragRef.current.startScrollLeft - delta;
+    const loopWidth = scroller.scrollWidth / 3;
+    let nextScrollLeft = dragRef.current.startScrollLeft - delta;
+
+    while (loopWidth > 0 && nextScrollLeft <= 0) nextScrollLeft += loopWidth;
+    while (loopWidth > 0 && nextScrollLeft >= loopWidth * 2) nextScrollLeft -= loopWidth;
+
+    scroller.scrollLeft = nextScrollLeft;
   };
 
   const endDrag = () => {

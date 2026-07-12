@@ -1,4 +1,4 @@
-import { ArrowRight, Mail, Download } from "lucide-react";
+import { ArrowRight, Mail, Download, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { EditableImage } from "@/features/admin/InlineEdit";
 import { useSectionEditor } from "@/features/admin/hooks/useSectionEditor";
@@ -41,9 +41,9 @@ export default function Hero({ section }: HeroProps) {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center px-4 pt-48 pb-20 sm:px-6 sm:pt-28 lg:px-8 lg:pt-32 lg:pb-16 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto w-full relative z-10">
-        <div className="grid gap-6 sm:gap-8 lg:grid-cols-2 lg:gap-12 items-center">
+    <section className="relative flex h-[100dvh] flex-col overflow-hidden px-4 pt-48 pb-20 sm:px-6 sm:pt-28 lg:px-8 lg:pt-32 lg:pb-16">
+      <div className="max-w-7xl mx-auto w-full relative z-10 flex min-h-0 flex-1 items-center pb-14">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-2 lg:gap-12 items-center w-full">
           {/* Content */}
           <div className="contents lg:block lg:space-y-8 lg:text-left">
             <div className="order-1 max-w-3xl mx-auto space-y-4 sm:space-y-5 text-center lg:mx-0 lg:text-left">
@@ -55,12 +55,17 @@ export default function Hero({ section }: HeroProps) {
               </p>
             </div>
 
-            <p className="order-3 max-w-2xl text-center text-sm leading-relaxed text-zinc-500 dark:text-zinc-500 sm:text-base italic break-words lg:text-left">
-              {t('hero.quote')}
-            </p>
+            <blockquote className="order-3 max-w-2xl text-center lg:text-left">
+              <p className="text-sm leading-relaxed text-zinc-500 dark:text-zinc-500 sm:text-base italic break-words">
+                {t('hero.quote')}
+              </p>
+              <footer className="mt-1.5 text-xs text-zinc-400 dark:text-zinc-600 sm:text-sm not-italic">
+                — {t('hero.quoteAuthor')}
+              </footer>
+            </blockquote>
 
             {/* CTA Buttons */}
-            <div className="order-4 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
+            <div className="order-4 flex flex-wrap gap-2 sm:gap-3 justify-center lg:justify-start">
               <button
                 onClick={() => {
                   const element = document.getElementById("projects");
@@ -71,10 +76,10 @@ export default function Hero({ section }: HeroProps) {
                     });
                   }
                 }}
-                className="group flex items-center justify-center gap-3 rounded-2xl px-6 py-3.5 text-sm font-medium transition-all duration-300 bg-violet-600 text-white shadow-lg shadow-violet-500/20 hover:bg-violet-700 hover:scale-105 active:scale-95 dark:bg-violet-500 dark:hover:bg-violet-600"
+                className="group flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-300 bg-violet-600 text-white shadow-lg shadow-violet-500/20 hover:bg-violet-700 hover:scale-105 active:scale-95 dark:bg-violet-500 dark:hover:bg-violet-600"
               >
                 {t('hero.viewProjects')}
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
               </button>
 
               <button
@@ -87,24 +92,24 @@ export default function Hero({ section }: HeroProps) {
                     });
                   }
                 }}
-                className="flex items-center justify-center gap-3 rounded-2xl px-6 py-3.5 text-sm font-medium transition-all duration-300 border border-zinc-200 bg-white text-zinc-700 shadow-sm hover:bg-white hover:border-violet-300 hover:text-violet-600 hover:scale-105 active:scale-95 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/80 dark:hover:bg-white/[0.08] dark:hover:border-violet-500/30 dark:hover:text-violet-400"
+                className="flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-300 border border-zinc-200 bg-white text-zinc-700 shadow-sm hover:bg-white hover:border-violet-300 hover:text-violet-600 hover:scale-105 active:scale-95 dark:border-white/10 dark:bg-white/[0.04] dark:text-white/80 dark:hover:bg-white/[0.08] dark:hover:border-violet-500/30 dark:hover:text-violet-400"
               >
-                <Mail className="size-4" />
+                <Mail className="size-3.5" />
                 {t('hero.contactMe')}
               </button>
 
               <a
                 href={cvPdf}
                 download="JUAN_ALBARRACIN_CV.pdf"
-                className="flex sm:hidden items-center justify-center gap-3 rounded-2xl px-6 py-3.5 text-sm font-medium transition-all duration-300 border border-violet-200 bg-violet-50 text-violet-700 shadow-sm hover:bg-violet-100 hover:border-violet-300 hover:scale-105 active:scale-95 dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-300 dark:hover:bg-violet-500/20"
+                className="flex sm:hidden items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all duration-300 border border-violet-200 bg-violet-50 text-violet-700 shadow-sm hover:bg-violet-100 hover:border-violet-300 hover:scale-105 active:scale-95 dark:border-violet-500/20 dark:bg-violet-500/10 dark:text-violet-300 dark:hover:bg-violet-500/20"
               >
-                <Download className="size-4" />
+                <Download className="size-3.5" />
                 {t('nav.downloadCV')}
               </a>
             </div>
 
-            {/* Spotify Now Playing */}
-            <div className="order-5 mx-auto w-full max-w-sm lg:mx-0">
+            {/* Spotify Now Playing — desktop only */}
+            <div className="order-5 hidden sm:block mx-auto w-full max-w-sm lg:mx-0">
               <SpotifyNowPlayingCard />
             </div>
           </div>
@@ -203,6 +208,16 @@ export default function Hero({ section }: HeroProps) {
           </div>
         </div>
       </div>
+
+      {/* Scroll Indicator */}
+      <button
+        onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
+        className="absolute bottom-5 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-zinc-400 transition-colors hover:text-violet-500 dark:text-zinc-600 dark:hover:text-violet-400 sm:bottom-6"
+        aria-label={t('hero.scrollDown')}
+      >
+        <span className="text-xs font-medium tracking-wide uppercase">{t('hero.scrollDown', { defaultValue: 'Scroll' })}</span>
+        <ChevronDown className="size-5 animate-bounce motion-reduce:animate-none" />
+      </button>
     </section>
   );
 }
