@@ -32,6 +32,15 @@
       "critical": "Crítico"
     }
   },
+  "mermaid": {
+    "copy": "Copiar",
+    "copied": "¡Copiado!",
+    "copyTitle": "Copiar fuente del diagrama",
+    "copySuccess": "Diagrama copiado al portapapeles"
+  },
+  "codeBlock": {
+    "copySuccess": "Código copiado al portapapeles"
+  },
   "spotify": {
     "notListening": "No estoy escuchando nada ahora.",
     "comeBackLater": "Vuelve pronto para ver mi actividad musical.",
@@ -80,7 +89,12 @@
     "all": "Todos",
     "showMoreFilters": "Mostrar más filtros",
     "showLessFilters": "Mostrar menos filtros",
-    "less": "Menos"
+    "less": "Menos",
+    "sortBy": "Ordenar por",
+    "sort": {
+      "discover": "Descubrir",
+      "recent": "Más recientes"
+    }
   },
   "blogPreview": {
     "title": "Blog",
@@ -92,7 +106,7 @@
   },
   "hero": {
     "greeting": "Hola, soy Juan Albarracín",
-    "tagline": "Construyo soluciones donde la tecnología se encuentra con el propósito",
+    "tagline": "Desarrollador de software. Me importa el porqué, no solo el cómo.",
     "quote": "\"Si puedes imaginarlo, puedes programarlo\"",
     "quoteAuthor": "Alejandro Taboada Sánchez",
     "viewProjects": "Ver proyectos",

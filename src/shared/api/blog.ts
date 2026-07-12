@@ -45,11 +45,36 @@ export type BlogTagWithCount = {
   articleCount: number;
 };
 
-export async function fetchBlogArticles(page = 1, limit = 12, tag?: string, projectId?: string) {
+export const BLOG_SORT = {
+  DISCOVER: 'discover',
+  RECENT: 'recent',
+} as const;
+
+export type BlogSort = (typeof BLOG_SORT)[keyof typeof BLOG_SORT];
+
+export const ARTICLE_INTERACTION = {
+  OPEN: 'open',
+  QUALIFIED_READ: 'qualified-read',
+} as const;
+
+export type ArticleInteraction = (typeof ARTICLE_INTERACTION)[keyof typeof ARTICLE_INTERACTION];
+
+export async function fetchBlogArticles(
+  page = 1,
+  limit = 12,
+  tag?: string,
+  projectId?: string,
+  sort: BlogSort = BLOG_SORT.DISCOVER,
+) {
   const params = new URLSearchParams({ page: String(page), limit: String(limit) });
   if (tag) params.set('tag', tag);
   if (projectId) params.set('projectId', projectId);
+  params.set('sort', sort);
   return apiRequest<BlogArticlesResponse>(`/public/blog/articles?${params}`);
+}
+
+export async function fetchBlogHomeArticles() {
+  return apiRequest<BlogArticleSummary[]>('/public/blog/articles/home');
 }
 
 export async function fetchBlogFeatured() {
@@ -62,4 +87,15 @@ export async function fetchBlogArticleBySlug(slug: string) {
 
 export async function fetchBlogTags() {
   return apiRequest<BlogTagWithCount[]>('/public/blog/tags');
+}
+
+export async function trackBlogInteraction(
+  articleId: string,
+  type: ArticleInteraction,
+  readDurationSeconds?: number,
+) {
+  return apiRequest<void>(`/public/blog/articles/${articleId}/interactions`, {
+    method: 'POST',
+    body: { type, readDurationSeconds },
+  });
 }

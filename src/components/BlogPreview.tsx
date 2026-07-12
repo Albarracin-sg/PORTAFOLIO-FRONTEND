@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ArrowRight, Clock, Tag } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
-import { fetchBlogArticles } from '@/shared/api/blog';
+import { fetchBlogHomeArticles } from '@/shared/api/blog';
 import { useLocalStorageSWR } from '@/shared/hooks/useLocalStorageSWR';
 import type { I18nText } from '@/shared/api/blog';
 
@@ -21,12 +21,13 @@ function formatDate(dateStr: string | null, locale: string): string {
 
 export function BlogPreview() {
   const { t, i18n } = useTranslation();
+  const discoveryDay = new Date().toISOString().slice(0, 10);
   const { data: articlesData } = useLocalStorageSWR(
-    'blog-latest-preview',
-    () => fetchBlogArticles(1, 3),
+    `blog-home-preview-${discoveryDay}`,
+    fetchBlogHomeArticles,
   );
 
-  const articles = articlesData?.data;
+  const articles = articlesData;
   if (!articles || articles.length === 0) return null;
 
   return (
@@ -55,7 +56,7 @@ export function BlogPreview() {
           </Button>
         </div>
 
-        {/* Latest articles grid */}
+        {/* Ranked and exploratory articles grid */}
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {articles.map((article) => (
             <Link key={article.id} to={`/blog/${article.slug}`} className="group">

@@ -32,6 +32,15 @@
       "critical": "Critical"
     }
   },
+  "mermaid": {
+    "copy": "Copy",
+    "copied": "Copied!",
+    "copyTitle": "Copy diagram source",
+    "copySuccess": "Diagram copied to clipboard"
+  },
+  "codeBlock": {
+    "copySuccess": "Code copied to clipboard"
+  },
   "spotify": {
     "notListening": "I'm not listening to anything right now.",
     "comeBackLater": "Come back later to see my musical activity.",
@@ -80,7 +89,12 @@
     "all": "All",
     "showMoreFilters": "Show more filters",
     "showLessFilters": "Show fewer filters",
-    "less": "Less"
+    "less": "Less",
+    "sortBy": "Sort by",
+    "sort": {
+      "discover": "Discover",
+      "recent": "Most recent"
+    }
   },
   "blogPreview": {
     "title": "Blog",
@@ -92,7 +106,7 @@
   },
   "hero": {
     "greeting": "Hello, I'm Juan Albarracín",
-    "tagline": "I build solutions where technology meets purpose",
+    "tagline": "Software Developer. I care about the why, not just the how.",
     "quote": "\"If you can imagine it, you can program it\"",
     "quoteAuthor": "Alejandro Taboada Sánchez",
     "viewProjects": "View projects",

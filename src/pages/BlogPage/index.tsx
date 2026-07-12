@@ -6,7 +6,7 @@ import { ArrowLeft, BookOpen, ChevronDown, ChevronUp, Newspaper, X } from "lucid
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { fetchBlogArticles, fetchBlogTags } from "@/shared/api/blog";
+import { BLOG_SORT, fetchBlogArticles, fetchBlogTags, type BlogSort } from "@/shared/api/blog";
 import { useLocalStorageSWR } from "@/shared/hooks/useLocalStorageSWR";
 import { commonFormatters } from "@/shared/utils/formatters";
 import { usePageSeo } from "@/shared/seo/usePageSeo";
@@ -26,11 +26,15 @@ export function BlogPage() {
 
   const [page, setPage] = useState(1);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
+  const [sort, setSort] = useState<BlogSort>(BLOG_SORT.DISCOVER);
   const [expandedFilters, setExpandedFilters] = useState(false);
 
   const { data: articlesData, isLoading: articlesLoading } = useLocalStorageSWR(
-    `blog-articles-${page}-${selectedTag ?? "all"}`,
-    useCallback(() => fetchBlogArticles(page, 12, selectedTag ?? undefined), [page, selectedTag]),
+    `blog-articles-${sort}-${page}-${selectedTag ?? "all"}`,
+    useCallback(
+      () => fetchBlogArticles(page, 12, selectedTag ?? undefined, undefined, sort),
+      [page, selectedTag, sort],
+    ),
   );
 
   const { data: tags, isLoading: tagsLoading } = useLocalStorageSWR<BlogTagWithCount[]>(
@@ -123,6 +127,19 @@ export function BlogPage() {
           </p>
         </div>
       </div>
+
+          <div className="mb-4 flex justify-end">
+            <label className="sr-only" htmlFor="blog-sort">{t("blogPage.sortBy")}</label>
+            <select
+              id="blog-sort"
+              value={sort}
+              onChange={(event) => { setSort(event.target.value as BlogSort); setPage(1); }}
+              className="rounded-lg border border-zinc-200 bg-white px-2 py-1 text-[11px] font-medium text-zinc-600 outline-none transition-colors hover:border-violet-300 dark:border-white/10 dark:bg-zinc-950 dark:text-zinc-400"
+            >
+              <option value={BLOG_SORT.DISCOVER}>{t("blogPage.sort.discover")}</option>
+              <option value={BLOG_SORT.RECENT}>{t("blogPage.sort.recent")}</option>
+            </select>
+          </div>
 
       {articlesLoading || tagsLoading ? (
         <BlogSkeleton />

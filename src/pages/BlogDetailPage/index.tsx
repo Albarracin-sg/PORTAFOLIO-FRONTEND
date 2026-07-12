@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Markdown } from "@/components/ui/markdown";
-import { fetchBlogArticleBySlug } from "@/shared/api/blog";
+import { ARTICLE_INTERACTION, fetchBlogArticleBySlug, trackBlogInteraction } from "@/shared/api/blog";
 import { fetchDiagramsByProject, type Diagram } from "@/shared/api/diagrams";
 import { useLocalStorageSWR } from "@/shared/hooks/useLocalStorageSWR";
 import { commonFormatters } from "@/shared/utils/formatters";
@@ -141,6 +141,39 @@ export function BlogDetailPage() {
     }
   }, [article?.projectId]);
 
+  useEffect(() => {
+    if (!article) return;
+
+    const startedAt = Date.now();
+    let qualifiedReadRecorded = false;
+
+    void trackBlogInteraction(article.id, ARTICLE_INTERACTION.OPEN).catch(() => {});
+
+    const recordQualifiedRead = () => {
+      if (qualifiedReadRecorded) return;
+
+      const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollProgress = scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0;
+      const readDurationSeconds = Math.floor((Date.now() - startedAt) / 1000);
+
+      if (scrollProgress < 0.6 || readDurationSeconds < 20) return;
+
+      qualifiedReadRecorded = true;
+      void trackBlogInteraction(
+        article.id,
+        ARTICLE_INTERACTION.QUALIFIED_READ,
+        Math.min(readDurationSeconds, 3600),
+      ).catch(() => {});
+    };
+
+    const timer = window.setInterval(recordQualifiedRead, 1000);
+    window.addEventListener('scroll', recordQualifiedRead, { passive: true });
+
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener('scroll', recordQualifiedRead);
+    };
+  }, [article]);
   const articleContent = useMemo(() => {
     if (!article?.content) return null;
     return resolveLocale(article.content, i18n.language);

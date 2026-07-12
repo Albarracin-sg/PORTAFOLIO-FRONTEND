@@ -127,11 +127,11 @@ export function SpotifyNowPlayingCard() {
       href={track.url}
       target="_blank"
       rel="noreferrer"
-      className="group relative block w-full overflow-hidden rounded-xl border border-zinc-200/60 bg-white/40 p-3.5 transition-all duration-300 hover:border-violet-300/50 hover:bg-white/60 sm:p-3 dark:border-white/[0.06] dark:bg-white/[0.03] dark:hover:border-violet-400/20 dark:hover:bg-white/[0.06]"
+      className="group relative block w-full overflow-hidden rounded-xl border border-zinc-200/60 bg-white/40 p-3.5 transition-all duration-300 hover:border-violet-300/50 hover:bg-white/60 sm:p-3 lg:p-4 dark:border-white/[0.06] dark:bg-white/[0.03] dark:hover:border-violet-400/20 dark:hover:bg-white/[0.06]"
     >
       <div className="flex items-center gap-3">
         {/* Album art */}
-        <div className="relative size-20 shrink-0 overflow-hidden rounded-lg ring-1 ring-zinc-900/5 sm:size-10 dark:ring-white/[0.08]">
+        <div className="relative size-20 shrink-0 overflow-hidden rounded-lg ring-1 ring-zinc-900/5 sm:size-10 lg:size-20 dark:ring-white/[0.08]">
           <img
             src={imageUrl}
             alt={`Portada de ${track.album}`}

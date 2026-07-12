@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, useId, useCallback } from "react";
 import mermaid from "mermaid";
 import { useTheme } from "@/features/theme";
+import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { cn } from "./utils";
 
 interface MermaidDiagramProps {
@@ -13,6 +15,7 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const { isDark } = useTheme();
+  const { t } = useTranslation();
   const reactId = useId();
   const diagramId = `mermaid-${reactId.replace(/:/g, "m")}`;
 
@@ -20,11 +23,12 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
     try {
       await navigator.clipboard.writeText(code.trim());
       setCopied(true);
+      toast.success(t("mermaid.copySuccess"));
       setTimeout(() => setCopied(false), 2000);
     } catch {
       // Clipboard API may fail in some contexts
     }
-  }, [code]);
+  }, [code, t]);
 
   useEffect(() => {
     if (!code.trim() || !containerRef.current) return;
@@ -67,8 +71,8 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
       <div className="relative group my-4">
         <button
           onClick={handleCopy}
-          className="absolute top-2.5 right-2.5 flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] font-medium opacity-0 transition-all duration-200 group-hover:opacity-100 hover:scale-105 active:scale-95 border-black/8 bg-white/80 text-zinc-500 hover:text-zinc-800 dark:border-white/10 dark:bg-zinc-800/80 dark:text-zinc-400 dark:hover:text-zinc-200 backdrop-blur-sm"
-          title="Copy mermaid source"
+          className="absolute top-2.5 right-2.5 flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] font-medium sm:opacity-0 transition-all duration-200 group-hover:opacity-100 hover:scale-105 active:scale-95 border-black/8 bg-white/80 text-zinc-500 hover:text-zinc-800 dark:border-white/10 dark:bg-zinc-800/80 dark:text-zinc-400 dark:hover:text-zinc-200 backdrop-blur-sm z-10"
+          title={t("mermaid.copyTitle")}
         >
           {copied ? (
             <svg className="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
@@ -79,7 +83,6 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
             </svg>
           )}
-          {copied ? "Copied!" : "Copy"}
         </button>
         <pre className="overflow-x-auto rounded-lg border border-red-500/30 bg-red-500/5 p-4 text-sm dark:border-red-400/20 dark:bg-red-400/5">
           <code className="text-red-600 dark:text-red-400">{code}</code>
@@ -98,19 +101,18 @@ export function MermaidDiagram({ code, className }: MermaidDiagramProps) {
     >
       <button
         onClick={handleCopy}
-        className="absolute top-2.5 right-2.5 flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] font-medium opacity-0 transition-all duration-200 group-hover:opacity-100 hover:scale-105 active:scale-95 border-black/8 bg-white/80 text-zinc-500 hover:text-zinc-800 dark:border-white/10 dark:bg-zinc-800/80 dark:text-zinc-400 dark:hover:text-zinc-200 backdrop-blur-sm z-10"
-        title="Copy mermaid source"
+        className="absolute top-2.5 right-2.5 flex items-center rounded-md border p-1.5 sm:opacity-0 transition-all duration-200 group-hover:opacity-100 hover:scale-105 active:scale-95 border-black/8 bg-white/80 text-zinc-500 hover:text-zinc-800 dark:border-white/10 dark:bg-zinc-800/80 dark:text-zinc-400 dark:hover:text-zinc-200 backdrop-blur-sm z-10"
+        title={t("mermaid.copyTitle")}
       >
         {copied ? (
-          <svg className="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <svg className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
           </svg>
         ) : (
-          <svg className="size-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+          <svg className="size-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
           </svg>
         )}
-        {copied ? "Copied!" : "Copy"}
       </button>
       <div ref={containerRef} className="w-full min-w-0 [&>svg]:max-w-full [&>svg]:h-auto" />
     </div>
