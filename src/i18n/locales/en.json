@@ -105,8 +105,8 @@
     "architecture": "Architecture"
   },
   "hero": {
-    "greeting": "Juan Camilo Albarracín's Portfolio",
-    "tagline": "Software engineer specializing in backend development, APIs, microservices, and AI integrations.",
+    "greeting": "Hello, I'm Juan Albarracín",
+    "tagline": "Software Developer. I care about the why, not just the how.",
     "quote": "\"If you can imagine it, you can program it\"",
     "quoteAuthor": "Alejandro Taboada Sánchez",
     "viewProjects": "View projects",

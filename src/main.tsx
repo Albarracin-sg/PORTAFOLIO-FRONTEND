@@ -8,9 +8,9 @@ import { EditModeProvider } from '@/features/admin/EditModeProvider';
 import App from './App';
 import './styles/index.css';
 
-document.getElementById('initial-loader')?.remove();
+const rootElement = document.getElementById('root');
 
-createRoot(document.getElementById('root')!).render(
+createRoot(rootElement!).render(
   <BrowserRouter>
     <ThemeProvider>
       <LanguageProvider>
@@ -23,3 +23,8 @@ createRoot(document.getElementById('root')!).render(
     </ThemeProvider>
   </BrowserRouter>
 );
+
+requestAnimationFrame(() => {
+  rootElement?.classList.add('is-app-ready');
+  document.getElementById('initial-loader')?.remove();
+});

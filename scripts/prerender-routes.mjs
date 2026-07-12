@@ -4,7 +4,7 @@ import path from 'node:path';
 const ROOT = process.cwd();
 const BUILD_DIR = path.join(ROOT, 'build');
 const DEFAULT_SITE_URL = 'https://jcalbarracin.vercel.app';
-const DEFAULT_OG_IMAGE = `${DEFAULT_SITE_URL}/opengraph-image.svg`;
+const DEFAULT_OG_IMAGE = `${DEFAULT_SITE_URL}/opengraph-image.png`;
 
 // ---------------------------------------------------------------------------
 // Env loading

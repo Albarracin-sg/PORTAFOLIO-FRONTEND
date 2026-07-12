@@ -105,8 +105,8 @@
     "architecture": "Arquitectura"
   },
   "hero": {
-    "greeting": "Portafolio de Juan Camilo Albarracín",
-    "tagline": "Ingeniero de software especializado en backend, APIs, microservicios e integraciones de inteligencia artificial.",
+    "greeting": "Hola, soy Juan Albarracín",
+    "tagline": "Desarrollador de software. Me importa el porqué, no solo el cómo.",
     "quote": "\"Si puedes imaginarlo, puedes programarlo\"",
     "quoteAuthor": "Alejandro Taboada Sánchez",
     "viewProjects": "Ver proyectos",

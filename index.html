@@ -42,13 +42,13 @@
   <link rel="icon" type="image/png" href="/logo.webp" />
 
   <!-- Open Graph Image -->
-  <meta property="og:image" content="https://jcalbarracin.vercel.app/opengraph-image.svg" />
-  <meta property="og:image:type" content="image/svg+xml" />
+  <meta property="og:image" content="https://jcalbarracin.vercel.app/opengraph-image.png" />
+  <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
 
   <!-- Twitter Card Image -->
-  <meta name="twitter:image" content="https://jcalbarracin.vercel.app/opengraph-image.svg" />
+  <meta name="twitter:image" content="https://jcalbarracin.vercel.app/opengraph-image.png" />
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -60,7 +60,7 @@
     "name": "Juan Camilo Albarracín",
     "alternateName": ["Juan Albarracín", "Juan Camilo Albarracin", "Juan Albarracin"],
     "url": "https://jcalbarracin.vercel.app/",
-    "image": "https://jcalbarracin.vercel.app/opengraph-image.svg",
+    "image": "https://jcalbarracin.vercel.app/opengraph-image.png",
     "jobTitle": "Backend Software Engineer",
     "description": "Backend Engineer especializado en sistemas distribuidos e integraciones de IA.",
     "address": {
@@ -131,6 +131,8 @@
   <noscript><style>#initial-loader{display:none!important}</style></noscript>
   <style>
     html.dark #root > div { background: #09090b !important; }
+    /* Static semantic content is for crawlers. Keep it hidden until React owns #root. */
+    #root:not(.is-app-ready) { visibility: hidden; }
     #initial-loader { position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:#09090b;pointer-events:none;animation:boot-loader-exit .2s ease 3s forwards; }
     #initial-loader img { width:min(58vw,320px);height:auto;animation:boot-loader-pulse 1.4s ease-in-out infinite; }
     @keyframes boot-loader-pulse { 50% { transform:scale(.94);opacity:.72; } }
