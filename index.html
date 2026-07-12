@@ -5,8 +5,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Juan Camilo Albarracin | Portafolio Full-Stack Backend e IA</title>
-  <meta name="description" content="Portafolio de Juan Camilo Albarracin Urrego. Full-Stack Engineer con foco en backend, microservicios, NestJS, DDD, CQRS, arquitectura distribuida e integracion de IA y MCP en Bogota, Colombia." />
+  <title>Juan Camilo Albarracin | Backend Engineer</title>
+  <meta name="description" content="Backend Engineer especializado en sistemas distribuidos e integraciones de IA con foco en mantenibilidad, observabilidad y despliegue en producción." />
   <meta name="keywords" content="juan camilo albarracin, juan camilo albarracín, albarracin portafolio, portafolio backend, backend engineer, full-stack developer, microservices, NestJS, Node.js, MCP, AI integration, DDD, Clean Architecture, Colombia" />
   <meta name="author" content="Juan Camilo Albarracín Urrego" />
   <meta name="robots" content="index, follow" />
@@ -15,8 +15,8 @@
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Juan Camilo Albarracin | Portafolio Full-Stack Backend e IA" />
-  <meta property="og:description" content="Portafolio de Juan Camilo Albarracin. Backend, microservicios, NestJS, arquitectura distribuida, automatizacion e integracion de IA y MCP." />
+  <meta property="og:title" content="Juan Camilo Albarracin | Backend Engineer" />
+  <meta property="og:description" content="Sistemas distribuidos e integraciones de IA con foco en mantenibilidad, observabilidad y despliegue en producción." />
   <meta property="og:url" content="https://jcalbarracin.vercel.app/" />
   <meta property="og:site_name" content="Portfolio - Juan Camilo Albarracín" />
   <meta property="og:locale" content="es_CO" />
@@ -24,8 +24,8 @@
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Juan Camilo Albarracin | Portafolio Full-Stack Backend e IA" />
-  <meta name="twitter:description" content="Portafolio profesional de Juan Camilo Albarracin. Backend, microservicios, arquitectura distribuida e IA aplicada." />
+  <meta name="twitter:title" content="Juan Camilo Albarracin | Backend Engineer" />
+  <meta name="twitter:description" content="Sistemas distribuidos e integraciones de IA con foco en mantenibilidad, observabilidad y despliegue en producción." />
   <meta name="twitter:creator" content="@Albarracin_sg" />
 
   <!-- Preconnect for external resources -->
@@ -42,25 +42,27 @@
   <link rel="icon" type="image/png" href="/logo.webp" />
 
   <!-- Open Graph Image -->
-  <meta property="og:image" content="https://jcalbarracin.vercel.app/logo.png" />
-  <meta property="og:image:type" content="image/png" />
-  <meta property="og:image:width" content="512" />
-  <meta property="og:image:height" content="512" />
+  <meta property="og:image" content="https://jcalbarracin.vercel.app/opengraph-image.svg" />
+  <meta property="og:image:type" content="image/svg+xml" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
 
   <!-- Twitter Card Image -->
-  <meta name="twitter:image" content="https://jcalbarracin.vercel.app/logo.png" />
+  <meta name="twitter:image" content="https://jcalbarracin.vercel.app/opengraph-image.svg" />
 
   <!-- Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "mainEntity": {
     "@type": "Person",
     "name": "Juan Camilo Albarracín Urrego",
     "alternateName": ["Juan Albarracín", "Juan Camilo Albarracin", "Juan Albarracin"],
     "url": "https://jcalbarracin.vercel.app/",
-    "image": "https://jcalbarracin.vercel.app/logo.png",
-    "jobTitle": "Full-Stack Engineer (Backend Focus)",
-    "description": "Portafolio de Juan Camilo Albarracin, Full-Stack Engineer especializado en microservicios, DDD, CQRS y orquestacion de IA con MCP.",
+    "image": "https://jcalbarracin.vercel.app/opengraph-image.svg",
+    "jobTitle": "Backend Engineer",
+    "description": "Backend Engineer especializado en sistemas distribuidos e integraciones de IA.",
     "address": {
       "@type": "PostalAddress",
       "addressLocality": "Bogotá",
@@ -86,6 +88,7 @@
       "https://www.linkedin.com/in/juan-camilo-albarracin-urrego",
       "https://twitter.com/Albarracin_sg"
     ]
+    }
   }
   </script>
 
@@ -113,26 +116,24 @@
 </head>
 
 <body>
-  <div id="root">
-    <div
-      role="status"
-      aria-label="Cargando portafolio"
-      style="min-height:100vh;display:grid;place-items:center;background:#fafafa"
-    >
-      <img
-        src="/src/assets/looading.png"
-        alt=""
-        width="320"
-        height="320"
-        style="width:min(58vw,320px);height:auto;animation:boot-loader-pulse 1.4s ease-in-out infinite"
-      />
-    </div>
+  <div id="initial-loader" aria-hidden="true">
+    <img src="/src/assets/looading.png" alt="" width="320" height="320" />
   </div>
+  <div id="root">
+    <main style="max-width:960px;margin:0 auto;padding:48px 20px;font-family:Roboto,system-ui,sans-serif;line-height:1.6;color:#18181b">
+      <p style="margin:0 0 8px;color:#6d28d9;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Portafolio profesional</p>
+      <h1 style="margin:0 0 16px;font-size:clamp(2rem,5vw,3.5rem);line-height:1.1">Juan Camilo Albarracín — Backend Engineer</h1>
+      <p style="margin:0;font-size:1.05rem;color:#52525b">Diseño sistemas distribuidos e integraciones de IA con foco en mantenibilidad, observabilidad y despliegue en producción.</p>
+      <nav aria-label="Enlaces principales" style="display:flex;gap:16px;flex-wrap:wrap;margin-top:24px"><a href="/projects">Ver casos de estudio</a><a href="/blog">Leer artículos técnicos</a></nav>
+    </main>
+  </div>
+  <noscript><style>#initial-loader{display:none!important}</style></noscript>
   <style>
     html.dark #root > div { background: #09090b !important; }
-    @keyframes boot-loader-pulse {
-      50% { transform: scale(.94); opacity: .72; }
-    }
+    #initial-loader { position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:#09090b;pointer-events:none;animation:boot-loader-exit .2s ease 3s forwards; }
+    #initial-loader img { width:min(58vw,320px);height:auto;animation:boot-loader-pulse 1.4s ease-in-out infinite; }
+    @keyframes boot-loader-pulse { 50% { transform:scale(.94);opacity:.72; } }
+    @keyframes boot-loader-exit { to { opacity:0;visibility:hidden; } }
   </style>
   <script type="module" src="/src/main.tsx"></script>
 </body>

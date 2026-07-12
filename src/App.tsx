@@ -30,7 +30,8 @@ function PageFallback() {
     <div className="min-h-[60vh] flex flex-col items-center justify-center gap-4">
       <img
         src={loadingImg}
-        alt="Loading"
+        alt=""
+        aria-hidden="true"
         className="w-16 h-16 sm:w-20 sm:h-20 object-contain animate-pulse"
       />
       <div className="flex gap-1.5">

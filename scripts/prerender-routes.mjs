@@ -4,6 +4,7 @@ import path from 'node:path';
 const ROOT = process.cwd();
 const BUILD_DIR = path.join(ROOT, 'build');
 const DEFAULT_SITE_URL = 'https://jcalbarracin.vercel.app';
+const DEFAULT_OG_IMAGE = `${DEFAULT_SITE_URL}/opengraph-image.svg`;
 
 // ---------------------------------------------------------------------------
 // Env loading
@@ -82,6 +83,20 @@ async function safeJsonFetch(url, retries = 2) {
   return null;
 }
 
+function localizedText(value, field, fallback) {
+  if (typeof value === 'string' && value.trim()) return value.trim();
+
+  if (value && typeof value === 'object' && !Array.isArray(value)) {
+    for (const locale of ['es', 'en']) {
+      const candidate = value[locale];
+      if (typeof candidate === 'string' && candidate.trim()) return candidate.trim();
+    }
+  }
+
+  if (fallback) return fallback;
+  throw new TypeError(`${field} must be a non-empty string or localized text record`);
+}
+
 // ---------------------------------------------------------------------------
 // Route collection
 // ---------------------------------------------------------------------------
@@ -90,21 +105,21 @@ async function collectRoutes(apiUrl) {
   const routes = [
     {
       path: '/',
-      title: 'Juan Camilo Albarracin | Portafolio Full-Stack Backend e IA',
+      title: 'Juan Camilo Albarracin | Backend Engineer',
       description:
-        'Portafolio de Juan Camilo Albarracin Urrego. Full-Stack Engineer con foco en backend, microservicios, NestJS, DDD, CQRS, arquitectura distribuida e integracion de IA y MCP en Bogota, Colombia.',
+        'Backend Engineer especializado en sistemas distribuidos e integraciones de IA, con foco en mantenibilidad, observabilidad y despliegue en producción.',
     },
     {
       path: '/projects',
-      title: 'Proyectos | Juan Camilo Albarracin',
+      title: 'Proyectos Backend e IA | Juan Camilo Albarracin',
       description:
-        'Proyectos de desarrollo backend, microservicios e integracion de IA de Juan Camilo Albarracin. NestJS, Node.js, TypeScript, Docker.',
+        'Casos de estudio sobre APIs, microservicios, automatización e integración de IA desarrollados con NestJS, TypeScript, PostgreSQL y Docker.',
     },
     {
       path: '/blog',
-      title: 'Blog | Juan Camilo Albarracin',
+      title: 'Blog de Backend, Microservicios e IA | Juan Camilo Albarracin',
       description:
-        'Blog de Juan Camilo Albarracin. Articulos sobre backend, microservicios, NestJS, arquitectura distribuida e integracion de IA.',
+        'Artículos técnicos sobre NestJS, arquitectura backend, sistemas distribuidos, PostgreSQL, observabilidad e integración segura de IA.',
     },
     {
       path: '/stats',
@@ -121,12 +136,28 @@ async function collectRoutes(apiUrl) {
   }
   for (const project of projects ?? []) {
     if (!project?.id) continue;
+    const projectName = localizedText(project.name, `project ${project.id} name`, 'Proyecto');
+    const projectDescription = localizedText(
+      project.description,
+      `project ${project.id} description`,
+      'Proyecto de Juan Camilo Albarracin.',
+    );
     routes.push({
       path: `/projects/${project.id}`,
-      title: `${project.name || 'Proyecto'} | Juan Camilo Albarracin`,
-      description:
-        project.description || `Proyecto de Juan Camilo Albarracin.`,
+      title: `${projectName} | Juan Camilo Albarracin`,
+      description: projectDescription,
+      heading: projectName,
     });
+  }
+  const projectsRoute = routes.find((route) => route.path === '/projects');
+  if (projectsRoute) {
+    projectsRoute.items = (projects ?? [])
+      .filter((project) => project?.id)
+      .map((project) => ({
+        href: `/projects/${project.id}`,
+        title: localizedText(project.name, `project ${project.id} name`, 'Proyecto'),
+        description: localizedText(project.description, `project ${project.id} description`, ''),
+      }));
   }
 
   // Dynamic: blog articles (paginated)
@@ -147,14 +178,35 @@ async function collectRoutes(apiUrl) {
 
   for (const article of articles) {
     if (!article?.slug) continue;
+    const articleDetail = await safeJsonFetch(`${apiUrl}/public/blog/articles/${article.slug}`);
+    const articleContent = articleDetail?.content ?? articleDetail?.data?.content;
+    const articleTitle = localizedText(article.title, `article ${article.slug} title`, 'Artículo');
+    const articleDescription = localizedText(
+      article.excerpt ?? article.metaDescription,
+      `article ${article.slug} description`,
+      'Artículo técnico por Juan Camilo Albarracin.',
+    );
     routes.push({
       path: `/blog/${article.slug}`,
-      title: `${article.title || 'Articulo'} | Juan Camilo Albarracin`,
-      description:
-        article.excerpt ||
-        article.metaDescription ||
-        `Articulo por Juan Camilo Albarracin.`,
+      title: `${articleTitle} | Juan Camilo Albarracin`,
+      description: articleDescription,
+      heading: articleTitle,
+      type: 'article',
+      publishedTime: typeof article.publishedAt === 'string' ? article.publishedAt : undefined,
+      body: articleContent
+        ? localizedText(articleContent, `article ${article.slug} content`)
+        : '',
     });
+  }
+  const blogRoute = routes.find((route) => route.path === '/blog');
+  if (blogRoute) {
+    blogRoute.items = articles
+      .filter((article) => article?.slug)
+      .map((article) => ({
+        href: `/blog/${article.slug}`,
+        title: localizedText(article.title, `article ${article.slug} title`, 'Artículo'),
+        description: localizedText(article.excerpt ?? article.metaDescription, `article ${article.slug} description`, ''),
+      }));
   }
 
   return routes;
@@ -164,8 +216,9 @@ async function collectRoutes(apiUrl) {
 // HTML generation
 // ---------------------------------------------------------------------------
 
-function escapeHtml(str) {
-  return String(str ?? '')
+function escapeHtml(value) {
+  const str = localizedText(value, 'HTML content', '');
+  return str
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
     .replaceAll('>', '&gt;')
@@ -174,9 +227,17 @@ function escapeHtml(str) {
 }
 
 function generateRouteContent(route) {
-  if (route.path === '/') return null;
-
-  const heading = String(route.title ?? '').split('|')[0].trim();
+  const heading = route.heading ?? localizedText(route.title, 'route title').split('|')[0].trim();
+  const body = route.body
+    ? `<section aria-label="Contenido del artículo" style="margin-top:40px"><h2 style="font-size:1.5rem">Artículo</h2><div style="white-space:pre-wrap">${escapeHtml(route.body)}</div></section>`
+    : '';
+  const items = route.items?.length
+    ? `<section aria-label="Contenido publicado" style="margin-top:40px"><h2 style="font-size:1.5rem">Contenido publicado</h2><ul style="padding-left:20px">${route.items
+        .map(
+          (item) => `<li style="margin:16px 0"><a href="${escapeHtml(item.href)}"><strong>${escapeHtml(item.title)}</strong></a><p style="margin:4px 0;color:#52525b">${escapeHtml(item.description)}</p></li>`,
+        )
+        .join('')}</ul></section>`
+    : '';
 
   return `
     <main style="max-width:960px;margin:0 auto;padding:48px 20px;font-family:Inter,system-ui,sans-serif;line-height:1.6;color:#18181b">
@@ -189,8 +250,40 @@ function generateRouteContent(route) {
           <a href="/projects">Proyectos</a>
           <a href="/blog">Blog</a>
         </nav>
-      </header>
-    </main>`;
+       </header>
+       ${body}
+       ${items}
+     </main>`;
+}
+
+function generateStructuredData(route, canonical) {
+  const breadcrumb = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: new URL('/', canonical).toString() },
+      { '@type': 'ListItem', position: 2, name: route.heading ?? route.title, item: canonical },
+    ],
+  };
+  const data = route.type === 'article'
+    ? [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: route.heading,
+          description: route.description,
+          image: DEFAULT_OG_IMAGE,
+          datePublished: route.publishedTime,
+          author: { '@type': 'Person', name: 'Juan Camilo Albarracín' },
+          mainEntityOfPage: canonical,
+        },
+        breadcrumb,
+      ]
+    : [breadcrumb];
+
+  return data
+    .map((entry) => `<script type="application/ld+json">${JSON.stringify(entry).replaceAll('</script>', '<\\/script>')}</script>`)
+    .join('');
 }
 
 function generateRouteHtml(template, route, siteUrl) {
@@ -204,6 +297,15 @@ function generateRouteHtml(template, route, siteUrl) {
     /<title>[^<]*<\/title>/,
     `<title>${escapedTitle}</title>`,
   );
+
+  html = html.replace(
+    /<meta\s+property="og:image"\s+content="[^"]*"\s*\/?>/,
+    `<meta property="og:image" content="${DEFAULT_OG_IMAGE}" />`,
+  );
+  html = html.replace(
+    /<meta\s+name="twitter:image"\s+content="[^"]*"\s*\/?>/,
+    `<meta name="twitter:image" content="${DEFAULT_OG_IMAGE}" />`,
+  );
   html = html.replace(
     /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/,
     `<meta name="description" content="${escapedDesc}" />`,
@@ -215,6 +317,10 @@ function generateRouteHtml(template, route, siteUrl) {
   html = html.replace(
     /<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/,
     `<meta property="og:title" content="${escapedTitle}" />`,
+  );
+  html = html.replace(
+    /<meta\s+property="og:type"\s+content="[^"]*"\s*\/?>/,
+    `<meta property="og:type" content="${route.type === 'article' ? 'article' : 'website'}" />`,
   );
   html = html.replace(
     /<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/,
@@ -234,12 +340,11 @@ function generateRouteHtml(template, route, siteUrl) {
   );
 
   const routeContent = generateRouteContent(route);
-  if (routeContent) {
-    // Keep the shared home loader inside #root for every hard refresh.
-    // Route-specific metadata remains in <head>; semantic content serves
-    // no-JavaScript crawlers without flashing a raw HTML preview to users.
-    html = html.replace('</body>', `<noscript>${routeContent}</noscript></body>`);
-  }
+  html = html.replace(
+    /<div id="root">[\s\S]*?<\/div>\s*<noscript>/,
+    `<div id="root">${routeContent}</div><noscript>`,
+  );
+  html = html.replace('</body>', `${generateStructuredData(route, canonical)}</body>`);
 
   return html;
 }
@@ -270,11 +375,6 @@ async function main() {
   let skipped = 0;
 
   for (const route of routes) {
-    if (route.path === '/') {
-      skipped++;
-      continue;
-    }
-
     const html = generateRouteHtml(template, route, siteUrl);
     const filePath = path.join(BUILD_DIR, route.path, 'index.html');
 
@@ -284,7 +384,7 @@ async function main() {
   }
 
   console.log(
-    `[prerender] Generated ${generated} route shells, skipped ${skipped} (homepage kept as-is)`,
+    `[prerender] Generated ${generated} static route shells, skipped ${skipped}`,
   );
 }
 

@@ -20,9 +20,9 @@ export const DEFAULT_SITE_URL = pickPublicSiteUrl(
   import.meta.env.NEXT_PUBLIC_SITE_URL,
 );
 
-export const SITE_NAME = 'Juan Camilo Albarracin | Portafolio Backend';
+export const SITE_NAME = 'Juan Camilo Albarracín | Backend Engineer';
 export const BRAND_NAME = 'Juan Camilo Albarracin';
-export const DEFAULT_OG_IMAGE = `${DEFAULT_SITE_URL}/logo.png`;
+export const DEFAULT_OG_IMAGE = `${DEFAULT_SITE_URL}/opengraph-image.svg`;
 
 export function absoluteUrl(path = '/') {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;

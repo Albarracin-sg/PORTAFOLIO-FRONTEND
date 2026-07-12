@@ -8,6 +8,8 @@ import { EditModeProvider } from '@/features/admin/EditModeProvider';
 import App from './App';
 import './styles/index.css';
 
+document.getElementById('initial-loader')?.remove();
+
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <ThemeProvider>

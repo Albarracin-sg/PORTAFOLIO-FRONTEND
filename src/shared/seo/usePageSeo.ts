@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { absoluteUrl, BRAND_NAME, DEFAULT_OG_IMAGE, SITE_NAME } from './config';
+import { requireSeoString } from './requireString';
 
 type SeoOptions = {
   title: string;
@@ -47,13 +48,15 @@ export function usePageSeo({
   publishedTime,
 }: SeoOptions) {
   useEffect(() => {
+    const seoTitle = requireSeoString(title, 'SEO title');
+    const seoDescription = requireSeoString(description, 'SEO description');
     const canonical = absoluteUrl(path);
-    const fullTitle = title.includes(BRAND_NAME) ? title : `${title} | ${BRAND_NAME}`;
+    const fullTitle = seoTitle.includes(BRAND_NAME) ? seoTitle : `${seoTitle} | ${BRAND_NAME}`;
 
     document.title = fullTitle;
     document.documentElement.setAttribute('lang', 'es');
 
-    upsertMeta('meta[name="description"]', { name: 'description', content: description });
+    upsertMeta('meta[name="description"]', { name: 'description', content: seoDescription });
     upsertMeta('meta[name="robots"]', { name: 'robots', content: robots });
     upsertMeta('meta[name="author"]', { name: 'author', content: BRAND_NAME });
 
@@ -65,14 +68,14 @@ export function usePageSeo({
 
     upsertMeta('meta[property="og:type"]', { property: 'og:type', content: type === 'article' ? 'article' : 'website' });
     upsertMeta('meta[property="og:title"]', { property: 'og:title', content: fullTitle });
-    upsertMeta('meta[property="og:description"]', { property: 'og:description', content: description });
+    upsertMeta('meta[property="og:description"]', { property: 'og:description', content: seoDescription });
     upsertMeta('meta[property="og:url"]', { property: 'og:url', content: canonical });
     upsertMeta('meta[property="og:site_name"]', { property: 'og:site_name', content: SITE_NAME });
     upsertMeta('meta[property="og:image"]', { property: 'og:image', content: image });
 
     upsertMeta('meta[name="twitter:card"]', { name: 'twitter:card', content: 'summary_large_image' });
     upsertMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: fullTitle });
-    upsertMeta('meta[name="twitter:description"]', { name: 'twitter:description', content: description });
+    upsertMeta('meta[name="twitter:description"]', { name: 'twitter:description', content: seoDescription });
     upsertMeta('meta[name="twitter:image"]', { name: 'twitter:image', content: image });
 
     if (publishedTime) {
