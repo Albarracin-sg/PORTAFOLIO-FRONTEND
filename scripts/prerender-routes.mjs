@@ -235,26 +235,10 @@ function generateRouteHtml(template, route, siteUrl) {
 
   const routeContent = generateRouteContent(route);
   if (routeContent) {
-    const rootStart = html.indexOf('<div id="root">');
-    if (rootStart !== -1) {
-      // Find the matching closing </div> for the root div, counting nesting
-      let depth = 0;
-      let rootEnd = -1;
-      for (let i = rootStart; i < html.length; i++) {
-        if (html.startsWith('<div', i)) depth++;
-        if (html.startsWith('</div>', i)) {
-          depth--;
-          if (depth === 0) { rootEnd = i; break; }
-        }
-      }
-      if (rootEnd !== -1) {
-        // Replace only the root div content; preserve <script> tags after it
-        html =
-          html.slice(0, rootStart) +
-          `<div id="root">${routeContent}</div>` +
-          html.slice(rootEnd + 6); // +6 = length of '</div>'
-      }
-    }
+    // Keep the shared home loader inside #root for every hard refresh.
+    // Route-specific metadata remains in <head>; semantic content serves
+    // no-JavaScript crawlers without flashing a raw HTML preview to users.
+    html = html.replace('</body>', `<noscript>${routeContent}</noscript></body>`);
   }
 
   return html;
