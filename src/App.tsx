@@ -60,6 +60,12 @@ function useDecorativeIcons() {
 
 export default function App() {
   useDecorativeIcons();
+
+  useEffect(() => {
+    document.getElementById('root')?.classList.add('is-app-ready');
+    document.getElementById('initial-loader')?.remove();
+  }, []);
+
   return (
     <>
       <ScrollToTop />

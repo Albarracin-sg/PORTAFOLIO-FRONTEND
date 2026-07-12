@@ -23,8 +23,3 @@ createRoot(rootElement!).render(
     </ThemeProvider>
   </BrowserRouter>
 );
-
-requestAnimationFrame(() => {
-  rootElement?.classList.add('is-app-ready');
-  document.getElementById('initial-loader')?.remove();
-});
