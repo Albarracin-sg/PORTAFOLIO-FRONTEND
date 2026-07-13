@@ -133,7 +133,8 @@
     html.dark #root > div { background: #09090b !important; }
     /* Static semantic content is for crawlers. Keep it hidden until React owns #root. */
     #root:not(.is-app-ready) { visibility: hidden; }
-    #initial-loader { position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:#09090b;pointer-events:none;animation:boot-loader-exit .2s ease 3s forwards; }
+    #initial-loader { position:fixed;inset:0;z-index:9999;display:grid;place-items:center;background:#fafafa;pointer-events:none;animation:boot-loader-exit .2s ease 3s forwards; }
+    html.dark #initial-loader { background:#09090b; }
     #initial-loader img { width:min(58vw,320px);height:auto;animation:boot-loader-pulse 1.4s ease-in-out infinite; }
     @keyframes boot-loader-pulse { 50% { transform:scale(.94);opacity:.72; } }
     @keyframes boot-loader-exit { to { opacity:0;visibility:hidden; } }
