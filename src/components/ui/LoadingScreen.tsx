@@ -27,7 +27,7 @@ export function LoadingScreen({ variant = "full", className }: LoadingScreenProp
     <div 
       className={cn(
         "flex flex-col items-center justify-center bg-background/40 backdrop-blur-sm",
-        isFull ? "fixed inset-0 z-[100] bg-background/80 backdrop-blur-md" : "w-full py-12 rounded-2xl border border-dashed border-violet-500/20",
+        isFull ? "fixed inset-0 z-[100] bg-background backdrop-blur-md" : "w-full py-12 rounded-2xl border border-dashed border-violet-500/20",
         className
       )}
     >
